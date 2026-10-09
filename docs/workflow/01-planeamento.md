@@ -9,7 +9,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | ID | Tarefa | Fase do MVP | Prioridade | Depende de | Estado |
 | --- | --- | --- | --- | --- | --- |
 | DS-001 | Monorepo pnpm, TypeScript strict, ESLint e Prettier | Fundações | Alta | — | Concluído |
-| DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Aprovado |
+| DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Concluído |
 | DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Planeado |
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Planeado |
 | DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Planeado |
@@ -201,6 +201,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · programador · Em desenvolvimento → Pronto para teste · commit b305745
 - 2026-10-09 · testador · Pronto para teste → Em teste · início da verificação
 - 2026-10-09 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, todos os critérios verificados
+- 2026-10-09 · finalizador · Aprovado → Concluído · relatório 1 aprovado (b305745); tarefa de infraestrutura, changeset não aplicável
 
 ### DS-003 · Storybook 8 com addon-a11y e `pnpm test:a11y`
 

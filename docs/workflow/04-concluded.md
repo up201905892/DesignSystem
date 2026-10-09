@@ -26,6 +26,15 @@ Modelo de entrada:
 - **Documentação:** README atualizado no commit d42f1ce; stories não aplicáveis (sem componentes)
 - **Lições:** nenhuma
 
+### DS-002 · Vitest + Testing Library e build com tsup — concluída a 2026-10-09
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-09), commit b305745
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** testes unitários com Vitest, jsdom e Testing Library, e build ESM + CJS + `.d.ts` com tsup em `ui` e `icons`, provados de ponta a ponta com o `VisuallyHidden` mínimo.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; pacotes privados)
+- **Documentação:** stories não aplicáveis (Storybook chega na DS-003); sem `TODO` deixados no código
+- **Lições:** nenhuma
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
