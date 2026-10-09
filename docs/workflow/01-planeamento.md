@@ -20,7 +20,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
 | DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Proposta |
 | DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Proposta |
-| DS-013 | Input | Formulários | Alta | DS-012 | Proposta |
+| DS-013 | Input | Formulários | Alta | DS-010, DS-012 | Proposta |
 | DS-014 | Textarea | Formulários | Média | DS-013 | Proposta |
 | DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Proposta |
 | DS-016 | RadioGroup | Formulários | Média | DS-012 | Proposta |
@@ -54,6 +54,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Proposta |
 | DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Proposta |
 | DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Proposta |
+| DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 
 ## Decisões aplicadas
 
@@ -72,19 +73,22 @@ Decisões do João que condicionam as especificações. Não são linhas de `apr
 | 2026-10-09 | conversa | Estilos | **CSS simples + CSS variables**. Um `.css` por componente, classes com prefixo `ds-` (ex.: `ds-button`), variantes/tamanhos/estados por atributos `data-*`, sem valores escritos à mão (só tokens). O pacote `ui` publica um `styles.css` agregado; zero runtime de CSS-in-JS. |
 | 2026-10-09 | conversa | Tokens | **Style Dictionary** (JSON → CSS variables + exportação TypeScript). Temas claro e escuro via `[data-theme]`, com fallback para `prefers-color-scheme`. |
 | 2026-10-09 | conversa | Ícones | **Subconjunto do Lucide** (20–30 SVG, licença ISC, com atribuição), convertidos em componentes React com SVGR em `packages/icons`, com API própria (`size`, `title`, `aria-hidden` por omissão). |
-| 2026-10-09 | conversa | Língua | **Inglês** no código, nos textos por omissão dos componentes (sempre substituíveis por prop), no Storybook e nos README. **Português** nos registos de `docs/workflow/`. |
+| 2026-10-09 | conversa | Língua | **Inglês** no código, nos textos por omissão dos componentes (sempre substituíveis por prop), no Storybook, nos README (títulos de secção incluídos), nos nomes de exemplo em testes e stories e nas mensagens de commit. **Português** em tudo o que está em `docs/workflow/`. |
+| 2026-10-09 | conversa | Licença | **MIT** para os três pacotes publicados e para o repositório. |
+| 2026-10-09 | conversa | Scope npm | **`@up201905892`**. Os pacotes publicados são `@up201905892/ui`, `@up201905892/icons` e `@up201905892/tokens`. Até à DS-036 os pacotes mantêm os nomes internos `@ds/*` e `"private": true`; a DS-036 faz a mudança de nome. |
+| 2026-10-09 | conversa | Storybook online | O Storybook é publicado no **GitHub Pages**. Os agentes preparam o build e propõem o workflow (DS-047); o ficheiro em `.github/` é acrescentado pelo João. |
 
-Decisões ainda pendentes (cada uma está assinalada na tarefa que afeta): nome do scope npm `@<utilizador>` (DS-036), licença dos pacotes (DS-036).
+Decisões ainda pendentes: nenhuma.
 
 ### Critérios comuns
 
-Para não repetir o mesmo texto 46 vezes, cada tarefa refere estes critérios pelo código. Valem como critérios de aceitação da tarefa que os cita.
+Para não repetir o mesmo texto em todas as tarefas, cada tarefa refere estes critérios pelo código. Valem como critérios de aceitação da tarefa que os cita.
 
 **Gerais (todas as tarefas):**
 
 - **G1 · Verificações verdes.** `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:a11y` e `pnpm build` saem com código 0. Um script que ainda não foi criado (os scripts nascem nas tarefas DS-001 a DS-003) conta como "não aplicável" nessa tarefa, não como falha.
 - **G2 · Dependências controladas.** A tarefa só acrescenta as dependências que a especificação nomeia; `pnpm-lock.yaml` fica atualizado e commitado, e `pnpm install --frozen-lockfile` passa.
-- **G3 · Commits.** Conventional Commits com o ID da tarefa (ex.: `feat(ui): DS-010 Button com variantes e tamanhos`). Nenhum ficheiro do João é alterado (`CLAUDE.md`, `.claude/`, `.github/`, `docs/workflow/aprovacoes.md`).
+- **G3 · Commits.** Conventional Commits com o ID da tarefa e mensagem em inglês (ex.: `feat(ui): DS-010 Button with variants and sizes`). Nenhum ficheiro do João é alterado (`CLAUDE.md`, `.claude/`, `.github/`, `docs/workflow/aprovacoes.md`).
 
 **Componentes (tarefas que criam ou alteram um componente em `packages/ui`):**
 
@@ -352,13 +356,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] `pnpm --filter @ds/icons generate` converte os SVG com SVGR em componentes `packages/icons/src/generated/<Nome>Icon.tsx` (ex.: `CheckIcon`, `ChevronDownIcon`) e regenera `src/index.ts`; os ficheiros gerados ficam commitados e correr o comando outra vez não produz diferenças (`git diff` vazio).
 - [ ] API de cada ícone: `size?: number | string` (por omissão `"1em"`, aplicado a `width` e `height`), `title?: string`, `className`, restantes props de `<svg>`, `forwardRef<SVGSVGElement>`; `stroke="currentColor"`.
 - [ ] Sem `title`: o `<svg>` tem `aria-hidden="true"` e `focusable="false"`. Com `title`: tem `role="img"`, um elemento `<title>` com esse texto, e não tem `aria-hidden`.
-- [ ] Atribuição: `packages/icons/LICENSE-LUCIDE` com o texto da licença ISC do Lucide e uma secção "Créditos" em `packages/icons/README.md`.
+- [ ] Atribuição: `packages/icons/LICENSE-LUCIDE` com o texto da licença ISC do Lucide e uma secção "Credits" em `packages/icons/README.md`.
 - [ ] `pnpm build` gera `packages/icons/dist` (ESM + CJS + `.d.ts`) e cada ícone é importável pelo nome (`import { CheckIcon } from '@ds/icons'`); `"sideEffects": false` no `package.json`.
 - [ ] G1, G2 (dependências novas: `lucide-static`, `@svgr/core` ou `@svgr/cli` e plugins), G3.
 
 **Testes exigidos:**
 - Unitários: há um componente exportado por cada ficheiro em `svg/` (teste que compara as duas listas); `size={24}` define `width` e `height` a 24; `ref` aponta para o `<svg>`; `className` é aplicada.
-- Acessibilidade: sem `title` → `aria-hidden="true"` e o ícone não aparece em `getByRole('img')`; com `title="Fechar"` → `getByRole('img', { name: 'Fechar' })` encontra-o; axe sem violações nos dois casos.
+- Acessibilidade: sem `title` → `aria-hidden="true"` e o ícone não aparece em `getByRole('img')`; com `title="Close"` → `getByRole('img', { name: 'Close' })` encontra-o; axe sem violações nos dois casos.
 - Visual/Storybook: story `Gallery` com todos os ícones e o respetivo nome, story `Sizes` (16, 20, 24), story `WithTitle` e story `DarkTheme` (os ícones herdam a cor do texto).
 
 **Fora de âmbito:** ícones fora da lista (acrescentam-se por tarefa nova), ícones preenchidos ou a duas cores, sprite SVG, componente `<Icon name="…">` com carregamento dinâmico.
@@ -366,6 +370,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): regra de língua, secção do README passa a "Credits" e o nome de exemplo do teste passa a 'Close'; estado mantém-se Planeado
 
 ### DS-009 · Utilitários partilhados, helper de axe e teste de convenções
 
@@ -383,7 +388,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] `packages/ui/test/a11y.ts` exporta `expectNoA11yViolations(container)` baseado em `vitest-axe` (ou `jest-axe`), usável em qualquer `*.test.tsx`.
 - [ ] O setup de testes inclui os polyfills de jsdom de que os primitivos Radix precisam: `ResizeObserver`, `Element.prototype.hasPointerCapture`/`setPointerCapture`/`releasePointerCapture`, `Element.prototype.scrollIntoView` e `window.matchMedia`.
 - [ ] `packages/ui/src/conventions.test.ts` percorre as pastas de componente em `packages/ui/src/` (as que começam por maiúscula) e falha se alguma: não tiver os cinco ficheiros de C1; não estiver exportada em `src/index.ts`; não tiver o `.css` importado em `src/styles.css`; não tiver uma story exportada como `DarkTheme`.
-- [ ] `packages/ui/README.md` tem uma secção "Como criar um componente" que resume C1 a C5 e aponta para o `VisuallyHidden` como exemplo.
+- [ ] `packages/ui/README.md` tem uma secção "How to create a component" que resume C1 a C5 e aponta para o `VisuallyHidden` como exemplo.
 - [ ] G1, G2 (dependências novas: `@radix-ui/react-slot`, `vitest-axe` ou `jest-axe`), G3; C1 a C5 para o `VisuallyHidden`.
 
 **Testes exigidos:**
@@ -396,6 +401,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): regra de língua, secção do README passa a "How to create a component"; estado mantém-se Planeado
 
 ### DS-010 · Button
 
@@ -445,21 +451,25 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Objetivo:** ter um botão só com ícone que nunca fica sem nome acessível, reutilizado por Alert, Dialog, Toast, Popover e Pagination.
 
 **Critérios de aceitação:**
-- [ ] `IconButton` reutiliza os estilos e as variantes do `Button` (`variant`, `size`, `disabled`, `asChild`) com formato quadrado (`data-icon-only`), sem duplicar as regras de cor.
+- [ ] `IconButton` é implementado sobre o `Button` da DS-010 (o `icon` é passado como `leadingIcon`, sem texto) e reutiliza os seus estilos e variantes (`variant`, `size`, `disabled`, `asChild`) com formato quadrado (`data-icon-only`), sem duplicar as regras de cor nem a lógica de `disabled`.
 - [ ] A prop `aria-label` é obrigatória no tipo TypeScript (omiti-la é erro de compilação), exceto quando é passada `aria-labelledby`.
-- [ ] A prop `icon: ReactNode` é obrigatória; o ícone é renderizado com `aria-hidden="true"`.
-- [ ] Dimensão mínima de 24×24px em `sm`, 32×32px em `md` e 40×40px em `lg`, definida por tokens.
+- [ ] A prop `icon: ReactNode` é obrigatória; o ícone é renderizado dentro de um `<span aria-hidden="true">`.
+- [ ] Dimensões pelos mesmos tokens do `Button`: com `data-icon-only`, a largura e a altura são `var(--ds-space-8)` em `sm` (32×32px), `var(--ds-space-10)` em `md` (40×40px) e `var(--ds-space-12)` em `lg` (48×48px), com o tamanho de letra de base de 16px; o botão é sempre quadrado e tem a mesma altura de um `Button` do mesmo `size`.
+- [ ] `disabled` sem `asChild` usa o atributo nativo `disabled`; `disabled` com `asChild` comporta-se como no `Button`: o filho recebe `aria-disabled="true"`, `data-disabled` e `tabIndex={-1}`, não recebe o atributo `disabled`, e o clique é bloqueado na fase de captura (nem o `onClick` do `IconButton` nem o do filho disparam, e a navegação não acontece).
+- [ ] Com `asChild`, o `<span aria-hidden="true">` do ícone é renderizado dentro do filho (via `Slottable`, como na DS-010), e o `aria-label` é aplicado ao filho; não é criado nenhum elemento à volta do filho.
 - [ ] G1 a G3; C1 a C5.
 
 **Testes exigidos:**
 - Unitários: renderiza um `<button>` com o ícone; `variant` e `size` nos `data-*`; `ref` e `className`; `onClick`; teste de tipos (`// @ts-expect-error`) que prova que falta de `aria-label` não compila.
-- Acessibilidade: axe sem violações; `getByRole('button', { name: 'Fechar' })` encontra o botão; Tab foca; Enter e Espaço ativam; `disabled` não recebe focus.
-- Visual/Storybook: `Default`, `Variants`, `Sizes`, `Disabled`, `DarkTheme`.
+- Unitários (`asChild`): com `<a href="/x" />` como filho, o `<a>` é o elemento raiz, tem a classe `ds-button`, `data-icon-only` e o `<span aria-hidden="true">` do ícone lá dentro, e `getByRole('link', { name: 'Settings' })` encontra-o; com `asChild` + `disabled`, a ligação tem `aria-disabled="true"`, `data-disabled` e `tabindex="-1"`, não tem o atributo `disabled`, e clicar não chama nenhum `onClick`, com o evento cancelado (`defaultPrevented`).
+- Acessibilidade: axe sem violações (incluindo `asChild` e `asChild` desativado); `getByRole('button', { name: 'Close' })` encontra o botão; Tab foca; Enter e Espaço ativam; `disabled` não recebe focus; com `asChild` + `disabled`, Tab salta a ligação.
+- Visual/Storybook: `Default`, `Variants`, `Sizes` (com `play` que mede cada botão: largura igual à altura, ≥ 32px em `sm`, ≥ 40px em `md`, ≥ 48px em `lg`), `Disabled`, `AsLink` (`asChild` com `<a>`), `AsLinkDisabled`, `NextToButton` (com `play`: um `IconButton` e um `Button` do mesmo `size` têm a mesma altura), `DarkTheme`.
 
 **Fora de âmbito:** tooltip automático com o texto do `aria-label` (compõe-se com a DS-023), botão de alternância (`aria-pressed`).
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): dimensões 32/40/48px pelos tokens do Button; disabled com asChild igual ao Button; ícone com asChild via Slottable; nomes de exemplo em inglês
 
 ### DS-012 · Field (label, descrição e mensagem de erro)
 
@@ -480,7 +490,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] G1 a G3; C1 a C5.
 
 **Testes exigidos:**
-- Unitários: com um `<input>` nativo ligado pelo hook: `getByLabelText('Nome')` devolve o input; `aria-describedby` contém os ids certos com e sem `invalid`; `FieldError` não existe no DOM quando `invalid` é falso; `disabled` do `Field` chega ao controlo; ids diferentes para dois `Field` na mesma página.
+- Unitários: com um `<input>` nativo ligado pelo hook: `getByLabelText('Name')` devolve o input; `aria-describedby` contém os ids certos com e sem `invalid`; `FieldError` não existe no DOM quando `invalid` é falso; `disabled` do `Field` chega ao controlo; ids diferentes para dois `Field` na mesma página.
 - Acessibilidade: axe sem violações nos estados normal, inválido e desativado; clicar na etiqueta foca o controlo; `toHaveAccessibleDescription` devolve descrição + erro quando inválido.
 - Visual/Storybook: `Default`, `WithDescription`, `Required`, `Invalid`, `Disabled`, `DarkTheme` (usando um `<input>` nativo até existir a DS-013).
 
@@ -488,12 +498,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Name')
 
 ### DS-013 · Input
 
 - **Fase do MVP:** Formulários
 - **Prioridade:** Alta
-- **Depende de:** DS-012
+- **Depende de:** DS-010, DS-012
 - **Estimativa:** M (≤ 1 dia)
 
 **Objetivo:** campo de texto de uma linha, integrado com o `Field`, com tamanhos, estado inválido e elementos decorativos à esquerda e à direita.
@@ -505,17 +516,19 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Suporta modo controlado (`value` + `onChange`) e não controlado (`defaultValue`), sem avisos do React na consola em nenhum dos dois.
 - [ ] Estados estilizados: `:hover`, `:focus-visible`, `disabled`, `readOnly`, inválido (`data-invalid`, borda `color-danger-default` com contraste ≥ 3:1) e placeholder com contraste ≥ 4,5:1.
 - [ ] Os addons são decorativos (`aria-hidden="true"`), ficam dentro do contorno do campo e clicar neles foca o input.
+- [ ] Alturas pelos mesmos tokens do `Button` (DS-010): `Input.css` declara `min-height: var(--ds-space-8)` para `data-size="sm"` (32px), `var(--ds-space-10)` para `md` (40px) e `var(--ds-space-12)` para `lg` (48px), aplicado ao contorno do campo (o elemento que inclui os addons); com o tamanho de letra de base de 16px, a altura renderizada é ≥ 32px, ≥ 40px e ≥ 48px, e é igual à de um `Button` do mesmo `size`.
 - [ ] G1 a G3; C1 a C5.
 
 **Testes exigidos:**
 - Unitários: escrever "abc" com `userEvent.type` altera o valor (não controlado) e chama `onChange` três vezes (controlado); `defaultValue`; `disabled` impede a escrita; `readOnly` não altera o valor; `size` em `data-size`; `ref.current` é um `HTMLInputElement`; `className` aplicada; dentro de `Field invalid` tem `aria-invalid="true"` e `aria-describedby` com o id do erro.
 - Acessibilidade: axe sem violações (com etiqueta via `Field` e via `aria-label`); Tab foca o input; `getByLabelText` encontra-o; com `disabled`, Tab salta-o.
-- Visual/Storybook: `Default`, `Sizes`, `WithField`, `WithAddons`, `Invalid`, `Disabled`, `ReadOnly`, `Password`, `DarkTheme`.
+- Visual/Storybook: `Default`, `Sizes` (com `play` que mede a altura do campo: ≥ 32px em `sm`, ≥ 40px em `md`, ≥ 48px em `lg`), `WithButton` (um `Input` e um `Button` lado a lado em cada `size`, com `play` que confirma que têm a mesma altura), `WithField`, `WithAddons`, `Invalid`, `Disabled`, `ReadOnly`, `Password`, `DarkTheme`.
 
 **Fora de âmbito:** máscaras de formatação, botão de limpar, alternância de visibilidade da palavra-passe, input numérico com botões de incremento.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): alturas 32/40/48px pelos tokens do Button, medidas nas stories Sizes e WithButton; DS-010 acrescentada às dependências
 
 ### DS-014 · Textarea
 
@@ -528,7 +541,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Critérios de aceitação:**
 - [ ] `Textarea` renderiza um `<textarea>` nativo; props `size: 'sm' | 'md' | 'lg'`, `invalid?`, `rows` (omissão 3) e `resize: 'none' | 'vertical' | 'both'` (omissão `vertical`, exposto como `data-resize`).
-- [ ] Reutiliza os tokens e os estados visuais do `Input` (mesma borda, raio, focus, inválido, desativado) sem copiar valores literais.
+- [ ] Reutiliza os tokens e os estados visuais do `Input` (mesma borda, raio, focus, inválido, desativado) sem copiar valores literais; para cada `size`, o tamanho de letra e o padding horizontal são os do `Input`.
+- [ ] Alturas: como o campo é multilinha, os 32/40/48px aplicam-se como altura **mínima** e não como altura fixa. `Textarea.css` declara `min-height: var(--ds-space-8)` para `data-size="sm"`, `var(--ds-space-10)` para `md` e `var(--ds-space-12)` para `lg`; a altura real resulta de `rows` × altura de linha + padding vertical, e nunca fica abaixo do mínimo, nem com `rows={1}` nem quando o utilizador redimensiona. Com `rows={1}`, a altura é igual à de um `Input` do mesmo `size`.
 - [ ] Integra com o `Field` da mesma forma que o `Input` (id, `aria-describedby`, `aria-invalid`, `aria-required`, `disabled`).
 - [ ] Suporta modo controlado e não controlado sem avisos do React.
 - [ ] G1 a G3; C1 a C5.
@@ -536,12 +550,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Testes exigidos:**
 - Unitários: escrever texto com quebras de linha altera o valor; `onChange` em modo controlado; `defaultValue`; `rows` por omissão e personalizado; `data-resize`; `disabled` e `readOnly`; `ref.current` é um `HTMLTextAreaElement`; integração com `Field invalid`.
 - Acessibilidade: axe sem violações; Tab foca; `getByLabelText` encontra-o; Enter insere uma nova linha (não submete o formulário).
-- Visual/Storybook: `Default`, `Sizes`, `WithField`, `Invalid`, `Disabled`, `ResizeNone`, `DarkTheme`.
+- Visual/Storybook: `Default`, `Sizes` (com `play`: com `rows={1}`, a altura é ≥ 32px em `sm`, ≥ 40px em `md` e ≥ 48px em `lg`, e igual à de um `Input` do mesmo `size` ao lado; com `rows` por omissão, a altura é maior do que esse mínimo), `WithField`, `Invalid`, `Disabled`, `ResizeNone`, `DarkTheme`.
 
 **Fora de âmbito:** altura automática conforme o conteúdo, contador de caracteres.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): 32/40/48px como altura mínima por tamanho (a altura real depende de rows), medida na story Sizes
 
 ### DS-015 · Checkbox
 
@@ -562,13 +577,14 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Testes exigidos:**
 - Unitários: clicar alterna `aria-checked` (não controlado); em modo controlado `onCheckedChange` recebe o novo valor e o estado só muda quando a prop muda; `checked="indeterminate"` → `aria-checked="mixed"`; clicar na etiqueta alterna; `disabled` não alterna; valor presente no `FormData` de um formulário submetido.
-- Acessibilidade: axe sem violações; Tab foca a checkbox; Espaço alterna o estado; Enter não alterna; `getByRole('checkbox', { name: 'Aceito os termos' })` encontra-a; com `disabled`, Tab salta-a.
-- Visual/Storybook: `Default`, `Checked`, `Indeterminate`, `Disabled`, `Sizes`, `WithField` (com descrição e erro), `Group` (lista com "selecionar todos" em estado indeterminado), `DarkTheme`.
+- Acessibilidade: axe sem violações; Tab foca a checkbox; Espaço alterna o estado; Enter não alterna; `getByRole('checkbox', { name: 'I accept the terms' })` encontra-a; com `disabled`, Tab salta-a.
+- Visual/Storybook: `Default`, `Checked`, `Indeterminate`, `Disabled`, `Sizes`, `WithField` (com descrição e erro), `Group` (lista com "Select all" em estado indeterminado), `DarkTheme`.
 
 **Fora de âmbito:** componente `CheckboxGroup` com estado próprio, cartões selecionáveis.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nomes de exemplo em inglês ('I accept the terms', "Select all")
 
 ### DS-016 · RadioGroup
 
@@ -618,13 +634,14 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Testes exigidos:**
 - Unitários: clicar alterna `aria-checked`; `onCheckedChange` recebe o novo valor; modo controlado; `defaultChecked`; clicar na etiqueta alterna; `disabled` não alterna; valor no `FormData`.
-- Acessibilidade: axe sem violações; Tab foca; Espaço alterna; Enter alterna; `getByRole('switch', { name: 'Notificações' })` encontra-o; com `disabled`, Tab salta-o.
+- Acessibilidade: axe sem violações; Tab foca; Espaço alterna; Enter alterna; `getByRole('switch', { name: 'Notifications' })` encontra-o; com `disabled`, Tab salta-o.
 - Visual/Storybook: `Default`, `Checked`, `Disabled`, `Sizes`, `WithField`, `DarkTheme`.
 
 **Fora de âmbito:** texto "On/Off" dentro da pista, ícones no manípulo.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Notifications')
 
 ### DS-018 · Select
 
@@ -642,18 +659,20 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] O gatilho tem `role="combobox"`, `aria-expanded` e mostra o `ChevronDownIcon`; a lista tem `role="listbox"`, é renderizada num portal, usa o token `z-index-dropdown` e tem a mesma largura mínima do gatilho; o item selecionado mostra o `CheckIcon` e `aria-selected="true"`.
 - [ ] Modo controlado e não controlado; com `name`, o valor entra no `FormData`.
 - [ ] Integra com o `Field`: a etiqueta fica associada ao gatilho e `aria-describedby`/`aria-invalid` são aplicados.
-- [ ] O gatilho tem a mesma altura, borda, raio e estados do `Input` para cada `size`.
+- [ ] O gatilho tem a mesma borda, raio e estados do `Input` para cada `size`.
+- [ ] Alturas do gatilho pelos mesmos tokens do `Button` e do `Input`: `Select.css` declara `min-height: var(--ds-space-8)` para `data-size="sm"` (32px), `var(--ds-space-10)` para `md` (40px) e `var(--ds-space-12)` para `lg` (48px); com o tamanho de letra de base de 16px, a altura renderizada do gatilho é ≥ 32px, ≥ 40px e ≥ 48px, e é igual à de um `Input` do mesmo `size`.
 - [ ] G1 a G3 (dependência nova: `@radix-ui/react-select`); C1 a C5.
 
 **Testes exigidos:**
 - Unitários: mostra o `placeholder` sem valor; `defaultValue` mostra o texto do item; selecionar um item chama `onValueChange` e fecha a lista; modo controlado; item `disabled` não é selecionável; `disabled` no `Select` impede abrir; valor no `FormData`.
 - Acessibilidade: axe sem violações com a lista fechada e aberta. Teclado (em teste unitário ou em `play` de uma story, executado pelo `pnpm test:a11y`): com o gatilho focado, Enter, Espaço, Seta para baixo e Seta para cima abrem a lista; Seta para baixo/cima movem o item ativo; Home e End vão ao primeiro e ao último; escrever uma letra salta para o item que começa por ela; Enter ou Espaço selecionam o item ativo, fecham e devolvem o focus ao gatilho; Esc fecha sem alterar o valor e devolve o focus ao gatilho; itens desativados são saltados.
-- Visual/Storybook: `Default`, `WithDefaultValue`, `Sizes`, `Groups`, `DisabledItem`, `Disabled`, `WithField` (inválido), `LongList` (30 itens com scroll), `KeyboardInteraction` (com `play`), `DarkTheme` (com a lista aberta).
+- Visual/Storybook: `Default`, `WithDefaultValue`, `Sizes` (com `play` que mede a altura do gatilho: ≥ 32px em `sm`, ≥ 40px em `md`, ≥ 48px em `lg`, e igual à de um `Input` do mesmo `size` ao lado), `Groups`, `DisabledItem`, `Disabled`, `WithField` (inválido), `LongList` (30 itens com scroll), `KeyboardInteraction` (com `play`), `DarkTheme` (com a lista aberta).
 
 **Fora de âmbito:** seleção múltipla, pesquisa/filtro dentro da lista (combobox com autocomplete), carregamento assíncrono de opções, virtualização.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): alturas do gatilho 32/40/48px pelos tokens do Button e do Input, medidas na story Sizes
 
 ### DS-019 · Badge
 
@@ -662,7 +681,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - **Depende de:** DS-009
 - **Estimativa:** S (≤ 2h)
 
-**Objetivo:** etiqueta curta para estados e contagens (ex.: "Ativo", "3"), usada em tabelas e cartões.
+**Objetivo:** etiqueta curta para estados e contagens (ex.: "Active", "3"), usada em tabelas e cartões.
 
 **Critérios de aceitação:**
 - [ ] `Badge` renderiza um `<span>` com a classe `ds-badge`; props `variant: 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'` (omissão `neutral`), `appearance: 'subtle' | 'solid'` (omissão `subtle`), `size: 'sm' | 'md'`, `asChild?`.
@@ -681,6 +700,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): texto de exemplo em inglês ("Active")
 
 ### DS-020 · Spinner e Skeleton
 
@@ -700,13 +720,14 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Testes exigidos:**
 - Unitários: `Spinner` tem `role="status"` e nome por omissão; `label` personalizado; `data-size`; `Skeleton` com `lines={3}` renderiza três linhas; `width`/`height` chegam às custom properties; `ref` e `className` nos dois.
-- Acessibilidade: axe sem violações; `getByRole('status', { name: 'A guardar' })` encontra o Spinner; o Skeleton não aparece na árvore de acessibilidade (`aria-hidden`); nenhum dos dois recebe focus com Tab.
+- Acessibilidade: axe sem violações; `getByRole('status', { name: 'Saving' })` encontra o Spinner; o Skeleton não aparece na árvore de acessibilidade (`aria-hidden`); nenhum dos dois recebe focus com Tab.
 - Visual/Storybook: `Spinner/Sizes`, `Spinner/CustomLabel`, `Spinner/DarkTheme`, `Skeleton/Text`, `Skeleton/Rect`, `Skeleton/Circle`, `Skeleton/CardPlaceholder`, `Skeleton/DarkTheme`.
 
 **Fora de âmbito:** barra de progresso, overlay de carregamento de página inteira, estado `loading` do Button (DS-021).
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Saving')
 
 ### DS-021 · Button: estado `loading`
 
@@ -719,21 +740,28 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Critérios de aceitação:**
 - [ ] Nova prop `loading?: boolean` em `Button` (herdada pelo `IconButton`) e `loadingLabel?: string` (omissão `"Loading"`).
-- [ ] Com `loading`: mostra o `Spinner` no lugar do `leadingIcon` (ou centrado, no `IconButton`), define `aria-busy="true"` e `aria-disabled="true"`, mantém o botão focável e não chama `onClick`.
-- [ ] A largura do botão é igual com e sem `loading` (o texto continua a ocupar espaço).
-- [ ] O `loadingLabel` é anunciado através do `role="status"` do Spinner; o nome acessível do botão mantém-se.
-- [ ] `data-loading` presente no elemento raiz durante o carregamento.
-- [ ] G1 a G3; C1 a C5 (os testes e as stories acrescentam-se aos ficheiros existentes do `Button`).
+- [ ] Com `loading`, o elemento raiz tem `aria-busy="true"`, `aria-disabled="true"` e `data-loading`, **não** recebe o atributo `disabled` nem `tabIndex={-1}`, e continua na ordem de Tab.
+- [ ] Diferença intencional face a `disabled`: `disabled` tira o elemento da ordem de Tab (DS-010); `loading` mantém-no focável, para que quem usa teclado ou leitor de ecrã não perca o focus enquanto a ação decorre e possa continuar a partir do mesmo ponto quando ela termina. Esta diferença fica escrita no JSDoc das props `loading` e `disabled` (aparece no autodocs) e na descrição da story `Button/Loading`.
+- [ ] Com `loading`, o clique é bloqueado na fase de captura (`preventDefault` + `stopPropagation`), como no `disabled` com `asChild` da DS-010: o `onClick` não dispara com rato, Enter ou Espaço, e um botão `type="submit"` não submete o formulário.
+- [ ] Posição do `Spinner`: é renderizado no `<span aria-hidden="true">` do `leadingIcon`, substituindo o ícone enquanto `loading` for verdadeiro (o span é criado se não houver `leadingIcon`); no `IconButton`, substitui o `icon` no mesmo span, e o botão continua quadrado. O `trailingIcon` não muda.
+- [ ] Com `asChild` + `loading`: o filho (ex.: `<a>`) continua focável, recebe `aria-disabled="true"`, `aria-busy="true"` e `data-loading`, o clique é bloqueado na fase de captura (nem o `onClick` do `Button` nem o do filho disparam, e a navegação não acontece), e o `Spinner` é renderizado dentro do filho, no mesmo span do `leadingIcon`, via `Slottable`; não é criado nenhum elemento à volta do filho.
+- [ ] Nome e descrição acessíveis: o nome do botão não muda com `loading` (o `Spinner` está dentro de um span `aria-hidden`); o `loadingLabel` fica num elemento visualmente escondido dentro desse span, referenciado por `aria-describedby` do elemento raiz (acrescentado a um `aria-describedby` que o consumidor já tenha passado), de modo que a descrição acessível passa a incluir o `loadingLabel` enquanto `loading` for verdadeiro.
+- [ ] A largura do botão é igual com e sem `loading` quando há `leadingIcon`; sem `leadingIcon`, o texto mantém-se visível e o botão só cresce a largura do `Spinner` mais o espaçamento.
+- [ ] Com `disabled` e `loading` em simultâneo, prevalece o comportamento de `disabled` (fora da ordem de Tab); o `Spinner` continua visível.
+- [ ] G1 a G3; C1 a C5 (os testes e as stories acrescentam-se aos ficheiros existentes do `Button` e do `IconButton`).
 
 **Testes exigidos:**
-- Unitários: com `loading`, o Spinner está presente, `aria-busy="true"`, e clicar não chama `onClick`; sem `loading`, nada muda face à DS-010 (os testes existentes continuam a passar sem alterações); `loadingLabel` personalizado.
-- Acessibilidade: axe sem violações; com `loading`, Tab ainda foca o botão; Enter e Espaço não chamam `onClick`; `getByRole('button', { name: 'Guardar' })` continua a encontrá-lo.
-- Visual/Storybook: `Button/Loading` (as quatro variantes), `Button/LoadingToggle` (com `play`: clicar ativa o loading e o focus mantém-se no botão), `IconButton/Loading`, e o estado loading acrescentado a `Button/DarkTheme`.
+- Unitários: com `loading`, o `Spinner` está presente dentro do span do `leadingIcon` e substitui o ícone; o elemento raiz tem `aria-busy="true"`, `aria-disabled="true"` e `data-loading`, e não tem `disabled` nem `tabindex="-1"`; clicar não chama `onClick` e o evento fica cancelado (`defaultPrevented`); um botão `type="submit"` com `loading` dentro de um `<form>` não chama `onSubmit`; sem `loading`, nada muda face à DS-010 (os testes existentes continuam a passar sem alterações); `loadingLabel` personalizado; `disabled` + `loading` → atributo `disabled` presente.
+- Unitários (`asChild` + `loading`): com `<a href="/x">Save</a>`, a ligação tem `aria-disabled="true"`, `aria-busy="true"` e `data-loading`, não tem `tabindex="-1"`, tem o `Spinner` dentro do `<a>` e antes do texto, e clicar não chama o `onClick` do `Button` nem o do `<a>`, com o evento cancelado.
+- Unitários (`IconButton`): com `loading`, o `Spinner` substitui o ícone e o nome acessível continua a ser o `aria-label`.
+- Acessibilidade: axe sem violações (incluindo `asChild` + `loading`); com `loading`, Tab ainda foca o botão; Enter e Espaço não chamam `onClick`; `getByRole('button', { name: 'Save' })` continua a encontrá-lo (o nome é exatamente "Save") e `toHaveAccessibleDescription('Loading')` passa; com `asChild` + `loading`, Tab foca a ligação e Enter não navega; comparação explícita num teste: o mesmo botão com `disabled` é saltado pelo Tab e com `loading` não é.
+- Visual/Storybook: `Button/Loading` (as quatro variantes, com a nota sobre a diferença face a `disabled` na descrição), `Button/LoadingToggle` (com `play`: clicar ativa o loading, o focus mantém-se no botão e a largura não muda), `Button/AsLinkLoading` (`asChild` + `loading`), `IconButton/Loading`, e o estado loading acrescentado a `Button/DarkTheme`.
 
-**Fora de âmbito:** texto alternativo durante o carregamento (ex.: "A guardar…" a substituir o texto), barra de progresso dentro do botão.
+**Fora de âmbito:** texto alternativo durante o carregamento (ex.: "Saving…" a substituir o texto), barra de progresso dentro do botão, anúncio automático do fim da ação (fica a cargo do consumidor, por exemplo com um Toast).
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loading focável com aria-disabled documentado como diferença intencional face a disabled; clique bloqueado na captura; asChild + loading; posição do Spinner via Slottable; loadingLabel por aria-describedby em vez de role="status"; nomes de exemplo em inglês
 
 ### DS-022 · Alert
 
@@ -1084,7 +1112,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Critérios de aceitação:**
 - [ ] `Pagination`: `page?`, `defaultPage?` (omissão 1), `onPageChange?`, `pageCount` (obrigatório), `siblingCount?` (omissão 1), `size: 'sm' | 'md'`, e etiquetas configuráveis com valores por omissão em inglês: `label` (`"Pagination"`), `previousLabel` (`"Previous page"`), `nextLabel` (`"Next page"`), `getPageLabel(page)` (`"Page 3"`).
 - [ ] Renderiza `<nav aria-label={label}>` com uma lista (`<ul>`/`<li>`) de botões; a página atual tem `aria-current="page"`; os botões anterior/seguinte usam `ChevronLeftIcon`/`ChevronRightIcon` com nome acessível.
-- [ ] Na primeira página o botão "anterior" está desativado, e na última o "seguinte"; a desativação usa `aria-disabled="true"` e o botão continua focável (o focus não se perde ao chegar ao limite).
+- [ ] Na primeira página o botão "anterior" está desativado, e na última o "seguinte"; a desativação usa `aria-disabled="true"` e `data-disabled`, sem o atributo `disabled` e sem `tabIndex={-1}`: o botão continua focável e o clique é bloqueado (não chama `onPageChange`).
+- [ ] Exceção intencional face ao `disabled` do `Button` (DS-010), que tira o elemento da ordem de Tab: aqui, quem navega com teclado carrega em "seguinte" até à última página e o botão que tem o focus passa a desativado; se saísse da ordem de Tab, o focus perdia-se. Por isso a `Pagination` não usa a prop `disabled` do `IconButton` nestes botões. A exceção e o motivo ficam escritos no JSDoc do componente (aparece no autodocs) e na descrição das stories `FirstPage` e `LastPage`.
 - [ ] Com muitas páginas mostra reticências: primeira, última, atual e `siblingCount` de cada lado (ex.: `1 … 4 5 6 … 20`); as reticências são `aria-hidden` e não são focáveis.
 - [ ] Hook `usePagination({ totalItems, pageSize, page?, defaultPage?, onPageChange? })` exportado: devolve `{ page, pageCount, startIndex, endIndex, setPage, next, previous, canNext, canPrevious }`; `page` é limitado ao intervalo `[1, pageCount]`, e quando `totalItems` diminui a página atual é corrigida.
 - [ ] `pageCount <= 1` renderiza a navegação com uma única página e os dois botões desativados (não desaparece, para o layout não saltar).
@@ -1093,13 +1122,14 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Testes exigidos:**
 - Unitários (componente): clicar numa página chama `onPageChange` com o número; anterior/seguinte; limites desativados não chamam `onPageChange`; intervalos com reticências para `pageCount=20` nas páginas 1, 5 e 20; `siblingCount={2}`; modo controlado e não controlado.
 - Unitários (hook): `startIndex`/`endIndex` para `totalItems=95`, `pageSize=10` nas páginas 1 e 10 (última página com 5 itens); `page` fora do intervalo é corrigida; `totalItems=0` devolve `pageCount=1` e intervalo vazio.
-- Acessibilidade: axe sem violações; `getByRole('navigation', { name: 'Pagination' })`; a página atual é encontrada por `aria-current="page"`; Tab percorre anterior, páginas e seguinte por ordem; Enter e Espaço mudam de página e o focus fica no botão ativado.
-- Visual/Storybook: `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `DarkTheme`.
+- Acessibilidade: axe sem violações; `getByRole('navigation', { name: 'Pagination' })`; a página atual é encontrada por `aria-current="page"`; Tab percorre anterior, páginas e seguinte por ordem; Enter e Espaço mudam de página e o focus fica no botão ativado; na primeira página, Tab ainda foca o botão "anterior" (que tem `aria-disabled="true"` e não tem `disabled`) e Enter/Espaço não chamam `onPageChange`; estando na penúltima página com o focus em "seguinte", Enter leva à última página e `document.activeElement` continua a ser o botão "seguinte".
+- Visual/Storybook: `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`: avançar até à última página só com Enter e confirmar que o focus nunca sai do botão "seguinte"), `DarkTheme`.
 
 **Fora de âmbito:** seletor de itens por página, campo "ir para a página", paginação por cursor ou "carregar mais", páginas como ligações com `href`.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): botões anterior/seguinte focáveis com aria-disabled nos limites documentados como exceção intencional face ao disabled do Button, com teste e story de teclado
 
 ### DS-035 · DataTable: Table com ordenação e paginação integradas
 
@@ -1138,31 +1168,30 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Objetivo:** deixar os `package.json` de `tokens`, `icons` e `ui` prontos para serem consumidos fora do monorepo, com nomes finais, pontos de entrada corretos e só os ficheiros necessários.
 
-**Decisões pendentes do João (a tarefa só deve ser aprovada com as duas respostas na nota de `aprovacoes.md`):**
-1. **Scope npm.** O nome `@<utilizador>` ainda não foi escolhido; nesta especificação aparece sempre como placeholder. Tem de ser um scope que o João controle no npm (o do seu utilizador ou uma organização criada por ele).
-2. **Licença.** Proposta: MIT.
+**Decisões do João (2026-10-09, conversa; ver "Decisões técnicas"):** scope npm `@up201905892` e licença MIT.
 
 **Critérios de aceitação:**
-- [ ] Os pacotes passam a chamar-se `@<utilizador>/tokens`, `@<utilizador>/icons` e `@<utilizador>/ui` (o placeholder é substituído pelo scope decidido); todas as referências a `@ds/*` no repositório são atualizadas (`grep -r "@ds/"` fora de `docs/workflow/` não devolve resultados) e o `pnpm-lock.yaml` é regenerado.
-- [ ] Os três pacotes deixam de ter `"private": true` e têm `version`, `description`, `license`, `author`, `repository` (com `directory`), `homepage`, `keywords` e `"publishConfig": { "access": "public" }`; `apps/docs` continua `"private": true`.
+- [ ] Os pacotes passam a chamar-se `@up201905892/tokens`, `@up201905892/icons` e `@up201905892/ui`; todas as referências a `@ds/*` no repositório são atualizadas (`grep -r "@ds/"` fora de `docs/workflow/` não devolve resultados) e o `pnpm-lock.yaml` é regenerado.
+- [ ] Os três pacotes deixam de ter `"private": true` e têm `version`, `description`, `"license": "MIT"`, `author`, `repository` (com `directory`), `homepage`, `keywords` e `"publishConfig": { "access": "public" }`; `apps/docs` continua `"private": true`.
 - [ ] `ui`: `"type": "module"`, `exports` com `"."` (`types` + `import` + `require`, com declarações separadas para ESM e CJS), `"./styles.css"` e `"./package.json"`; `main`, `module` e `types` como fallback; `"sideEffects": ["**/*.css"]`; `"files": ["dist"]`.
-- [ ] `ui`: `react` e `react-dom` em `peerDependencies`; os pacotes `@radix-ui/react-*` e `@<utilizador>/icons` (`workspace:^`) em `dependencies`; nada que só serve para desenvolvimento em `dependencies`; nenhuma dependência é incluída no bundle do `dist` (ficam externas).
+- [ ] `ui`: `react` e `react-dom` em `peerDependencies`; os pacotes `@radix-ui/react-*` e `@up201905892/icons` (`workspace:^`) em `dependencies`; nada que só serve para desenvolvimento em `dependencies`; nenhuma dependência é incluída no bundle do `dist` (ficam externas).
 - [ ] `icons`: `exports` com `"."` e `"./package.json"`, `"sideEffects": false`, `"files": ["dist", "LICENSE-LUCIDE"]`.
 - [ ] `tokens`: `exports` com `"."`, `"./tokens.css"`, `"./themes.css"` e `"./package.json"`; `"sideEffects": ["**/*.css"]`; `"files": ["dist"]`.
-- [ ] Ficheiro `LICENSE` na raiz e em cada pacote publicado, e um `README.md` mínimo em cada pacote (nome, instalação, exemplo de três linhas); a versão completa é da DS-046.
-- [ ] `import { Button } from '@<utilizador>/ui'` e `import '@<utilizador>/ui/styles.css'` resolvem a partir de `apps/docs` usando o campo `exports` (sem aliases para `src`).
+- [ ] Ficheiro `LICENSE` com o texto da licença MIT na raiz e em cada pacote publicado, e um `README.md` mínimo em cada pacote (nome, instalação, exemplo de três linhas); a versão completa é da DS-046.
+- [ ] `import { Button } from '@up201905892/ui'` e `import '@up201905892/ui/styles.css'` resolvem a partir de `apps/docs` usando o campo `exports` (sem aliases para `src`).
 - [ ] G1 a G3.
 
 **Testes exigidos:**
 - Unitários: teste Vitest que lê cada `package.json` publicado e verifica que todos os caminhos referidos em `exports`, `main`, `module` e `types` existem depois de `pnpm build`, e que `files` não inclui `src`.
 - Acessibilidade: não aplicável (sem alterações de interface); `pnpm test:a11y` continua a passar.
 - Visual/Storybook: o Storybook arranca e todas as stories existentes continuam a funcionar depois da mudança de nome.
-- Verificação manual no terminal: `node -e "require('@<utilizador>/ui')"` e o `import()` equivalente em ESM, executados a partir de `apps/docs`, terminam sem erro.
+- Verificação manual no terminal: `node -e "require('@up201905892/ui')"` e o `import()` equivalente em ESM, executados a partir de `apps/docs`, terminam sem erro.
 
-**Fora de âmbito:** Changesets (DS-037), limite de tamanho (DS-038), verificação do tarball (DS-039), entradas por componente (`@<utilizador>/ui/button`), publicação.
+**Fora de âmbito:** Changesets (DS-037), limite de tamanho (DS-038), verificação do tarball (DS-039), entradas por componente (`@up201905892/ui/button`), publicação.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): scope npm `@up201905892` e licença MIT decididos; marcas de decisão pendente removidas e placeholder substituído
 
 ### DS-037 · Changesets: versionamento e changelog
 
@@ -1179,7 +1208,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Não existe nenhum script que chame `changeset publish`, `pnpm publish` ou `npm publish`; a publicação é um passo manual do João, descrito na DS-041.
 - [ ] `.changeset/README.md` explica, em poucas linhas, quando criar um changeset e que tipo usar (patch, minor, major).
 - [ ] Existe um primeiro changeset de exemplo válido (tipo `minor`, com a descrição dos componentes já entregues) e `pnpm changeset status` sai com 0 e lista os três pacotes.
-- [ ] A regra fica escrita em `packages/ui/README.md` (secção "Como criar um componente"): a partir desta tarefa, qualquer tarefa que altere o comportamento de um pacote publicado inclui um ficheiro em `.changeset/`.
+- [ ] A regra fica escrita em `packages/ui/README.md` (secção "How to create a component"): a partir desta tarefa, qualquer tarefa que altere o comportamento de um pacote publicado inclui um ficheiro em `.changeset/`.
 - [ ] G1 a G3 (dependência nova: `@changesets/cli`).
 
 **Testes exigidos:**
@@ -1192,6 +1221,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): a secção do README de `ui` passa a chamar-se "How to create a component" (regra de língua)
 
 ### DS-038 · Limite de tamanho de bundle (< 5 kB gzip por componente)
 
@@ -1204,7 +1234,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Critérios de aceitação:**
 - [ ] `size-limit` com `@size-limit/preset-small-lib` configurado em `packages/ui`, e script `pnpm size` na raiz que corre depois do build e sai com código ≠ 0 se algum limite for ultrapassado.
-- [ ] Há uma entrada por componente exportado (ex.: `import { Button } from './dist/index.js'`), cada uma com limite de **5 kB** gzip, medindo o código da biblioteca com `react`, `react-dom`, `react/jsx-runtime`, `@radix-ui/*` e `@<utilizador>/icons` como externos (são dependências instaladas pelo consumidor; o método de medição fica explicado no README do pacote).
+- [ ] Há uma entrada por componente exportado (ex.: `import { Button } from './dist/index.js'`), cada uma com limite de **5 kB** gzip, medindo o código da biblioteca com `react`, `react-dom`, `react/jsx-runtime`, `@radix-ui/*` e `@up201905892/icons` como externos (são dependências instaladas pelo consumidor; o método de medição fica explicado no README do pacote).
 - [ ] A lista de entradas é gerada a partir das exportações de `packages/ui/src/index.ts` (ou validada por um teste), para que um componente novo não fique sem limite.
 - [ ] Há uma entrada adicional para `dist/styles.css` com limite de 15 kB gzip e uma entrada informativa (sem limite) para a biblioteca inteira.
 - [ ] Tree-shaking verificado: o bundle gerado para `import { Button }` não contém referências a `@radix-ui/react-dialog` nem a classes `ds-dialog`.
@@ -1221,6 +1251,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 
@@ -1235,7 +1266,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Script `pnpm verify:package` na raiz que: faz o build; corre `pnpm pack` nos três pacotes para uma pasta temporária ignorada pelo git; corre `publint` e `@arethetypeswrong/cli` sobre cada tarball; instala os tarballs no projeto consumidor e corre as verificações dele; sai com 0 só se tudo passar.
 - [ ] `publint` sem erros e `attw` sem problemas de resolução de tipos para `node16` (ESM e CJS) e `bundler`, nos três pacotes.
 - [ ] Cada tarball contém só `dist/`, `package.json`, `README.md` e licenças: não contém `src/`, testes, stories nem ficheiros de configuração; nas dependências não resta nenhum `workspace:` (o pnpm substitui pela versão).
-- [ ] Projeto consumidor em `tests/consumer/` (fora do workspace do pnpm, com o seu próprio `package.json`), que instala os três tarballs e verifica: (a) `import` em ESM e `require` em CJS de `@<utilizador>/ui` em Node 22; (b) `tsc --noEmit` com `strict` sobre um ficheiro que usa `Button`, `DataTable` tipada, um ícone e o objeto `tokens`; (c) `renderToString(<Button>OK</Button>)` devolve HTML com a classe `ds-button`, o que prova que importar a biblioteca não acede a `window`/`document`; (d) o ficheiro `@<utilizador>/ui/styles.css` resolve e contém `--ds-color-bg-canvas`.
+- [ ] Projeto consumidor em `tests/consumer/` (fora do workspace do pnpm, com o seu próprio `package.json`), que instala os três tarballs e verifica: (a) `import` em ESM e `require` em CJS de `@up201905892/ui` em Node 22; (b) `tsc --noEmit` com `strict` sobre um ficheiro que usa `Button`, `DataTable` tipada, um ícone e o objeto `tokens`; (c) `renderToString(<Button>OK</Button>)` devolve HTML com a classe `ds-button`, o que prova que importar a biblioteca não acede a `window`/`document`; (d) o ficheiro `@up201905892/ui/styles.css` resolve e contém `--ds-color-bg-canvas`.
 - [ ] Nenhum agente corre `pnpm publish`, nem com `--dry-run` (as permissões bloqueiam-no); o dry-run de publicação é um passo manual do João, descrito na DS-041.
 - [ ] G1 a G3 (dependências novas: `publint`, `@arethetypeswrong/cli`).
 
@@ -1249,6 +1280,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 
@@ -1291,10 +1323,10 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Critérios de aceitação:**
 - [ ] Existe um changeset `major` que descreve a versão 1.0.0, e `pnpm version-packages` foi corrido: os três pacotes ficam com `"version": "1.0.0"` e cada um tem `CHANGELOG.md` gerado; não restam changesets pendentes (`pnpm changeset status` indica que não há alterações por lançar).
 - [ ] `pnpm build`, `pnpm size` e `pnpm verify:package` passam com as versões 1.0.0.
-- [ ] `docs/publicacao.md` descreve o **passo manual do João**, por esta ordem: (1) pré-requisitos: conta npm, scope criado, autenticação de dois fatores, `npm login`; (2) confirmar que o `main` tem o merge do `develop` e que o CI está verde; (3) `pnpm install --frozen-lockfile && pnpm build && pnpm verify:package`; (4) dry-run: `pnpm -r publish --dry-run --access public` e o que conferir na saída; (5) publicação: `pnpm changeset publish`; (6) `git push --follow-tags`; (7) confirmar com `npm view @<utilizador>/ui version` e instalar num projeto vazio; (8) criar a release no GitHub com o conteúdo do `CHANGELOG.md`; (9) o que fazer se correr mal (versão já publicada, `npm deprecate`, lançar um `patch`).
-- [ ] O guia recomenda publicar só depois de a fase Documentação (DS-042 a DS-046) estar `Concluído`, para que os README incluídos nos pacotes sejam os finais, e explica como lançar versões seguintes (changeset → `version-packages` → publicar).
+- [ ] `docs/publicacao.md` descreve o **passo manual do João**, por esta ordem: (1) pré-requisitos: conta npm, scope criado, autenticação de dois fatores, `npm login`; (2) confirmar que o `main` tem o merge do `develop` e que o CI está verde; (3) `pnpm install --frozen-lockfile && pnpm build && pnpm verify:package`; (4) dry-run: `pnpm -r publish --dry-run --access public` e o que conferir na saída; (5) publicação: `pnpm changeset publish`; (6) `git push --follow-tags`; (7) confirmar com `npm view @up201905892/ui version` e instalar num projeto vazio; (8) criar a release no GitHub com o conteúdo do `CHANGELOG.md`; (9) o que fazer se correr mal (versão já publicada, `npm deprecate`, lançar um `patch`).
+- [ ] O guia recomenda publicar só depois de a fase Documentação (DS-042 a DS-047) estar `Concluído`, para que os README e o campo `homepage` incluídos nos pacotes sejam os finais, e explica como lançar versões seguintes (changeset → `version-packages` → publicar).
 - [ ] O guia afirma explicitamente que nenhum agente publica nem faz push e que os comandos dos passos 4 a 6 estão bloqueados nas permissões.
-- [ ] Nenhum comando de publicação foi executado nesta tarefa (`npm view @<utilizador>/ui` continua a não encontrar a versão 1.0.0, salvo se o João já a tiver publicado).
+- [ ] Nenhum comando de publicação foi executado nesta tarefa (`npm view @up201905892/ui` continua a não encontrar a versão 1.0.0, salvo se o João já a tiver publicado).
 - [ ] G1 a G3.
 
 **Testes exigidos:**
@@ -1303,10 +1335,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - Visual/Storybook: não aplicável.
 - Verificação manual no terminal: `pnpm changeset status`; `pnpm verify:package` com código 0; leitura do guia confirmando os nove passos e que os nomes dos pacotes coincidem com os dos `package.json`.
 
-**Fora de âmbito:** a publicação efetiva no npm, tags e releases no GitHub, publicação do Storybook online (todos passos do João), automação de releases por GitHub Actions.
+**Fora de âmbito:** a publicação efetiva no npm, tags e releases no GitHub (passos do João), publicação do Storybook online (DS-047), automação de releases por GitHub Actions.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`; a publicação do Storybook online passa a remeter para a DS-047
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): o guia recomenda publicar só depois de DS-042 a DS-047 (inclui a DS-047, que altera o campo `homepage` dos pacotes)
 
 ### DS-042 · Página "Getting started" no Storybook
 
@@ -1320,7 +1354,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Critérios de aceitação:**
 - [ ] A página está escrita em inglês (regra de língua em "Decisões técnicas"), incluindo títulos, texto, comentários dos exemplos e nomes na barra lateral.
 - [ ] `apps/docs/src/getting-started.mdx` é a página de entrada do Storybook (primeira na barra lateral, com a ordem definida em `storySort`).
-- [ ] Secções, por esta ordem: o que é a biblioteca (duas frases); requisitos (versões de React e de Node); instalação com pnpm, npm e yarn; importar `@<utilizador>/ui/styles.css` uma vez; primeiro exemplo com `Button`; ativar o tema escuro com `data-theme="dark"` no `<html>`; usar ícones; utilização com TypeScript; ligações para as páginas de tokens (DS-006), para a página de acessibilidade (DS-040) e para o repositório (as ligações para os guias são acrescentadas pela DS-043).
+- [ ] Secções, por esta ordem: o que é a biblioteca (duas frases); requisitos (versões de React e de Node); instalação com pnpm, npm e yarn; importar `@up201905892/ui/styles.css` uma vez; primeiro exemplo com `Button`; ativar o tema escuro com `data-theme="dark"` no `<html>`; usar ícones; utilização com TypeScript; ligações para as páginas de tokens (DS-006), para a página de acessibilidade (DS-040) e para o repositório (as ligações para os guias são acrescentadas pela DS-043).
 - [ ] Os nomes dos pacotes na página são os reais dos `package.json` (sem placeholder).
 - [ ] Os exemplos de código não se podem desatualizar: vivem em `apps/docs/src/snippets/*.tsx`, são verificados pelo `pnpm typecheck` e importados para a página como texto (`?raw`), e o primeiro exemplo aparece também renderizado.
 - [ ] Texto sem erros ortográficos e sem conteúdo provisório ("TODO", "lorem ipsum").
@@ -1336,6 +1370,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação alinhada com a regra de língua decidida pelo João (conversa): marca de decisão pendente removida; a página é escrita em inglês
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 
 ### DS-043 · Guias de temas e de personalização de estilos
 
@@ -1374,7 +1409,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Objetivo:** criar a aplicação de demonstração (um gestor de tarefas de equipa fictício) que consome a biblioteca como um projeto real, com a estrutura, a navegação e a alternância de tema.
 
 **Critérios de aceitação:**
-- [ ] Novo workspace `apps/example` (Vite + React + TypeScript `strict`, `"private": true`) que depende de `@<utilizador>/ui` e `@<utilizador>/icons` por `workspace:*` e importa `@<utilizador>/ui/styles.css` (pelo campo `exports`, sem aliases para `src`).
+- [ ] Novo workspace `apps/example` (Vite + React + TypeScript `strict`, `"private": true`) que depende de `@up201905892/ui` e `@up201905892/icons` por `workspace:*` e importa `@up201905892/ui/styles.css` (pelo campo `exports`, sem aliases para `src`).
 - [ ] Scripts: `pnpm example` na raiz arranca o servidor de desenvolvimento; `apps/example` tem scripts `build`, `typecheck` e `test`, incluídos nos comandos da raiz (`pnpm build` constrói a app e sai com 0).
 - [ ] "Feita só com a biblioteca": em `apps/example/src` uma regra do ESLint (`no-restricted-syntax`) proíbe os elementos JSX `button`, `input`, `textarea`, `select`, `table` e `dialog`; não há atributos `style` com cores ou espaçamentos; o CSS próprio da app limita-se a um ficheiro de layout que passa o Stylelint da DS-007 (só tokens).
 - [ ] Estrutura da app: cabeçalho com o nome, navegação entre as vistas "Overview" e "Tasks" com `Tabs`, menu de utilizador com `DropdownMenu`, e alternância de tema (`IconButton` com `SunIcon`/`MoonIcon`) que muda `data-theme`, persiste em `localStorage` e respeita `prefers-color-scheme` na primeira visita.
@@ -1393,6 +1428,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 
 ### DS-045 · App de exemplo: formulário e tabela de dados
 
@@ -1410,7 +1446,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Submeter com sucesso fecha o diálogo, atualiza a tabela, mostra um `Toast` de sucesso e devolve o focus ao elemento que abriu o diálogo; o botão de submeter mostra `loading` durante uma espera simulada.
 - [ ] "Delete" abre um `Dialog` de confirmação com `Button variant="danger"`; confirmar remove a linha e mostra um `Toast` com a ação "Undo", que repõe a tarefa.
 - [ ] Um `Popover` de filtros (por estado) junto à tabela, e `Tooltip` nos botões só com ícone.
-- [ ] Cobertura da biblioteca: um teste percorre as exportações de componentes de `@<utilizador>/ui` e falha se alguma não for importada em `apps/example/src` (exceções justificadas numa lista no próprio teste).
+- [ ] Cobertura da biblioteca: um teste percorre as exportações de componentes de `@up201905892/ui` e falha se alguma não for importada em `apps/example/src` (exceções justificadas numa lista no próprio teste).
 - [ ] A regra "só com a biblioteca" da DS-044 continua a passar.
 - [ ] G1 a G3.
 
@@ -1423,6 +1459,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 
 ### DS-046 · README do repositório e dos pacotes
 
@@ -1434,10 +1471,10 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Objetivo:** dar ao repositório e a cada pacote uma página de entrada profissional, que explica o produto a quem o vai usar e o método de trabalho a quem o vai avaliar numa entrevista.
 
 **Critérios de aceitação:**
-- [ ] `README.md` da raiz, em inglês (regra de língua em "Decisões técnicas"), com: descrição numa frase; lista do que inclui (componentes, tokens, temas, ícones); instalação e exemplo mínimo (iguais aos de "Getting started"); tabela dos pacotes com nome e descrição; tabela dos componentes por fase; comandos de desenvolvimento (os do `CLAUDE.md`); secção "Accessibility" com ligação à página de conformidade; secção "How this project is built" que explica o fluxo de quatro fases e aponta para `docs/workflow/`; licença e créditos (Lucide, Radix UI).
+- [ ] `README.md` da raiz, em inglês (regra de língua em "Decisões técnicas"), com: descrição numa frase; lista do que inclui (componentes, tokens, temas, ícones); instalação e exemplo mínimo (iguais aos de "Getting started"); tabela dos pacotes com nome e descrição; tabela dos componentes por fase; comandos de desenvolvimento (os do `CLAUDE.md`); secção "Accessibility" com ligação à página de conformidade; secção "How this project is built" que explica o fluxo de quatro fases e aponta para `docs/workflow/`; secções "License" (MIT) e "Credits" (Lucide, Radix UI).
 - [ ] O conteúdo atual do `README.md` sobre o fluxo de trabalho não se perde: é integrado na secção "How this project is built" ou movido para `docs/` com ligação.
-- [ ] `README.md` de `packages/ui`, `packages/tokens` e `packages/icons` (são os que aparecem na página do npm): instalação, utilização, API principal ou ligação para a documentação, licença; o de `icons` mantém os créditos do Lucide; o de `ui` mantém a secção "Como criar um componente".
-- [ ] Os nomes dos pacotes e os comandos são os reais; não há placeholders, "TODO" nem ligações para recursos que não existem (as ligações para o Storybook publicado e para o npm só entram se o João as indicar; caso contrário ficam omitidas e registadas em "Decisões para o João").
+- [ ] `README.md` de `packages/ui`, `packages/tokens` e `packages/icons` (são os que aparecem na página do npm), em inglês e com títulos de secção em inglês: instalação, utilização, API principal ou ligação para a documentação, licença (MIT); o de `icons` mantém a secção "Credits" com os créditos do Lucide; o de `ui` mantém a secção "How to create a component".
+- [ ] Os nomes dos pacotes (`@up201905892/ui`, `@up201905892/icons`, `@up201905892/tokens`) e os comandos são os reais; não há placeholders, "TODO" nem ligações para recursos que não existem (a ligação para o Storybook publicado é acrescentada pela DS-047; as ligações para o npm só entram se o João confirmar que os pacotes já estão publicados; caso contrário ficam omitidas e registadas em "Decisões para o João").
 - [ ] Todas as ligações relativas apontam para ficheiros que existem (verificado por teste).
 - [ ] G1 a G3 (o Prettier passa nos ficheiros Markdown alterados).
 
@@ -1451,3 +1488,34 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação alinhada com a regra de língua decidida pelo João (conversa): o README da raiz é escrito em inglês, sem remeter para uma decisão pendente
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): títulos de secção em inglês ("Credits", "How to create a component", "License"); licença MIT; nomes reais dos pacotes com o scope `@up201905892`; a ligação para o Storybook publicado passa para a DS-047
+
+### DS-047 · Storybook no GitHub Pages: build estático e proposta de workflow
+
+- **Fase do MVP:** Documentação
+- **Prioridade:** Média
+- **Depende de:** DS-042, DS-046
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** deixar o Storybook pronto a ser publicado no GitHub Pages, com um build que funciona debaixo do caminho base do repositório e um workflow proposto que o João só tem de copiar para `.github/`.
+
+**Critérios de aceitação:**
+- [ ] Script `pnpm build:pages` na raiz: constrói os pacotes, gera o Storybook estático e deixa o site completo em `apps/docs/storybook-static/` (a pasta de saída já usada pelo `pnpm build:docs`, ignorada pelo git), incluindo um ficheiro `.nojekyll` na raiz dessa pasta.
+- [ ] O build funciona debaixo de um caminho base: todos os recursos (JS, CSS, iframe das stories, tipos de letra, imagens) são referenciados por caminhos relativos, de modo que o site abre tanto em `/` como em `/<nome-do-repositório>/`; não há caminhos absolutos começados por `/` no `index.html` nem no `iframe.html` gerados.
+- [ ] Script `pnpm preview:pages` que serve a pasta de saída em `http://localhost:<porta>/<nome-do-repositório>/`, com o nome do repositório lido do campo `repository` do `package.json` da raiz (não fica escrito à mão nos scripts).
+- [ ] Verificação automática `pnpm test:pages`: com o site servido debaixo do caminho base, abre a página inicial num browser (Playwright, já instalado pela DS-003), confirma que a página "Getting started" aparece, que uma story de componente (ex.: `Button/Primary`) renderiza dentro do iframe, e que nenhum pedido de rede termina em 404; sai com código ≠ 0 se algo falhar.
+- [ ] `docs/github-pages.md`, em inglês, com: (1) o conteúdo completo proposto para `.github/workflows/pages.yml` (disparo em `push` para `main` e `workflow_dispatch`; pnpm 10 e Node 22; `pnpm install --frozen-lockfile`; `pnpm build:pages`; `actions/configure-pages`, `actions/upload-pages-artifact` com `apps/docs/storybook-static` e `actions/deploy-pages`; permissões `contents: read`, `pages: write` e `id-token: write`; grupo de `concurrency`); (2) os passos manuais do João: copiar o ficheiro para `.github/workflows/`, ativar Pages em Settings → Pages com a origem "GitHub Actions", e confirmar o URL; (3) como testar localmente com `pnpm preview:pages`; (4) o URL esperado, `https://<dono>.github.io/<nome-do-repositório>/`, calculado a partir do campo `repository`.
+- [ ] Nenhum ficheiro em `.github/` é criado ou alterado por esta tarefa; o pedido para o João acrescentar o workflow e ativar o Pages fica registado em "Decisões para o João" no registo diário, com ligação para `docs/github-pages.md`.
+- [ ] O `README.md` da raiz ganha, numa secção "Documentation", a ligação para o URL esperado do Storybook, e o campo `homepage` dos `package.json` publicados aponta para o mesmo URL; o registo em "Decisões para o João" avisa que a ligação só funciona depois de o João ativar o Pages.
+- [ ] G1 a G3 (sem dependências novas além de um servidor estático de desenvolvimento, se o já usado pelo `pnpm test:a11y` não servir).
+
+**Testes exigidos:**
+- Unitários: teste Vitest que, depois de `pnpm build:pages`, verifica que `apps/docs/storybook-static/index.html`, `iframe.html` e `.nojekyll` existem e que os dois HTML não contêm `src="/` nem `href="/`; teste que confirma que o URL escrito no README e em `homepage` coincide com o calculado a partir de `repository`.
+- Acessibilidade: não aplicável a esta tarefa (o conteúdo é o mesmo já testado); `pnpm test:a11y` continua a passar.
+- Visual/Storybook: `pnpm test:pages` com código 0; verificação manual com `pnpm preview:pages`: a página inicial abre debaixo do caminho base, o seletor de tema funciona e a navegação entre stories não dá erros na consola.
+- Verificação manual no terminal: `pnpm build:pages && pnpm test:pages` com código 0; `git status` confirma que nada mudou em `.github/`; prova negativa temporária: servir a pasta na raiz e pedir um recurso por `/<nome-do-repositório>/…` inexistente faz `pnpm test:pages` falhar (não commitado).
+
+**Fora de âmbito:** criar ou alterar ficheiros em `.github/` e ativar o Pages (passos do João), publicar a app de exemplo (`apps/example`) no mesmo site, domínio próprio, pré-visualizações por pull request, publicação em serviços externos (Chromatic, Netlify, Vercel).
+
+**Histórico:**
+- 2026-10-09 · planeador · criada como Proposta

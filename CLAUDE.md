@@ -58,7 +58,7 @@ Se um comando ainda não existir, criá-lo faz parte da tarefa de setup correspo
 - API consistente: `variant`, `size`, `asChild`, `forwardRef`, `className`; suporte controlado e não controlado (`value` / `defaultValue`)
 - Sem cores, espaçamentos ou raios escritos à mão: usar sempre tokens
 - Todo o componente interativo funciona só com teclado e tem focus visível
-- Commits: `feat(ui): DS-012 Button com variantes e tamanhos` (o ID da tarefa vai sempre na mensagem)
+- Commits em inglês, Conventional Commits, com o ID da tarefa sempre na mensagem: `feat(ui): DS-012 add Button with variants and sizes`
 
 ## Ficheiros que são só do João
 

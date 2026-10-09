@@ -63,5 +63,5 @@ Se houver menos de 3 tarefas `Planeado` com dependências satisfeitas → delega
 ## 7. Registo do dia
 
 1. Acrescenta o resumo do dia no topo de `docs/workflow/registo-diario.md`, logo a seguir à introdução, com o título `## AAAA-MM-DD` (modelo no ficheiro). Em modo autónomo, o workflow publica esta secção como comentário no pull request, por isso escreve-a para o João ler no telemóvel: curta e com as decisões pendentes em primeiro lugar.
-2. Commit: `chore(workflow): registo diário AAAA-MM-DD`.
+2. Commit: `chore(workflow): daily log YYYY-MM-DD`.
 3. Em modo interativo, responde ao João com o mesmo resumo.
