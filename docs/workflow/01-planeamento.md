@@ -8,16 +8,16 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 
 | ID | Tarefa | Fase do MVP | Prioridade | Depende de | Estado |
 | --- | --- | --- | --- | --- | --- |
-| DS-001 | Monorepo pnpm, TypeScript strict, ESLint e Prettier | Fundações | Alta | — | Proposta |
-| DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Proposta |
-| DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Proposta |
-| DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Proposta |
-| DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Proposta |
-| DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Proposta |
-| DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Proposta |
-| DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Proposta |
-| DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Proposta |
-| DS-010 | Button | Formulários | Alta | DS-009 | Proposta |
+| DS-001 | Monorepo pnpm, TypeScript strict, ESLint e Prettier | Fundações | Alta | — | Planeado |
+| DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Planeado |
+| DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Planeado |
+| DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Planeado |
+| DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Planeado |
+| DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Planeado |
+| DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Planeado |
+| DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Planeado |
+| DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
+| DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
 | DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Proposta |
 | DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Proposta |
 | DS-013 | Input | Formulários | Alta | DS-012 | Proposta |
@@ -72,8 +72,9 @@ Decisões do João que condicionam as especificações. Não são linhas de `apr
 | 2026-10-09 | conversa | Estilos | **CSS simples + CSS variables**. Um `.css` por componente, classes com prefixo `ds-` (ex.: `ds-button`), variantes/tamanhos/estados por atributos `data-*`, sem valores escritos à mão (só tokens). O pacote `ui` publica um `styles.css` agregado; zero runtime de CSS-in-JS. |
 | 2026-10-09 | conversa | Tokens | **Style Dictionary** (JSON → CSS variables + exportação TypeScript). Temas claro e escuro via `[data-theme]`, com fallback para `prefers-color-scheme`. |
 | 2026-10-09 | conversa | Ícones | **Subconjunto do Lucide** (20–30 SVG, licença ISC, com atribuição), convertidos em componentes React com SVGR em `packages/icons`, com API própria (`size`, `title`, `aria-hidden` por omissão). |
+| 2026-10-09 | conversa | Língua | **Inglês** no código, nos textos por omissão dos componentes (sempre substituíveis por prop), no Storybook e nos README. **Português** nos registos de `docs/workflow/`. |
 
-Decisões ainda pendentes (cada uma está assinalada na tarefa que afeta): nome do scope npm `@<utilizador>` (DS-036), licença dos pacotes (DS-036), língua dos textos por omissão e da documentação (DS-010, DS-042).
+Decisões ainda pendentes (cada uma está assinalada na tarefa que afeta): nome do scope npm `@<utilizador>` (DS-036), licença dos pacotes (DS-036).
 
 ### Critérios comuns
 
@@ -154,6 +155,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-002 · Vitest + Testing Library e build com tsup
 
@@ -184,6 +186,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-003 · Storybook 8 com addon-a11y e `pnpm test:a11y`
 
@@ -214,6 +217,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-004 · Tokens primitivos com Style Dictionary
 
@@ -244,6 +248,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-005 · Tokens semânticos e temas claro/escuro
 
@@ -272,6 +277,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-006 · Tema no Storybook: toggle e páginas de tokens
 
@@ -299,6 +305,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-007 · CSS base, focus visível, `styles.css` agregado e Stylelint
 
@@ -329,6 +336,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-008 · Pacote de ícones (subconjunto do Lucide com SVGR)
 
@@ -357,6 +365,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-009 · Utilitários partilhados, helper de axe e teste de convenções
 
@@ -386,6 +395,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 
 ### DS-010 · Button
 
@@ -401,21 +411,29 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Props: `variant: 'primary' | 'secondary' | 'ghost' | 'danger'` (omissão `primary`), `size: 'sm' | 'md' | 'lg'` (omissão `md`), `fullWidth?: boolean`, `leadingIcon?` e `trailingIcon?` (`ReactNode`), `asChild?: boolean`, `disabled`.
 - [ ] `variant` e `size` aparecem no DOM como `data-variant` e `data-size`; a classe base é `ds-button`.
 - [ ] Com `asChild`, o `Button` não cria um `<button>`: aplica classes, `data-*` e `ref` ao filho (ex.: `<a href>`), e não lhe passa `type`.
-- [ ] `disabled` usa o atributo nativo: o botão não recebe focus com Tab e `onClick` não dispara.
-- [ ] Estados `:hover`, `:active`, `:focus-visible` e `:disabled` estilizados para as quatro variantes; altura mínima de 24px em `sm` (WCAG 2.5.8) e área de toque confortável em `md`/`lg`.
+- [ ] `disabled` sem `asChild` usa o atributo nativo `disabled` do `<button>`: o botão não recebe focus com Tab e `onClick` não dispara.
+- [ ] `disabled` com `asChild` (o filho, ex.: `<a>`, não tem `disabled` nativo): o filho recebe `aria-disabled="true"` e `tabIndex={-1}` e não recebe o atributo `disabled`; o clique é bloqueado na fase de captura (`preventDefault` + `stopPropagation`), de modo que nem o `onClick` passado ao `Button` nem o do próprio filho disparam e a navegação da ligação não acontece.
+- [ ] Nos dois casos de `disabled` o elemento raiz tem `data-disabled`, e é esse o seletor usado no CSS para o estado desativado (o mesmo aspeto com e sem `asChild`).
+- [ ] Estados `:hover`, `:active`, `:focus-visible` e desativado (`[data-disabled]`) estilizados para as quatro variantes.
+- [ ] Alturas mínimas por tokens da escala de espaçamento (DS-004): `Button.css` declara `min-height: var(--ds-space-8)` para `data-size="sm"` (2rem = 32px), `var(--ds-space-10)` para `md` (2.5rem = 40px) e `var(--ds-space-12)` para `lg` (3rem = 48px); com o tamanho de letra de base de 16px, a altura renderizada é ≥ 32px, ≥ 40px e ≥ 48px, respetivamente.
 - [ ] Os ícones passados em `leadingIcon`/`trailingIcon` ficam dentro de um `<span aria-hidden="true">` e não alteram o nome acessível.
-- [ ] Decisão pendente (língua): este componente não tem textos por omissão; a regra geral proposta é "textos por omissão em inglês, sempre substituíveis por prop" e aplica-se a partir daqui se o João a confirmar.
+- [ ] Com `asChild`, os ícones são renderizados dentro do filho, nos mesmos `<span aria-hidden="true">`, antes e depois do conteúdo do filho, usando `Slottable` de `@radix-ui/react-slot` (acrescentado à reexportação de `packages/ui/src/utils/Slot.ts`); não é criado nenhum elemento à volta do filho.
+- [ ] As stories e os testes usam um `<svg>` de exemplo definido no próprio ficheiro: a DS-010 não depende do pacote de ícones (DS-008).
 - [ ] G1 a G3; C1 a C5.
 
 **Testes exigidos:**
 - Unitários: renderiza o texto filho; valores por omissão de `variant`/`size` nos `data-*`; cada variante e tamanho; `className` acrescentada a `ds-button`; `ref` aponta para o `<button>`; `onClick` chamado uma vez ao clicar; `asChild` com `<a href="/x">` renderiza uma ligação com a classe `ds-button` e sem atributo `type`; `type="submit"` dentro de um `<form>` submete.
-- Acessibilidade: axe sem violações; Tab foca o botão; Enter e Espaço chamam `onClick` uma vez cada; com `disabled`, Tab salta o botão e Enter/Espaço não chamam `onClick`; `getByRole('button', { name })` devolve o texto mesmo com ícones.
-- Visual/Storybook: `Primary`, `Secondary`, `Ghost`, `Danger`, `Sizes`, `WithIcons`, `FullWidth`, `Disabled`, `AsLink` (com `asChild`), `DarkTheme` (as quatro variantes e o estado disabled).
+- Unitários (`disabled`): sem `asChild`, o `<button>` tem o atributo `disabled` e `data-disabled`, e clicar não chama `onClick`; com `asChild` e `<a href="/x">`, a ligação tem `aria-disabled="true"`, `data-disabled` e `tabindex="-1"`, não tem o atributo `disabled`, e clicar não chama o `onClick` do `Button` nem o do `<a>`, com o evento de clique cancelado (`defaultPrevented`).
+- Unitários (ícones com `asChild`): `asChild` com `<a href="/x">Docs</a>` e `leadingIcon` → o `<span aria-hidden="true">` do ícone está dentro do `<a>` e antes do texto; com `trailingIcon`, está dentro do `<a>` e depois do texto; o `<a>` é o elemento raiz (não há elemento à volta); `getByRole('link', { name: 'Docs' })` encontra a ligação (o nome acessível é só o texto).
+- Acessibilidade: axe sem violações (incluindo `asChild` com ícones e `asChild` desativado); Tab foca o botão; Enter e Espaço chamam `onClick` uma vez cada; com `disabled`, Tab salta o botão e Enter/Espaço não chamam `onClick`; com `asChild` + `disabled`, Tab salta a ligação (o focus passa do elemento anterior para o seguinte); `getByRole('button', { name })` devolve o texto mesmo com ícones.
+- Visual/Storybook: `Primary`, `Secondary`, `Ghost`, `Danger`, `Sizes` (com `play` que mede a altura de cada botão: ≥ 32px em `sm`, ≥ 40px em `md`, ≥ 48px em `lg`), `WithIcons`, `FullWidth`, `Disabled`, `AsLink` (`asChild` com `<a>`, com `leadingIcon` e `trailingIcon`), `AsLinkDisabled` (`asChild` + `disabled`), `DarkTheme` (as quatro variantes, o estado disabled e uma ligação com `asChild`).
 
 **Fora de âmbito:** estado `loading` (DS-021), botão só com ícone (DS-011), grupo de botões, variante "link".
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): critério de língua removido; disabled com asChild; alturas mínimas 32/40/48px por tokens; ícones com asChild via Slottable
+- 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa), após revisão
 
 ### DS-011 · IconButton
 
@@ -1299,14 +1317,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Objetivo:** primeira página que um programador lê: como instalar, importar os estilos e usar o primeiro componente em menos de cinco minutos.
 
-**Decisão pendente do João:** língua da documentação pública (Storybook e README). Proposta: inglês, para o portfólio poder ser lido por recrutadores internacionais; os registos em `docs/workflow/` continuam em português.
-
 **Critérios de aceitação:**
+- [ ] A página está escrita em inglês (regra de língua em "Decisões técnicas"), incluindo títulos, texto, comentários dos exemplos e nomes na barra lateral.
 - [ ] `apps/docs/src/getting-started.mdx` é a página de entrada do Storybook (primeira na barra lateral, com a ordem definida em `storySort`).
 - [ ] Secções, por esta ordem: o que é a biblioteca (duas frases); requisitos (versões de React e de Node); instalação com pnpm, npm e yarn; importar `@<utilizador>/ui/styles.css` uma vez; primeiro exemplo com `Button`; ativar o tema escuro com `data-theme="dark"` no `<html>`; usar ícones; utilização com TypeScript; ligações para as páginas de tokens (DS-006), para a página de acessibilidade (DS-040) e para o repositório (as ligações para os guias são acrescentadas pela DS-043).
 - [ ] Os nomes dos pacotes na página são os reais dos `package.json` (sem placeholder).
 - [ ] Os exemplos de código não se podem desatualizar: vivem em `apps/docs/src/snippets/*.tsx`, são verificados pelo `pnpm typecheck` e importados para a página como texto (`?raw`), e o primeiro exemplo aparece também renderizado.
-- [ ] Texto sem erros ortográficos na língua escolhida e sem conteúdo provisório ("TODO", "lorem ipsum").
+- [ ] Texto sem erros ortográficos e sem conteúdo provisório ("TODO", "lorem ipsum").
 - [ ] G1 a G3.
 
 **Testes exigidos:**
@@ -1318,6 +1335,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação alinhada com a regra de língua decidida pelo João (conversa): marca de decisão pendente removida; a página é escrita em inglês
 
 ### DS-043 · Guias de temas e de personalização de estilos
 
@@ -1416,7 +1434,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Objetivo:** dar ao repositório e a cada pacote uma página de entrada profissional, que explica o produto a quem o vai usar e o método de trabalho a quem o vai avaliar numa entrevista.
 
 **Critérios de aceitação:**
-- [ ] `README.md` da raiz, na língua decidida na DS-042, com: descrição numa frase; lista do que inclui (componentes, tokens, temas, ícones); instalação e exemplo mínimo (iguais aos de "Getting started"); tabela dos pacotes com nome e descrição; tabela dos componentes por fase; comandos de desenvolvimento (os do `CLAUDE.md`); secção "Accessibility" com ligação à página de conformidade; secção "How this project is built" que explica o fluxo de quatro fases e aponta para `docs/workflow/`; licença e créditos (Lucide, Radix UI).
+- [ ] `README.md` da raiz, em inglês (regra de língua em "Decisões técnicas"), com: descrição numa frase; lista do que inclui (componentes, tokens, temas, ícones); instalação e exemplo mínimo (iguais aos de "Getting started"); tabela dos pacotes com nome e descrição; tabela dos componentes por fase; comandos de desenvolvimento (os do `CLAUDE.md`); secção "Accessibility" com ligação à página de conformidade; secção "How this project is built" que explica o fluxo de quatro fases e aponta para `docs/workflow/`; licença e créditos (Lucide, Radix UI).
 - [ ] O conteúdo atual do `README.md` sobre o fluxo de trabalho não se perde: é integrado na secção "How this project is built" ou movido para `docs/` com ligação.
 - [ ] `README.md` de `packages/ui`, `packages/tokens` e `packages/icons` (são os que aparecem na página do npm): instalação, utilização, API principal ou ligação para a documentação, licença; o de `icons` mantém os créditos do Lucide; o de `ui` mantém a secção "Como criar um componente".
 - [ ] Os nomes dos pacotes e os comandos são os reais; não há placeholders, "TODO" nem ligações para recursos que não existem (as ligações para o Storybook publicado e para o npm só entram se o João as indicar; caso contrário ficam omitidas e registadas em "Decisões para o João").
@@ -1432,3 +1450,4 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação alinhada com a regra de língua decidida pelo João (conversa): o README da raiz é escrito em inglês, sem remeter para uma decisão pendente
