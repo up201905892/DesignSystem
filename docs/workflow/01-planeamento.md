@@ -34,7 +34,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Proposta |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Proposta |
 | DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Proposta |
-| DS-027 | Toast | Overlays e feedback | Média | DS-011 | Proposta |
+| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Proposta |
 | DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Proposta |
 | DS-029 | Card | Layout e dados | Média | DS-010 | Proposta |
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Proposta |
@@ -55,6 +55,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Proposta |
 | DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Proposta |
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
+| DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 
 ## Decisões aplicadas
 
@@ -73,7 +74,7 @@ Decisões do João que condicionam as especificações. Não são linhas de `apr
 | 2026-10-09 | conversa | Estilos | **CSS simples + CSS variables**. Um `.css` por componente, classes com prefixo `ds-` (ex.: `ds-button`), variantes/tamanhos/estados por atributos `data-*`, sem valores escritos à mão (só tokens). O pacote `ui` publica um `styles.css` agregado; zero runtime de CSS-in-JS. |
 | 2026-10-09 | conversa | Tokens | **Style Dictionary** (JSON → CSS variables + exportação TypeScript). Temas claro e escuro via `[data-theme]`, com fallback para `prefers-color-scheme`. |
 | 2026-10-09 | conversa | Ícones | **Subconjunto do Lucide** (20–30 SVG, licença ISC, com atribuição), convertidos em componentes React com SVGR em `packages/icons`, com API própria (`size`, `title`, `aria-hidden` por omissão). |
-| 2026-10-09 | conversa | Língua | **Inglês** no código, nos textos por omissão dos componentes (sempre substituíveis por prop), no Storybook, nos README (títulos de secção incluídos), nos nomes de exemplo em testes e stories e nas mensagens de commit. **Português** em tudo o que está em `docs/workflow/`. |
+| 2026-10-09 | conversa | Língua | **Inglês** no código, nos textos por omissão dos componentes (sempre substituíveis por prop), no Storybook, nos README (títulos de secção incluídos), nos nomes de exemplo em testes e stories nas mensagens de commit e nos documentos em `docs/` fora de `docs/workflow/` (ex.: `docs/publishing.md`, `docs/github-pages.md`). **Português** em tudo o que está em `docs/workflow/`. |
 | 2026-10-09 | conversa | Licença | **MIT** para os três pacotes publicados e para o repositório. |
 | 2026-10-09 | conversa | Scope npm | **`@up201905892`**. Os pacotes publicados são `@up201905892/ui`, `@up201905892/icons` e `@up201905892/tokens`. Até à DS-036 os pacotes mantêm os nomes internos `@ds/*` e `"private": true`; a DS-036 faz a mudança de nome. |
 | 2026-10-09 | conversa | Storybook online | O Storybook é publicado no **GitHub Pages**. Os agentes preparam o build e propõem o workflow (DS-047); o ficheiro em `.github/` é acrescentado pelo João. |
@@ -557,6 +558,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): 32/40/48px como altura mínima por tamanho (a altura real depende de rows), medida na story Sizes
+- 2026-10-09 · planeador · interpretação da altura mínima confirmada pelo João (conversa)
 
 ### DS-015 · Checkbox
 
@@ -746,6 +748,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Posição do `Spinner`: é renderizado no `<span aria-hidden="true">` do `leadingIcon`, substituindo o ícone enquanto `loading` for verdadeiro (o span é criado se não houver `leadingIcon`); no `IconButton`, substitui o `icon` no mesmo span, e o botão continua quadrado. O `trailingIcon` não muda.
 - [ ] Com `asChild` + `loading`: o filho (ex.: `<a>`) continua focável, recebe `aria-disabled="true"`, `aria-busy="true"` e `data-loading`, o clique é bloqueado na fase de captura (nem o `onClick` do `Button` nem o do filho disparam, e a navegação não acontece), e o `Spinner` é renderizado dentro do filho, no mesmo span do `leadingIcon`, via `Slottable`; não é criado nenhum elemento à volta do filho.
 - [ ] Nome e descrição acessíveis: o nome do botão não muda com `loading` (o `Spinner` está dentro de um span `aria-hidden`); o `loadingLabel` fica num elemento visualmente escondido dentro desse span, referenciado por `aria-describedby` do elemento raiz (acrescentado a um `aria-describedby` que o consumidor já tenha passado), de modo que a descrição acessível passa a incluir o `loadingLabel` enquanto `loading` for verdadeiro.
+- [ ] O botão não anuncia o resultado da ação: o JSDoc da prop `loading` e a descrição da story `Button/Loading` dizem que o sucesso ou o erro é comunicado pelo consumidor, com um `Toast` (DS-027) ou outro feedback visível e anunciado, e não pelo botão.
 - [ ] A largura do botão é igual com e sem `loading` quando há `leadingIcon`; sem `leadingIcon`, o texto mantém-se visível e o botão só cresce a largura do `Spinner` mais o espaçamento.
 - [ ] Com `disabled` e `loading` em simultâneo, prevalece o comportamento de `disabled` (fora da ordem de Tab); o `Spinner` continua visível.
 - [ ] G1 a G3; C1 a C5 (os testes e as stories acrescentam-se aos ficheiros existentes do `Button` e do `IconButton`).
@@ -762,6 +765,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loading focável com aria-disabled documentado como diferença intencional face a disabled; clique bloqueado na captura; asChild + loading; posição do Spinner via Slottable; loadingLabel por aria-describedby em vez de role="status"; nomes de exemplo em inglês
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loadingLabel por aria-describedby, bloqueio da submissão e largura sem leadingIcon confirmados; novo critério: a documentação diz que o resultado da ação é anunciado pelo Toast ou por outro feedback do consumidor, não pelo botão
 
 ### DS-022 · Alert
 
@@ -832,17 +836,19 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] O gatilho tem `aria-haspopup="dialog"`, `aria-expanded` e `aria-controls`; o conteúdo tem `role="dialog"`, é renderizado num portal com o token `z-index-dropdown` e exige nome acessível (`aria-label` ou `aria-labelledby`).
 - [ ] Ao abrir, o focus passa para o conteúdo; ao fechar (Esc, clique fora, `PopoverClose`), o focus volta ao gatilho.
 - [ ] O conteúdo reposiciona-se quando não cabe no lado pedido (comportamento de colisão do Radix ativo) e não ultrapassa a largura do viewport.
+- [ ] Gatilho desativado: com `<PopoverTrigger asChild>` à volta de um `Button disabled` (ou `IconButton disabled`), o popover não abre com clique, Enter nem Espaço, `onOpenChange` não é chamado, e o gatilho não recebe focus com Tab.
 - [ ] G1 a G3 (dependência nova: `@radix-ui/react-popover`); C1 a C5.
 
 **Testes exigidos:**
-- Unitários: fechado por omissão; clicar no gatilho abre e volta a fechar; `defaultOpen`; modo controlado; `onOpenChange` chamado com `true`/`false`; clicar fora fecha; `PopoverClose` fecha; `showClose` renderiza o botão com o `closeLabel`.
-- Acessibilidade: axe sem violações com o popover aberto; Enter e Espaço no gatilho abrem; o focus fica dentro do conteúdo depois de abrir; Tab percorre os elementos focáveis do conteúdo; Esc fecha e devolve o focus ao gatilho; `aria-expanded` alterna entre `false` e `true`.
-- Visual/Storybook: `Default`, `Placement` (lados e alinhamentos), `WithForm` (Input + Button), `WithCloseButton`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme` (aberto).
+- Unitários: fechado por omissão; clicar no gatilho abre e volta a fechar; `defaultOpen`; modo controlado; `onOpenChange` chamado com `true`/`false`; clicar fora fecha; `PopoverClose` fecha; `showClose` renderiza o botão com o `closeLabel`; com um `Button disabled` como gatilho, clicar não abre o popover e `onOpenChange` não é chamado.
+- Acessibilidade: axe sem violações com o popover aberto; Enter e Espaço no gatilho abrem; o focus fica dentro do conteúdo depois de abrir; Tab percorre os elementos focáveis do conteúdo; Esc fecha e devolve o focus ao gatilho; `aria-expanded` alterna entre `false` e `true`; com o gatilho desativado, Tab salta-o (o focus passa do elemento anterior para o seguinte) e o conteúdo nunca aparece no DOM.
+- Visual/Storybook: `Default`, `Placement` (lados e alinhamentos), `WithForm` (Input + Button), `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction` (com `play`), `DarkTheme` (aberto).
 
 **Fora de âmbito:** popover modal com bloqueio de fundo (usar Dialog), seta decorativa, abertura por hover.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o popover nem recebe focus, com critério, testes e story DisabledTrigger
 
 ### DS-025 · Dialog (Modal)
 
@@ -861,17 +867,19 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Ao abrir, o focus vai para o primeiro elemento focável do diálogo; ao fechar, volta ao gatilho.
 - [ ] Em ecrãs estreitos ocupa a largura disponível com margem definida por token; conteúdo longo faz scroll dentro do `DialogBody`, com cabeçalho e rodapé sempre visíveis.
 - [ ] Animações de entrada e saída respeitam `prefers-reduced-motion`.
+- [ ] Gatilho desativado: com `<DialogTrigger asChild>` à volta de um `Button disabled` (ou `IconButton disabled`), o diálogo não abre com clique, Enter nem Espaço, `onOpenChange` não é chamado, e o gatilho não recebe focus com Tab.
 - [ ] G1 a G3 (dependência nova: `@radix-ui/react-dialog`); C1 a C5.
 
 **Testes exigidos:**
-- Unitários: fechado por omissão; clicar no gatilho abre; `defaultOpen`; modo controlado; `onOpenChange(false)` ao clicar no botão de fechar, em `DialogClose` e no overlay; com `closeOnOverlayClick={false}` o clique no overlay não fecha; `hideClose` remove o botão; `size` em `data-size`.
-- Acessibilidade: axe sem violações com o diálogo aberto; `getByRole('dialog', { name: <título> })`; ao abrir, o focus está dentro do diálogo; Tab no último elemento focável volta ao primeiro e Shift+Tab no primeiro vai para o último (focus preso); Esc fecha; depois de fechar, o gatilho tem o focus. A verificação do focus preso é feita também numa story com `play`, em browser real.
-- Visual/Storybook: `Default`, `Sizes`, `WithForm`, `LongContent` (scroll interno), `Confirmation` (ação destrutiva com `Button variant="danger"`), `NoOverlayClose`, `KeyboardInteraction` (com `play`), `DarkTheme` (aberto).
+- Unitários: fechado por omissão; clicar no gatilho abre; `defaultOpen`; modo controlado; `onOpenChange(false)` ao clicar no botão de fechar, em `DialogClose` e no overlay; com `closeOnOverlayClick={false}` o clique no overlay não fecha; `hideClose` remove o botão; `size` em `data-size`; com um `Button disabled` como gatilho, clicar não abre o diálogo e `onOpenChange` não é chamado.
+- Acessibilidade: axe sem violações com o diálogo aberto; `getByRole('dialog', { name: <título> })`; ao abrir, o focus está dentro do diálogo; Tab no último elemento focável volta ao primeiro e Shift+Tab no primeiro vai para o último (focus preso); Esc fecha; depois de fechar, o gatilho tem o focus; com o gatilho desativado, Tab salta-o (o focus passa do elemento anterior para o seguinte) e não existe nenhum elemento com `role="dialog"`. A verificação do focus preso é feita também numa story com `play`, em browser real.
+- Visual/Storybook: `Default`, `Sizes`, `WithForm`, `LongContent` (scroll interno), `Confirmation` (ação destrutiva com `Button variant="danger"`), `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction` (com `play`), `DarkTheme` (aberto).
 
 **Fora de âmbito:** `AlertDialog` separado (confirmação que não fecha com Esc/overlay), painel lateral (drawer), diálogos empilhados, ecrã inteiro.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o diálogo nem recebe focus, com critério, testes e story DisabledTrigger
 
 ### DS-026 · DropdownMenu
 
@@ -889,23 +897,25 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] O item ativo é realçado por `data-highlighted` (o focus real está no item, não é simulado só por hover).
 - [ ] Selecionar um item chama `onSelect`, fecha o menu e devolve o focus ao gatilho; itens desativados têm `aria-disabled="true"` e não chamam `onSelect`.
 - [ ] O item `variant="danger"` distingue-se por cor com contraste AA e a distinção não depende só da cor quando tem ícone.
+- [ ] Gatilho desativado: com `<DropdownMenuTrigger asChild>` à volta de um `Button disabled` (ou `IconButton disabled`), o menu não abre com clique, Enter, Espaço nem Seta para baixo, `onOpenChange` não é chamado, e o gatilho não recebe focus com Tab.
 - [ ] G1 a G3 (dependência nova: `@radix-ui/react-dropdown-menu`); C1 a C5.
 
 **Testes exigidos:**
-- Unitários: fechado por omissão; abre ao clicar no gatilho; `onSelect` chamado ao clicar num item e o menu fecha; item `disabled` não chama `onSelect`; modo controlado; clicar fora fecha; `DropdownMenuLabel` e `DropdownMenuSeparator` renderizam com os papéis certos (`separator`).
-- Acessibilidade: axe sem violações com o menu aberto. Teclado (unitário ou `play`): no gatilho, Enter, Espaço e Seta para baixo abrem o menu com o primeiro item focado; Seta para baixo/cima movem o focus entre itens e saltam os desativados; Home e End vão ao primeiro e ao último; escrever uma letra foca o item que começa por ela; Enter e Espaço ativam o item focado e fecham; Esc fecha e devolve o focus ao gatilho; Tab fecha o menu.
-- Visual/Storybook: `Default`, `WithIcons`, `WithGroupsAndLabels`, `DisabledItem`, `DangerItem`, `OnIconButton` (gatilho com `EllipsisIcon`), `KeyboardInteraction` (com `play`), `DarkTheme` (aberto).
+- Unitários: fechado por omissão; abre ao clicar no gatilho; `onSelect` chamado ao clicar num item e o menu fecha; item `disabled` não chama `onSelect`; modo controlado; clicar fora fecha; `DropdownMenuLabel` e `DropdownMenuSeparator` renderizam com os papéis certos (`separator`); com um `Button disabled` como gatilho, clicar não abre o menu e `onOpenChange` não é chamado.
+- Acessibilidade: axe sem violações com o menu aberto. Teclado (unitário ou `play`): no gatilho, Enter, Espaço e Seta para baixo abrem o menu com o primeiro item focado; Seta para baixo/cima movem o focus entre itens e saltam os desativados; Home e End vão ao primeiro e ao último; escrever uma letra foca o item que começa por ela; Enter e Espaço ativam o item focado e fecham; Esc fecha e devolve o focus ao gatilho; Tab fecha o menu; com o gatilho desativado, Tab salta-o (o focus passa do elemento anterior para o seguinte) e não existe nenhum elemento com `role="menu"`.
+- Visual/Storybook: `Default`, `WithIcons`, `WithGroupsAndLabels`, `DisabledItem`, `DangerItem`, `OnIconButton` (gatilho com `EllipsisIcon`), `DisabledTrigger`, `KeyboardInteraction` (com `play`), `DarkTheme` (aberto).
 
 **Fora de âmbito:** submenus, itens de checkbox e de rádio, atalhos de teclado apresentados à direita, menu de contexto (botão direito).
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o menu (clique, Enter, Espaço, Seta para baixo) nem recebe focus, com critério, testes e story DisabledTrigger
 
 ### DS-027 · Toast
 
 - **Fase do MVP:** Overlays e feedback
 - **Prioridade:** Média
-- **Depende de:** DS-011
+- **Depende de:** DS-011, DS-021
 - **Estimativa:** M (≤ 1 dia)
 
 **Objetivo:** notificações temporárias não bloqueantes, disparadas por código, baseadas em `@radix-ui/react-toast`.
@@ -919,17 +929,19 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Cada toast tem botão de fechar (`IconButton`); a região usa o token `z-index-toast`; em ecrãs estreitos os toasts ocupam a largura disponível.
 - [ ] Usar `useToast` fora de um `ToastProvider` lança um erro com mensagem explícita.
 - [ ] Animações de entrada/saída respeitam `prefers-reduced-motion`.
+- [ ] Padrão "botão em loading → Toast com o resultado" documentado: a story `AfterLoading` mostra um `Button` que fica `loading` durante uma espera simulada e, no fim, dispara um toast de sucesso (ou de erro); a descrição da story explica que é o toast que anuncia o resultado e que o focus fica no botão (complementa a nota da DS-021).
 - [ ] G1 a G3 (dependência nova: `@radix-ui/react-toast`); C1 a C5.
 
 **Testes exigidos:**
 - Unitários (com timers falsos): `toast()` mostra título e descrição; fecha sozinho ao fim de `duration`; `duration: Infinity` não fecha; `dismiss(id)` fecha um e `dismiss()` fecha todos; com `max={3}`, o quarto toast remove o mais antigo; clicar na ação chama `onClick` e fecha; o botão de fechar fecha; erro fora do provider; variante em `data-variant`.
 - Acessibilidade: axe sem violações com um toast visível; a região tem o nome do `label`; abrir um toast não altera `document.activeElement`; F8 move o focus para a região; com o focus num toast, Tab chega à ação e ao botão de fechar e Esc fecha esse toast; o temporizador pausa com o focus na região (o toast continua presente depois de `duration`).
-- Visual/Storybook: `Default` (botão que dispara um toast), `Variants`, `WithAction`, `Persistent`, `Stacked` (vários seguidos), `Positions`, `DarkTheme` (com um toast de cada variante aberto).
+- Visual/Storybook: `Default` (botão que dispara um toast), `Variants`, `WithAction`, `Persistent`, `Stacked` (vários seguidos), `Positions`, `AfterLoading` (com `play`: clicar no botão põe-no em `loading`; quando a espera termina, o toast de sucesso aparece, o botão deixa de ter `aria-busy` e `document.activeElement` continua a ser o botão), `DarkTheme` (com um toast de cada variante aberto).
 
-**Fora de âmbito:** toasts de promessa (loading → sucesso/erro), barra de progresso do tempo restante, API imperativa fora do React (`toast()` global sem hook).
+**Fora de âmbito:** toasts de promessa na API do `toast()` (ex.: `toast.promise`, com o próprio toast a passar de loading a sucesso/erro), barra de progresso do tempo restante, API imperativa fora do React (`toast()` global sem hook).
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): story AfterLoading com o padrão "botão em loading → Toast com o resultado"; DS-021 acrescentada às dependências
 
 ### DS-028 · Stack e Grid
 
@@ -1297,19 +1309,21 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] `pnpm test:a11y` passa com todas as stories, e todos os componentes têm story `DarkTheme` (teste de convenções a passar).
 - [ ] Reflow (WCAG 1.4.10): script `pnpm test:a11y:reflow` que corre o test runner com viewport de 320px de largura e falha se alguma story tiver scroll horizontal na página; as exceções (ex.: `Table/HorizontalScroll`, que faz scroll dentro do seu contentor) ficam listadas e justificadas na página.
 - [ ] Movimento (WCAG 2.3.3): `grep` de `animation` e `transition` em `packages/ui/src/**/*.css` confirma que todas as ocorrências estão cobertas pela regra de `prefers-reduced-motion` da DS-007.
-- [ ] Alvos de toque (WCAG 2.5.8): todos os controlos interativos têm pelo menos 24×24px, confirmado por story `play` ou teste que mede o tamanho mínimo definido em CSS.
+- [ ] Alturas do projeto: script `pnpm test:a11y:sizes` (ou verificação equivalente no test runner) que mede, em browser real e com tamanho de letra de base de 16px, a altura renderizada de `Button`, `IconButton` (também a largura), `Input`, gatilho do `Select` e `Textarea` com `rows={1}` em cada `size`, e falha se alguma for inferior a 32px em `sm`, 40px em `md` ou 48px em `lg`.
+- [ ] Alvos de toque (WCAG 2.5.8): 24×24px é o mínimo absoluto para qualquer alvo interativo da biblioteca (inclui Checkbox, Radio, Switch, separadores, gatilhos do Accordion, botões da Pagination, cabeçalhos ordenáveis, botões de fechar e itens de menu); a mesma verificação mede cada um nas respetivas stories e falha se algum tiver menos de 24px de largura ou de altura. As exceções permitidas pela WCAG (ex.: ligações dentro de uma frase) ficam listadas e justificadas na página de conformidade.
 - [ ] Defeitos encontrados: os que se corrigem em menos de 30 minutos cada são corrigidos nesta tarefa (com teste que os cobre); os restantes ficam listados na página como "limitações conhecidas" e em "Decisões para o João", para o planeador propor tarefas novas.
 - [ ] G1 a G3; alterações a componentes incluem um changeset `patch`.
 
 **Testes exigidos:**
 - Unitários: os testes de teclado em falta, por componente.
-- Acessibilidade: `pnpm test:a11y` e `pnpm test:a11y:reflow` com código 0; verificação manual só com teclado das stories `KeyboardInteraction` de Select, Dialog, DropdownMenu, Popover, Tooltip e DataTable, nos dois temas, com o resultado registado no relatório de testes.
+- Acessibilidade: `pnpm test:a11y`, `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` com código 0; prova negativa temporária da verificação de tamanhos: reduzir o `min-height` de um `size` do `Button` faz `pnpm test:a11y:sizes` falhar e identificar o componente e o tamanho (não commitado); verificação manual só com teclado das stories `KeyboardInteraction` de Select, Dialog, DropdownMenu, Popover, Tooltip e DataTable, nos dois temas, com o resultado registado no relatório de testes.
 - Visual/Storybook: a página "Accessibility/Conformance" abre sem erros e tem uma linha por cada componente exportado (verificado por um teste que compara com as exportações de `packages/ui/src/index.ts`).
 
 **Fora de âmbito:** testes com leitores de ecrã reais (NVDA, VoiceOver) feitos por agentes (ficam como verificação manual recomendada ao João), modo de alto contraste do Windows (`forced-colors`), WCAG 2.2 e nível AAA, certificação externa.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): a auditoria verifica as alturas do projeto (32/40/48px em Button, IconButton, Input, Select e Textarea mínima) e mantém 24×24px como mínimo absoluto para qualquer alvo interativo, com script que falha abaixo desses valores
 
 ### DS-041 · Preparação da versão 1.0.0 e guia de publicação manual
 
@@ -1323,8 +1337,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Critérios de aceitação:**
 - [ ] Existe um changeset `major` que descreve a versão 1.0.0, e `pnpm version-packages` foi corrido: os três pacotes ficam com `"version": "1.0.0"` e cada um tem `CHANGELOG.md` gerado; não restam changesets pendentes (`pnpm changeset status` indica que não há alterações por lançar).
 - [ ] `pnpm build`, `pnpm size` e `pnpm verify:package` passam com as versões 1.0.0.
-- [ ] `docs/publicacao.md` descreve o **passo manual do João**, por esta ordem: (1) pré-requisitos: conta npm, scope criado, autenticação de dois fatores, `npm login`; (2) confirmar que o `main` tem o merge do `develop` e que o CI está verde; (3) `pnpm install --frozen-lockfile && pnpm build && pnpm verify:package`; (4) dry-run: `pnpm -r publish --dry-run --access public` e o que conferir na saída; (5) publicação: `pnpm changeset publish`; (6) `git push --follow-tags`; (7) confirmar com `npm view @up201905892/ui version` e instalar num projeto vazio; (8) criar a release no GitHub com o conteúdo do `CHANGELOG.md`; (9) o que fazer se correr mal (versão já publicada, `npm deprecate`, lançar um `patch`).
-- [ ] O guia recomenda publicar só depois de a fase Documentação (DS-042 a DS-047) estar `Concluído`, para que os README e o campo `homepage` incluídos nos pacotes sejam os finais, e explica como lançar versões seguintes (changeset → `version-packages` → publicar).
+- [ ] `docs/publishing.md`, escrito em inglês (regra de língua em "Decisões técnicas"), descreve o **passo manual do João**, por esta ordem: (1) pré-requisitos: conta npm, scope criado, autenticação de dois fatores, `npm login`; (2) confirmar que o `main` tem o merge do `develop` e que o CI está verde; (3) `pnpm install --frozen-lockfile && pnpm build && pnpm verify:package`; (4) dry-run: `pnpm -r publish --dry-run --access public` e o que conferir na saída; (5) publicação: `pnpm changeset publish`; (6) `git push --follow-tags`; (7) confirmar com `npm view @up201905892/ui version` e instalar num projeto vazio; (8) criar a release no GitHub com o conteúdo do `CHANGELOG.md`; (9) o que fazer se correr mal (versão já publicada, `npm deprecate`, lançar um `patch`).
+- [ ] O guia recomenda publicar só depois de a fase Documentação (DS-042 a DS-048) estar `Concluído`, para que os README e o campo `homepage` incluídos nos pacotes sejam os finais, e explica como lançar versões seguintes (changeset → `version-packages` → publicar).
 - [ ] O guia afirma explicitamente que nenhum agente publica nem faz push e que os comandos dos passos 4 a 6 estão bloqueados nas permissões.
 - [ ] Nenhum comando de publicação foi executado nesta tarefa (`npm view @up201905892/ui` continua a não encontrar a versão 1.0.0, salvo se o João já a tiver publicado).
 - [ ] G1 a G3.
@@ -1341,6 +1355,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`; a publicação do Storybook online passa a remeter para a DS-047
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): o guia recomenda publicar só depois de DS-042 a DS-047 (inclui a DS-047, que altera o campo `homepage` dos pacotes)
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): o guia passa a `docs/publishing.md`, em inglês; a lista de tarefas a concluir antes de publicar passa a DS-042 a DS-048
 
 ### DS-042 · Página "Getting started" no Storybook
 
@@ -1515,7 +1530,38 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - Visual/Storybook: `pnpm test:pages` com código 0; verificação manual com `pnpm preview:pages`: a página inicial abre debaixo do caminho base, o seletor de tema funciona e a navegação entre stories não dá erros na consola.
 - Verificação manual no terminal: `pnpm build:pages && pnpm test:pages` com código 0; `git status` confirma que nada mudou em `.github/`; prova negativa temporária: servir a pasta na raiz e pedir um recurso por `/<nome-do-repositório>/…` inexistente faz `pnpm test:pages` falhar (não commitado).
 
-**Fora de âmbito:** criar ou alterar ficheiros em `.github/` e ativar o Pages (passos do João), publicar a app de exemplo (`apps/example`) no mesmo site, domínio próprio, pré-visualizações por pull request, publicação em serviços externos (Chromatic, Netlify, Vercel).
+**Fora de âmbito:** criar ou alterar ficheiros em `.github/` e ativar o Pages (passos do João), publicar a app de exemplo (`apps/example`) no mesmo site (DS-048), domínio próprio, pré-visualizações por pull request, publicação em serviços externos (Chromatic, Netlify, Vercel).
+
+**Histórico:**
+- 2026-10-09 · planeador · criada como Proposta
+- 2026-10-09 · planeador · especificação revista a pedido do João (conversa): a publicação da app de exemplo no mesmo site passa a remeter para a DS-048
+
+### DS-048 · App de exemplo no GitHub Pages (subpasta `example/`)
+
+- **Fase do MVP:** Documentação
+- **Prioridade:** Média
+- **Depende de:** DS-045, DS-047
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** publicar a app de exemplo no mesmo site do Storybook, numa subpasta, para que o portfólio tenha uma demonstração ao vivo da biblioteca sem precisar de outro workflow.
+
+**Critérios de aceitação:**
+- [ ] O build de `apps/example` usa caminho base relativo (`base: './'` na configuração do Vite): o `index.html` gerado não tem caminhos absolutos começados por `/` e a app abre a partir de qualquer subpasta.
+- [ ] `pnpm build:pages` (DS-047) passa também a construir a app de exemplo e a copiar o resultado para `apps/docs/storybook-static/example/`; o Storybook continua na raiz do site e nenhum ficheiro dele é substituído. A cópia é feita por um script Node que funciona em Windows e em Linux.
+- [ ] Com `pnpm preview:pages`, a app abre em `http://localhost:<porta>/<nome-do-repositório>/example/` e o Storybook continua a abrir em `/<nome-do-repositório>/`.
+- [ ] `pnpm test:pages` (DS-047) passa também a abrir `/<nome-do-repositório>/example/` e confirma que a vista "Overview" renderiza, que mudar para "Tasks" mostra a tabela, que a alternância de tema muda `data-theme`, e que nenhum pedido de rede termina em 404.
+- [ ] Ligações: o `README.md` da raiz ganha, na secção "Documentation", a ligação "Live example" para `https://<dono>.github.io/<nome-do-repositório>/example/` (calculada a partir do campo `repository`); a página "Getting started" do Storybook ganha uma ligação relativa para `example/`; `docs/github-pages.md` é atualizado com o URL da app e com a nota de que o workflow proposto não muda (o mesmo artefacto passa a incluir a subpasta).
+- [ ] Nenhum ficheiro em `.github/` é criado ou alterado; se o João já tiver copiado o workflow da DS-047, não precisa de fazer mais nada, e isso fica dito no registo diário.
+- [ ] `pnpm example` (servidor de desenvolvimento) e os testes da app (DS-044 e DS-045) continuam a funcionar com o caminho base relativo.
+- [ ] G1 a G3 (sem dependências novas).
+
+**Testes exigidos:**
+- Unitários: teste Vitest que, depois de `pnpm build:pages`, verifica que `apps/docs/storybook-static/example/index.html` existe, que não contém `src="/` nem `href="/`, e que `apps/docs/storybook-static/index.html` (Storybook) continua a existir; teste que confirma que o URL "Live example" do README coincide com o calculado a partir de `repository`.
+- Acessibilidade: não aplicável a esta tarefa (a app é a mesma já testada nas DS-044 e DS-045); `pnpm test:a11y` e os testes de `apps/example` continuam a passar.
+- Visual/Storybook: `pnpm test:pages` com código 0, cobrindo o Storybook e a app; verificação manual com `pnpm preview:pages`: a app abre na subpasta nos dois temas e a ligação a partir de "Getting started" funciona.
+- Verificação manual no terminal: `pnpm build:pages && pnpm test:pages` com código 0; `git status` confirma que nada mudou em `.github/`; prova negativa temporária: repor `base: '/'` no Vite faz `pnpm test:pages` falhar com pedidos 404 na subpasta (não commitado).
+
+**Fora de âmbito:** router com URLs e tratamento de 404 para rotas (a app não tem router), dados persistentes ou backend, alterar o workflow proposto na DS-047, publicar a app num site ou domínio separado, incorporar a app dentro de uma story do Storybook.
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
