@@ -1,0 +1,100 @@
+name: Ciclo diário
+
+# Corre o /diario em modo autónomo no branch develop, todos os dias úteis.
+# Horas em UTC: 06:47 UTC = 07:47 em Lisboa no inverno, 08:47 no verão.
+on:
+  schedule:
+    - cron: "47 6 * * 1-5"
+  workflow_dispatch: {}
+
+concurrency:
+  group: ciclo-diario
+  cancel-in-progress: false
+
+jobs:
+  diario:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write
+      id-token: write
+
+    steps:
+      - name: Obter o repositório
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Ir para o branch develop (cria-o na primeira vez)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin develop > /dev/null; then
+            git checkout -B develop origin/develop
+          else
+            git checkout -b develop
+            git push -u origin develop
+          fi
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependências (se o projeto já existir)
+        run: |
+          if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; fi
+
+      - name: Correr o ciclo diário
+        uses: anthropics/claude-code-action@v1
+        with:
+          # Com subscrição Claude (Pro/Max): secret CLAUDE_CODE_OAUTH_TOKEN, gerado com `claude setup-token`.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Com chave da API, troca a linha acima por:
+          # anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: "/diario autonomo"
+          settings: .claude/settings.json
+          claude_args: |
+            --max-turns 200
+
+      - name: Enviar os commits do dia
+        run: |
+          if [ -n "$(git log origin/develop..HEAD --oneline)" ]; then
+            git pull --rebase origin develop
+            git push origin develop
+          else
+            echo "Sem commits novos hoje."
+          fi
+
+      - name: Correr o CI sobre o develop
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --ref develop
+
+      - name: Publicar o resumo no pull request develop → main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          awk '/^## 20[0-9][0-9]-/{n++} n==1' docs/workflow/registo-diario.md > "$RUNNER_TEMP/resumo.md" || true
+          if [ -z "$(git log origin/main..develop --oneline)" ]; then
+            echo "O develop não tem nada novo face ao main."
+            exit 0
+          fi
+          PR=$(gh pr list --head develop --base main --state open --json number -q '.[0].number')
+          if [ -z "$PR" ]; then
+            gh pr create --base main --head develop \
+              --title "Design system — trabalho do ciclo diário" \
+              --body "Pull request mantido pelo ciclo diário. Revê os commits e faz merge para o main quando quiseres fechar uma fase. As decisões tomam-se em docs/workflow/aprovacoes.md, no branch develop."
+            PR=$(gh pr list --head develop --base main --state open --json number -q '.[0].number')
+          fi
+          if [ -s "$RUNNER_TEMP/resumo.md" ]; then
+            gh pr comment "$PR" --body-file "$RUNNER_TEMP/resumo.md"
+          fi
