@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+dist/
+storybook-static/
+docs/workflow/
+.claude/
+.github/
+CLAUDE.md

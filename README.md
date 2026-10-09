@@ -24,31 +24,32 @@ Se não aprovares nada, o ciclo continua a desenvolver o que já está planeado 
 
 ## Conteúdo
 
-| Ficheiro | Para que serve |
-| --- | --- |
-| `CLAUDE.md` | Regras do projeto e do fluxo; o Claude Code lê-o em todas as sessões |
-| `PROMPT-INICIAL.md` | O prompt para a primeira sessão (criar o backlog contigo) |
-| `.claude/agents/` | Os quatro agentes: `planeador`, `programador`, `testador`, `finalizador` |
-| `.claude/skills/diario/SKILL.md` | O ciclo diário (`/diario` à mão, `/diario autonomo` no agendamento) |
-| `.claude/settings.json` | Permissões: o que os agentes podem e não podem fazer |
-| `.github/workflows/diario.yml` | O agendamento diário |
-| `.github/workflows/ci.yml` | Verificações independentes (lint, tipos, testes, build) |
-| `docs/workflow/01…04` | Os quatro registos |
-| `docs/workflow/aprovacoes.md` | As tuas decisões (só tu editas) |
-| `docs/workflow/registo-diario.md` | Resumo de cada dia |
+| Ficheiro                          | Para que serve                                                           |
+| --------------------------------- | ------------------------------------------------------------------------ |
+| `CLAUDE.md`                       | Regras do projeto e do fluxo; o Claude Code lê-o em todas as sessões     |
+| `PROMPT-INICIAL.md`               | O prompt para a primeira sessão (criar o backlog contigo)                |
+| `.claude/agents/`                 | Os quatro agentes: `planeador`, `programador`, `testador`, `finalizador` |
+| `.claude/skills/diario/SKILL.md`  | O ciclo diário (`/diario` à mão, `/diario autonomo` no agendamento)      |
+| `.claude/settings.json`           | Permissões: o que os agentes podem e não podem fazer                     |
+| `.github/workflows/diario.yml`    | O agendamento diário                                                     |
+| `.github/workflows/ci.yml`        | Verificações independentes (lint, tipos, testes, build)                  |
+| `docs/workflow/01…04`             | Os quatro registos                                                       |
+| `docs/workflow/aprovacoes.md`     | As tuas decisões (só tu editas)                                          |
+| `docs/workflow/registo-diario.md` | Resumo de cada dia                                                       |
 
 ## Instalação (uma vez, cerca de 20 minutos)
 
 1. **Repositório:** cria um repositório no GitHub (ex.: `design-system`) e copia para lá todo o conteúdo desta pasta, incluindo as pastas escondidas `.claude/` e `.github/`. Faz commit e push para o `main`.
 2. **App do Claude no GitHub:** instala a [Claude GitHub App](https://github.com/apps/claude) no repositório.
-3. **Autenticação:** escolhe uma das opções e cria o secret em *Settings → Secrets and variables → Actions*:
+3. **Autenticação:** escolhe uma das opções e cria o secret em _Settings → Secrets and variables → Actions_:
    - **Subscrição Claude (Pro ou Max):** corre `claude setup-token` no teu computador e guarda o token como `CLAUDE_CODE_OAUTH_TOKEN`. As execuções gastam o limite de uso da tua subscrição.
    - **Chave da API:** cria uma chave na Claude Console, guarda-a como `ANTHROPIC_API_KEY` e troca a linha `claude_code_oauth_token` pela `anthropic_api_key` em `diario.yml`. As execuções são pagas por tokens.
 
    Alternativa: no Claude Code, `/install-github-app` faz os passos 2 e 3 por ti.
+
 4. **Primeira sessão:** abre o Claude Code no repositório, cola o texto de `PROMPT-INICIAL.md`, toma as decisões técnicas e aprova as tarefas. Faz push.
-5. **Primeiro ciclo:** no GitHub, *Actions → Ciclo diário → Run workflow*. Na primeira vez, cria o branch `develop` sozinho. Vê o log para confirmar que correu bem.
-6. **Proteger o `main`:** em *Settings → Branches*, exige pull request para o `main`. Assim, nada chega lá sem a tua revisão.
+5. **Primeiro ciclo:** no GitHub, _Actions → Ciclo diário → Run workflow_. Na primeira vez, cria o branch `develop` sozinho. Vê o log para confirmar que correu bem.
+6. **Proteger o `main`:** em _Settings → Branches_, exige pull request para o `main`. Assim, nada chega lá sem a tua revisão.
 
 ## Segurança: o que os agentes não conseguem fazer
 
@@ -64,8 +65,8 @@ Limites do workflow: 90 minutos por execução, 200 turnos, e uma execução de 
 
 - **Hora ou dias:** linha `cron` em `diario.yml` (horas em UTC; `47 6 * * 1-5` = dias úteis às 07:47 em Lisboa no inverno). Escolhe um minuto que não seja `:00`, que é a hora com mais filas no GitHub.
 - **Mais ou menos trabalho por dia:** "Máximo de 2 tarefas desenvolvidas por execução" no `SKILL.md`.
-- **Correr à mão:** `/diario` no Claude Code (modo interativo, faz-te perguntas) ou *Run workflow* no GitHub (modo autónomo).
-- **Pausar:** desativa o workflow em *Actions → Ciclo diário → ⋯ → Disable workflow*.
+- **Correr à mão:** `/diario` no Claude Code (modo interativo, faz-te perguntas) ou _Run workflow_ no GitHub (modo autónomo).
+- **Pausar:** desativa o workflow em _Actions → Ciclo diário → ⋯ → Disable workflow_.
 
 Nota: num repositório público, o GitHub desativa agendamentos ao fim de 60 dias sem atividade. Com commits diários isso não acontece, mas se pausares muito tempo, reativa o workflow.
 
