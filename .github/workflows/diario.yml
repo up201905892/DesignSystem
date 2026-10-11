@@ -47,12 +47,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: Instalar o Chromium (se o script já existir)
-        run: pnpm run --if-present test:a11y:setup
-
       - name: Instalar dependências (se o projeto já existir)
         run: |
           if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; fi
+
+      - name: Instalar o Chromium (se o script já existir)
+        run: pnpm run --if-present test:a11y:setup
 
       - name: Correr o ciclo diário
         uses: anthropics/claude-code-action@v1
