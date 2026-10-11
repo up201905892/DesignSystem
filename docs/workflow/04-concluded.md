@@ -44,6 +44,15 @@ Modelo de entrada:
 - **Documentação:** `apps/docs/README.md` (inclui `test:a11y:setup`); story `Utilities/VisuallyHidden` com autodocs. Tema escuro nas stories não aplicável: tokens e tema chegam em DS-004 a DS-006. Sem `TODO` na tarefa.
 - **Lições:** o CI/ciclo diário precisa de `pnpm test:a11y:setup` antes de `test:a11y` (já em "Decisões para o João")
 
+### DS-004 · Tokens primitivos com Style Dictionary — concluída a 2026-10-11
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-11), commit 7598497
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** tokens primitivos (cor, espaço, tipografia, raios, sombras, duração, z-index) em JSON, gerados pelo Style Dictionary como `tokens.css` (`--ds-*`) e objeto `tokens` tipado (ESM, CJS, `.d.ts`); `tokens` é construído antes de `ui`.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; pacotes privados)
+- **Documentação:** stories e tema escuro não aplicáveis (páginas de tokens na DS-006); sem `TODO` na tarefa
+- **Lições:** nenhuma
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
