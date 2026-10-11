@@ -7,6 +7,7 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | Data | Decisão | IDs | Nota |
 | --- | --- | --- | --- |
 | *AAAA-MM-DD* | *Aprovar* | *DS-001 a DS-008* | |
+| 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | |
 
 Decisões possíveis:
 
