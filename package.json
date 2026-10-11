@@ -14,7 +14,11 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",
     "test:watch": "pnpm -r --if-present test:watch",
-    "build": "pnpm -r --if-present build"
+    "build": "pnpm -r --if-present build",
+    "storybook": "pnpm --filter docs storybook",
+    "build:docs": "pnpm --filter docs build-storybook",
+    "test:a11y": "pnpm --filter docs test:a11y",
+    "test:a11y:setup": "pnpm --filter docs test:a11y:setup"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
