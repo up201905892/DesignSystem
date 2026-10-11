@@ -53,6 +53,8 @@ jobs:
 
       - name: Correr o ciclo diário
         uses: anthropics/claude-code-action@v1
+        env:
+          CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: "1"
         with:
           # Com subscrição Claude (Pro/Max): secret CLAUDE_CODE_OAUTH_TOKEN, gerado com `claude setup-token`.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
