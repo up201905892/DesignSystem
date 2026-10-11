@@ -21,9 +21,6 @@ jobs:
           if [ -f package.json ]; then echo "sim=true" >> "$GITHUB_OUTPUT"; else echo "sim=false" >> "$GITHUB_OUTPUT"; fi
 
       - uses: pnpm/action-setup@v4
-        if: steps.existe.outputs.sim == 'true'
-        with:
-          version: 10
 
       - uses: actions/setup-node@v4
         if: steps.existe.outputs.sim == 'true'
