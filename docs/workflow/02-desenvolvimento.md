@@ -59,3 +59,20 @@ Modelo de entrada:
   - `globals: true` no Vitest, para o cleanup automático do Testing Library.
   - `tsconfig.base.json` ganhou `"ignoreDeprecations": "6.0"`: o tsup injeta `baseUrl` no build de `.d.ts`, que o TypeScript 6 marca como obsoleto e faz o build falhar. Deve ser revisto na migração para TS 7.
   - Versões resolvidas: vitest 5.0.3, jsdom 30, tsup 8.5, react 19.3.
+
+### DS-003 · Storybook 8 com addon-a11y e `pnpm test:a11y`
+
+**Iteração 1 — 2026-10-11**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** Storybook 8.6 (`@storybook/react-vite`, addon-essentials, addon-a11y) em `apps/docs/.storybook`, glob `packages/*/src/**/*.stories.tsx` + `apps/docs/src/**/*.mdx`; `@storybook/test-runner` com `axe-playwright` (`injectAxe` + `checkA11y` com tags wcag2a/wcag2aa/wcag21a/wcag21aa); script `apps/docs/scripts/test-a11y.mjs` que constrói, serve (http-server na porta 6007), espera pelo servidor, corre o test-runner e termina o servidor; scripts de raiz `storybook`, `build:docs`, `test:a11y`, `test:a11y:setup`; README do `apps/docs`; story `Utilities/VisuallyHidden` com `autodocs`.
+- **Ficheiros alterados:** `package.json`, `pnpm-lock.yaml`, `apps/docs/{package.json,tsconfig.json,README.md}`, `apps/docs/.storybook/{main.ts,preview.ts,test-runner.ts}`, `apps/docs/scripts/test-a11y.mjs`, `packages/ui/package.json` (devDependency `@storybook/react`), `packages/ui/src/VisuallyHidden/VisuallyHidden.stories.tsx`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 3f25ff9 `feat(ui): DS-003 Storybook 8 with addon-a11y and test:a11y`
+- **Critérios de aceitação cobertos:** todos os da especificação. `pnpm storybook` não foi arrancado interativamente (só `build:docs` e o build estático dentro de `test:a11y`).
+- **Testes escritos pelo programador:** story de exemplo (smoke test + axe via `pnpm test:a11y`). Prova negativa: story temporária com `<button></button>` fez `pnpm test:a11y` sair ≠ 0 com `button-name` (ficheiro removido, não commitado).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · build:docs ✔ · test:a11y ✔ (após `pnpm test:a11y:setup`).
+- **Notas para o testador:**
+  - `@storybook/test-runner` fixado em `^0.22` (a 0.26 exige Storybook 10); `vite` fixado em `^6` (o 8 não é suportado pelo Storybook 8.6).
+  - Aviso esperado: "No story files found for src/**/*.mdx" (ainda não há MDX; o glob é exigido pela tarefa).
+  - O CI/ciclo diário precisa de correr `pnpm test:a11y:setup` (Chromium) antes de `pnpm test:a11y`; `.github/` não é meu, fica para "Decisões para o João".
+  - O pnpm avisa de build scripts ignorados (`@parcel/watcher`, `@swc/core`, `unrs-resolver`); não impediram nada do que foi testado.
