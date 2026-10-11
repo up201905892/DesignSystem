@@ -35,6 +35,15 @@ Modelo de entrada:
 - **Documentação:** stories não aplicáveis (Storybook chega na DS-003); sem `TODO` deixados no código
 - **Lições:** nenhuma
 
+### DS-003 · Storybook 8 com addon-a11y e `pnpm test:a11y` — concluída a 2026-10-11
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-11), commit 3f25ff9
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** Storybook 8 em `apps/docs` com addon-a11y e `pnpm test:a11y` (test-runner + axe, WCAG A/AA) que falha perante violações, provado com a story do `VisuallyHidden`.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; pacotes privados)
+- **Documentação:** `apps/docs/README.md` (inclui `test:a11y:setup`); story `Utilities/VisuallyHidden` com autodocs. Tema escuro nas stories não aplicável: tokens e tema chegam em DS-004 a DS-006. Sem `TODO` na tarefa.
+- **Lições:** o CI/ciclo diário precisa de `pnpm test:a11y:setup` antes de `test:a11y` (já em "Decisões para o João")
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->

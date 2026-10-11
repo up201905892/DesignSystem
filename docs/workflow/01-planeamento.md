@@ -10,7 +10,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | --- | --- | --- | --- | --- | --- |
 | DS-001 | Monorepo pnpm, TypeScript strict, ESLint e Prettier | Fundações | Alta | — | Concluído |
 | DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Concluído |
-| DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Aprovado |
+| DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Concluído |
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Planeado |
 | DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Planeado |
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Planeado |
@@ -237,6 +237,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-11 · programador · Em desenvolvimento → Pronto para teste · commit 3f25ff9
 - 2026-10-11 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-11 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados
+- 2026-10-11 · finalizador · Aprovado → Concluído · relatório 1 aprovado (3f25ff9); infraestrutura, changeset não aplicável
 
 ### DS-004 · Tokens primitivos com Style Dictionary
 
