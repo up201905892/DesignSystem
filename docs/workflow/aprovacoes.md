@@ -8,6 +8,7 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | --- | --- | --- | --- |
 | *AAAA-MM-DD* | *Aprovar* | *DS-001 a DS-008* | |
 | 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | |
+| 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | |
 
 Decisões possíveis:
 
