@@ -76,3 +76,22 @@ Modelo de entrada:
   - Aviso esperado: "No story files found for src/**/*.mdx" (ainda não há MDX; o glob é exigido pela tarefa).
   - O CI/ciclo diário precisa de correr `pnpm test:a11y:setup` (Chromium) antes de `pnpm test:a11y`; `.github/` não é meu, fica para "Decisões para o João".
   - O pnpm avisa de build scripts ignorados (`@parcel/watcher`, `@swc/core`, `unrs-resolver`); não impediram nada do que foi testado.
+
+### DS-004 · Tokens primitivos com Style Dictionary
+
+**Iteração 1 — 2026-10-11**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** fontes JSON (formato `value` + `type`) por categoria em `packages/tokens/src/primitives/` (`color`, `space`, `typography`, `radius`, `shadow`, `motion`, `z-index`); `scripts/build.mjs` corre o Style Dictionary e gera `dist/tokens.css` (`:root`, prefixo `--ds-`) e `dist/index.js` + `index.cjs` + `index.d.ts` (objeto `tokens` aninhado, com tipos literais `readonly`); `@ds/tokens` passa a ser dependência `workspace:*` de `@ds/ui`, pelo que `pnpm build` constrói `tokens` primeiro.
+- **Ficheiros alterados:** `packages/tokens/{package.json,tsconfig.json,vitest.config.ts,scripts/build.mjs,src/tokens.test.ts,src/primitives/*.json}`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 7598497 `feat(tokens): DS-004 primitive tokens with Style Dictionary`
+- **Critérios de aceitação cobertos:** todos os da especificação.
+- **Testes escritos pelo programador:** `packages/tokens/src/tokens.test.ts` (14 testes sobre o resultado do build: 10 passos por paleta, espaçamentos múltiplos de 4px, prefixo `--ds-`, nº de variáveis CSS = nº de folhas TS, sem valores vazios nem `{...}`, ESM = CJS).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔.
+- **Notas para o testador:**
+  - O Style Dictionary instalado é a 5.6 (a mais recente); aceita o formato `value` + `type` sem alterações.
+  - `pnpm test` do pacote corre primeiro o build, porque os testes leem `dist/`.
+  - Nomes: `--ds-font-family-sans`, `--ds-font-size-md`, `--ds-font-weight-bold`, `--ds-font-line-height-normal`, `--ds-radius-*`, `--ds-shadow-*`, `--ds-duration-*`, `--ds-z-*`. Tamanhos `xs` a `3xl` incluem `sm, md, lg, xl, 2xl`.
+  - `tsconfig` do pacote tem `types: ["node"]` (TS 6 já não inclui os tipos por omissão) e `@types/node` como devDependency.
+  - Valores das paletas escolhidos pelo programador (escala tipo Tailwind); o contraste é da DS-005.
+  - Sugestão ao planeador: o `ui` ainda não importa `tokens.css`; fica para as tarefas de componentes/DS-005/DS-006.
