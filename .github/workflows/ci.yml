@@ -28,9 +28,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Instalar o Chromium (se o script já existir)
-        run: pnpm run --if-present test:a11y:setup
-
       - name: Instalar
         if: steps.existe.outputs.sim == 'true'
         run: pnpm install --frozen-lockfile
@@ -50,3 +47,11 @@ jobs:
       - name: Build
         if: steps.existe.outputs.sim == 'true'
         run: pnpm run --if-present build
+
+      - name: Instalar o Chromium (se o script já existir)
+        if: steps.existe.outputs.sim == 'true'
+        run: pnpm run --if-present test:a11y:setup
+
+      - name: Acessibilidade
+        if: steps.existe.outputs.sim == 'true'
+        run: pnpm run --if-present test:a11y
