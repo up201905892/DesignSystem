@@ -1,0 +1,24 @@
+{
+  "z": {
+    "dropdown": {
+      "value": "1000",
+      "type": "number"
+    },
+    "overlay": {
+      "value": "1100",
+      "type": "number"
+    },
+    "modal": {
+      "value": "1200",
+      "type": "number"
+    },
+    "toast": {
+      "value": "1300",
+      "type": "number"
+    },
+    "tooltip": {
+      "value": "1400",
+      "type": "number"
+    }
+  }
+}

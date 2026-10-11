@@ -3,7 +3,26 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tokens.css": "./dist/tokens.css"
+  },
   "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/build.mjs && vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "style-dictionary": "^5.6.1",
+    "vitest": "^5.0.3"
   }
 }
