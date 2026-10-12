@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-12
+
+- **Decisões para o João:**
+  1. Aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem. Hoje só DS-006 está livre para desenvolver (DS-007, DS-009 e DS-010 seguem-se em cadeia), e as 10 tarefas aprovadas ontem (DS-011 a DS-020) estão à espera dessa cadeia. Não propus tarefas novas: já há 28 por aprovar.
+  2. Repete-se o pedido de ontem: acrescentar `pnpm test:a11y:setup` antes de `pnpm test:a11y` em `.github/workflows/ci.yml` e `diario.yml`.
+- **Concluídas:** DS-005, DS-008
+- **Testadas:** DS-005 (Aprovado), DS-008 (Aprovado)
+- **Desenvolvidas:** DS-005, DS-008 (ambas percorreram o ciclo completo no mesmo dia)
+- **Decisões aplicadas:** DS-011 a DS-020 passaram a `Planeado` (aprovações de 2026-10-11). Essa alteração ficou no commit `36fa7b6` (DS-005), por um erro meu ao fazer o commit; não afeta o conteúdo.
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-006 (tema no Storybook), depois DS-007 e DS-009, que desbloqueiam DS-010 e o resto dos componentes. Nota: `@ds/icons` ganhou `axe-core`, `@storybook/react` e `@types/node` como devDependencies; a DS-009 deve migrar o teste de axe para o helper.
+
 ## 2026-10-11
 
 - **Decisões para o João:**
