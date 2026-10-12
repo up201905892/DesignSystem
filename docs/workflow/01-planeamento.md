@@ -12,22 +12,22 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Concluído |
 | DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Concluído |
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Concluído |
-| DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Planeado |
+| DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Pronto para teste |
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Planeado |
 | DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Planeado |
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Planeado |
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
 | DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
-| DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Proposta |
-| DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Proposta |
-| DS-013 | Input | Formulários | Alta | DS-010, DS-012 | Proposta |
-| DS-014 | Textarea | Formulários | Média | DS-013 | Proposta |
-| DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Proposta |
-| DS-016 | RadioGroup | Formulários | Média | DS-012 | Proposta |
-| DS-017 | Switch | Formulários | Média | DS-012 | Proposta |
-| DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Proposta |
-| DS-019 | Badge | Overlays e feedback | Média | DS-009 | Proposta |
-| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Proposta |
+| DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Planeado |
+| DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Planeado |
+| DS-013 | Input | Formulários | Alta | DS-010, DS-012 | Planeado |
+| DS-014 | Textarea | Formulários | Média | DS-013 | Planeado |
+| DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Planeado |
+| DS-016 | RadioGroup | Formulários | Média | DS-012 | Planeado |
+| DS-017 | Switch | Formulários | Média | DS-012 | Planeado |
+| DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Planeado |
+| DS-019 | Badge | Overlays e feedback | Média | DS-009 | Planeado |
+| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Proposta |
 | DS-022 | Alert | Overlays e feedback | Média | DS-011 | Proposta |
 | DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Proposta |
@@ -63,6 +63,8 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 
 | Data da decisão | Decisão | IDs | Aplicada em |
 | --- | --- | --- | --- |
+| 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | 2026-10-12 |
+| 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | 2026-10-12 |
 
 ## Decisões técnicas
 
@@ -303,6 +305,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
+- 2026-10-12 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-12 · programador · Em desenvolvimento → Pronto para teste · commit 36fa7b6
 
 ### DS-006 · Tema no Storybook: toggle e páginas de tokens
 
@@ -491,6 +495,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): dimensões 32/40/48px pelos tokens do Button; disabled com asChild igual ao Button; ícone com asChild via Slottable; nomes de exemplo em inglês
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-012 · Field (label, descrição e mensagem de erro)
 
@@ -520,6 +525,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Name')
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-013 · Input
 
@@ -550,6 +556,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): alturas 32/40/48px pelos tokens do Button, medidas nas stories Sizes e WithButton; DS-010 acrescentada às dependências
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-014 · Textarea
 
@@ -579,6 +586,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): 32/40/48px como altura mínima por tamanho (a altura real depende de rows), medida na story Sizes
 - 2026-10-09 · planeador · interpretação da altura mínima confirmada pelo João (conversa)
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-015 · Checkbox
 
@@ -607,6 +615,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nomes de exemplo em inglês ('I accept the terms', "Select all")
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-016 · RadioGroup
 
@@ -635,6 +644,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-017 · Switch
 
@@ -664,6 +674,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Notifications')
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-018 · Select
 
@@ -695,6 +706,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): alturas do gatilho 32/40/48px pelos tokens do Button e do Input, medidas na story Sizes
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-019 · Badge
 
@@ -723,6 +735,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): texto de exemplo em inglês ("Active")
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-020 · Spinner e Skeleton
 
@@ -750,6 +763,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Saving')
+- 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 
 ### DS-021 · Button: estado `loading`
 

@@ -95,3 +95,21 @@ Modelo de entrada:
   - `tsconfig` do pacote tem `types: ["node"]` (TS 6 já não inclui os tipos por omissão) e `@types/node` como devDependency.
   - Valores das paletas escolhidos pelo programador (escala tipo Tailwind); o contraste é da DS-005.
   - Sugestão ao planeador: o `ui` ainda não importa `tokens.css`; fica para as tarefas de componentes/DS-005/DS-006.
+
+### DS-005 · Tokens semânticos e temas claro/escuro
+
+**Iteração 1 — 2026-10-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** fontes semânticas `packages/tokens/src/semantic/light.json` e `dark.json` (só referências `{color.*}` a primitivos); o `scripts/build.mjs` resolve cada tema com um Style Dictionary próprio (primitivos em `include`, semânticos em `source`) e gera `dist/themes.css` com `:root, [data-theme="light"]`, `[data-theme="dark"]` e `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`, cada bloco com `color-scheme`; o objeto `themes` (`light` e `dark`) é exportado em `index.js`, `index.cjs` e `index.d.ts`; `exports` do pacote ganhou `./themes.css`; `src/contrast-pairs.ts` documenta os pares de contraste.
+- **Ficheiros alterados:** `packages/tokens/{package.json,scripts/build.mjs,src/semantic/light.json,src/semantic/dark.json,src/contrast-pairs.ts,src/themes.test.ts,src/contrast.test.ts}`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 36fa7b6 `feat(tokens): DS-005 semantic tokens and light/dark themes`
+- **Critérios de aceitação cobertos:** todos os da especificação.
+- **Testes escritos pelo programador:** `themes.test.ts` (JSON só com referências; mesmo conjunto de chaves nos dois temas; todos os tokens obrigatórios; valores resolvidos; três seletores, `color-scheme` e mesmas variáveis em cada bloco; fallback igual ao tema escuro) e `contrast.test.ts` (rácio WCAG de cada par de `contrast-pairs.ts` nos dois temas: 4,5:1 texto, 3:1 não textual; cobre `text-default|muted` e os quatro `*-text` sobre `bg-canvas|surface` e `*-subtle`, `text-on-accent` sobre `accent-default|hover|active`, `border-strong` e `focus-ring` sobre os três fundos).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 89 testes) · build ✔. `test:a11y` não corrido: a tarefa não altera stories nem `apps/docs` (Storybook é da DS-006).
+- **Notas para o testador:**
+  - `color-overlay` precisa de transparência e os semânticos só podem referenciar primitivos: o JSON tem a propriedade `alpha` (0.5 claro, 0.6 escuro) e uma transformação `ds/color/alpha` no build gera `#0f172a80` / `#00000099`. Os valores de `tokens.css` não mudam.
+  - No tema escuro `text-on-accent` é `neutral.900` e o acento é `primary.400|300|200` (branco sobre `primary.500` ficaria abaixo de 4,5:1).
+  - `themes.css` não faz parte do objeto `tokens` (a contagem CSS = folhas TS da DS-004 mantém-se); os semânticos estão em `themes.light|dark`, com a mesma estrutura aninhada (ex.: `themes.light.color.bg.canvas`).
+  - Os pares `*-default` de estado (ex.: `success-default`) não têm requisito de contraste na especificação e não estão em `contrast-pairs.ts`.
+  - Sugestão ao planeador: a DS-007 deve importar `themes.css` no `styles.css`; o `exports` de `@ds/tokens` já tem `./themes.css`.
