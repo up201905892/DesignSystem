@@ -189,3 +189,32 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** nenhum.
 
 **Notas (não são falhas):** `color-overlay` usa `alpha` com transformação própria (`#0f172a80`, `#00000099`) e não tem requisito de contraste. `text-disabled` e os `*-default` de estado não têm requisito de contraste na especificação. O bloco de fallback duplica o tema escuro (inevitável em CSS puro; coberto por teste de igualdade).
+
+### DS-008 · Pacote de ícones (subconjunto do Lucide com SVGR) — Relatório 1 — 2026-10-12
+
+- **Commit testado:** 7e74ced (presente no histórico de `develop`; sem alterações por guardar no início; registo fe8ba94 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Instalação | `pnpm install --frozen-lockfile` | ✔ |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` (4 pacotes) | ✔ |
+| Unitários | `pnpm test` (10 em icons, 89 em tokens, 3 em ui) | ✔ |
+| Acessibilidade | `pnpm test:a11y:setup` + `pnpm test:a11y` (5 testes, 2 suites, sem violações) | ✔ |
+| Build | `pnpm build` (`packages/icons/dist`: index.js, index.cjs, index.d.ts, index.d.cts) | ✔ |
+
+**Critérios de aceitação:**
+- [x] 30 SVG de `lucide-static` em `svg/` — `ls svg` conta 30 e os nomes coincidem com a lista; `lucide-static` 1.55.0 (versão exata) em devDependencies.
+- [x] `pnpm --filter @ds/icons generate` — 30 ficheiros em `src/generated/` e `src/index.ts` regenerado; corri o comando e `git status` não mostrou diferenças em `packages/icons` (idempotente).
+- [x] API — lido `IconBase.tsx`: `size` por omissão `"1em"` em `width` e `height`, `title`, `className` e restantes props via `...rest`, `forwardRef<SVGSVGElement>`, `stroke="currentColor"`.
+- [x] ARIA — sem `title`: `aria-hidden` e `focusable=false`; com `title`: `role="img"` e `<title>`, sem `aria-hidden`. Coberto por teste em todos os 30 ícones.
+- [x] Atribuição — `LICENSE-LUCIDE` (licença ISC) e secção "Credits" no README.
+- [x] Build e importação — `dist` ESM + CJS + `.d.ts`; `index.d.ts` exporta os ícones por nome; `"sideEffects": false`.
+- [x] G1 (lint, typecheck, test, build passam), G2 (`lucide-static`, `@svgr/core` e `@svgr/plugin-jsx` em versões exatas; lockfile passa com `--frozen-lockfile`), G3 (commit `feat(icons): DS-008 ...` em inglês com ID; sem alterações a `CLAUDE.md`, `.claude/`, `.github/` nem `aprovacoes.md`).
+
+**Testes exigidos:** existem e são substantivos — lista de `svg/` vs exports, `size={24}`, ref, className, ausência em `getByRole('img')` sem título, `getByRole('img', { name: 'Close' })` com título, axe nos dois casos. Stories `Gallery`, `Sizes` (16, 20, 24), `WithTitle` e `DarkTheme` existem; o `test:a11y` passa. Teclado e focus não aplicáveis (ícones não interativos). Tema escuro: os ícones herdam `currentColor`.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):** o teste de `svg/` depende do cwd do pacote (o que `pnpm test` garante). As props em `...rest` vêm depois do ARIA por omissão, por isso o chamador pode substituí-las de propósito. `title=""` é tratado como decorativo.
