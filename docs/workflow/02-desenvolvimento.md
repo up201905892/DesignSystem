@@ -150,3 +150,23 @@ Modelo de entrada:
   - A story `Semantic` mostra cada tema num painel com `data-theme` próprio, independente do seletor; as restantes seguem o seletor (verificar no browser que fundo e texto mudam sem recarregar).
   - Os fallbacks da story `DarkTheme` dos ícones (DS-008) já podem ser retirados; não o fiz por estar fora do âmbito. Sugestão ao planeador.
   - `globals` ao nível da story não foi implementado; só `parameters.theme`.
+
+### DS-007 · CSS base, focus visível, `styles.css` agregado e Stylelint
+
+**Iteração 1 — 2026-10-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `packages/ui/src/styles/{base,focus,motion}.css` (base só para `[class^="ds-"], [class*=" ds-"]`; classe `.ds-focus-ring:focus-visible` com outline 2px `--ds-color-focus-ring` e offset 2px; `prefers-reduced-motion: reduce` a zero para `ds-*` e pseudo-elementos). `packages/ui/src/styles.css` importa tokens, temas, base, focus, motion (por esta ordem; os componentes acrescentam-se a seguir). `packages/ui/scripts/build-css.mjs` (corre depois do `tsup` no `pnpm build`) inlina os `@import` e gera `dist/styles.css` único. `.storybook/preview.tsx` importa `packages/ui/src/styles.css` em vez dos CSS dos tokens. `stylelint.config.js` na raiz e `stylelint "packages/ui/src/**/*.css"` em `pnpm lint`.
+- **Ficheiros alterados:** `packages/ui/src/styles.css`, `packages/ui/src/styles/{base,focus,motion}.css`, `packages/ui/src/styles/FocusRing.stories.tsx`, `packages/ui/src/styles.test.ts`, `packages/ui/scripts/build-css.mjs`, `packages/ui/package.json`, `packages/ui/tsup.config.ts`, `apps/docs/.storybook/preview.tsx`, `stylelint.config.js`, `package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** fdb215a `feat(ui): DS-007 base CSS, focus ring, aggregated styles.css and Stylelint`
+- **Critérios de aceitação cobertos:** todos; prova negativa feita com um `.css` temporário (`.button { color: #ff0000 }`, `padding: 8px`, `red`, `rgb()`), que falhou o `pnpm lint` com 6 erros (ficheiro removido, não commitado). `currentColor` e `border: 1px solid` passam.
+- **Testes escritos pelo programador:** `styles.test.ts` (4 testes sobre `dist/styles.css`: variáveis dos tokens e `[data-theme="dark"]`, `:focus-visible` e reduced-motion, sem `@import`, ordem das secções). Stories `Foundations/FocusRing` › `FocusRing` e `DarkTheme` (nome `FocusRing/DarkTheme`).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ (15 testes).
+- **Notas para o testador:**
+  - Dependência nova: `stylelint` 17.16.0 (devDependency da raiz); regras só nativas do Stylelint, sem `stylelint-config-standard`.
+  - O `tsup` não resolve `@import` de pacotes (exports) em CSS, por isso o agregado é gerado por `scripts/build-css.mjs` (inlining simples, sem PostCSS). Falha se ficar algum `@import`.
+  - `styles.test.ts` corre o script de CSS antes de ler `dist/styles.css`; precisa de `@ds/tokens` construído (o `pnpm test` da raiz já o faz pela ordem topológica).
+  - Não existem ainda `.tsx` com `import '*.css'`; nenhum componente tem CSS (fora de âmbito). O `ui/package.json` não tem `exports` para `./styles.css` (fica para a DS-036).
+  - A regra das unidades usa regex sobre o valor das propriedades listadas (inclui `margin-block`, `padding-inline`, etc.).
+  - A story FocusRing usa `style` inline com tokens só para o layout da story.
+- **Pedidos para o João:** o CI (`.github/workflows/ci.yml`) já corre `pnpm run lint`, que inclui Stylelint; não é preciso alterar nada em `.github/`.
