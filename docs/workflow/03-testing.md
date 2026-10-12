@@ -247,3 +247,35 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** nenhum.
 
 **Notas (não são falhas):** não consegui abrir o browser para observar a troca de tema ao vivo (a escrita do script de verificação foi bloqueada); a conclusão baseia-se na leitura do decorator, que usa `useLayoutEffect` dependente de `theme`, e nos resultados do axe. Contraste verificado pelo axe só nas stories existentes (claro por omissão e escuro na `DarkTheme`). Teclado/focus não aplicáveis (páginas não interativas).
+
+### DS-007 · CSS base, focus visível, `styles.css` agregado e Stylelint — Relatório 1 — 2026-10-12
+
+- **Commit testado:** fdb215a (presente no histórico de `develop`; sem alterações por guardar no início; registo e9551c5 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Instalação | `pnpm install --frozen-lockfile` | ✔ |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (10 em icons, 89 em tokens, 7 em ui) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (6 suites, 15 testes, sem violações) | ✔ |
+| Build | `pnpm build` (tsup + `build-css.mjs`) | ✔ |
+| Prova negativa | ficheiro temporário (não commitado, removido) com `.button`, hex, nome, `rgb()`, `hsl()`, `px`/`rem`/`em` em margin, padding, gap, border-radius, font-size, box-shadow e `calc(... + 4px)`: 13 erros do Stylelint. Linha com `0`, `1px solid currentColor`, `2px solid transparent`, `50%`, `inherit` e `var(--ds-*)`: sem erros | ✔ (falha esperada) |
+
+**Critérios de aceitação:**
+- [x] `base.css`: lido; `box-sizing` e `font-family` só em `[class^='ds-'], [class*=' ds-']`, sem reset global.
+- [x] `focus.css`: `.ds-focus-ring:focus-visible` com `outline: 2px solid var(--ds-color-focus-ring)` e `outline-offset`; nenhum `outline: none` no CSS.
+- [x] `motion.css`: dentro de `@media (prefers-reduced-motion: reduce)`, duração e atraso de transições e animações a 0 para `ds-*` e `::before`/`::after`.
+- [x] `styles.css`: ordem tokens, themes, base, focus, motion (lido; confirmado também no teste de ordem sobre o `dist`).
+- [x] `dist/styles.css`: gerado por `pnpm build`, ficheiro único, 0 ocorrências de `@import`, inclui `--ds-color-bg-canvas`, `[data-theme="dark"]` e `--ds-color-focus-ring` (claro `#2563eb`, escuro `#93c5fd`); nenhum `.tsx` importa `.css`.
+- [x] Storybook: `apps/docs/.storybook/preview.tsx` importa `packages/ui/src/styles.css` e já não importa os CSS dos tokens diretamente.
+- [x] Stylelint: `stylelint.config.js` e passo em `pnpm lint`; regras e exceções verificadas pela prova negativa acima.
+- [x] Ficheiro temporário com `color: #ff0000` ou `.button {}` faz o lint falhar: reproduzido por mim.
+- [x] G1 (lint, typecheck, test, build passam), G2 (única dependência nova: `stylelint` 17.16.0 exata; lockfile passa com `--frozen-lockfile`), G3 (commit `feat(ui): DS-007 ...` em inglês com ID; sem alterações a `CLAUDE.md`, `.claude/`, `.github/` nem `aprovacoes.md`).
+
+**Testes exigidos:** `styles.test.ts` existe (4 testes sobre `dist/styles.css`: variáveis e `[data-theme="dark"]`, `:focus-visible` e reduced-motion, sem `@import`, ordem) e não é trivial. Stories `FocusRing` e `FocusRing/DarkTheme` existem com botão e ligação nativos com `ds-focus-ring`; `test:a11y` passa. Contraste do anel: `#2563eb` sobre fundo claro e `#93c5fd` sobre fundo escuro, ambos acima de 3:1 pela inspeção dos valores.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):** não há teste automático que prove que o anel aparece ao premir Tab (jsdom não avalia `:focus-visible` e a story não tem `play`); a verificação assenta na leitura do CSS e nas stories. O `styles.test.ts` regenera o `dist/styles.css` antes de o ler, por isso não prova que o `pnpm build` o gera (verificado à parte). A regra de unidades é uma regex sobre o valor, pelo que `calc()` com `px` também é apanhado. A story usa `style` inline com tokens só para layout.
