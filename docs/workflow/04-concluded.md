@@ -71,6 +71,15 @@ Modelo de entrada:
 - **Documentação:** `packages/icons/README.md` (secção "Credits") e `LICENSE-LUCIDE`; stories `Gallery`, `Sizes`, `WithTitle` e `DarkTheme`. Sem `TODO` na tarefa.
 - **Lições:** nenhuma
 
+### DS-006 · Tema no Storybook: toggle e páginas de tokens — concluída a 2026-10-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-12), commit 5ffc6f1
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** seletor "Theme" (claro/escuro) no Storybook, com `parameters.theme` a ter prioridade, e páginas Foundations (cores, semânticos nos dois temas, espaçamento, tipografia, raios, sombras) geradas a partir dos tokens.
+- **Changeset:** não aplicável (alterações só em `apps/docs`, privado; nenhum pacote publicado alterado)
+- **Documentação:** convenção da story `DarkTheme` em `apps/docs/README.md`; stories `Foundations/*` e `Foundations/Theme › DarkTheme` (tema escuro coberto pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** sugestão ao planeador (do programador): retirar os fallbacks da story `DarkTheme` dos ícones (DS-008), agora que o Storybook carrega os temas. Troca de tema ao vivo não observada no browser pelo testador; verificada por leitura do decorator.
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->

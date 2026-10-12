@@ -13,7 +13,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Concluído |
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Concluído |
 | DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Concluído |
-| DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Aprovado |
+| DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Concluído |
 | DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Planeado |
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Concluído |
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
@@ -344,6 +344,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-12 · programador · Em desenvolvimento → Pronto para teste · commit 5ffc6f1
 - 2026-10-12 · testador · Pronto para teste → Em teste · início dos testes (commit 5ffc6f1)
 - 2026-10-12 · testador · Em teste → Aprovado · relatório 1; todos os critérios verificados, zero falhas
+- 2026-10-12 · finalizador · Aprovado → Concluído · relatório 1 verificado; sem changeset (apps/docs privado)
 
 ### DS-007 · CSS base, focus visível, `styles.css` agregado e Stylelint
 
