@@ -15,7 +15,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Concluído |
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Planeado |
 | DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Planeado |
-| DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Planeado |
+| DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Em desenvolvimento |
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
 | DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
 | DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Planeado |
@@ -399,6 +399,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): regra de língua, secção do README passa a "Credits" e o nome de exemplo do teste passa a 'Close'; estado mantém-se Planeado
+- 2026-10-12 · programador · Planeado → Em desenvolvimento · início da implementação
 
 ### DS-009 · Utilitários partilhados, helper de axe e teste de convenções
 
