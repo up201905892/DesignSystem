@@ -113,3 +113,22 @@ Modelo de entrada:
   - `themes.css` não faz parte do objeto `tokens` (a contagem CSS = folhas TS da DS-004 mantém-se); os semânticos estão em `themes.light|dark`, com a mesma estrutura aninhada (ex.: `themes.light.color.bg.canvas`).
   - Os pares `*-default` de estado (ex.: `success-default`) não têm requisito de contraste na especificação e não estão em `contrast-pairs.ts`.
   - Sugestão ao planeador: a DS-007 deve importar `themes.css` no `styles.css`; o `exports` de `@ds/tokens` já tem `./themes.css`.
+
+### DS-008 · Pacote de ícones (subconjunto do Lucide com SVGR)
+
+**Iteração 1 — 2026-10-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** 30 SVG de `lucide-static` (1.55.0, versão exata) copiados para `packages/icons/svg/`; `scripts/generate.mjs` (comando `pnpm --filter @ds/icons generate`) copia os SVG da lista, converte-os com `@svgr/core` + `@svgr/plugin-jsx` em `src/generated/<Nome>Icon.tsx` e regenera `src/index.ts` (formatados com Prettier; correr outra vez não produz diferenças, verificado). Cada ícone é um `forwardRef<SVGSVGElement, IconProps>` fino sobre o `IconBase` partilhado (`src/IconBase.tsx`), que trata de `size` (omissão `"1em"`), `title`, `stroke="currentColor"` e ARIA (sem `title`: `aria-hidden="true"` e `focusable="false"`; com `title`: `role="img"` e `<title>`). `LICENSE-LUCIDE` (licença do Lucide, copiada do `lucide-static`) e `README.md` com secção "Credits". `package.json` com `sideEffects: false`, `main`/`module`/`types`/`exports` mínimos.
+- **Ficheiros alterados:** `packages/icons/{package.json,tsconfig.json,README.md,LICENSE-LUCIDE,scripts/generate.mjs,svg/*.svg,src/IconBase.tsx,src/index.ts,src/generated/*.tsx,src/icons.test.tsx,src/Icons.stories.tsx,src/vitest-env.d.ts}`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 7e74ced `feat(icons): DS-008 add icon package from a Lucide subset with SVGR`
+- **Critérios de aceitação cobertos:** todos os da especificação.
+- **Testes escritos pelo programador:** `src/icons.test.tsx` (10 testes: lista de `svg/` = exports, 30 ícones, tamanho por omissão e `size={24}`, `currentColor`, ref, className/props, `aria-hidden` sem título, `getByRole('img', { name: 'Close' })` com título, axe sem violações nos dois casos, contrato de ARIA em todos os 30 ícones). Stories: `Gallery`, `Sizes`, `WithTitle`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (icons: 10) · build ✔ · test:a11y ✔ (5 testes).
+- **Notas para o testador:**
+  - Dependências novas de `@ds/icons` (devDependencies): `lucide-static` 1.55.0, `@svgr/core` 8.1.0, `@svgr/plugin-jsx` 8.1.0 (versões exatas), mais `axe-core` (o helper `vitest-axe` só chega com a DS-009, por isso o teste usa `axe.run` diretamente), `@storybook/react` e `@types/node` (leitura de `svg/` no teste).
+  - `@types/node` dá ao vitest do pacote uma instância própria, pelo que os tipos do jest-dom não chegavam via `test/setup.ts`; `src/vitest-env.d.ts` regista-os também aqui.
+  - O teste lê `svg/` a partir de `process.cwd()` (em jsdom `import.meta.url` não é um URL `file:`), logo tem de correr com o diretório do pacote como cwd (o que `pnpm test` faz).
+  - Não usei `@svgr/plugin-svgo` para não reescrever os caminhos do Lucide; o invólucro `<svg>` é substituído por `IconBase` no gerador.
+  - Story `DarkTheme` usa `var(--ds-color-bg-canvas, <fallback>)`: os fallbacks mantêm-na escura até o Storybook carregar o CSS dos temas (DS-006); depois podem ser retirados.
+  - Sugestão ao planeador: a DS-009 podia migrar o teste de axe para `expectNoA11yViolations` e a DS-036 completar os metadados (`files`, licença) do pacote.
