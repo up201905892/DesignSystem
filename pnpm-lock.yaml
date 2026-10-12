@@ -41,6 +41,9 @@ importers:
 
   apps/docs:
     devDependencies:
+      '@ds/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       '@storybook/addon-a11y':
         specifier: ^8.6.18
         version: 8.6.18(storybook@8.6.18(prettier@3.9.9))

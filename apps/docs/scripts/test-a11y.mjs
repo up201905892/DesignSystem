@@ -10,6 +10,10 @@ function run(cmd, args) {
   return spawnSync('pnpm', ['exec', cmd, ...args], { stdio: 'inherit' });
 }
 
+// The stories import the generated token CSS and objects from @ds/tokens/dist.
+const tokensBuild = spawnSync('pnpm', ['--filter', '@ds/tokens', 'build'], { stdio: 'inherit' });
+if (tokensBuild.status !== 0) process.exit(tokensBuild.status ?? 1);
+
 const build = run('storybook', ['build', '--quiet']);
 if (build.status !== 0) process.exit(build.status ?? 1);
 
