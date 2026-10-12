@@ -65,6 +65,7 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | --- | --- | --- | --- |
 | 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | 2026-10-12 |
 | 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | 2026-10-12 |
+| 2026-10-12 | Responder | DS-003 | 2026-10-12 |
 
 ## Decisões técnicas
 
@@ -240,6 +241,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-11 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-11 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados
 - 2026-10-11 · finalizador · Aprovado → Concluído · relatório 1 aprovado (3f25ff9); infraestrutura, changeset não aplicável
+- 2026-10-12 · planeador · Concluído (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-10-12): passo `pnpm test:a11y:setup` acrescentado ao ci.yml e ao diario.yml em 2026-10-11, antes de `pnpm test:a11y`; pedido de instalar o Chromium no CI resolvido, não repetir
 
 ### DS-004 · Tokens primitivos com Style Dictionary
 
