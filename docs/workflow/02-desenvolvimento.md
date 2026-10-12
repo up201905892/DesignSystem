@@ -132,3 +132,21 @@ Modelo de entrada:
   - Não usei `@svgr/plugin-svgo` para não reescrever os caminhos do Lucide; o invólucro `<svg>` é substituído por `IconBase` no gerador.
   - Story `DarkTheme` usa `var(--ds-color-bg-canvas, <fallback>)`: os fallbacks mantêm-na escura até o Storybook carregar o CSS dos temas (DS-006); depois podem ser retirados.
   - Sugestão ao planeador: a DS-009 podia migrar o teste de axe para `expectNoA11yViolations` e a DS-036 completar os metadados (`files`, licença) do pacote.
+
+### DS-006 · Tema no Storybook: toggle e páginas de tokens
+
+**Iteração 1 — 2026-10-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `preview.tsx` importa `tokens.css` e `themes.css`, tem o seletor "Theme" (`light`/`dark`, global `theme`) e um decorator que aplica `data-theme` ao `<html>` do iframe e põe o fundo/cor do body com `--ds-color-bg-canvas`/`--ds-color-text-default`; `parameters.theme` tem prioridade sobre a barra. Páginas "Foundations" geradas a partir de `tokens` e `themes` (sem listas à mão): Colors, Semantic (os dois temas lado a lado), Spacing, Typography, Radii, Shadows, e Theme (`Default` e `DarkTheme`). Convenção `DarkTheme` documentada em `apps/docs/README.md`.
+- **Ficheiros alterados:** `apps/docs/.storybook/preview.ts` (removido) → `apps/docs/.storybook/preview.tsx`, `apps/docs/.storybook/main.ts` (inclui `../src/**/*.stories.tsx`), `apps/docs/package.json`, `apps/docs/scripts/test-a11y.mjs`, `apps/docs/README.md`, `apps/docs/src/foundations/utils.tsx`, `apps/docs/src/foundations/Colors.stories.tsx`, `apps/docs/src/foundations/Scales.stories.tsx`, `apps/docs/src/foundations/Theme.stories.tsx`, `pnpm-lock.yaml`.
+- **Commit(s):** 5ffc6f1 `feat(ui): DS-006 Storybook theme toggle and foundations token pages`
+- **Critérios de aceitação cobertos:** preview e seletor em `.storybook/preview.tsx`; prioridade de `parameters.theme` no decorator `withTheme` e story `Foundations/Theme › DarkTheme`; convenção em `apps/docs/README.md`; páginas em `apps/docs/src/foundations/`; G1–G3.
+- **Testes escritos pelo programador:** unitários n/a. Stories verificadas pelo `pnpm test:a11y` (13 stories, 0 violações).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔. Prova negativa: story temporária com `parameters.theme = 'dark'` e texto `--ds-color-neutral-700` falhou por `color-contrast` (ficheiro removido, não commitada).
+- **Notas para o testador:**
+  - Única dependência nova: `@ds/tokens` (workspace) em `apps/docs`, para importar o CSS e os objetos. Como o pacote só existe em `dist/`, os scripts `storybook`, `build-storybook`, `typecheck` (docs) e `scripts/test-a11y.mjs` fazem primeiro `pnpm --filter @ds/tokens build`; sem isto o `typecheck` do CI (que corre antes do build) falharia.
+  - `preview.ts` passou a `preview.tsx` (JSX no decorator).
+  - A story `Semantic` mostra cada tema num painel com `data-theme` próprio, independente do seletor; as restantes seguem o seletor (verificar no browser que fundo e texto mudam sem recarregar).
+  - Os fallbacks da story `DarkTheme` dos ícones (DS-008) já podem ser retirados; não o fiz por estar fora do âmbito. Sugestão ao planeador.
+  - `globals` ao nível da story não foi implementado; só `parameters.theme`.
