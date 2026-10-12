@@ -12,7 +12,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-002 | Vitest + Testing Library e build com tsup | Fundações | Alta | DS-001 | Concluído |
 | DS-003 | Storybook 8 com addon-a11y e `pnpm test:a11y` | Fundações | Alta | DS-002 | Concluído |
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Concluído |
-| DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Pronto para teste |
+| DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Aprovado |
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Planeado |
 | DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Planeado |
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Planeado |
@@ -307,6 +307,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 - 2026-10-12 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-10-12 · programador · Em desenvolvimento → Pronto para teste · commit 36fa7b6
+- 2026-10-12 · testador · Pronto para teste → Em teste · início dos testes (commit 36fa7b6)
+- 2026-10-12 · testador · Em teste → Aprovado · relatório 1; todos os critérios verificados, zero falhas
 
 ### DS-006 · Tema no Storybook: toggle e páginas de tokens
 
