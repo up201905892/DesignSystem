@@ -2,6 +2,17 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-12 (segunda execução)
+
+- **Decisões para o João:** aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem. Não propus tarefas novas: já há 28 por aprovar. O pedido do `ci.yml`/`diario.yml` está resolvido.
+- **Concluídas:** DS-006, DS-007
+- **Testadas:** DS-006 (Aprovado), DS-007 (Aprovado)
+- **Desenvolvidas:** DS-006, DS-007 (ambas percorreram o ciclo completo)
+- **Decisões aplicadas:** resposta a DS-003 (`aprovacoes.md`, 2026-10-12)
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-009 (utilitários partilhados), que desbloqueia DS-010, DS-012, DS-019 e DS-020. Notas: a troca de tema ao vivo no Storybook (DS-006) e o anel de focus (DS-007) não foram vistos num browser; os fallbacks da story `DarkTheme` dos ícones podem sair; a DS-036 deve acrescentar `./styles.css` aos `exports` de `@ds/ui`.
+
 ## 2026-10-12
 
 - **Decisões para o João:**
