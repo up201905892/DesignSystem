@@ -14,7 +14,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Concluído |
 | DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Concluído |
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Concluído |
-| DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Aprovado |
+| DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Concluído |
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Concluído |
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
 | DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
@@ -380,6 +380,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-12 · programador · Em desenvolvimento → Pronto para teste · commit fdb215a
 - 2026-10-12 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-12 · testador · Em teste → Aprovado · relatório 1, commit fdb215a, zero falhas
+- 2026-10-12 · finalizador · Aprovado → Concluído · relatório 1 verificado; sem changeset (pacote ui privado)
 
 ### DS-008 · Pacote de ícones (subconjunto do Lucide com SVGR)
 

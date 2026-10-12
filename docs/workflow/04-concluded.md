@@ -80,6 +80,15 @@ Modelo de entrada:
 - **Documentação:** convenção da story `DarkTheme` em `apps/docs/README.md`; stories `Foundations/*` e `Foundations/Theme › DarkTheme` (tema escuro coberto pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** sugestão ao planeador (do programador): retirar os fallbacks da story `DarkTheme` dos ícones (DS-008), agora que o Storybook carrega os temas. Troca de tema ao vivo não observada no browser pelo testador; verificada por leitura do decorator.
 
+### DS-007 · CSS base, focus visível, `styles.css` agregado e Stylelint — concluída a 2026-10-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-12), commit fdb215a
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** CSS base limitado a elementos `ds-*`, classe `ds-focus-ring` com `:focus-visible`, regra de `prefers-reduced-motion`, `styles.css` agregado (gerado em `dist/styles.css` por `build-css.mjs`, sem `@import`) carregado pelo Storybook, e Stylelint em `pnpm lint` a proibir valores escritos à mão e classes sem prefixo `ds-`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** stories `Foundations/FocusRing` e `FocusRing/DarkTheme` (tema escuro coberto pelo `test:a11y`); regras e exceções em `stylelint.config.js`. Sem `TODO` na tarefa.
+- **Lições:** nota do testador: não há teste automático que prove o anel ao premir Tab (jsdom não avalia `:focus-visible`); verificado por leitura do CSS e das stories.
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
