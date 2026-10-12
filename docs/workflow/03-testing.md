@@ -218,3 +218,32 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** nenhum.
 
 **Notas (não são falhas):** o teste de `svg/` depende do cwd do pacote (o que `pnpm test` garante). As props em `...rest` vêm depois do ARIA por omissão, por isso o chamador pode substituí-las de propósito. `title=""` é tratado como decorativo.
+
+### DS-006 · Tema no Storybook: toggle e páginas de tokens — Relatório 1 — 2026-10-12
+
+- **Commit testado:** 5ffc6f1 (presente no histórico de `develop`; sem alterações por guardar no início; registo d20db6a por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Instalação | `pnpm install --frozen-lockfile` | ✔ |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` (4 pacotes) | ✔ |
+| Unitários | `pnpm test` (10 em icons, 89 em tokens, 3 em ui) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (5 suites, 13 testes, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Prova negativa | story temporária (não commitada, removida) com `parameters.theme = 'dark'` e texto `--ds-color-neutral-700`: `pnpm test:a11y` falhou por `color-contrast` | ✔ (falha esperada) |
+
+**Critérios de aceitação:**
+- [x] `preview.tsx` importa `@ds/tokens/tokens.css` e `@ds/tokens/themes.css` — lido no ficheiro (o `preview.ts` passou a `.tsx`, sem impacto no critério).
+- [x] Seletor "Theme" com `light` e `dark` (global `theme`); o decorator `withTheme` põe `data-theme` em `document.documentElement` (via `useLayoutEffect`, reage à mudança sem recarregar) e o body usa `--ds-color-bg-canvas` e `--ds-color-text-default` — lido no código.
+- [x] `parameters.theme` tem prioridade sobre `globals.theme` (ordem no decorator); story `Foundations/Theme › DarkTheme` passa no `test:a11y`, e a prova negativa confirma que a story é de facto avaliada em tema escuro. `globals` por story não implementado, o critério admite "ou".
+- [x] Convenção `DarkTheme` em `apps/docs/README.md` (secção Themes, com exemplo).
+- [x] Páginas Foundations: Colors, Semantic (os dois temas), Spacing, Typography, Radii, Shadows, geradas por `flatten` sobre `tokens`/`themes` — sem listas à mão (lido em `src/foundations/`).
+- [x] G1 (lint, typecheck, test, build passam), G2 (única dependência nova: `@ds/tokens` do workspace), G3 (commit `feat(ui): DS-006 ...` em inglês com ID; sem alterações a `CLAUDE.md`, `.claude/`, `.github/` nem `aprovacoes.md`).
+
+**Testes exigidos:** unitários n/a. Acessibilidade: passa em todas as páginas e na `DarkTheme`; prova negativa reproduzida por mim. Stories `Colors`, `Spacing`, `Typography`, `Radii`, `Shadows` e `DarkTheme` existem.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):** não consegui abrir o browser para observar a troca de tema ao vivo (a escrita do script de verificação foi bloqueada); a conclusão baseia-se na leitura do decorator, que usa `useLayoutEffect` dependente de `theme`, e nos resultados do axe. Contraste verificado pelo axe só nas stories existentes (claro por omissão e escuro na `DarkTheme`). Teclado/focus não aplicáveis (páginas não interativas).
