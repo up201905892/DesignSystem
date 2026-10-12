@@ -1,0 +1,6 @@
+/* Common focus ring. Components reuse it with the ds-focus-ring class or copy
+   these two declarations; the outline is never removed without an alternative. */
+.ds-focus-ring:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: 2px;
+}

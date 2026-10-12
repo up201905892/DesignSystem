@@ -1,0 +1,15 @@
+/* WCAG 2.3.3: no transitions or animations when the user asks for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  [class^='ds-'],
+  [class*=' ds-'],
+  [class^='ds-']::before,
+  [class*=' ds-']::before,
+  [class^='ds-']::after,
+  [class*=' ds-']::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}

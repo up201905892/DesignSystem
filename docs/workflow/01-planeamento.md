@@ -14,7 +14,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-004 | Tokens primitivos com Style Dictionary | Fundações | Alta | DS-002 | Concluído |
 | DS-005 | Tokens semânticos e temas claro/escuro | Fundações | Alta | DS-004 | Concluído |
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Concluído |
-| DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Planeado |
+| DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Em desenvolvimento |
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Concluído |
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
 | DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
@@ -376,6 +376,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
+- 2026-10-12 · programador · Planeado → Em desenvolvimento · início da implementação
 
 ### DS-008 · Pacote de ícones (subconjunto do Lucide com SVGR)
 

@@ -1,7 +1,6 @@
 import type { Decorator, Preview } from '@storybook/react';
 import { useLayoutEffect } from 'react';
-import '@ds/tokens/tokens.css';
-import '@ds/tokens/themes.css';
+import '../../../packages/ui/src/styles.css';
 
 type Theme = 'light' | 'dark';
 

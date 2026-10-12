@@ -1,0 +1,6 @@
+/* Minimal base: no global reset, only elements that carry a ds-* class. */
+[class^='ds-'],
+[class*=' ds-'] {
+  box-sizing: border-box;
+  font-family: var(--ds-font-family-sans);
+}
