@@ -1,0 +1,50 @@
+{
+  "color": {
+    "bg": {
+      "canvas": { "value": "{color.neutral.900}", "type": "color" },
+      "surface": { "value": "{color.neutral.800}", "type": "color" },
+      "subtle": { "value": "{color.neutral.700}", "type": "color" },
+      "inverse": { "value": "{color.neutral.50}", "type": "color" }
+    },
+    "text": {
+      "default": { "value": "{color.neutral.50}", "type": "color" },
+      "muted": { "value": "{color.neutral.300}", "type": "color" },
+      "disabled": { "value": "{color.neutral.500}", "type": "color" },
+      "on-accent": { "value": "{color.neutral.900}", "type": "color" }
+    },
+    "border": {
+      "default": { "value": "{color.neutral.700}", "type": "color" },
+      "strong": { "value": "{color.neutral.400}", "type": "color" }
+    },
+    "accent": {
+      "default": { "value": "{color.primary.400}", "type": "color" },
+      "hover": { "value": "{color.primary.300}", "type": "color" },
+      "active": { "value": "{color.primary.200}", "type": "color" },
+      "subtle": { "value": "{color.primary.900}", "type": "color" }
+    },
+    "success": {
+      "default": { "value": "{color.success.400}", "type": "color" },
+      "subtle": { "value": "{color.success.900}", "type": "color" },
+      "text": { "value": "{color.success.200}", "type": "color" }
+    },
+    "warning": {
+      "default": { "value": "{color.warning.400}", "type": "color" },
+      "subtle": { "value": "{color.warning.900}", "type": "color" },
+      "text": { "value": "{color.warning.200}", "type": "color" }
+    },
+    "danger": {
+      "default": { "value": "{color.danger.400}", "type": "color" },
+      "subtle": { "value": "{color.danger.900}", "type": "color" },
+      "text": { "value": "{color.danger.200}", "type": "color" }
+    },
+    "info": {
+      "default": { "value": "{color.info.400}", "type": "color" },
+      "subtle": { "value": "{color.info.900}", "type": "color" },
+      "text": { "value": "{color.info.200}", "type": "color" }
+    },
+    "focus": {
+      "ring": { "value": "{color.primary.300}", "type": "color" }
+    },
+    "overlay": { "value": "{color.black}", "type": "color", "alpha": 0.6 }
+  }
+}

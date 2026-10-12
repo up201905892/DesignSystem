@@ -1,0 +1,50 @@
+{
+  "color": {
+    "bg": {
+      "canvas": { "value": "{color.neutral.50}", "type": "color" },
+      "surface": { "value": "{color.white}", "type": "color" },
+      "subtle": { "value": "{color.neutral.100}", "type": "color" },
+      "inverse": { "value": "{color.neutral.900}", "type": "color" }
+    },
+    "text": {
+      "default": { "value": "{color.neutral.900}", "type": "color" },
+      "muted": { "value": "{color.neutral.600}", "type": "color" },
+      "disabled": { "value": "{color.neutral.400}", "type": "color" },
+      "on-accent": { "value": "{color.white}", "type": "color" }
+    },
+    "border": {
+      "default": { "value": "{color.neutral.300}", "type": "color" },
+      "strong": { "value": "{color.neutral.500}", "type": "color" }
+    },
+    "accent": {
+      "default": { "value": "{color.primary.600}", "type": "color" },
+      "hover": { "value": "{color.primary.700}", "type": "color" },
+      "active": { "value": "{color.primary.800}", "type": "color" },
+      "subtle": { "value": "{color.primary.50}", "type": "color" }
+    },
+    "success": {
+      "default": { "value": "{color.success.600}", "type": "color" },
+      "subtle": { "value": "{color.success.50}", "type": "color" },
+      "text": { "value": "{color.success.800}", "type": "color" }
+    },
+    "warning": {
+      "default": { "value": "{color.warning.600}", "type": "color" },
+      "subtle": { "value": "{color.warning.50}", "type": "color" },
+      "text": { "value": "{color.warning.800}", "type": "color" }
+    },
+    "danger": {
+      "default": { "value": "{color.danger.600}", "type": "color" },
+      "subtle": { "value": "{color.danger.50}", "type": "color" },
+      "text": { "value": "{color.danger.700}", "type": "color" }
+    },
+    "info": {
+      "default": { "value": "{color.info.600}", "type": "color" },
+      "subtle": { "value": "{color.info.50}", "type": "color" },
+      "text": { "value": "{color.info.800}", "type": "color" }
+    },
+    "focus": {
+      "ring": { "value": "{color.primary.600}", "type": "color" }
+    },
+    "overlay": { "value": "{color.neutral.900}", "type": "color", "alpha": 0.5 }
+  }
+}

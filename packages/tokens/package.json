@@ -12,7 +12,8 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./tokens.css": "./dist/tokens.css"
+    "./tokens.css": "./dist/tokens.css",
+    "./themes.css": "./dist/themes.css"
   },
   "scripts": {
     "build": "node scripts/build.mjs",
