@@ -62,6 +62,15 @@ Modelo de entrada:
 - **Documentação:** pares de contraste documentados em `packages/tokens/src/contrast-pairs.ts`; stories e tema escuro no Storybook não aplicáveis (DS-006). Sem `TODO` na tarefa.
 - **Lições:** nenhuma
 
+### DS-008 · Pacote de ícones (subconjunto do Lucide com SVGR) — concluída a 2026-10-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-12), commit 7e74ced
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** pacote `@ds/icons` com 30 ícones Lucide como componentes React gerados com SVGR, acessíveis por omissão (decorativos sem `title`, `role="img"` com `title`), com `size`, `className` e `ref`, em ESM + CJS + `.d.ts`.
+- **Changeset:** não aplicável (`@ds/icons` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** `packages/icons/README.md` (secção "Credits") e `LICENSE-LUCIDE`; stories `Gallery`, `Sizes`, `WithTitle` e `DarkTheme`. Sem `TODO` na tarefa.
+- **Lições:** nenhuma
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
