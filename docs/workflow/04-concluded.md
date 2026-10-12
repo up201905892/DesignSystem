@@ -53,6 +53,15 @@ Modelo de entrada:
 - **Documentação:** stories e tema escuro não aplicáveis (páginas de tokens na DS-006); sem `TODO` na tarefa
 - **Lições:** nenhuma
 
+### DS-005 · Tokens semânticos e temas claro/escuro — concluída a 2026-10-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-12), commit 36fa7b6
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** tokens semânticos (fundo, texto, borda, acento, estados, focus-ring, overlay) resolvidos em `themes.css` para tema claro, escuro e fallback `prefers-color-scheme`, exportados como `themes`, com contraste AA verificado por teste.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; pacotes privados)
+- **Documentação:** pares de contraste documentados em `packages/tokens/src/contrast-pairs.ts`; stories e tema escuro no Storybook não aplicáveis (DS-006). Sem `TODO` na tarefa.
+- **Lições:** nenhuma
+
 ## Marcos
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
