@@ -5,3 +5,4 @@
 @import './styles/focus.css';
 @import './styles/motion.css';
 /* Component stylesheets go below, one line each, after the files above. */
+@import './VisuallyHidden/VisuallyHidden.css';

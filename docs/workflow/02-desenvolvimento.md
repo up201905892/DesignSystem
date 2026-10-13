@@ -170,3 +170,21 @@ Modelo de entrada:
   - A regra das unidades usa regex sobre o valor das propriedades listadas (inclui `margin-block`, `padding-inline`, etc.).
   - A story FocusRing usa `style` inline com tokens só para o layout da story.
 - **Pedidos para o João:** o CI (`.github/workflows/ci.yml`) já corre `pnpm run lint`, que inclui Stylelint; não é preciso alterar nada em `.github/`.
+
+### DS-009 · Utilitários partilhados, helper de axe e teste de convenções
+
+**Iteração 1 — 2026-10-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `cx` e `Slot` em `packages/ui/src/utils/`; `VisuallyHidden` refeito segundo C1 a C5 (classe `ds-visually-hidden`, técnica de `clip`, `asChild`, `className` somada à base, CSS no `styles.css`, stories `Default` e `DarkTheme`); helper `expectNoA11yViolations` em `packages/ui/test/a11y.ts` (vitest-axe); polyfills de jsdom no setup partilhado; `conventions.test.ts`; `packages/ui/README.md` com "How to create a component".
+- **Ficheiros alterados:** `packages/ui/package.json`, `pnpm-lock.yaml`, `test/setup.ts`, `packages/ui/README.md`, `packages/ui/src/styles.css`, `packages/ui/src/conventions.test.ts`, `packages/ui/src/utils/{cx.ts,cx.test.ts,Slot.ts}`, `packages/ui/test/{a11y.ts,a11y.test.tsx}`, `packages/ui/src/VisuallyHidden/{VisuallyHidden.tsx,VisuallyHidden.css,VisuallyHidden.test.tsx,VisuallyHidden.stories.tsx}`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** ver histórico da tarefa no Planeamento (commit `feat(ui): DS-009 shared utils, axe helper and conventions test`).
+- **Critérios de aceitação cobertos:** todos; `cx.test.ts`, `VisuallyHidden.test.tsx`, `a11y.test.tsx`, `conventions.test.ts`, stories `Utilities/VisuallyHidden`.
+- **Testes escritos pelo programador:** os cinco ficheiros acima. Prova negativa: remover `VisuallyHidden.css` fez falhar `conventions.test.ts` (ficheiro reposto, não commitado).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ · `pnpm install --frozen-lockfile` ✔.
+- **Notas para o testador:**
+  - Dependências novas: `@radix-ui/react-slot` (dependencies) e `vitest-axe` (devDependencies) em `packages/ui`.
+  - Os polyfills ficaram em `test/setup.ts` (setup partilhado já usado pelo Vitest), não em `packages/ui/test/`.
+  - O CSS usa `margin: 0` em vez de `-1px` porque o Stylelint proíbe comprimentos fixos; o elemento é `position: absolute`, por isso o efeito é o mesmo.
+  - O aviso "HTMLCanvasElement getContext not implemented" nos testes vem do axe em jsdom e é inofensivo.
+  - O helper lança um erro com a lista de violações em vez de usar um matcher `toHaveNoViolations`, para não ser preciso estender os tipos do `expect`.

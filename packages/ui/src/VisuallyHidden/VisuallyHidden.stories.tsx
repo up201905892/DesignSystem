@@ -10,6 +10,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const render: Story['render'] = (args) => (
+  <button type="button">
+    <span aria-hidden="true">×</span>
+    <VisuallyHidden {...args} />
+  </button>
+);
+
 export const Default: Story = {
-  args: { children: 'Text available to assistive technology' },
+  args: { children: 'Close' },
+  render,
+};
+
+export const DarkTheme: Story = {
+  args: { children: 'Close' },
+  parameters: { theme: 'dark' },
+  render,
 };

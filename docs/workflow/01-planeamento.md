@@ -16,7 +16,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-006 | Tema no Storybook: toggle e páginas de tokens | Fundações | Alta | DS-003, DS-005 | Concluído |
 | DS-007 | CSS base, focus visível, `styles.css` agregado e Stylelint | Fundações | Alta | DS-006 | Concluído |
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Concluído |
-| DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Planeado |
+| DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Em desenvolvimento |
 | DS-010 | Button | Formulários | Alta | DS-009 | Planeado |
 | DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Planeado |
 | DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Planeado |
@@ -447,6 +447,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · Proposta → Planeado · aprovada pelo João (conversa)
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): regra de língua, secção do README passa a "How to create a component"; estado mantém-se Planeado
+- 2026-10-13 · programador · Planeado → Em desenvolvimento · início da implementação
 
 ### DS-010 · Button
 
