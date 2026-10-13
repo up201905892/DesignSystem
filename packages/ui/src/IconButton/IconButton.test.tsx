@@ -92,6 +92,18 @@ describe('IconButton', () => {
       );
     });
 
+    it('adds no wrapper around the child and puts aria-label on it', () => {
+      const { container } = render(
+        <IconButton asChild aria-label="Settings" icon={<Icon />}>
+          <a href="/x" />
+        </IconButton>,
+      );
+      expect(container.children).toHaveLength(1);
+      expect(container.firstElementChild?.tagName).toBe('A');
+      expect(container.firstElementChild).toHaveAttribute('aria-label', 'Settings');
+      expect(container.firstElementChild).not.toHaveAttribute('type');
+    });
+
     it('blocks clicks and leaves the Tab order when disabled', async () => {
       const outer = vi.fn();
       const inner = vi.fn();
