@@ -279,3 +279,33 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** nenhum.
 
 **Notas (não são falhas):** não há teste automático que prove que o anel aparece ao premir Tab (jsdom não avalia `:focus-visible` e a story não tem `play`); a verificação assenta na leitura do CSS e nas stories. O `styles.test.ts` regenera o `dist/styles.css` antes de o ler, por isso não prova que o `pnpm build` o gera (verificado à parte). A regra de unidades é uma regex sobre o valor, pelo que `calc()` com `px` também é apanhado. A story usa `style` inline com tokens só para layout.
+
+### DS-009 · Utilitários partilhados, helper de axe e teste de convenções — Relatório 1 — 2026-10-13
+
+- **Commit testado:** d729d7e (presente no histórico de `develop`; sem alterações por guardar no início; registo 525463d por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Instalação | `pnpm install --frozen-lockfile` | ✔ |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (10 em icons, 89 em tokens, 25 em ui) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (6 suites, 16 testes, incluindo `VisuallyHidden` Default e DarkTheme) | ✔ |
+| Build | `pnpm build`; `dist/styles.css` contém `ds-visually-hidden` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `cx`: lido `utils/cx.ts` (sem dependências); `cx.test.ts` cobre `('a', false, undefined, 'b')` → `'a b'`, `null`, vazio e sem argumentos.
+- [x] `@radix-ui/react-slot` em `dependencies` de `packages/ui`; reexportado em `utils/Slot.ts`.
+- [x] `VisuallyHidden`: pasta própria com os cinco ficheiros, classe `ds-visually-hidden`, `clip` + `clip-path`, sem `display: none`, `asChild` via `Slot`, `forwardRef`, `displayName`, `className` somada à base.
+- [x] `packages/ui/test/a11y.ts` exporta `expectNoA11yViolations` (vitest-axe); usado em `VisuallyHidden.test.tsx`.
+- [x] Polyfills em `test/setup.ts` (setup partilhado): `ResizeObserver`, `hasPointerCapture`/`setPointerCapture`/`releasePointerCapture`, `scrollIntoView`, `matchMedia`.
+- [x] `conventions.test.ts`: percorre pastas com maiúscula; verifica os cinco ficheiros, export em `index.ts`, `@import` em `styles.css` e `export const DarkTheme`; passa para `VisuallyHidden`.
+- [x] README: secção "How to create a component" com C1 a C5, aponta para `VisuallyHidden`.
+- [x] G1 (todos os comandos passam), G2 (novas: `@radix-ui/react-slot`, `vitest-axe`; lockfile com `--frozen-lockfile`), G3 (commit em inglês com ID; sem alterações a ficheiros do João). C1 a C5 para `VisuallyHidden` verificados.
+
+**Testes exigidos:** unitários de `cx`, `VisuallyHidden` (texto, `className`, `ref`, `asChild` sem `<span>` extra, nome acessível de botão só com ícone) e do helper (falha com `<img>` sem `alt`, regex `image-alt`) existem e não são triviais. Stories `Default` e `DarkTheme` existem e passam no axe.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):** a prova negativa do teste de convenções (remover um ficheiro) não foi repetida por mim, porque o ambiente bloqueou mover ficheiros; baseia-se na leitura (`existsSync` por ficheiro) e no registo do programador. Os polyfills não têm teste próprio. O aviso `getContext` do axe em jsdom é inofensivo. Tema escuro/contraste não aplicáveis ao texto oculto; a story `DarkTheme` passa no axe.
