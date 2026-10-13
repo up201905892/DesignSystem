@@ -376,3 +376,33 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** um teste em `IconButton.test.tsx` (`asChild` sem wrapper, `aria-label` no filho, sem `type`). Passa. Commit a seguir a este relatório (`test(ui): DS-011 ...`).
 
 **Notas (não são falhas):** `IconButton` com `variant="danger"` e `ghost` em hover não tem `play` visual; verificado por leitura do CSS. `ReactNode` como `icon` não impede texto, só a convenção e a documentação.
+
+### DS-012 · Field — Relatório 1 — 2026-10-13
+
+- **Commit testado:** 4363736 (presente no histórico de `develop`; sem alterações por guardar no início; registo a5f729e por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 105 antes do meu teste, 106 depois) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (9 suites, 41 testes, incluindo as seis stories do Field) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports `Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `useFieldControl` em `Field/index.ts` e `packages/ui/src/index.ts`; o hook devolve `id`, `aria-describedby`, `aria-invalid`, `aria-required`, `disabled` (lido `Field.tsx`, testes com `<input>`).
+- [x] `Field` com `id?` (`useId`), `invalid`, `required`, `disabled`, contexto e `data-invalid`/`data-disabled` na raiz: testes "uses the given id", "passes disabled ... data attributes".
+- [x] `FieldLabel` com `htmlFor` = id; `*` com `aria-hidden="true"`: testes `getByLabelText` e "passes required ...".
+- [x] `aria-describedby` com descrição quando existe e erro só se `invalid`: testes com e sem `invalid`, sem descrição, sem ambos; teste acrescentado por mim para a alternância dinâmica.
+- [x] `FieldError` só no DOM quando `invalid`, token `--ds-color-danger-text`, texto (não só cor): teste `queryByText` e `Field.css`.
+- [x] Fora de um `Field` o hook devolve vazio e as partes não falham: dois testes.
+- [x] G1 (todos os comandos passam), G2 (sem dependências novas), G3 (commit em inglês com ID; sem alterações a ficheiros do João). C1 a C5: cinco ficheiros, `export` nos dois `index.ts`, `@import` em `styles.css`, `DarkTheme`; `conventions.test.ts` passa.
+
+**Testes exigidos:** unitários (getByLabelText, describedby com e sem `invalid`, erro ausente do DOM, `disabled`, ids distintos), acessibilidade (axe em normal, inválido, desativado e obrigatório; clique na etiqueta foca; `toHaveAccessibleDescription` com descrição + erro) e stories (`Default`, `WithDescription`, `Required`, `Invalid`, `Disabled`, `DarkTheme`) existem e não são triviais.
+
+**Acessibilidade e contraste:** `text-default`, `text-muted`, `danger-text` e `text-disabled` (só na etiqueta, de controlo desativado) sem violações no axe em Chromium; `DarkTheme` passa. O Field não tem elementos interativos próprios, por isso não há navegação por teclado a verificar além do foco via etiqueta.
+
+**Testes adicionados pelo testador:** um teste em `Field.test.tsx` (aria-describedby ao alternar `invalid` e ao remover a descrição com `rerender`). Passa. Commit a seguir a este relatório (`test(ui): DS-012 ...`).
+
+**Notas (não são falhas):** `FieldError` sem `role="alert"` (decisão documentada; anúncio dinâmico fica como sugestão ao planeador). A descrição mantém `text-muted` quando desativado. Texto muito longo quebra normalmente (sem `nowrap`).
