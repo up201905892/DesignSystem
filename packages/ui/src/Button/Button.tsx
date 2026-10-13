@@ -33,6 +33,15 @@ function blockClick(event: MouseEvent<HTMLElement>) {
 
 /**
  * A button for actions, or a link styled as a button when used with `asChild`.
+ *
+ * @example
+ * <Button variant="secondary" leadingIcon={<PlusIcon />}>Add</Button>
+ * <Button asChild><a href="/docs">Docs</a></Button>
+ *
+ * Accessibility: works with the keyboard alone (Tab to focus, Enter and Space to activate)
+ * and shows a visible focus ring. The accessible name comes from the text only, because
+ * icons are `aria-hidden`. `type` defaults to `"button"`, so it does not submit forms
+ * unless `type="submit"` is passed. A disabled button leaves the Tab order.
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
