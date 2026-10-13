@@ -228,6 +228,20 @@ describe('Button', () => {
       expect(onClick).not.toHaveBeenCalled();
     });
 
+    it('blocks Enter and clicks on the icon of a focused disabled asChild link', async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      render(
+        <Button asChild disabled leadingIcon={<Icon />} onClick={onClick}>
+          <a href="/x">Docs</a>
+        </Button>,
+      );
+      screen.getByRole('link', { name: 'Docs' }).focus();
+      await user.keyboard('{Enter}');
+      await user.click(screen.getByTestId('icon'));
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
     it('skips a disabled asChild link with Tab', async () => {
       const user = userEvent.setup();
       render(
