@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-13 (segunda execução)
+
+- **Decisões para o João:**
+  1. Aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem (28 propostas por aprovar; não propus tarefas novas, há 7 planeadas e livres).
+  2. Sugestões sem ação urgente: `wrapperClassName` no `Input` (hoje o contorno não aceita classe) e anúncio dinâmico do erro no `FieldError` (sem `role="alert"`). Dizem respeito ao planeador/às tarefas futuras.
+- **Concluídas:** DS-012 (Field), DS-013 (Input)
+- **Testadas:** DS-012 (Aprovado), DS-013 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-012, DS-013 (ciclo completo no mesmo dia)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-015 (Checkbox, Alta) e DS-018 (Select, Alta), depois DS-014, DS-016, DS-017, DS-019, DS-020. Nota: o `Input` mede alturas só em Chromium (stories), não em jsdom.
+
 ## 2026-10-13
 
 - **Decisões para o João:**
