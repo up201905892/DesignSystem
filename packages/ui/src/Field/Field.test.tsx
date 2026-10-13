@@ -137,6 +137,24 @@ describe('Field', () => {
     expect(screen.queryByText('Error')).not.toBeInTheDocument();
   });
 
+  it('updates aria-describedby when invalid toggles and when the description is removed', () => {
+    const { rerender } = render(<Example />);
+    const input = screen.getByRole('textbox');
+    const descriptionId = screen.getByText('As on your ID.').id;
+    expect(input.getAttribute('aria-describedby')).toBe(descriptionId);
+
+    rerender(<Example invalid />);
+    const errorId = screen.getByText('Name is required.').id;
+    expect(input.getAttribute('aria-describedby')).toBe(`${descriptionId} ${errorId}`);
+
+    rerender(<Example />);
+    expect(screen.queryByText('Name is required.')).not.toBeInTheDocument();
+    expect(input.getAttribute('aria-describedby')).toBe(descriptionId);
+
+    rerender(<Example invalid description={false} />);
+    expect(input.getAttribute('aria-describedby')).toBe(errorId);
+  });
+
   it('has displayNames', () => {
     expect(Field.displayName).toBe('Field');
     expect(FieldLabel.displayName).toBe('FieldLabel');
