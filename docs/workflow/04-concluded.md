@@ -116,6 +116,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Variants`, `Sizes`, `Disabled`, `AsLink`, `AsLinkDisabled`, `NextToButton` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** nota do testador: sem `play` visual para `danger` e `ghost` em hover; verificado por leitura do CSS.
 
+### DS-012 · Field — concluída a 2026-10-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-13), commit 4363736 (mais 84ce2e8, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Field`, `FieldLabel`, `FieldDescription`, `FieldError` e hook `useFieldControl()` que ligam controlo, etiqueta, ajuda e erro (`aria-describedby`, `aria-invalid`, `aria-required`, `disabled`), reutilizáveis pelos componentes de formulário seguintes.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `WithDescription`, `Required`, `Invalid`, `Disabled` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** nota do testador: `FieldError` sem `role="alert"`; anúncio dinâmico do erro fica como sugestão ao planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
