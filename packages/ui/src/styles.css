@@ -7,3 +7,4 @@
 /* Component stylesheets go below, one line each, after the files above. */
 @import './VisuallyHidden/VisuallyHidden.css';
 @import './Button/Button.css';
+@import './IconButton/IconButton.css';

@@ -1,0 +1,20 @@
+/* Icon only: square, same size tokens as the text Button (colours come from Button.css) */
+.ds-button[data-icon-only] {
+  padding: 0;
+  font-size: var(--ds-font-size-md);
+}
+
+.ds-button[data-icon-only][data-size='sm'] {
+  width: var(--ds-space-8);
+  height: var(--ds-space-8);
+}
+
+.ds-button[data-icon-only][data-size='md'] {
+  width: var(--ds-space-10);
+  height: var(--ds-space-10);
+}
+
+.ds-button[data-icon-only][data-size='lg'] {
+  width: var(--ds-space-12);
+  height: var(--ds-space-12);
+}
