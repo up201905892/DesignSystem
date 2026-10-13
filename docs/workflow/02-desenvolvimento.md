@@ -178,7 +178,7 @@ Modelo de entrada:
 - **Estado no fim:** Pronto para teste
 - **O que foi feito:** `cx` e `Slot` em `packages/ui/src/utils/`; `VisuallyHidden` refeito segundo C1 a C5 (classe `ds-visually-hidden`, técnica de `clip`, `asChild`, `className` somada à base, CSS no `styles.css`, stories `Default` e `DarkTheme`); helper `expectNoA11yViolations` em `packages/ui/test/a11y.ts` (vitest-axe); polyfills de jsdom no setup partilhado; `conventions.test.ts`; `packages/ui/README.md` com "How to create a component".
 - **Ficheiros alterados:** `packages/ui/package.json`, `pnpm-lock.yaml`, `test/setup.ts`, `packages/ui/README.md`, `packages/ui/src/styles.css`, `packages/ui/src/conventions.test.ts`, `packages/ui/src/utils/{cx.ts,cx.test.ts,Slot.ts}`, `packages/ui/test/{a11y.ts,a11y.test.tsx}`, `packages/ui/src/VisuallyHidden/{VisuallyHidden.tsx,VisuallyHidden.css,VisuallyHidden.test.tsx,VisuallyHidden.stories.tsx}`, `docs/workflow/01-planeamento.md`.
-- **Commit(s):** ver histórico da tarefa no Planeamento (commit `feat(ui): DS-009 shared utils, axe helper and conventions test`).
+- **Commit(s):** d729d7e `feat(ui): DS-009 shared utils, axe helper and conventions test`
 - **Critérios de aceitação cobertos:** todos; `cx.test.ts`, `VisuallyHidden.test.tsx`, `a11y.test.tsx`, `conventions.test.ts`, stories `Utilities/VisuallyHidden`.
 - **Testes escritos pelo programador:** os cinco ficheiros acima. Prova negativa: remover `VisuallyHidden.css` fez falhar `conventions.test.ts` (ficheiro reposto, não commitado).
 - **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ · `pnpm install --frozen-lockfile` ✔.
