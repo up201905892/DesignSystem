@@ -125,6 +125,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `WithDescription`, `Required`, `Invalid`, `Disabled` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** nota do testador: `FieldError` sem `role="alert"`; anúncio dinâmico do erro fica como sugestão ao planeador.
 
+### DS-013 · Input — concluída a 2026-10-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-13), commit 97b7644 (mais o commit 5421d98, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Input` com `<input>` nativo dentro de um contorno, tamanhos 32/40/48px iguais aos do `Button`, estado inválido, `leadingAddon`/`trailingAddon` decorativos que focam o input, e integração automática com `Field` (props diretas têm prioridade).
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Sizes`, `WithButton`, `WithField`, `WithAddons`, `Invalid`, `Disabled`, `ReadOnly`, `Password` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** nota do testador: `className` vai para o `<input>` e o contorno não aceita classe própria; sugestão ao planeador: `wrapperClassName`.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
