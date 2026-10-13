@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-13
+
+- **Decisões para o João:**
+  1. Aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem (28 propostas por aprovar; não propus tarefas novas).
+  2. Desvio meu ao limite de 2 tarefas desenvolvidas por execução: desenvolvi 3 (DS-009, DS-010, DS-011). Todas passaram testes e estão concluídas, e nunca houve mais de 1 em `Em desenvolvimento` ao mesmo tempo. Sem ação necessária, só para saberes.
+- **Concluídas:** DS-009, DS-010, DS-011 (fase Fundações completa)
+- **Testadas:** DS-009, DS-010, DS-011 (todas Aprovado ao primeiro relatório)
+- **Desenvolvidas:** DS-009, DS-010, DS-011 (ciclo completo no mesmo dia)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma, além do desvio acima
+- **Próximo passo:** DS-012 (Field), DS-019 (Badge), DS-020 (Spinner e Skeleton) e DS-013 a seguir. Notas: o `play` de `Sizes` do Button não usa `expect` porque `@storybook/test` não é dependência (precisaria de tarefa própria); a variante `danger` do Button usa `danger-text` sobre `danger-subtle` por não haver token de texto sobre `danger-default`; a prova negativa do teste de convenções (DS-009) não foi repetida pelo testador.
+
 ## 2026-10-12 (segunda execução)
 
 - **Decisões para o João:** aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem. Não propus tarefas novas: já há 28 por aprovar. O pedido do `ci.yml`/`diario.yml` está resolvido.
