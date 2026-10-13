@@ -201,6 +201,30 @@ describe('Input', () => {
       expect(input).toHaveAttribute('aria-describedby', 'other');
     });
 
+    it('lets invalid={false} override an invalid Field', () => {
+      render(
+        <Field invalid>
+          <FieldLabel>Name</FieldLabel>
+          <Input invalid={false} />
+        </Field>,
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).not.toHaveAttribute('aria-invalid', 'true');
+      expect(input.parentElement).not.toHaveAttribute('data-invalid');
+    });
+
+    it('keeps an explicit aria-invalid="false" inside an invalid Field and a direct aria-required', () => {
+      render(
+        <Field invalid required>
+          <FieldLabel>Name</FieldLabel>
+          <Input aria-invalid="false" aria-required={false} />
+        </Field>,
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-invalid', 'false');
+      expect(input).toHaveAttribute('aria-required', 'false');
+    });
+
     it('clicking the label focuses the input', async () => {
       const user = userEvent.setup();
       render(
