@@ -406,3 +406,34 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** um teste em `Field.test.tsx` (aria-describedby ao alternar `invalid` e ao remover a descrição com `rerender`). Passa. Commit a seguir a este relatório (`test(ui): DS-012 ...`).
 
 **Notas (não são falhas):** `FieldError` sem `role="alert"` (decisão documentada; anúncio dinâmico fica como sugestão ao planeador). A descrição mantém `text-muted` quando desativado. Texto muito longo quebra normalmente (sem `nowrap`).
+
+### DS-013 · Input — Relatório 1 — 2026-10-13
+
+- **Commit testado:** 97b7644 (presente no histórico de `develop`; sem alterações por guardar no início; registo 9e9ded0 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 140 antes dos meus testes, 142 depois) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (10 suites, 51 testes, incluindo as 10 stories do Input com os `play` de altura) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `<input>` nativo, `type` por omissão `text`, seis tipos aceites, `ref` aponta para o `<input>`: testes `it.each` de tipos e "forwards the ref".
+- [x] Props `size` (HTML `size` omitido por `Omit`), `invalid`, `leadingAddon`, `trailingAddon`: lido `Input.tsx`; testes de `data-size` e de `invalid`.
+- [x] Dentro de `Field`: `id`, `aria-describedby`, `aria-invalid`, `aria-required`, `disabled` automáticos; props diretas ganham: testes de etiqueta, erro, disabled e prioridade; acrescentei dois testes (`invalid={false}` dentro de `Field invalid`; `aria-invalid="false"` e `aria-required={false}` explícitos).
+- [x] Controlado (três chamadas a `onChange`) e não controlado (`defaultValue`), sem avisos na consola: teste com espiões em `console.error` e `console.warn`.
+- [x] Estados em `Input.css`: `:hover`, `:focus-visible` (via `:has`, outline no contorno), disabled, readOnly, `data-invalid` com `danger-default`, placeholder `text-muted`. Contraste estimado a partir dos tokens: claro, borda `#64748b` e `#dc2626` sobre `#ffffff` ≈ 4,8:1 (≥ 3:1), placeholder `#475569` sobre branco e sobre `#f1f5f9` ≥ 6:1; escuro, borda `#94a3b8` e `#f87171` sobre `#1e293b` ≥ 5:1, placeholder `#cbd5e1` sobre `#334155` ≥ 7:1 (≥ 4,5:1).
+- [x] Addons `aria-hidden="true"`, dentro do contorno, clique foca o input: teste com `user.click` nos dois addons.
+- [x] Alturas: `Input.css` declara `--ds-space-8`, `--ds-space-10`, `--ds-space-12` no contorno (`.ds-input`); `Sizes` mede ≥ 32/40/48px e `WithButton` confirma altura igual à do `Button` (tolerância 0,5px); ambas passam no test runner (Chromium).
+- [x] G1 (todos os comandos passam), G2 (sem dependências novas), G3 (commit em inglês com ID; sem alterações a ficheiros do João). C1 a C5: cinco ficheiros, `export` nos dois `index.ts`, `@import` em `styles.css`, `DarkTheme`.
+
+**Testes exigidos:** unitários (digitar "abc" nos dois modos, `defaultValue`, disabled, readOnly, `data-size`, ref, `className`, Field com `aria-invalid` e `aria-describedby` do erro), acessibilidade (axe com `aria-label` e com `Field` em três estados; `getByLabelText`; Tab; disabled saltado) e stories (`Default`, `Sizes`, `WithButton`, `WithField`, `WithAddons`, `Invalid`, `Disabled`, `ReadOnly`, `Password`, `DarkTheme`) existem e não são triviais.
+
+**Acessibilidade e contraste:** Tab foca o `<input>` e o outline de 2px é desenhado no contorno (verificado no CSS, não visualmente); os addons são `aria-hidden` e não focáveis; `DarkTheme` passa no axe.
+
+**Testes adicionados pelo testador:** dois testes em `Input.test.tsx` (prioridade de `invalid={false}` e de `aria-invalid`/`aria-required` explícitos sobre o `Field`). Passam. Commit a seguir a este relatório (`test(ui): DS-013 ...`).
+
+**Notas (não são falhas):** `className` vai para o `<input>` e o contorno não aceita classe própria (sugestão do programador para o planeador: `wrapperClassName`). O `Button sm` renderiza ~35,5px (por conteúdo) e o `Input sm` acompanha-o por usar o mesmo `padding-block`. A altura em px não é verificável em jsdom; a verificação é feita pelos `play` das stories.
