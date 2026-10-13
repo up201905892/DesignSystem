@@ -240,3 +240,22 @@ Modelo de entrada:
   - No estado `disabled` só a etiqueta passa a `text-disabled`; a descrição mantém `text-muted`, porque o axe apontou `color-contrast` na descrição com `text-disabled` (só o texto de controlos desativados está isento).
   - `FieldError` não usa `role="alert"`; a mensagem chega ao leitor de ecrã por `aria-describedby`. Anúncio dinâmico fica como sugestão para o planeador.
   - O hook devolve `aria-invalid`/`aria-required`/`disabled` como `true` ou `undefined` (nunca `false`).
+
+### DS-013 · Input
+
+**Iteração 1 — 2026-10-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Input` com um contorno (`div.ds-input`, com `data-size`/`data-invalid`/`data-disabled`) à volta de um `<input class="ds-input__control">`. Usa `useFieldControl()` e as props passadas diretamente têm prioridade (`id`, `disabled`, `aria-*`, `invalid`). `leadingAddon`/`trailingAddon` em `span aria-hidden`; premir um addon foca o input (`onMouseDown` no contorno). A altura mínima 32/40/48px (`--ds-space-8|10|12`) está no contorno, com o mesmo `padding-block` do `Button` para a altura renderizada ser igual (o `Button sm` renderiza ~35,5px, por conteúdo).
+- **Ficheiros alterados:** `packages/ui/src/Input/{Input.tsx,Input.css,Input.test.tsx,Input.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 97b7644 `feat(ui): DS-013 add Input with sizes, addons and Field integration`
+- **Critérios de aceitação cobertos:** todos; testes em `Input.test.tsx`; stories `Default`, `Sizes` (play), `WithButton` (play), `WithField`, `WithAddons`, `Invalid`, `Disabled`, `ReadOnly`, `Password`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Input.test.tsx` (tipos, escrita controlada e não controlada, sem avisos na consola, defaultValue, disabled, readOnly, data-size, ref/className/displayName, invalid, addons, Tab, integração com Field, prioridade das props, clique na etiqueta, axe).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 140) · build ✔ · test:a11y ✔ (51).
+- **Notas para o testador:**
+  - Sem dependências novas.
+  - `ref`, `className` e as props nativas vão para o `<input>` (o critério pede que o `ref` aponte para o `<input>`); `data-size` e `data-invalid` estão no `<input>` e no contorno. O contorno não aceita `className` (sugestão para o planeador: `wrapperClassName` ou similar, p.ex. para largura).
+  - O focus visível usa `.ds-input:has(.ds-input__control:focus-visible)`, porque o outline é desenhado no contorno.
+  - `invalid` direto > `aria-invalid` direto > `Field`. `aria-invalid="false"` explícito é mantido.
+  - O contorno tem `eslint-disable jsx-a11y/no-static-element-interactions` (só reencaminha o rato dos addons para o input).
+  - Cores: borda `border-strong`, inválido `danger-default`, placeholder `text-muted`, desativado `border-default`/`bg-subtle`/`text-disabled`.
