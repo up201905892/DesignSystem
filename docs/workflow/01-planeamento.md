@@ -19,7 +19,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Concluído |
 | DS-010 | Button | Formulários | Alta | DS-009 | Concluído |
 | DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Concluído |
-| DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Em desenvolvimento |
+| DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Pronto para teste |
 | DS-013 | Input | Formulários | Alta | DS-010, DS-012 | Planeado |
 | DS-014 | Textarea | Formulários | Média | DS-013 | Planeado |
 | DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Planeado |
@@ -562,6 +562,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Name')
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 - 2026-10-13 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-13 · programador · Em desenvolvimento → Pronto para teste · commit 4363736
 
 ### DS-013 · Input
 

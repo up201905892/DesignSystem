@@ -222,3 +222,21 @@ Modelo de entrada:
   - As regras de tamanho ficaram em `IconButton.css` (a convenção C1 exige um `.css` por componente); as cores vêm de `Button.css`.
   - Testes e stories têm `eslint-disable jsx-a11y/anchor-has-content` porque o conteúdo do `<a>` vem do `icon` via `asChild`.
   - `fullWidth` não faz parte da API do `IconButton`.
+
+### DS-012 · Field (label, descrição e mensagem de erro)
+
+**Iteração 1 — 2026-10-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Field`, `FieldLabel`, `FieldDescription`, `FieldError` e `useFieldControl()`. O contexto guarda `id` (de `useId` se faltar), `invalid`, `required`, `disabled` e os ids de descrição e erro (`<id>-description`, `<id>-error`). `FieldDescription` e `FieldError` registam-se no `Field` (em `useLayoutEffect`) para o `aria-describedby` só referir elementos que existem; o erro só entra se `invalid`. Fora de um `Field` o hook devolve um objeto vazio e as partes não falham. `required` mostra `*` com `aria-hidden`.
+- **Ficheiros alterados:** `packages/ui/src/Field/{Field.tsx,Field.css,Field.test.tsx,Field.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 4363736 `feat(ui): DS-012 add Field with label, description and error`
+- **Critérios de aceitação cobertos:** todos; testes em `Field.test.tsx`, stories `Default`, `WithDescription`, `Required`, `Invalid`, `Disabled`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Field.test.tsx` (label/controlo, ids, describedby com e sem `invalid`, com e sem descrição, required, disabled, ids únicos, clique na etiqueta, refs/className, uso fora do Field, descrição acessível, axe nos 4 estados).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 105) · build ✔ · test:a11y ✔ (41).
+- **Notas para o testador:**
+  - Sem dependências novas.
+  - `Field` omite `id` das props do `div`: o `id` é o do controlo, não o da raiz.
+  - No estado `disabled` só a etiqueta passa a `text-disabled`; a descrição mantém `text-muted`, porque o axe apontou `color-contrast` na descrição com `text-disabled` (só o texto de controlos desativados está isento).
+  - `FieldError` não usa `role="alert"`; a mensagem chega ao leitor de ecrã por `aria-describedby`. Anúncio dinâmico fica como sugestão para o planeador.
+  - O hook devolve `aria-invalid`/`aria-required`/`disabled` como `true` ou `undefined` (nunca `false`).
