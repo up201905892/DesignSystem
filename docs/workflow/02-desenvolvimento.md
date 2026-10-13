@@ -188,3 +188,21 @@ Modelo de entrada:
   - O CSS usa `margin: 0` em vez de `-1px` porque o Stylelint proíbe comprimentos fixos; o elemento é `position: absolute`, por isso o efeito é o mesmo.
   - O aviso "HTMLCanvasElement getContext not implemented" nos testes vem do axe em jsdom e é inofensivo.
   - O helper lança um erro com a lista de violações em vez de usar um matcher `toHaveNoViolations`, para não ser preciso estender os tipos do `expect`.
+
+### DS-010 · Button
+
+**Iteração 1 — 2026-10-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Button` (`forwardRef`, `variant` primary/secondary/ghost/danger, `size` sm/md/lg, `fullWidth`, `leadingIcon`/`trailingIcon`, `asChild`, `disabled`) com `data-variant`, `data-size`, `data-full-width` e `data-disabled`. `disabled` com `asChild` usa `aria-disabled`, `tabIndex=-1` e bloqueio do clique em `onClickCapture`. Ícones em `<span class="ds-button__icon" aria-hidden>` e `Slottable` para `asChild`. CSS só com tokens; `min-height` 32/40/48px por `--ds-space-8|10|12`.
+- **Ficheiros alterados:** `packages/ui/src/Button/{Button.tsx,Button.css,Button.test.tsx,Button.stories.tsx,index.ts}`, `packages/ui/src/utils/Slot.ts` (reexporta `Slottable`), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** dcf7d57 `feat(ui): DS-010 Button with variants, sizes, icons and asChild`
+- **Critérios de aceitação cobertos:** todos; testes em `Button.test.tsx`, stories `Primary`, `Secondary`, `Ghost`, `Danger`, `Sizes` (com `play` que mede a altura), `WithIcons`, `FullWidth`, `Disabled`, `AsLink`, `AsLinkDisabled`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Button.test.tsx` (defaults, variantes, tamanhos, className, ref, submit, `asChild`, `disabled` com e sem `asChild`, ícones com e sem `asChild`, axe, Tab/Enter/Espaço).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 58) · build ✔ · test:a11y ✔ (27).
+- **Notas para o testador:**
+  - Sem dependências novas. O `play` de `Sizes` usa `throw` em vez de `expect` porque `@storybook/test` não é dependência (G2).
+  - Cores só com pares de contraste já testados na DS-005: `danger` usa `danger-text` sobre `danger-subtle` com contorno `danger-text` (não há token de texto sobre `danger-default`); `secondary` usa `border-strong`; `ghost` e `secondary` usam `text-default`. O estado desativado usa `text-disabled` sobre `bg-subtle` (isento de contraste em WCAG).
+  - O estado desativado com `asChild` não usa `pointer-events: none`, para o clique chegar ao bloqueio em captura.
+  - As stories usam `style` inline só para o layout da story (como em `FocusRing`).
+  - `type` não é passado ao filho com `asChild`.
