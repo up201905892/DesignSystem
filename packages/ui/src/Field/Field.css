@@ -1,0 +1,37 @@
+.ds-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  font-family: var(--ds-font-family-sans);
+}
+
+.ds-field__label {
+  color: var(--ds-color-text-default);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-font-line-height-tight);
+}
+
+.ds-field__required {
+  margin-inline-start: var(--ds-space-1);
+}
+
+.ds-field__description {
+  margin: 0;
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-font-line-height-tight);
+}
+
+.ds-field__error {
+  margin: 0;
+  color: var(--ds-color-danger-text);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-font-line-height-tight);
+}
+
+/* The description keeps its color when disabled: it is not exempt from contrast rules. */
+.ds-field[data-disabled] .ds-field__label {
+  color: var(--ds-color-text-disabled);
+}
