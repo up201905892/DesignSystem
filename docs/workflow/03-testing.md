@@ -309,3 +309,39 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** nenhum.
 
 **Notas (não são falhas):** a prova negativa do teste de convenções (remover um ficheiro) não foi repetida por mim, porque o ambiente bloqueou mover ficheiros; baseia-se na leitura (`existsSync` por ficheiro) e no registo do programador. Os polyfills não têm teste próprio. O aviso `getContext` do axe em jsdom é inofensivo. Tema escuro/contraste não aplicáveis ao texto oculto; a story `DarkTheme` passa no axe.
+
+### DS-010 · Button — Relatório 1 — 2026-10-13
+
+- **Commit testado:** dcf7d57 (presente no histórico de `develop`; sem alterações por guardar no início; registo b4b8532 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (10 icons, 89 tokens, 58 ui) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (7 suites, 27 testes, incluindo as stories do Button e o `play` de `Sizes`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `<button type="button">` por omissão, `type="submit"` submete: lido `Button.tsx`; testes "renders its text and defaults", "submits a form", "does not submit by default".
+- [x] Props `variant`, `size`, `fullWidth`, `leadingIcon`, `trailingIcon`, `asChild`, `disabled` e omissões `primary`/`md`: lido `Button.tsx`; testes por variante e tamanho.
+- [x] `data-variant`, `data-size`, classe `ds-button`: lido e testado.
+- [x] `asChild` aplica classes, `data-*` e `ref` ao filho, sem `type` e sem `<button>`: teste "renders a link with the class and no type".
+- [x] `disabled` sem `asChild`: atributo nativo, `data-disabled`, `onClick` não dispara, Tab salta o botão: testes dedicados.
+- [x] `disabled` com `asChild`: `aria-disabled`, `tabindex=-1`, sem `disabled`, clique bloqueado em captura (`defaultPrevented`, nem `onClick` do Button nem do `<a>`), Tab salta a ligação: testes dedicados.
+- [x] `data-disabled` nos dois casos e usado no CSS (`.ds-button[data-disabled]`, com `:hover` e `:active` declarados depois das variantes, mesma especificidade, por isso ganham).
+- [x] `:hover`, `:active`, `:focus-visible`, desativado nas quatro variantes: lido `Button.css`.
+- [x] Alturas: `Button.css` usa `--ds-space-8|10|12` para `sm|md|lg`; `play` de `Sizes` mede ≥ 32/40/48px e passou no `test:a11y` (Chromium).
+- [x] Ícones em `<span aria-hidden="true">`, nome acessível só com o texto: testes.
+- [x] Ícones com `asChild` via `Slottable` (reexportado em `utils/Slot.ts`), dentro do filho, antes e depois do texto, sem elemento à volta: testes (3 nós filhos, `container.firstElementChild` é a ligação).
+- [x] Stories e testes usam `<svg>` próprio; sem dependência do pacote de ícones: lido.
+- [x] G1 (todos os comandos passam), G2 (sem dependências novas), G3 (commit em inglês com ID; sem alterações a ficheiros do João). C1 a C5: pasta com os cinco ficheiros, `styles.css` importa `Button.css`, `DarkTheme` existe; `conventions.test.ts` passa.
+
+**Testes exigidos:** unitários, de `disabled`, de ícones com `asChild` e de acessibilidade (axe, Tab, Enter, Espaço, Tab a saltar) existem e não são triviais. Stories pedidas todas presentes: `Primary`, `Secondary`, `Ghost`, `Danger`, `Sizes`, `WithIcons`, `FullWidth`, `Disabled`, `AsLink`, `AsLinkDisabled`, `DarkTheme`.
+
+**Acessibilidade e contraste:** cores usam apenas pares já cobertos por `contrast-pairs.ts` nos dois temas (`text-on-accent` sobre `accent-*`, `danger-text` sobre `danger-subtle` e superfícies, `text-default` sobre superfícies, `border-strong` sobre superfícies); anel de focus via `--ds-color-focus-ring`; estado desativado isento de contraste. `DarkTheme` aplica o tema através do `preview.tsx` e passa no axe.
+
+**Testes adicionados pelo testador:** um teste em `Button.test.tsx` (ligação `asChild` desativada com focus programático: Enter e clique no ícone não chamam `onClick`). Passa. Commit a seguir a este relatório (`test(ui): DS-010 ...`).
+
+**Notas (não são falhas):** `white-space: nowrap` faz texto muito longo transbordar o contentor (não é critério da tarefa). Não há `play` que prove o aspeto de `:hover`/`:active`; verificado por leitura do CSS. O `play` de `Sizes` só falha se a altura for inferior ao mínimo.
