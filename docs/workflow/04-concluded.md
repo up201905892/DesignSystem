@@ -89,6 +89,17 @@ Modelo de entrada:
 - **Documentação:** stories `Foundations/FocusRing` e `FocusRing/DarkTheme` (tema escuro coberto pelo `test:a11y`); regras e exceções em `stylelint.config.js`. Sem `TODO` na tarefa.
 - **Lições:** nota do testador: não há teste automático que prove o anel ao premir Tab (jsdom não avalia `:focus-visible`); verificado por leitura do CSS e das stories.
 
+### DS-009 · Utilitários partilhados, helper de axe e teste de convenções — concluída a 2026-10-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-13), commit d729d7e
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `cx` e `Slot` em `utils/`, `VisuallyHidden` conforme C1 a C5 (com `asChild`), helper `expectNoA11yViolations` (vitest-axe), polyfills de jsdom no setup partilhado, `conventions.test.ts` e secção "How to create a component" no README de `@ds/ui`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** `packages/ui/README.md`; stories `VisuallyHidden` Default e DarkTheme (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** nota do testador: a prova negativa do teste de convenções e os polyfills não têm verificação automática própria.
+
 ## Marcos
+
+- Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
