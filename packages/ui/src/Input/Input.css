@@ -1,0 +1,91 @@
+.ds-input {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  box-sizing: border-box;
+  min-height: var(--ds-space-10);
+  padding-block: var(--ds-space-2);
+  padding-inline: var(--ds-space-3);
+  border: 1px solid var(--ds-color-border-strong);
+  border-radius: var(--ds-radius-md);
+  background-color: var(--ds-color-bg-surface);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-font-line-height-tight);
+  cursor: text;
+  transition:
+    background-color var(--ds-duration-fast),
+    border-color var(--ds-duration-fast);
+}
+
+.ds-input[data-size='sm'] {
+  min-height: var(--ds-space-8);
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-input[data-size='md'] {
+  min-height: var(--ds-space-10);
+}
+
+.ds-input[data-size='lg'] {
+  min-height: var(--ds-space-12);
+  padding-inline: var(--ds-space-4);
+  font-size: var(--ds-font-size-lg);
+}
+
+.ds-input:hover {
+  background-color: var(--ds-color-bg-subtle);
+}
+
+.ds-input:has(.ds-input__control:focus-visible) {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-input[data-invalid] {
+  border-color: var(--ds-color-danger-default);
+}
+
+.ds-input__control {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.ds-input__control::placeholder {
+  color: var(--ds-color-text-muted);
+  opacity: 1;
+}
+
+.ds-input__addon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-input:has(.ds-input__control:read-only:not(:disabled)) {
+  background-color: var(--ds-color-bg-subtle);
+}
+
+/* disabled */
+.ds-input[data-disabled],
+.ds-input[data-disabled]:hover {
+  border-color: var(--ds-color-border-default);
+  background-color: var(--ds-color-bg-subtle);
+  color: var(--ds-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-input[data-disabled] .ds-input__control,
+.ds-input[data-disabled] .ds-input__addon,
+.ds-input[data-disabled] .ds-input__control::placeholder {
+  color: var(--ds-color-text-disabled);
+  cursor: not-allowed;
+}
