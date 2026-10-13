@@ -98,6 +98,15 @@ Modelo de entrada:
 - **Documentação:** `packages/ui/README.md`; stories `VisuallyHidden` Default e DarkTheme (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** nota do testador: a prova negativa do teste de convenções e os polyfills não têm verificação automática própria.
 
+### DS-010 · Button — concluída a 2026-10-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-13), commit dcf7d57 (mais e005cde, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** componente `Button` com quatro variantes, três tamanhos, ícones decorativos, `fullWidth` e `asChild` (incluindo `disabled` acessível em ligações), referência de API para os componentes seguintes.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade (commit docs); stories `Primary`, `Secondary`, `Ghost`, `Danger`, `Sizes`, `WithIcons`, `FullWidth`, `Disabled`, `AsLink`, `AsLinkDisabled` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** nota do testador: sem `play` que prove `:hover`/`:active`; verificado por leitura do CSS.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
