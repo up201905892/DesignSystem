@@ -206,3 +206,19 @@ Modelo de entrada:
   - O estado desativado com `asChild` não usa `pointer-events: none`, para o clique chegar ao bloqueio em captura.
   - As stories usam `style` inline só para o layout da story (como em `FocusRing`).
   - `type` não é passado ao filho com `asChild`.
+
+### DS-011 · IconButton
+
+**Iteração 1 — 2026-10-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `IconButton` sobre o `Button` (o `icon` vai como `leadingIcon`, com `data-icon-only`), sem duplicar lógica de `disabled`/`asChild`. `aria-label` obrigatório no tipo (união com `aria-labelledby`); `fullWidth`, `leadingIcon` e `trailingIcon` omitidos do tipo. `IconButton.css` com largura e altura 32/40/48px por `--ds-space-8|10|12`.
+- **Ficheiros alterados:** `packages/ui/src/IconButton/{IconButton.tsx,IconButton.css,IconButton.test.tsx,IconButton.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 53148f3 `feat(ui): DS-011 add IconButton on top of Button`
+- **Critérios de aceitação cobertos:** todos; testes em `IconButton.test.tsx`, stories `Default`, `Variants`, `Sizes` (play), `Disabled`, `AsLink`, `AsLinkDisabled`, `NextToButton` (play), `DarkTheme`.
+- **Testes escritos pelo programador:** `IconButton.test.tsx` (ícone `aria-hidden`, data-*, ref/className, onClick, `aria-labelledby`, `@ts-expect-error`, disabled nativo, teclado, `asChild` e `asChild` desativado, axe).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 78) · build ✔ · test:a11y ✔ (35).
+- **Notas para o testador:**
+  - As regras de tamanho ficaram em `IconButton.css` (a convenção C1 exige um `.css` por componente); as cores vêm de `Button.css`.
+  - Testes e stories têm `eslint-disable jsx-a11y/anchor-has-content` porque o conteúdo do `<a>` vem do `icon` via `asChild`.
+  - `fullWidth` não faz parte da API do `IconButton`.
