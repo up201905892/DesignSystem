@@ -345,3 +345,34 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** um teste em `Button.test.tsx` (ligação `asChild` desativada com focus programático: Enter e clique no ícone não chamam `onClick`). Passa. Commit a seguir a este relatório (`test(ui): DS-010 ...`).
 
 **Notas (não são falhas):** `white-space: nowrap` faz texto muito longo transbordar o contentor (não é critério da tarefa). Não há `play` que prove o aspeto de `:hover`/`:active`; verificado por leitura do CSS. O `play` de `Sizes` só falha se a altura for inferior ao mínimo.
+
+### DS-011 · IconButton — Relatório 1 — 2026-10-13
+
+- **Commit testado:** 53148f3 (presente no histórico de `develop`; sem alterações por guardar no início; registo d6936da por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 78 antes do meu teste, 79 depois) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (8 suites, 35 testes, incluindo as stories do IconButton e os `play` de `Sizes` e `NextToButton`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Sobre o `Button`, `icon` como `leadingIcon`, `data-icon-only`, sem duplicar cores nem `disabled`: lido `IconButton.tsx` (só delega no `Button`) e `IconButton.css` (só tamanho).
+- [x] `aria-label` obrigatório (ou `aria-labelledby`): união de tipos lida; teste com `@ts-expect-error` e `tsc` (inclui `src`) passa; teste de `aria-labelledby`.
+- [x] `icon` obrigatório e dentro de `<span aria-hidden="true">`: teste "renders a button with the icon hidden".
+- [x] Dimensões: `IconButton.css` usa `--ds-space-8|10|12` em largura e altura para `sm|md|lg`; `font-size: var(--ds-font-size-md)` (16px) e `IconButton.css` é importado depois de `Button.css` com igual especificidade, por isso ganha a `sm`/`lg`; `padding: 0`. `play` de `Sizes` (quadrado, ≥ 32/40/48) e `NextToButton` (mesma altura) passaram em Chromium.
+- [x] `disabled` sem `asChild` nativo, Tab salta: teste dedicado.
+- [x] `disabled` com `asChild`: `aria-disabled`, `data-disabled`, `tabindex=-1`, sem `disabled`, `defaultPrevented`, nem `onClick` do IconButton nem do filho, Tab salta: teste dedicado.
+- [x] `asChild`: `<a>` raiz com `ds-button`, `data-icon-only`, `<span aria-hidden>` dentro, `getByRole('link', { name: 'Settings' })`: teste; sem elemento à volta: teste acrescentado por mim.
+- [x] G1 (todos os comandos passam), G2 (sem dependências novas), G3 (commit em inglês com ID; sem alterações a ficheiros do João). C1 a C5: cinco ficheiros, `export` em `index.ts` e `packages/ui/src/index.ts`, `@import` em `styles.css`, `DarkTheme`; `conventions.test.ts` passa.
+
+**Testes exigidos:** unitários, `asChild`, acessibilidade (axe nos três casos, Tab, Enter, Espaço, disabled fora do Tab) e as stories pedidas (`Default`, `Variants`, `Sizes`, `Disabled`, `AsLink`, `AsLinkDisabled`, `NextToButton`, `DarkTheme`) existem e não são triviais.
+
+**Acessibilidade e contraste:** cores herdadas do `Button` (pares já cobertos pela DS-005 nos dois temas); focus visível herdado de `.ds-button:focus-visible`; `DarkTheme` passa no axe.
+
+**Testes adicionados pelo testador:** um teste em `IconButton.test.tsx` (`asChild` sem wrapper, `aria-label` no filho, sem `type`). Passa. Commit a seguir a este relatório (`test(ui): DS-011 ...`).
+
+**Notas (não são falhas):** `IconButton` com `variant="danger"` e `ghost` em hover não tem `play` visual; verificado por leitura do CSS. `ReactNode` como `icon` não impede texto, só a convenção e a documentação.
