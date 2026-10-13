@@ -107,6 +107,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade (commit docs); stories `Primary`, `Secondary`, `Ghost`, `Danger`, `Sizes`, `WithIcons`, `FullWidth`, `Disabled`, `AsLink`, `AsLinkDisabled` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** nota do testador: sem `play` que prove `:hover`/`:active`; verificado por leitura do CSS.
 
+### DS-011 · IconButton — concluída a 2026-10-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-13), commit 53148f3 (mais 9a39631, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `IconButton` sobre o `Button`, quadrado (32/40/48px), `aria-label` ou `aria-labelledby` obrigatório no tipo, ícone decorativo em `aria-hidden`, com `asChild` e `disabled` acessível herdados do `Button`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Variants`, `Sizes`, `Disabled`, `AsLink`, `AsLinkDisabled`, `NextToButton` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** nota do testador: sem `play` visual para `danger` e `ghost` em hover; verificado por leitura do CSS.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

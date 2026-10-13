@@ -18,7 +18,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-008 | Pacote de ícones (subconjunto do Lucide com SVGR) | Fundações | Alta | DS-003 | Concluído |
 | DS-009 | Utilitários partilhados, helper de axe e teste de convenções | Fundações | Alta | DS-007 | Concluído |
 | DS-010 | Button | Formulários | Alta | DS-009 | Concluído |
-| DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Aprovado |
+| DS-011 | IconButton | Formulários | Alta | DS-008, DS-010 | Concluído |
 | DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Planeado |
 | DS-013 | Input | Formulários | Alta | DS-010, DS-012 | Planeado |
 | DS-014 | Textarea | Formulários | Média | DS-013 | Planeado |
@@ -530,6 +530,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-13 · programador · Em desenvolvimento → Pronto para teste · commit 53148f3
 - 2026-10-13 · testador · Pronto para teste → Em teste · início da verificação
 - 2026-10-13 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, todos os critérios verificados
+- 2026-10-13 · finalizador · Aprovado → Concluído · JSDoc com exemplo e notas de acessibilidade já presentes; changeset não aplicável (pacote privado)
 
 ### DS-012 · Field (label, descrição e mensagem de erro)
 
