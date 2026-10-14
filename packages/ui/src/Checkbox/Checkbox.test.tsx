@@ -203,6 +203,55 @@ describe('Checkbox', () => {
     });
   });
 
+  it('asks for true when an indeterminate checkbox is activated', async () => {
+    const user = userEvent.setup();
+    const onCheckedChange = vi.fn();
+    render(
+      <Checkbox checked="indeterminate" onCheckedChange={onCheckedChange}>
+        Select all
+      </Checkbox>,
+    );
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'mixed');
+  });
+
+  it('removes the value from FormData when unchecked again and omits it when disabled', async () => {
+    const user = userEvent.setup();
+    render(
+      <form data-testid="form">
+        <Checkbox name="a" value="yes">
+          A
+        </Checkbox>
+        <Checkbox name="b" value="yes" disabled defaultChecked>
+          B
+        </Checkbox>
+      </form>,
+    );
+    const form = screen.getByTestId<HTMLFormElement>('form');
+    await user.click(screen.getByRole('checkbox', { name: 'A' }));
+    expect(new FormData(form).get('a')).toBe('yes');
+    await user.click(screen.getByRole('checkbox', { name: 'A' }));
+    expect(new FormData(form).get('a')).toBeNull();
+    expect(new FormData(form).get('b')).toBeNull();
+  });
+
+  it('toggles with Space in controlled mode and keeps the label click working in a Field', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <Field>
+        <Controlled onChange={onChange} />
+      </Field>,
+    );
+    await user.tab();
+    await user.keyboard(' ');
+    expect(onChange).toHaveBeenLastCalledWith(true);
+    await user.click(screen.getByText('I accept the terms'));
+    expect(onChange).toHaveBeenLastCalledWith(false);
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'false');
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(
       <>
