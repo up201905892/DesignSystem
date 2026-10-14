@@ -134,6 +134,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Sizes`, `WithButton`, `WithField`, `WithAddons`, `Invalid`, `Disabled`, `ReadOnly`, `Password` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** nota do testador: `className` vai para o `<input>` e o contorno não aceita classe própria; sugestão ao planeador: `wrapperClassName`.
 
+### DS-015 · Checkbox — concluída a 2026-10-14
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-14), commit 4467da0 (mais 4085eca, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Checkbox` sobre `@radix-ui/react-checkbox` com estados marcada, desmarcada e indeterminada (`aria-checked="mixed"`), indicador `CheckIcon`/`MinusIcon`, tamanhos `sm`/`md`, etiqueta clicável (>= 24x24px), estado inválido, modo controlado e não controlado, `FormData` e integração automática com `Field`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Checked`, `Indeterminate`, `Disabled`, `Sizes`, `WithField`, `Group` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** nota do testador: `className` vai para o botão e o `<label>` exterior não aceita classe própria; sugestão ao planeador: `labelClassName`. Etiqueta desativada usa `text-muted` por causa do axe.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
