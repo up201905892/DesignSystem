@@ -276,3 +276,25 @@ Modelo de entrada:
   - `ref`, `className` e props nativas vão para o botão `role="checkbox"`; o `<label>` exterior não aceita `className` (sugestão para o planeador: `labelClassName` ou similar).
   - O texto da etiqueta desativada usa `text-muted` (não `text-disabled`): o axe em browser acusou `color-contrast` porque não isenta a etiqueta de um controlo `button`. A caixa desativada usa `border-default`/`bg-subtle`.
   - `required` sem `Field` vai para o Radix (`aria-required` + input oculto em formulários).
+
+### DS-018 · Select
+
+**Iteração 1 — 2026-10-14**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Select`, `SelectItem`, `SelectGroup` e `SelectSeparator` sobre `@radix-ui/react-select` (`position="popper"`, lista em portal com `z-index: var(--ds-z-dropdown)` e `min-width: var(--radix-select-trigger-width)`). O gatilho (`button role="combobox"`, classe `ds-select`) recebe `ref`, `className` e props nativas, mostra `ChevronDownIcon`; cada item mostra `CheckIcon` quando selecionado. Usa `useFieldControl()` (props diretas têm prioridade). Alturas mínimas 32/40/48px por `--ds-space-8|10|12`, com o mesmo `padding-block`, borda, raio e estados do `Input`.
+- **Ficheiros alterados:** `packages/ui/src/Select/{Select.tsx,Select.css,Select.test.tsx,Select.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 74464f5 `feat(ui): DS-018 add Select with groups, sizes and Field integration`
+- **Critérios de aceitação cobertos:** todos; testes em `Select.test.tsx`; stories `Default`, `WithDefaultValue`, `Sizes` (play: alturas e igualdade com `Input`), `Groups`, `DisabledItem`, `Disabled`, `WithField`, `LongList`, `KeyboardInteraction` (play), `DarkTheme` (lista aberta).
+- **Testes escritos pelo programador:** `Select.test.tsx` (placeholder, defaultValue, seleção e fecho, `aria-selected` + ícone, controlado, `open` controlado, item desativado, `disabled`, `FormData`, ref/className/data-size/displayName, invalid, grupos e separador, portal, teclado: Enter/Espaço/setas abrem, setas saltam desativados, Home/End, letra, Enter/Espaço selecionam com focus de volta, Esc, integração com Field, axe fechada e aberta).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 207) · build ✔ · test:a11y ✔ (69) · `pnpm install --frozen-lockfile` ✔.
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-select` (nomeada na tarefa).
+  - O critério fala em "token `z-index-dropdown`"; o token real gerado é `--ds-z-dropdown` (1000), que é o usado.
+  - Com a lista aberta o gatilho recebe `tabIndex={-1}` (estado `open` seguido internamente, incluindo `defaultOpen`): o Radix põe o resto da página em `aria-hidden` e o axe acusava `aria-hidden-focus` no gatilho (4 stories com lista aberta). O focus volta ao gatilho ao fechar e o tabindex é retirado.
+  - O jsdom não tem `scrollIntoView`, `hasPointerCapture`/`setPointerCapture` nem `ResizeObserver`: o `Select.test.tsx` define-os localmente em `beforeAll` (não alterei `test/setup.ts`).
+  - O axe aberto no teste unitário corre com a regra `region` desativada (a lista está num portal fora de qualquer landmark); no `test:a11y` não foi preciso.
+  - O `play` de `KeyboardInteraction` usa `KeyboardEvent` despachados (o repositório não tem `@storybook/test`); o teste unitário usa `user-event` e cobre todos os atalhos pedidos.
+  - O `SelectSeparator` do Radix é `aria-hidden` (decorativo), logo não tem `role="separator"` na árvore de acessibilidade.
+  - Radix só marca `aria-selected="true"` no item selecionado quando está também focado (acontece ao abrir a lista).
+  - O gatilho tem `width: 100%`; para largura fixa o consumidor usa `className` ou um contentor.
