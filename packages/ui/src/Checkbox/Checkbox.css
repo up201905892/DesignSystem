@@ -1,0 +1,99 @@
+.ds-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  box-sizing: border-box;
+  min-width: var(--ds-space-6);
+  min-height: var(--ds-space-6);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-font-line-height-tight);
+  cursor: pointer;
+}
+
+.ds-checkbox[data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-checkbox__control {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--ds-space-5);
+  height: var(--ds-space-5);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--ds-color-border-strong);
+  border-radius: var(--ds-radius-sm);
+  background-color: var(--ds-color-bg-surface);
+  color: var(--ds-color-text-on-accent);
+  cursor: inherit;
+  transition:
+    background-color var(--ds-duration-fast),
+    border-color var(--ds-duration-fast);
+}
+
+.ds-checkbox__control[data-size='sm'] {
+  width: var(--ds-space-4);
+  height: var(--ds-space-4);
+}
+
+.ds-checkbox__control:hover {
+  background-color: var(--ds-color-bg-subtle);
+}
+
+.ds-checkbox__control:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-checkbox__control[data-state='checked'],
+.ds-checkbox__control[data-state='indeterminate'] {
+  border-color: var(--ds-color-accent-default);
+  background-color: var(--ds-color-accent-default);
+}
+
+.ds-checkbox__control[data-state='checked']:hover,
+.ds-checkbox__control[data-state='indeterminate']:hover {
+  border-color: var(--ds-color-accent-hover);
+  background-color: var(--ds-color-accent-hover);
+}
+
+.ds-checkbox__control[data-invalid] {
+  border-color: var(--ds-color-danger-default);
+}
+
+.ds-checkbox__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.ds-checkbox__icon {
+  width: 80%;
+  height: 80%;
+}
+
+.ds-checkbox__indicator[data-state='checked'] .ds-checkbox__icon--minus,
+.ds-checkbox__indicator[data-state='indeterminate'] .ds-checkbox__icon--check {
+  display: none;
+}
+
+/* disabled */
+.ds-checkbox[data-disabled] {
+  /* axe does not exempt the label of a button-based control, so keep AA contrast */
+  color: var(--ds-color-text-muted);
+  cursor: not-allowed;
+}
+
+.ds-checkbox[data-disabled] .ds-checkbox__control,
+.ds-checkbox[data-disabled] .ds-checkbox__control:hover {
+  border-color: var(--ds-color-border-default);
+  background-color: var(--ds-color-bg-subtle);
+  color: var(--ds-color-text-disabled);
+}

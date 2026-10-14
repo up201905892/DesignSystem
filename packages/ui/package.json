@@ -29,7 +29,9 @@
     "vitest-axe": "^0.1.0"
   },
   "dependencies": {
+    "@ds/icons": "workspace:*",
     "@ds/tokens": "workspace:*",
+    "@radix-ui/react-checkbox": "^1.4.1",
     "@radix-ui/react-slot": "^1.5.0"
   }
 }
