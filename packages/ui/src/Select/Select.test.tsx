@@ -293,6 +293,68 @@ describe('Select', () => {
     });
   });
 
+  describe('edge cases (tester)', () => {
+    it('keeps the value in controlled mode when the parent ignores onValueChange', async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(<Fruits value="apple" onValueChange={onValueChange} />);
+      await user.click(screen.getByRole('combobox'));
+      await user.click(screen.getByRole('option', { name: 'Cherry' }));
+      expect(onValueChange).toHaveBeenCalledWith('cherry');
+      expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
+    });
+
+    it('does not submit a value when disabled and submits the selected one otherwise', () => {
+      const { container, rerender } = render(
+        <form>
+          <Fruits name="fruit" defaultValue="date" disabled />
+        </form>,
+      );
+      const form = container.querySelector('form') as HTMLFormElement;
+      expect(new FormData(form).get('fruit')).toBeNull();
+      rerender(
+        <form>
+          <Fruits name="fruit" defaultValue="date" />
+        </form>,
+      );
+      expect(new FormData(form).get('fruit')).toBe('date');
+    });
+
+    it('calls onOpenChange and restores the trigger to the tab order after closing', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      render(<Fruits onOpenChange={onOpenChange} />);
+      await user.click(screen.getByRole('combobox'));
+      expect(onOpenChange).toHaveBeenLastCalledWith(true);
+      await user.keyboard('{Escape}');
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
+      expect(screen.getByRole('combobox')).not.toHaveAttribute('tabindex', '-1');
+    });
+
+    it('has no axe violations with a very long selected label', async () => {
+      const long = 'A very long option label '.repeat(12);
+      const { container } = render(
+        <Select aria-label="Long" defaultValue="x">
+          <SelectItem value="x">{long}</SelectItem>
+        </Select>,
+      );
+      expect(screen.getByRole('combobox')).toHaveTextContent('A very long option label');
+      await expectNoA11yViolations(container);
+    });
+
+    it('skips a disabled select in the tab order', async () => {
+      const user = userEvent.setup();
+      render(
+        <>
+          <Fruits disabled />
+          <button type="button">after</button>
+        </>,
+      );
+      await user.tab();
+      expect(screen.getByRole('button', { name: 'after' })).toHaveFocus();
+    });
+  });
+
   describe('accessibility', () => {
     it('has no axe violations when closed', async () => {
       const { container } = render(<Fruits />);
