@@ -143,6 +143,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Checked`, `Indeterminate`, `Disabled`, `Sizes`, `WithField`, `Group` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** nota do testador: `className` vai para o botão e o `<label>` exterior não aceita classe própria; sugestão ao planeador: `labelClassName`. Etiqueta desativada usa `text-muted` por causa do axe.
 
+### DS-018 · Select — concluída a 2026-10-14
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-14), commit 74464f5 (mais f7552ff, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Select`, `SelectItem`, `SelectGroup` e `SelectSeparator` sobre `@radix-ui/react-select`, lista em portal com `--ds-z-dropdown`, largura mínima do gatilho, tamanhos 32/40/48px iguais aos do `Input`, estado inválido, modo controlado e não controlado, `FormData` e integração automática com `Field`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `WithDefaultValue`, `Sizes`, `Groups`, `DisabledItem`, `Disabled`, `WithField`, `LongList`, `KeyboardInteraction` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: o `tabIndex={-1}` no gatilho com a lista aberta é deliberado (axe `aria-hidden-focus`); o `play` de `KeyboardInteraction` usa `KeyboardEvent` despachados e o teste unitário cobre os atalhos com `user-event`. O critério dizia `z-index-dropdown`, o token real é `--ds-z-dropdown`.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
