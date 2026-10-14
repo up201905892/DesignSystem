@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-14
+
+- **Decisões para o João:**
+  1. Aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem (28 propostas por aprovar; não propus tarefas novas, há 5 planeadas e livres).
+  2. Sugestões sem ação urgente, para o planeador: `wrapperClassName` no `Input` e `labelClassName` no `Checkbox` (o contorno não aceita classe); acrescentar `@storybook/test` para os `play` de interação (o `play` do Select usa `KeyboardEvent` despachados).
+- **Concluídas:** DS-015 (Checkbox), DS-018 (Select)
+- **Testadas:** DS-015 (Aprovado), DS-018 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-015, DS-018 (ciclo completo no mesmo dia)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma. Nota de processo: lancei DS-015 (finalizar) e DS-018 (desenvolver) em paralelo, o que misturou edições em `01-planeamento.md`; resolvi num único commit (`cbb02b3`). Não acontece de novo, passo a uma tarefa de cada vez.
+- **Próximo passo:** DS-014, DS-016, DS-017, DS-019, DS-020. Notas: `@ds/ui` passou a depender de `@ds/icons`; a etiqueta desativada do Checkbox usa `text-muted` por contraste no axe; o token do dropdown é `--ds-z-dropdown`.
+
 ## 2026-10-13 (segunda execução)
 
 - **Decisões para o João:**
