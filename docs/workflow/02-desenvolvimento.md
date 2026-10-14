@@ -259,3 +259,20 @@ Modelo de entrada:
   - `invalid` direto > `aria-invalid` direto > `Field`. `aria-invalid="false"` explícito é mantido.
   - O contorno tem `eslint-disable jsx-a11y/no-static-element-interactions` (só reencaminha o rato dos addons para o input).
   - Cores: borda `border-strong`, inválido `danger-default`, placeholder `text-muted`, desativado `border-default`/`bg-subtle`/`text-disabled`.
+
+### DS-015 · Checkbox
+
+**Iteração 1 — 2026-10-14**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Checkbox` sobre `@radix-ui/react-checkbox`. Um `<label class="ds-checkbox">` (área clicável mínima 24x24px por `--ds-space-6`) envolve o `<button role="checkbox">` (raiz Radix) e o texto de `children`. Indicador com `CheckIcon` e `MinusIcon` de `@ds/icons`, alternados por CSS conforme o `data-state` (`checked`/`indeterminate`). Usa `useFieldControl()`; as props diretas (`id`, `disabled`, `required`, `aria-describedby`, `aria-invalid`, `invalid`) têm prioridade. Tamanhos `sm` 16px (`--ds-space-4`) e `md` 20px (`--ds-space-5`).
+- **Ficheiros alterados:** `packages/ui/src/Checkbox/{Checkbox.tsx,Checkbox.css,Checkbox.test.tsx,Checkbox.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`.
+- **Commit(s):** 4467da0 `feat(ui): DS-015 add Checkbox with indeterminate state and Field integration`
+- **Critérios de aceitação cobertos:** todos; testes em `Checkbox.test.tsx`; stories `Default`, `Checked`, `Indeterminate`, `Disabled`, `Sizes` (play, área >= 24px), `WithField`, `Group` (Select all indeterminado), `DarkTheme`.
+- **Testes escritos pelo programador:** `Checkbox.test.tsx` (role e nome, alternar não controlado, defaultChecked, controlado, `mixed`, clique na etiqueta, disabled, `FormData`, Tab/Espaço/Enter, Tab salta disabled, ref/className/data-size/displayName, indicador, integração com Field e prioridade das props, axe).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 167) · build ✔ · test:a11y ✔ (59) · `pnpm install --frozen-lockfile` ✔.
+- **Notas para o testador:**
+  - Dependências novas: `@radix-ui/react-checkbox` (nomeada na tarefa) e `@ds/icons` (workspace, necessária para `CheckIcon`/`MinusIcon`). `@ds/icons` tem de estar construído (`pnpm build`) para typecheck/testes do `ui`.
+  - `ref`, `className` e props nativas vão para o botão `role="checkbox"`; o `<label>` exterior não aceita `className` (sugestão para o planeador: `labelClassName` ou similar).
+  - O texto da etiqueta desativada usa `text-muted` (não `text-disabled`): o axe em browser acusou `color-contrast` porque não isenta a etiqueta de um controlo `button`. A caixa desativada usa `border-default`/`bg-subtle`.
+  - `required` sem `Field` vai para o Radix (`aria-required` + input oculto em formulários).
