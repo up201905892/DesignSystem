@@ -9,6 +9,13 @@ export { Input } from './Input';
 export type { InputProps } from './Input';
 export { Checkbox } from './Checkbox';
 export type { CheckboxProps } from './Checkbox';
+export { Select, SelectItem, SelectGroup, SelectSeparator } from './Select';
+export type {
+  SelectProps,
+  SelectItemProps,
+  SelectGroupProps,
+  SelectSeparatorProps,
+} from './Select';
 export type {
   FieldProps,
   FieldLabelProps,
