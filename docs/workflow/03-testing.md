@@ -466,3 +466,35 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** três testes em `Checkbox.test.tsx` (clique em indeterminada pede `true` e mantém `mixed` em controlado; `FormData` ao desmarcar e com `disabled`; Espaço e clique na etiqueta em controlado dentro de `Field`). Passam. Commit 4085eca (`test(ui): DS-015 ...`).
 
 **Notas (não são falhas):** `className` vai para o botão e o `<label>` exterior não aceita classe própria (sugestão do programador: `labelClassName`). A etiqueta desativada usa `text-muted` em vez de `text-disabled` por causa do axe. As stories usam estilos inline para o layout, como as de Button e Input (precedente; C3 refere o `.css` do componente).
+
+### DS-018 · Select — Relatório 1 — 2026-10-14
+
+- **Commit testado:** 74464f5 (presente no histórico de `develop`; sem alterações por guardar no início, além do meu registo de estado; registo cbb02b3 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 207 antes dos meus testes, 212 depois; Select: 34) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (12 suites, 69 testes, incluindo as 10 stories do Select e os `play`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta `Select`, `SelectItem`, `SelectGroup`, `SelectSeparator`: lido `Select/index.ts` e `src/index.ts`; `@import` em `styles.css`.
+- [x] Props de `Select` (`value`, `defaultValue`, `onValueChange`, `open`, `defaultOpen`, `onOpenChange`, `placeholder`, `disabled`, `required`, `name`, `size`, `invalid`); `ref` e `className` no gatilho: lido `Select.tsx`; testes de ref/className/data-size, `open` controlado, invalid.
+- [x] `SelectItem` (`value`, `disabled`, `children`) e `SelectGroup` (`label` obrigatório): tipos lidos; teste de grupos e separadores.
+- [x] Gatilho `role="combobox"`, `aria-expanded`, `ChevronDownIcon`; lista `role="listbox"` em portal (teste "portal"), `z-index: var(--ds-z-dropdown)` (token existe, 1000), `min-width: var(--radix-select-trigger-width)`; item selecionado com `CheckIcon` e `aria-selected="true"`: testes e CSS. O nome `z-index-dropdown` do critério corresponde ao token real `--ds-z-dropdown`.
+- [x] Controlado e não controlado; `FormData`: testes existentes; acrescentei controlado que ignora `onValueChange` e `FormData` com `disabled`.
+- [x] Integração com `Field`: etiqueta, `aria-describedby`, `aria-invalid`, `aria-required`, `disabled`, prioridade das props diretas: três testes.
+- [x] Mesma borda, raio e estados do `Input`: comparado `Select.css` com `Input.css` (borda `border-strong`, `radius-md`, hover, invalid, disabled, focus-visible idênticos).
+- [x] Alturas: `Select.css` declara `--ds-space-8/10/12` por `data-size`; `Sizes` mede ≥ 32/40/48px e igualdade com `Input` (tolerância 0,5px); passa no Chromium.
+- [x] G1 a G3 (dependência `@radix-ui/react-select` nomeada na tarefa; commit em inglês com ID; nenhum ficheiro do João alterado); C1 a C5 (cinco ficheiros, exports, `@import`, `DarkTheme`, `autodocs`, só tokens `var(--ds-*)`).
+
+**Testes exigidos:** unitários (placeholder, `defaultValue`, selecionar chama `onValueChange` e fecha, controlado, item desativado, `disabled`, `FormData`), acessibilidade (axe fechada e aberta; Enter, Espaço, setas abrem; setas, Home, End, letra; Enter/Espaço selecionam e devolvem o focus; Esc; desativados saltados) e as dez stories pedidas existem e não são triviais (`Sizes` e `KeyboardInteraction` com `play` que lançam erro se falharem).
+
+**Acessibilidade e contraste:** focus via `:focus-visible` com `--ds-color-focus-ring` (outline 2px, igual ao Input). `DarkTheme` com lista aberta passa no axe. Contraste só estimado a partir dos tokens (iguais aos do Input; rótulo de grupo em `text-muted`).
+
+**Testes adicionados pelo testador:** cinco testes em `Select.test.tsx` (controlado ignora a mudança do pai; `FormData` ausente com `disabled` e presente depois; `onOpenChange` e retirada do `tabindex="-1"` ao fechar; axe com etiqueta muito longa; select desativado saltado no Tab). Passam. Commit f7552ff (`test(ui): DS-018 ...`).
+
+**Notas (não são falhas):** o `play` de `KeyboardInteraction` usa `KeyboardEvent` despachados (sem `@storybook/test`), mas o teste unitário com `user-event` cobre todos os atalhos. O `tabIndex={-1}` com a lista aberta é uma solução deliberada para o axe (`aria-hidden-focus`); testado que é retirado ao fechar. O gatilho tem `width: 100%`.
