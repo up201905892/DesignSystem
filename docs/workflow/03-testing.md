@@ -437,3 +437,32 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** dois testes em `Input.test.tsx` (prioridade de `invalid={false}` e de `aria-invalid`/`aria-required` explícitos sobre o `Field`). Passam. Commit a seguir a este relatório (`test(ui): DS-013 ...`).
 
 **Notas (não são falhas):** `className` vai para o `<input>` e o contorno não aceita classe própria (sugestão do programador para o planeador: `wrapperClassName`). O `Button sm` renderiza ~35,5px (por conteúdo) e o `Input sm` acompanha-o por usar o mesmo `padding-block`. A altura em px não é verificável em jsdom; a verificação é feita pelos `play` das stories.
+
+### DS-015 · Checkbox — Relatório 1 — 2026-10-14
+
+- **Commit testado:** 4467da0 (presente no histórico de `develop`; sem alterações por guardar no início; registo 8a8d08d por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 167 antes dos meus testes, 170 depois; Checkbox: 20) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (11 suites, 59 testes, incluindo as oito stories do Checkbox) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Usa `@radix-ui/react-checkbox`; `role="checkbox"` e `aria-checked` `true`/`false`/`mixed`: lido `Checkbox.tsx`; testes de role, `defaultChecked` e `checked="indeterminate"` → `mixed`.
+- [x] Props `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `required`, `name`, `value`, `size` (`sm`/`md`, omissão `md`) e `children` como etiqueta: tipo derivado do Root Radix + `size`/`invalid`/`children`; testes de `data-size` e de etiqueta.
+- [x] Controlado e não controlado; `FormData` com `name`: testes de alternância, "only changes in controlled mode when the prop changes" e `FormData`; acrescentei remoção do valor ao desmarcar e ausência quando `disabled`.
+- [x] Indicador com `CheckIcon`/`MinusIcon` de `@ds/icons`, alternados por CSS via `data-state`; `data-state` exposto na raiz e no indicador: lido `Checkbox.tsx` e `Checkbox.css`; teste do indicador.
+- [x] Integração com `Field` (id, `aria-describedby`, `aria-invalid`, `aria-required`, `disabled`, prioridade das props diretas): três testes. Área clicável: `<label>` com `min-width/min-height: --ds-space-6` (24px); a story `Sizes` mede >= 24x24 no Chromium e passa.
+- [x] G1 (todos os comandos passam), G2 (`@radix-ui/react-checkbox` nomeada; `@ds/icons` é workspace, exigido pelo critério dos ícones; `pnpm install --frozen-lockfile` passa e lockfile commitado), G3 (commit em inglês com ID; nenhum ficheiro do João alterado). C1 a C5: cinco ficheiros, `export` nos dois `index.ts`, `@import` em `styles.css`, `DarkTheme`, `autodocs`; só `var(--ds-*)` e todos os tokens usados existem em `tokens/dist` (claro e escuro).
+
+**Testes exigidos:** unitários (alternar, controlado, `mixed`, etiqueta, `disabled`, `FormData`), acessibilidade (axe; Tab; Espaço alterna; Enter não; `getByRole('checkbox', { name: 'I accept the terms' })`; Tab salta `disabled`) e stories (`Default`, `Checked`, `Indeterminate`, `Disabled`, `Sizes`, `WithField` com descrição e erro, `Group` com "Select all" indeterminado, `DarkTheme`) existem e não são triviais.
+
+**Acessibilidade e contraste:** focus via `:focus-visible` com `--ds-color-focus-ring` (outline 2px; 5,2:1 no claro, mais no escuro). Contraste estimado a partir dos tokens: borda `#64748b` sobre `#ffffff` ≈ 4,8:1 (claro) e `#94a3b8` sobre `#1e293b` ≥ 5:1 (escuro); marca branca sobre `#2563eb` ≈ 5,2:1 e `#0f172a` sobre `#60a5fa` ≥ 7:1; etiqueta desativada em `text-muted`. Axe passa nas stories em Chromium, incluindo `DarkTheme`. Enter não alterna (APG).
+
+**Testes adicionados pelo testador:** três testes em `Checkbox.test.tsx` (clique em indeterminada pede `true` e mantém `mixed` em controlado; `FormData` ao desmarcar e com `disabled`; Espaço e clique na etiqueta em controlado dentro de `Field`). Passam. Commit 4085eca (`test(ui): DS-015 ...`).
+
+**Notas (não são falhas):** `className` vai para o botão e o `<label>` exterior não aceita classe própria (sugestão do programador: `labelClassName`). A etiqueta desativada usa `text-muted` em vez de `text-disabled` por causa do axe. As stories usam estilos inline para o layout, como as de Button e Input (precedente; C3 refere o `.css` do componente).

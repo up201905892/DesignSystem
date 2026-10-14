@@ -22,7 +22,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-012 | Field (label, descrição e mensagem de erro) | Formulários | Alta | DS-009 | Concluído |
 | DS-013 | Input | Formulários | Alta | DS-010, DS-012 | Concluído |
 | DS-014 | Textarea | Formulários | Média | DS-013 | Planeado |
-| DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Pronto para teste |
+| DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Aprovado |
 | DS-016 | RadioGroup | Formulários | Média | DS-012 | Planeado |
 | DS-017 | Switch | Formulários | Média | DS-012 | Planeado |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Planeado |
@@ -663,6 +663,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 - 2026-10-14 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-10-14 · programador · Em desenvolvimento → Pronto para teste · commit 4467da0
+- 2026-10-14 · testador · Pronto para teste → Em teste · início da verificação
+- 2026-10-14 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados
 
 ### DS-016 · RadioGroup
 
