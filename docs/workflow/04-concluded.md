@@ -160,6 +160,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Sizes`, `WithField`, `Invalid`, `Disabled`, `ResizeNone` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: a igualdade de altura com o `Input` só é medida no Chromium (o `play` de `Sizes`); o redimensionamento pelo utilizador não é testado automaticamente.
 
+### DS-016 · RadioGroup — concluída a 2026-10-15
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-15), commit 4aa0448 (mais 66977bf, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `RadioGroup` e `Radio` sobre `@radix-ui/react-radio-group`, com `aria-orientation` (vertical por omissão), nome acessível obrigatório no tipo, tamanhos `sm`/`md`, setas nas quatro direções com volta, desativados saltados, modo controlado e não controlado, `FormData` e integração automática com `Field`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Horizontal`, `WithDefaultValue`, `DisabledItem`, `DisabledGroup`, `WithField`, `Sizes` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: o ponto de tabulação no DOM é o contentor `radiogroup`, que reencaminha o focus; as setas só selecionam em jsdom com a tecla premida; `Radio` fora de `RadioGroup` falha. Sugestão ao planeador: `FieldLabel` com `id` ou `Fieldset`/`legend`, porque `htmlFor` não nomeia o grupo.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
