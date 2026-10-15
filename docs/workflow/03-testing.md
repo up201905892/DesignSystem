@@ -527,3 +527,37 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** `Textarea.css.test.ts` (8 casos: `min-height` por tamanho sem `height`, paridade de font-size/padding/borda/raio/line-height com o `Input`, sem cores literais). Passam. Commit 6f8a97f (`test(ui): DS-014 ...`).
 
 **Notas (não são falhas):** a igualdade de altura com o `Input` só é medida no Chromium (jsdom não calcula layout); o `play` de `Sizes` cobre-a. O redimensionamento pelo utilizador não é testado de forma automática.
+
+### DS-016 · RadioGroup — Relatório 1 — 2026-10-15
+
+- **Commit testado:** 4aa0448 (presente no histórico de `develop`; sem alterações por guardar no início, além do meu registo de estado; registo 7cf5927 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 284 antes dos meus testes, 291 depois; RadioGroup: 35) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (14 suites, 84 testes, incluindo as 8 stories do RadioGroup) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta `RadioGroup` (`role="radiogroup"`) e `Radio` (`role="radio"`, etiqueta via `children`): lido `RadioGroup/index.ts`, `src/index.ts`, `@import` em `styles.css`; teste de roles e nomes.
+- [x] Props de `RadioGroup` (`value`, `defaultValue`, `onValueChange`, `name`, `disabled`, `required`, `orientation` com omissão `vertical` e `aria-orientation`; nome por `aria-label` ou `aria-labelledby` obrigatório no tipo `RadioGroupName`): lido `RadioGroup.tsx`; testes de orientação, `aria-labelledby`; acrescentei `required` (`aria-required="true"`).
+- [x] `Radio`: `value` obrigatório no tipo, `disabled`, `size` `sm`/`md`: lido; teste de `data-size`, desativado.
+- [x] Controlado e não controlado; `FormData` com `name`: testes existentes; acrescentei controlado que ignora a mudança do pai, `FormData` ausente com grupo `disabled` e sem seleção.
+- [x] Tabindex itinerante: um só ponto de tabulação, no selecionado ou no primeiro ativo; Tab e Shift+Tab testados. Inspecionado o DOM: o `div radiogroup` tem `tabindex="0"` e os botões `-1`; o Radix reencaminha o focus para o rádio selecionado (ver notas). Acrescentei: grupo desativado é saltado no Tab.
+- [x] Integração com `Field` (`aria-describedby` com descrição e erro, `aria-invalid`, `disabled`, prioridade das props diretas): três testes.
+- [x] G1 a G3 (dependência `@radix-ui/react-radio-group` nomeada na tarefa e em `package.json`; commit em inglês com ID; nenhum ficheiro do João alterado); C1 a C5 (cinco ficheiros, exports, `@import`, `DarkTheme`, `autodocs`). `RadioGroup.css` só usa `var(--ds-*)` (verificado que todos os tokens existem em `tokens.css`/`themes.css`), exceto `1px`/`2px` de borda e outline, como nos outros componentes.
+
+**Testes exigidos:** unitários (clique seleciona e desmarca, `onValueChange`, `defaultValue`, controlado, rádio e grupo `disabled`, `FormData`), acessibilidade (axe; Tab entra no selecionado e o seguinte sai; setas baixo/direita e cima/esquerda movem e selecionam; volta nos dois sentidos; desativados saltados; Espaço) e as stories pedidas (`Default`, `Horizontal`, `WithDefaultValue`, `DisabledItem`, `DisabledGroup`, `WithField` com erro, `DarkTheme`, mais `Sizes`) existem. Os testes de setas verificam focus e `aria-checked`, não são triviais.
+
+**Acessibilidade e contraste:** focus via `:focus-visible` com `--ds-color-focus-ring` (outline 2px, offset 2px) no botão; área clicável mínima 24px (`min-height`/`min-width` `--ds-space-6`). `DarkTheme` (com rádio desativado e grupo inválido) passa no axe no Chromium. Texto desativado em `text-muted` para manter AA. Contraste só estimado a partir dos tokens; não medi rácios.
+
+**Testes adicionados pelo testador:** sete testes em `RadioGroup.test.tsx` (controlado ignora o pai; `FormData` ausente com grupo `disabled`; `FormData` ausente sem seleção; `required`; grupo desativado saltado no Tab; Espaço no rádio já selecionado não dispara `onValueChange`; axe com etiquetas muito longas e os dois tamanhos). Passam. Commit 66977bf (`test(ui): DS-016 ...`).
+
+**Notas (não são falhas):**
+- O ponto de tabulação no DOM é o contentor `radiogroup` (`tabindex="0"`), que reencaminha o focus para o rádio certo; nenhum botão tem `tabindex="0"` antes de receber focus. O comportamento observável cumpre o critério (comportamento padrão do Radix), mas só foi verificado em jsdom, não num teste de teclado no Chromium.
+- As setas só selecionam em jsdom com a tecla mantida premida (helper `press`); o comportamento em browser real não foi exercitado por um `play`.
+- `FieldLabel` não nomeia o grupo (`htmlFor` num `div`); a story `WithField` usa `aria-labelledby` com um `<span>`. Sugestão já feita pelo programador para o planeador.
+- `Radio` fora de um `RadioGroup` falha (contexto do Radix).
