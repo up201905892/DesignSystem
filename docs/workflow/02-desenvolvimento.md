@@ -315,3 +315,23 @@ Modelo de entrada:
   - Não há contorno: `ref`, `className` e props nativas vão para o próprio `<textarea>` (que tem `data-size`, `data-resize` e `data-invalid`). Largura: `width: 100%`.
   - `invalid` direto > `aria-invalid` direto > `Field`; `aria-invalid="false"` explícito é mantido.
   - O CSS não importa o do `Input`: repete as mesmas variáveis `--ds-*`, sem valores literais.
+
+### DS-016 · RadioGroup
+
+**Iteração 1 — 2026-10-15**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `RadioGroup` e `Radio` sobre `@radix-ui/react-radio-group`. A raiz (`div role="radiogroup"`, classe `ds-radio-group`) recebe `ref`, `className` e props nativas; `orientation` (`vertical` por omissão) vai para `aria-orientation` e `data-orientation`; o nome acessível é obrigatório no tipo (`aria-label` ou `aria-labelledby`). Usa `useFieldControl()` (`id`, `aria-describedby`, `aria-invalid`, `required`, `disabled`; props diretas têm prioridade). Cada `Radio` é um `<label class="ds-radio">` (área mínima 24px) com o `<button role="radio">` e o texto de `children`; tamanhos `sm` 16px e `md` 20px; indicador de ponto central por CSS.
+- **Ficheiros alterados:** `packages/ui/src/RadioGroup/{RadioGroup.tsx,RadioGroup.css,RadioGroup.test.tsx,RadioGroup.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 4aa0448 `feat(ui): DS-016 add RadioGroup and Radio with roving focus and Field integration`
+- **Critérios de aceitação cobertos:** todos; testes em `RadioGroup.test.tsx`; stories `Default`, `Horizontal`, `WithDefaultValue`, `DisabledItem`, `DisabledGroup`, `WithField` (descrição e erro), `Sizes`, `DarkTheme`.
+- **Testes escritos pelo programador:** `RadioGroup.test.tsx` (roles e nomes, `aria-labelledby`, seleção por clique e pela etiqueta, `onValueChange`, `defaultValue`, controlado, rádio e grupo `disabled`, `FormData`, `aria-orientation`, ref/className/size/displayName, invalid, Tab/Shift+Tab, primeiro ativo sem seleção, as quatro setas com seleção, volta, orientação horizontal, desativados saltados, Espaço, integração com Field e prioridade das props, axe).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 284) · build ✔ · test:a11y ✔ (84) · `pnpm install --frozen-lockfile` ✔.
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-radio-group` (nomeada na tarefa).
+  - A `orientation` não é passada ao Radix: com `vertical` o roving focus do Radix ignora Seta esquerda/direita, e a tarefa exige as quatro setas em qualquer orientação. `aria-orientation` é posto à mão na raiz.
+  - O Radix seleciona o rádio ao receber focus por seta só enquanto a tecla está premida, e move o focus num temporizador. Nos testes unitários as setas usam `{Tecla>}` seguido de `{/Tecla}` (helper `press`); com `user.keyboard('{ArrowDown}')` a tecla é largada cedo demais no jsdom. Num browser real não há diferença.
+  - Ordem de tabulação: no Radix o contentor `radiogroup` é que está na ordem de tabulação e reencaminha o focus para o rádio selecionado (ou o primeiro ativo); os botões têm `tabindex=-1`. O comportamento (um só ponto de tabulação, Tab e Shift+Tab) está testado; não se verifica `tabindex=0` no botão.
+  - Dentro de um `Field`, o `FieldLabel` usa `htmlFor`, que não nomeia um `div`; o nome do grupo vem de `aria-labelledby` (ver story `WithField`, que usa um `<span id>`). Sugestão para o planeador: tarefa para um `FieldLabel` com `id` ou um `Fieldset`/`legend` (já fora de âmbito).
+  - Como no `Checkbox`, o `<label>` exterior de cada `Radio` não aceita `className`; o texto desativado usa `text-muted` (contraste AA no axe) e o estilo desativado usa `:has(:disabled)`.
+  - `Radio` fora de um `RadioGroup` falha no Radix (contexto em falta).
