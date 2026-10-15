@@ -12,4 +12,5 @@
 @import './Input/Input.css';
 @import './Textarea/Textarea.css';
 @import './Checkbox/Checkbox.css';
+@import './RadioGroup/RadioGroup.css';
 @import './Select/Select.css';

@@ -1,0 +1,103 @@
+.ds-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.ds-radio-group[data-orientation='horizontal'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--ds-space-4);
+}
+
+.ds-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  box-sizing: border-box;
+  min-width: var(--ds-space-6);
+  min-height: var(--ds-space-6);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-font-line-height-tight);
+  cursor: pointer;
+}
+
+.ds-radio[data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-radio__control {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--ds-space-5);
+  height: var(--ds-space-5);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--ds-color-border-strong);
+  border-radius: var(--ds-radius-full);
+  background-color: var(--ds-color-bg-surface);
+  cursor: inherit;
+  transition:
+    background-color var(--ds-duration-fast),
+    border-color var(--ds-duration-fast);
+}
+
+.ds-radio__control[data-size='sm'] {
+  width: var(--ds-space-4);
+  height: var(--ds-space-4);
+}
+
+.ds-radio__control:hover {
+  background-color: var(--ds-color-bg-subtle);
+}
+
+.ds-radio__control:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-radio__control[data-state='checked'] {
+  border-color: var(--ds-color-accent-default);
+}
+
+.ds-radio__control[data-state='checked']:hover {
+  border-color: var(--ds-color-accent-hover);
+}
+
+.ds-radio-group[data-invalid] .ds-radio__control {
+  border-color: var(--ds-color-danger-default);
+}
+
+.ds-radio__indicator {
+  display: block;
+  width: 50%;
+  height: 50%;
+  border-radius: var(--ds-radius-full);
+  background-color: var(--ds-color-accent-default);
+}
+
+.ds-radio__control:hover .ds-radio__indicator {
+  background-color: var(--ds-color-accent-hover);
+}
+
+/* disabled: the label is dimmed with :has() on the row that contains a disabled control */
+.ds-radio:has(.ds-radio__control:disabled) {
+  /* axe does not exempt the label of a button-based control, so keep AA contrast */
+  color: var(--ds-color-text-muted);
+  cursor: not-allowed;
+}
+
+.ds-radio__control:disabled,
+.ds-radio__control:disabled:hover {
+  border-color: var(--ds-color-border-default);
+  background-color: var(--ds-color-bg-subtle);
+}
+
+.ds-radio__control:disabled .ds-radio__indicator {
+  background-color: var(--ds-color-text-disabled);
+}
