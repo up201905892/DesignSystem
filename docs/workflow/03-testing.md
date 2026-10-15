@@ -498,3 +498,32 @@ Modelo de relatório:
 **Testes adicionados pelo testador:** cinco testes em `Select.test.tsx` (controlado ignora a mudança do pai; `FormData` ausente com `disabled` e presente depois; `onOpenChange` e retirada do `tabindex="-1"` ao fechar; axe com etiqueta muito longa; select desativado saltado no Tab). Passam. Commit f7552ff (`test(ui): DS-018 ...`).
 
 **Notas (não são falhas):** o `play` de `KeyboardInteraction` usa `KeyboardEvent` despachados (sem `@storybook/test`), mas o teste unitário com `user-event` cobre todos os atalhos. O `tabIndex={-1}` com a lista aberta é uma solução deliberada para o axe (`aria-hidden-focus`); testado que é retirado ao fechar. O gatilho tem `width: 100%`.
+
+### DS-014 · Textarea — Relatório 1 — 2026-10-15
+
+- **Commit testado:** 3ece050 (presente no histórico de `develop`; sem alterações por guardar no início, além do meu registo de estado; registo 69bfe4a por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 240 antes dos meus testes, 248 depois; Textarea: 20 + 8 de CSS) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (13 suites, 76 testes, incluindo as 7 stories do Textarea e o `play` de `Sizes`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `<textarea>` nativo; `size`, `invalid`, `rows` (omissão 3), `resize` (omissão `vertical`, `data-resize`): lido `Textarea.tsx`; testes de elemento nativo, rows, data-resize, data-size, invalid.
+- [x] Mesmos tokens e estados do `Input`, sem valores literais: comparado `Textarea.css` com `Input.css` (borda, raio, hover, focus-visible, inválido, só de leitura, desativado, placeholder); font-size e padding-inline por `size` idênticos. Só há literais `1px`/`2px` (borda e outline), iguais aos do `Input`. Teste novo compara estas propriedades com o CSS do `Input`.
+- [x] Alturas: `Textarea.css` declara `min-height` `--ds-space-8/10/12` por `data-size` e não declara `height`; `Sizes` mede no Chromium `rows={1}` >= 32/40/48px e igual ao `Input` (tolerância 0,5px), e `rows` por omissão maior que o mínimo; passa. Redimensionar não desce abaixo do mínimo (`min-height` no CSS).
+- [x] Integração com `Field` (id, `aria-describedby`, `aria-invalid`, `aria-required`, `disabled`, prioridade das props diretas, clique na etiqueta): cinco testes.
+- [x] Controlado e não controlado sem avisos: teste que espia `console.error`/`warn` nos dois modos.
+- [x] G1 a G3 (sem dependências novas; commit em inglês com ID; nenhum ficheiro do João alterado); C1 a C5 (cinco ficheiros, exports nos dois `index.ts`, `@import` em `styles.css`, `DarkTheme`, `autodocs`, só `var(--ds-*)`).
+
+**Testes exigidos:** unitários (quebras de linha, controlado, `defaultValue`, rows, `data-resize`, `disabled`, `readOnly`, ref `HTMLTextAreaElement`, `Field invalid`), acessibilidade (axe em todos os estados; Tab foca e salta `disabled`; `getByLabelText`; Enter insere `\n` e não submete) e as sete stories pedidas existem e não são triviais.
+
+**Acessibilidade e contraste:** focus via `:focus-visible` com `--ds-color-focus-ring` (outline 2px, igual ao Input). Axe passa em Chromium nas stories, incluindo `DarkTheme` (padrão, só de leitura, desativado, inválido). Contraste só estimado: usa os mesmos tokens do `Input`.
+
+**Testes adicionados pelo testador:** `Textarea.css.test.ts` (8 casos: `min-height` por tamanho sem `height`, paridade de font-size/padding/borda/raio/line-height com o `Input`, sem cores literais). Passam. Commit 6f8a97f (`test(ui): DS-014 ...`).
+
+**Notas (não são falhas):** a igualdade de altura com o `Input` só é medida no Chromium (jsdom não calcula layout); o `play` de `Sizes` cobre-a. O redimensionamento pelo utilizador não é testado de forma automática.
