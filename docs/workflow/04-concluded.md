@@ -151,6 +151,14 @@ Modelo de entrada:
 - **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `WithDefaultValue`, `Sizes`, `Groups`, `DisabledItem`, `Disabled`, `WithField`, `LongList`, `KeyboardInteraction` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: o `tabIndex={-1}` no gatilho com a lista aberta é deliberado (axe `aria-hidden-focus`); o `play` de `KeyboardInteraction` usa `KeyboardEvent` despachados e o teste unitário cobre os atalhos com `user-event`. O critério dizia `z-index-dropdown`, o token real é `--ds-z-dropdown`.
+### DS-014 · Textarea — concluída a 2026-10-15
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-15), commit 3ece050 (mais 6f8a97f, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Textarea` sobre `<textarea>` nativo com `size` (altura mínima 32/40/48px), `invalid`, `rows` (omissão 3) e `resize` (`data-resize`), mesmos tokens e estados do `Input`, modo controlado e não controlado e integração automática com `Field`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Sizes`, `WithField`, `Invalid`, `Disabled`, `ResizeNone` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: a igualdade de altura com o `Input` só é medida no Chromium (o `play` de `Sizes`); o redimensionamento pelo utilizador não é testado automaticamente.
 
 ## Marcos
 
