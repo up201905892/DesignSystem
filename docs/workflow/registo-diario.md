@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-15
+
+- **Decisões para o João:**
+  1. Aprovar DS-021 a DS-048 em `aprovacoes.md` quando quiseres que avancem (28 propostas por aprovar; não propus tarefas novas, há 3 planeadas e livres: DS-017, DS-019, DS-020; a próxima execução já fica sem margem).
+  2. Sugestões sem ação urgente, para o planeador: `FieldLabel` com `id` ou um `Fieldset`/`legend`, porque `htmlFor` não dá nome acessível ao `RadioGroup` (a story usa `aria-labelledby`); `className` no `<label>` exterior do `Radio` (e do `Checkbox`).
+- **Concluídas:** DS-014 (Textarea), DS-016 (RadioGroup)
+- **Testadas:** DS-014 (Aprovado), DS-016 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-014, DS-016 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-017 (Switch), DS-019 (Badge), DS-020 (Spinner e Skeleton). Notas: o `RadioGroup` não passa `orientation` ao Radix (para manter as quatro setas) e põe `aria-orientation` à mão; o testador acrescentou `Textarea.css.test.ts`; o redimensionamento do Textarea e o teclado do RadioGroup em Chromium não têm teste automático.
+
 ## 2026-10-14
 
 - **Decisões para o João:**
