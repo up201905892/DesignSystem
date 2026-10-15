@@ -298,3 +298,20 @@ Modelo de entrada:
   - O `SelectSeparator` do Radix é `aria-hidden` (decorativo), logo não tem `role="separator"` na árvore de acessibilidade.
   - Radix só marca `aria-selected="true"` no item selecionado quando está também focado (acontece ao abrir a lista).
   - O gatilho tem `width: 100%`; para largura fixa o consumidor usa `className` ou um contentor.
+
+### DS-014 · Textarea
+
+**Iteração 1 — 2026-10-15**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Textarea` sobre `<textarea>` nativo, com `size` (`sm`/`md`/`lg`), `invalid`, `rows` (omissão 3) e `resize` (`none`/`vertical`/`both`, omissão `vertical`, exposto em `data-resize`). Usa `useFieldControl()` da mesma forma que o `Input` (props diretas têm prioridade). `Textarea.css` usa os mesmos tokens e estados do `Input` (borda, raio, hover, focus, inválido, só de leitura, desativado, placeholder), com `min-height` `--ds-space-8|10|12` e o mesmo `padding-block`, `padding-inline`, `font-size` e `line-height` por tamanho; com `rows={1}` a altura iguala a do `Input`.
+- **Ficheiros alterados:** `packages/ui/src/Textarea/{Textarea.tsx,Textarea.css,Textarea.test.tsx,Textarea.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 3ece050 `feat(ui): DS-014 add Textarea with sizes, resize and Field integration`
+- **Critérios de aceitação cobertos:** todos; testes em `Textarea.test.tsx`; stories `Default`, `Sizes` (play: altura >= 32/40/48px com `rows={1}`, igual à do `Input` ao lado, e maior com `rows` por omissão), `WithField`, `Invalid`, `Disabled`, `ResizeNone`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Textarea.test.tsx` (elemento nativo, quebras de linha, controlado, sem avisos na consola, defaultValue, rows, data-resize, data-size, disabled, readOnly, ref/className/displayName, invalid, Tab e Enter sem submeter, integração com Field e prioridade das props, clique na etiqueta, axe).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 240) · build ✔ · test:a11y ✔ (76).
+- **Notas para o testador:**
+  - Sem dependências novas. `@ds/icons` tem de estar construído (`pnpm build`) antes do typecheck do `ui`.
+  - Não há contorno: `ref`, `className` e props nativas vão para o próprio `<textarea>` (que tem `data-size`, `data-resize` e `data-invalid`). Largura: `width: 100%`.
+  - `invalid` direto > `aria-invalid` direto > `Field`; `aria-invalid="false"` explícito é mantido.
+  - O CSS não importa o do `Input`: repete as mesmas variáveis `--ds-*`, sem valores literais.
