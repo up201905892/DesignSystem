@@ -331,6 +331,76 @@ describe('RadioGroup', () => {
     });
   });
 
+  describe('edge cases (QA)', () => {
+    it('keeps a controlled group on its value when the parent ignores the change', async () => {
+      const user = userEvent.setup();
+      render(<Basic value="free" onValueChange={() => {}} />);
+      await user.click(radio('Team'));
+      expect(radio('Free')).toHaveAttribute('aria-checked', 'true');
+      expect(radio('Team')).toHaveAttribute('aria-checked', 'false');
+    });
+
+    it('does not put a disabled group in FormData', () => {
+      const { container } = render(
+        <form>
+          <Basic name="plan" defaultValue="free" disabled />
+        </form>,
+      );
+      expect(new FormData(container.querySelector('form')!).get('plan')).toBeNull();
+    });
+
+    it('has no value in FormData while nothing is selected', () => {
+      const { container } = render(
+        <form>
+          <Basic name="plan" />
+        </form>,
+      );
+      expect(new FormData(container.querySelector('form')!).get('plan')).toBeNull();
+    });
+
+    it('marks the group required with aria-required', () => {
+      render(<Basic required />);
+      expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-required', 'true');
+    });
+
+    it('skips a disabled group in the Tab order', async () => {
+      const user = userEvent.setup();
+      render(
+        <>
+          <Basic disabled />
+          <button>After</button>
+        </>,
+      );
+      await user.tab();
+      expect(screen.getByRole('button', { name: 'After' })).toHaveFocus();
+    });
+
+    it('Space on a focused, selected radio keeps it selected and fires nothing extra', async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(<Basic defaultValue="pro" onValueChange={onValueChange} />);
+      await user.tab();
+      await user.keyboard(' ');
+      expect(radio('Pro')).toHaveAttribute('aria-checked', 'true');
+      expect(onValueChange).not.toHaveBeenCalled();
+    });
+
+    it('has no axe violations with very long labels and both sizes', async () => {
+      const long = 'A very long option label '.repeat(12);
+      const { container } = render(
+        <RadioGroup aria-label="Plan" defaultValue="a">
+          <Radio value="a" size="sm">
+            {long}
+          </Radio>
+          <Radio value="b" size="md">
+            {long}
+          </Radio>
+        </RadioGroup>,
+      );
+      await expectNoA11yViolations(container);
+    });
+  });
+
   describe('accessibility', () => {
     it('has no axe violations', async () => {
       const { container } = render(<Basic defaultValue="free" />);
