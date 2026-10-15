@@ -10,5 +10,6 @@
 @import './IconButton/IconButton.css';
 @import './Field/Field.css';
 @import './Input/Input.css';
+@import './Textarea/Textarea.css';
 @import './Checkbox/Checkbox.css';
 @import './Select/Select.css';
