@@ -57,6 +57,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
+| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Proposta |
 
 ## Decisões aplicadas
 
@@ -1726,6 +1727,45 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - Verificação manual no terminal: `pnpm lint` com código 0.
 
 **Fora de âmbito:** a regra de manutenção no `finalizador` (acrescentada pelo João em `.claude/agents/finalizador.md`), documentar ficheiros de tarefas que ainda não estejam `Concluído`, gerar os documentos automaticamente por script, documentação da API em Storybook (DS-042, DS-043), README do repositório e dos pacotes (DS-046), traduções.
+
+**Histórico:**
+- 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio)
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Alta
+- **Depende de:** — (DS-008 e DS-015 já estão `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** fazer com que os comandos do `CLAUDE.md` funcionem num clone limpo, sem `pnpm build` prévio. Em desenvolvimento (typecheck, Vitest, Storybook), os pacotes `@ds/*` do workspace passam a ser resolvidos a partir do código-fonte (`src/index.ts`); o resultado construído e publicado continua a resolver para `dist/`.
+
+**Contexto (verificado pelo João num clone limpo de `develop` em 2026-10-16):** `packages/icons/package.json` só expõe tipos a partir de `./dist/index.d.ts` (campo `types` e `exports["."].types`). Desde a DS-015 (Checkbox) e a DS-018 (Select), o `@ds/ui` importa `@ds/icons`. Por isso, num clone limpo, `pnpm typecheck` falha com `TS2307: Cannot find module '@ds/icons'` em `src/Checkbox/Checkbox.tsx` e `src/Select/Select.tsx`, e só passa depois de `pnpm build`. O CI do GitHub corre os passos de tipos e de testes antes do build, e por isso está vermelho desde 2026-10-14. O João vai reordenar o `ci.yml` como solução provisória, mas essa mudança não substitui esta tarefa.
+
+**Abordagem sugerida (não obrigatória):** `paths` no `tsconfig.base.json`, ou uma condição de exportação própria (ex.: `"source"` em `exports`, a apontar para `./src/index.ts`) com `customConditions` no TypeScript; nos dois casos, acompanhada de `resolve.alias` ou `resolve.conditions` equivalentes nas configurações do Vitest e na configuração Vite do Storybook. O programador escolhe o mecanismo e regista a escolha e o motivo em `02-desenvolvimento.md`. Os `.d.ts` construídos e os `exports` para `dist/` ficam iguais para quem consome os pacotes.
+
+**Nota sobre `@ds/tokens`:** o `src/index.ts` deste pacote está vazio (`export {}`). O objeto `tokens`/`themes` e os ficheiros `tokens.css`/`themes.css` são produzidos pelo Style Dictionary e só existem em `dist/`. Hoje, os scripts de `apps/docs` (`storybook`, `build-storybook`, `typecheck`, `test:a11y`) e o `test` do próprio pacote correm `pnpm --filter @ds/tokens build` antes. Para este pacote há duas soluções aceites: (a) manter a geração automática como passo prévio dentro de cada comando que precisa dela, ou (b) expor uma fonte TypeScript sem geração. Em qualquer dos casos, a solução tem de cobrir todos os consumidores e fica registada.
+
+**Critérios de aceitação:**
+- [ ] Inventário: `02-desenvolvimento.md` lista todas as dependências `@ds/*` entre workspaces, no mínimo `ui → icons`, `ui → tokens`, `docs → ui`, `docs → icons` e `docs → tokens` (incluindo importações diretas nas stories, mesmo sem dependência declarada). Para cada uma, indica o tipo de importação (TS/JS ou CSS) e como passa a ser resolvida em desenvolvimento.
+- [ ] Clone limpo: depois de `git clone` + `pnpm install --frozen-lockfile`, sem nenhuma pasta `dist/` nem `storybook-static/` no repositório, `pnpm typecheck`, `pnpm test` e `pnpm lint` saem com código 0, cada um corrido isoladamente e sem `pnpm build` antes.
+- [ ] Num clone limpo, `pnpm build:docs` sai com código 0, e `pnpm storybook` arranca sem erros de resolução de módulos; as stories do Checkbox e do Select mostram os ícones.
+- [ ] `pnpm build` continua a sair com código 0 e gera os mesmos ficheiros em `packages/*/dist/` que antes da tarefa (mesma lista de ficheiros).
+- [ ] Os `dist/*.d.ts` do `@ds/ui` importam `@ds/icons` pelo nome do pacote: não contêm caminhos para o código-fonte de outros pacotes (nem `../icons/src`, nem `packages/icons`, nem `src/index`), e não copiam as declarações dos ícones para dentro (`grep` sem resultados).
+- [ ] Os campos `main`, `module`, `types` e as entradas `import`/`require`/`types` de `exports` dos três pacotes continuam a apontar para `dist/`. Se for acrescentada uma condição de desenvolvimento (ex.: `"source"`), ela é a única entrada nova e não é usada pelo `tsup` nem por um consumidor normal: `node -e "require('@ds/ui')"`, a partir de `apps/docs`, depois do build, resolve para `dist/`.
+- [ ] `pnpm test:a11y` continua a passar.
+- [ ] Verificação de regressão registada em `02-desenvolvimento.md` com os comandos exatos usados, incluindo a forma de remover `dist/` (clone novo, ou `git clean -xdf` seguido de `pnpm install --frozen-lockfile`), e o código de saída de cada comando.
+- [ ] Nenhum ficheiro em `.github/` é alterado. Se o CI precisar de alguma mudança (ex.: deixar de depender da ordem dos passos), o pedido fica em "Decisões para o João" no registo diário.
+- [ ] G1 a G3 (sem dependências novas de runtime; uma devDependency só entra se o mecanismo a exigir e se ficar justificada no registo).
+
+**Testes exigidos:**
+- Unitários: não são precisos testes novos, salvo se o mecanismo escolhido precisar de um (ex.: um teste que confirma que `@ds/icons` resolve para `src/` no Vitest). Os testes existentes continuam a passar sem build prévio.
+- Verificação do testador: repetir a verificação de clone limpo (clone novo ou `git clean -xdf`, depois `pnpm install --frozen-lockfile`, depois `pnpm typecheck`, `pnpm test` e `pnpm lint`, cada um com código 0); depois `pnpm build`, inspeção com `grep` dos `packages/ui/dist/*.d.ts` (sem caminhos de código-fonte de outros pacotes) e `pnpm build:docs` com código 0.
+- Prova negativa (temporária, não commitada): num clone limpo, introduzir um erro de tipos em `packages/icons/src`, por exemplo mudando o tipo de `size` de um ícone usado pelo Checkbox, e confirmar que `pnpm typecheck` no `@ds/ui` falha. Isto prova que os tipos vêm do código-fonte e não de um `dist/` antigo.
+- Acessibilidade: não aplicável (sem alterações a componentes); `pnpm test:a11y` continua a passar.
+- Visual/Storybook: verificação manual de que as stories do Checkbox e do Select mostram os ícones com `pnpm storybook` num clone limpo.
+
+**Fora de âmbito:** alterar a ordem dos passos em `ci.yml` ou `diario.yml` (é do João), metadados de publicação e mudança de nome dos pacotes (DS-036), project references do TypeScript (`tsc -b`) com build incremental, alterar o Style Dictionary ou os tokens.
 
 **Histórico:**
 - 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
