@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-16
+
+- **Decisões para o João:**
+  1. Aprovar DS-021 a DS-048 em `aprovacoes.md` (28 propostas por aprovar). Só resta DS-020 `Planeado`: a próxima execução só tem essa tarefa para desenvolver. Não propus tarefas novas, porque já há 28 à espera de aprovação.
+  2. Sugestões sem ação urgente, para o planeador: o estado desativado do `Switch` fica abaixo de 3:1 de contraste (isento em WCAG 1.4.11, igual ao `Checkbox`); o `Switch` não tem `invalid`; o `Badge` com `asChild` não tem hover.
+- **Concluídas:** DS-017 (Switch), DS-019 (Badge). Fase Formulários completa.
+- **Testadas:** DS-017 (Aprovado), DS-019 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-017, DS-019 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-021 a DS-048
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-020 (Spinner e Skeleton). Notas: o axe em jsdom não mede contraste, por isso o Badge e o Switch têm testes de CSS que calculam rácios; `02-desenvolvimento.md` tem linhas duplicadas da entrada DS-016 no fim (não apagadas, os registos só crescem); `@ds/icons` tem de estar compilado (`pnpm build`) antes de `typecheck`/`test` num clone limpo.
+
 ## 2026-10-15
 
 - **Decisões para o João:**
