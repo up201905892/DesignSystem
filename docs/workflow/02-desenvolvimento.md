@@ -316,6 +316,23 @@ Modelo de entrada:
   - `invalid` direto > `aria-invalid` direto > `Field`; `aria-invalid="false"` explícito é mantido.
   - O CSS não importa o do `Input`: repete as mesmas variáveis `--ds-*`, sem valores literais.
 
+### DS-019 · Badge
+
+**Iteração 1 — 2026-10-16**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Badge` como `<span class="ds-badge">` (ou o filho com `asChild`, via `Slot`), com `variant` (`neutral` por omissão, `primary`, `success`, `warning`, `danger`, `info`), `appearance` (`subtle` por omissão, `solid`) e `size` (`sm`, `md` por omissão), expostos em `data-variant`, `data-appearance` e `data-size`. Sem `role`. O CSS usa as variáveis locais `--ds-badge-bg` e `--ds-badge-fg` sobre tokens; `white-space: nowrap`, `max-width: 100%`, `overflow: hidden` e `text-overflow: ellipsis`.
+- **Ficheiros alterados:** `packages/ui/src/Badge/{Badge.tsx,Badge.css,Badge.css.test.ts,Badge.test.tsx,Badge.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 15b540c `feat(ui): DS-019 add Badge with variants, appearances and sizes`
+- **Critérios de aceitação cobertos:** todos; testes em `Badge.test.tsx` e `Badge.css.test.ts`; stories `Default`, `Variants`, `Solid`, `Sizes`, `LongText` (play: não ultrapassa o contentor e o texto é cortado), `DarkTheme`.
+- **Testes escritos pelo programador:** `Badge.test.tsx` (texto e valores por omissão, cada variante, aparência e tamanho, className, ref, props nativas, displayName, sem role, `asChild` com `<a>`, axe nas 12 combinações). `Badge.css.test.ts` calcula o contraste (>= 4,5:1) das 12 combinações nos dois temas a partir de `themes.css` e verifica as regras de não quebrar linha e reticências.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 357) · build ✔ · test:a11y ✔ (96).
+- **Notas para o testador:**
+  - Sem dependências novas. `pnpm build` tem de correr antes do typecheck (`@ds/icons`, `@ds/tokens`).
+  - O axe em jsdom não mede `color-contrast` (sem canvas); por isso o contraste é verificado por cálculo em `Badge.css.test.ts` e no `test:a11y` (browser real).
+  - Escolhas de cor: `subtle` usa `<variante>-subtle` com `<variante>-text`; `primary` subtle usa `accent-subtle` com `text-default`. `solid` usa `<variante>-text` como fundo com `text-on-accent` (os tokens `*-default` não chegam a 4,5:1 com texto branco no tema claro); `neutral` solid usa `bg-inverse`, `primary` solid usa `accent-default`.
+  - Com `asChild` sobre um `<a>`, o badge não ganha estilos de hover; só tem `:focus-visible`.
+
 ### DS-017 · Switch
 
 **Iteração 1 — 2026-10-16**
