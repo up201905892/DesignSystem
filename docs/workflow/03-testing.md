@@ -561,3 +561,48 @@ Modelo de relatório:
 - As setas só selecionam em jsdom com a tecla mantida premida (helper `press`); o comportamento em browser real não foi exercitado por um `play`.
 - `FieldLabel` não nomeia o grupo (`htmlFor` num `div`); a story `WithField` usa `aria-labelledby` com um `<span>`. Sugestão já feita pelo programador para o planeador.
 - `Radio` fora de um `RadioGroup` falha (contexto do Radix).
+
+### DS-017 · Switch — Relatório 1 — 2026-10-16
+
+- **Commit testado:** 3fbd332 (presente no histórico de `develop`; sem alterações por guardar no início; registo 094a2fc por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 313 antes dos meus testes, 320 depois; Switch: 13 + 7 de CSS) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (15 suites, 90 testes, incluindo as 6 stories do Switch) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `@radix-ui/react-switch`; raiz `<button role="switch">` com `aria-checked` e `data-state`: lido `Switch.tsx` e `package.json`; teste de role, tagName, `aria-checked` e `data-state`.
+- [x] Props `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `required`, `name`, `value`, `size` (`sm`/`md`, omissão `md`), `children` como etiqueta: lido o tipo (herda as props do Radix; `size` e `children` próprios); testes de `data-size`, etiqueta, ref/className.
+- [x] Controlado e não controlado; `FormData`: testes de controlado (ignora o clique sem mudança do pai), com pai com estado, `defaultChecked`, e `FormData` com valor quando ligado, ausente quando desligado ou `disabled`.
+- [x] Estado pela posição do manípulo: `Switch.css` aplica `translateX` (inset à esquerda; largura menos manípulo menos inset à direita) quando `data-state='checked'`; teste novo. Contraste (calculado com os valores de `themes.css`, fórmula WCAG; o teste novo repete o cálculo):
+
+| Par | Claro | Escuro |
+| --- | --- | --- |
+| Pista desligada (`border-strong`) vs `bg-canvas` / `bg-surface` | 4,55 / 4,76 | 7,1 / 5,7 |
+| Pista ligada (`accent-default`) vs `bg-canvas` / `bg-surface` | ~4,7 / ~5,2 | ~7,3 / ~5,9 |
+| Manípulo desligado (`bg-surface`) vs pista | 4,76 | 5,7 |
+| Manípulo ligado (`text-on-accent`) vs pista (também em hover) | >= 5 | ~7,3 |
+
+  Todos >= 3:1 (valores aproximados na tabela; o teste afirma >= 3 para todos, incluindo hover da pista ligada).
+- [x] `prefers-reduced-motion`: as transições da pista e do manípulo usam `--ds-duration-fast` em classes `ds-*`, e `styles/motion.css` (importado em `styles.css`) põe `transition-duration: 0s !important` com `reduce`; teste novo confirma as duas pontas. Não executado num browser com a preferência ativa.
+- [x] Integração com `Field`: `id`, `aria-describedby`, `aria-required`, `disabled`, prioridade das props diretas: dois testes.
+- [x] G1 a G3 (dependência `@radix-ui/react-switch` nomeada na tarefa e em `package.json`/`pnpm-lock.yaml`; commit em inglês com ID; nenhum ficheiro do João alterado); C1 a C5 (cinco ficheiros, exports nos dois `index.ts`, `@import` em `styles.css`, stories `Default`, `Checked`, `Disabled`, `Sizes`, `WithField`, `DarkTheme`, `autodocs`; `Switch.css` só usa `var(--ds-*)` exceto o outline de 2px).
+
+**Testes exigidos:** unitários (clique, `onCheckedChange`, controlado, `defaultChecked`, etiqueta, `disabled`, `FormData`), acessibilidade (axe com os quatro estados e `Field`; Tab foca; Espaço e Enter alternam; `getByRole('switch', { name })`; Tab salta o desativado) e as seis stories existem; `Sizes` tem `play` que mede a área clicável (>= 24px) no Chromium. Não são triviais.
+
+**Acessibilidade e contraste:** focus via `:focus-visible` com `--ds-color-focus-ring` (outline 2px, offset 2px; teste novo). Axe passa em jsdom e em Chromium nas stories, incluindo `DarkTheme` (com os dois estados desativados). Etiqueta desativada em `text-muted` (igual ao Checkbox).
+
+**Estado desativado:** pista `border-default` e manípulo `text-disabled`, o que dá aproximadamente 1,5:1 (claro) e 1,1:1 (escuro) da pista face ao fundo, e ~1,7:1 (claro) e ~2,7:1 (escuro) do manípulo face à pista. Está abaixo de 3:1, mas os componentes inativos estão isentos de WCAG 1.4.11, o critério da tarefa refere o contraste de forma geral sem tratar o desativado à parte, e o padrão é o mesmo do `Checkbox`. Considerado nota, não falha. Os estados ligado/desligado desativados distinguem-se só pela posição do manípulo (as cores são iguais), o que cumpre 1.4.1.
+
+**Testes adicionados pelo testador:** `Switch.css.test.ts` (7 casos: contraste >= 3:1 de pista e manípulo nos dois temas, sobre canvas e surface, incluindo hover; tokens assumidos; manípulo desloca-se quando ligado; transições cobertas pela regra de movimento reduzido; focus ring). Passam. Commit 443b3ec (`test(ui): DS-017 ...`).
+
+**Notas (não são falhas):**
+- O contraste do estado desativado (acima) fica abaixo de 3:1 por isenção; se o João quiser a pista desativada visível no tema escuro (cerca de 1,1:1 face a `bg-surface`), é decisão de design a propor ao planeador.
+- O `Switch` não tem `invalid`/`aria-invalid` (a tarefa não o pede).
+- O movimento reduzido e a posição real do manípulo não foram medidos num browser; a verificação é sobre o CSS.
+- O `<label>` envolvente e um `FieldLabel` com `htmlFor` podem nomear o mesmo controlo duas vezes; o axe não se queixa.
