@@ -606,3 +606,35 @@ Modelo de relatório:
 - O `Switch` não tem `invalid`/`aria-invalid` (a tarefa não o pede).
 - O movimento reduzido e a posição real do manípulo não foram medidos num browser; a verificação é sobre o CSS.
 - O `<label>` envolvente e um `FieldLabel` com `htmlFor` podem nomear o mesmo controlo duas vezes; o axe não se queixa.
+
+### DS-019 · Badge — Relatório 1 — 2026-10-16
+
+- **Commit testado:** 15b540c (presente no histórico de `develop`; sem alterações por guardar no início; registo 9b63d26 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 357, 18 ficheiros; Badge: 20 em `Badge.test.tsx` + `Badge.css.test.ts`) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (16 suites, 96 testes, incluindo as 6 stories do Badge no Chromium com axe) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `<span class="ds-badge">`, props `variant` (omissão `neutral`), `appearance` (omissão `subtle`), `size`, `asChild`: lido `Badge.tsx`; testes de tag, classe, omissões, cada valor e `asChild` com `<a>`.
+- [x] `data-variant`, `data-appearance`, `data-size`: lido o código e testados em todos os valores.
+- [x] Contraste de texto >= 4,5:1 nas 12 combinações por tema: `Badge.css.test.ts` lê os tokens atribuídos em `Badge.css` e os valores de `themes.css` (claro e escuro), calcula a razão WCAG e falha se algum token não existir; mais axe com `color-contrast` em Chromium nas stories `Variants`, `Solid` e `DarkTheme` (sem violações).
+- [x] Sem `role`: lido o código e teste `not.toHaveAttribute('role')`.
+- [x] `white-space: nowrap`, `max-width: 100%`, `overflow: hidden`, `text-overflow: ellipsis`: lido o CSS e testado por regex; a story `LongText` tem `play` que mede no Chromium que o badge não excede o contentor e que o texto é cortado (passou no test runner).
+- [x] G1 (cinco comandos verdes por mim); G2 (sem dependências novas, lockfile inalterado); G3 (commit em inglês com ID; ficheiros alterados nos 9 do `git show`, nenhum do João); C1 (cinco ficheiros mais `index.ts`, exports nos dois `index.ts`, `@import` em `styles.css`, teste de convenções passa); C2 (`forwardRef`, `displayName`, `className` acrescentada, props nativas); C3 (só `ds-*` e `var(--ds-*)`, `data-*`, Stylelint passa; sem estilos inline no componente); C4 (axe unitário, stories com `DarkTheme` em `pnpm test:a11y`, focus com `:focus-visible` e `--ds-color-focus-ring`); C5 (`Default`, `Variants`, `Solid`, `Sizes`, `LongText`, `DarkTheme`, `autodocs`, JSDoc nas props).
+
+**Testes exigidos:** unitários (texto, omissões, variantes, aparências, tamanhos, `className`, `ref`, `asChild` com `<a>`), acessibilidade (axe nas 12 combinações com `getByText`) e as stories pedidas existem. Não são triviais: o contraste e a regra de linha única têm verificação própria e a `LongText` mede o resultado real no browser.
+
+**Acessibilidade e casos limite:** `DarkTheme` usa `parameters.theme`, que o `preview.tsx` aplica em `data-theme`. Texto muito longo é cortado com reticências; badge vazio e `disabled` não se aplicam. Sem modo controlado (componente estático). Props nativas depois de `data-*` no JSX deixam o consumidor sobrepor `data-*` (comportamento comum aos outros componentes).
+
+**Testes adicionados pelo testador:** nenhum; a cobertura existente chega para os critérios.
+
+**Notas (não são falhas):**
+- No jsdom o axe não mede `color-contrast`; a medição real vem do `test:a11y` (Chromium) e do cálculo em `Badge.css.test.ts`.
+- Com `asChild` sobre `<a>` não há estilo de hover, só `:focus-visible` (referido pelo programador). O focus ring de 2px não foi medido numericamente (3:1) por ser o mesmo token dos restantes componentes.
+- A `LongText` só tem o `play` no Chromium; não há teste unitário de layout (jsdom não calcula layout).
