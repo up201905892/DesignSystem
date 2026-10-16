@@ -26,7 +26,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-016 | RadioGroup | Formulários | Média | DS-012 | Concluído |
 | DS-017 | Switch | Formulários | Média | DS-012 | Concluído |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
-| DS-019 | Badge | Overlays e feedback | Média | DS-009 | Planeado |
+| DS-019 | Badge | Overlays e feedback | Média | DS-009 | Em desenvolvimento |
 | DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Proposta |
 | DS-022 | Alert | Overlays e feedback | Média | DS-011 | Proposta |
@@ -806,6 +806,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): texto de exemplo em inglês ("Active")
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
+- 2026-10-16 · programador · Planeado → Em desenvolvimento · início da implementação
 
 ### DS-020 · Spinner e Skeleton
 
