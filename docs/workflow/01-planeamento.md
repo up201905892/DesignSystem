@@ -24,7 +24,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-014 | Textarea | Formulários | Média | DS-013 | Concluído |
 | DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Concluído |
 | DS-016 | RadioGroup | Formulários | Média | DS-012 | Concluído |
-| DS-017 | Switch | Formulários | Média | DS-012 | Planeado |
+| DS-017 | Switch | Formulários | Média | DS-012 | Pronto para teste |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Planeado |
 | DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
@@ -735,6 +735,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Notifications')
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
+- 2026-10-16 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-16 · programador · Em desenvolvimento → Pronto para teste · commit 3fbd332
 
 ### DS-018 · Select
 

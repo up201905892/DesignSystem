@@ -316,6 +316,24 @@ Modelo de entrada:
   - `invalid` direto > `aria-invalid` direto > `Field`; `aria-invalid="false"` explícito é mantido.
   - O CSS não importa o do `Input`: repete as mesmas variáveis `--ds-*`, sem valores literais.
 
+### DS-017 · Switch
+
+**Iteração 1 — 2026-10-16**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Switch` sobre `@radix-ui/react-switch`. A raiz é `<button role="switch">` (classe `ds-switch__control`) e recebe `ref`, `className` e props nativas; vem dentro de um `<label class="ds-switch">` (área mínima 24px) com o texto de `children`. Usa `useFieldControl()` (`id`, `aria-describedby`, `required`, `disabled`; props diretas têm prioridade). Tamanhos `sm` (32x20px) e `md` (40x24px) por variáveis CSS locais sobre tokens `--ds-space-*`. Desligado: pista `border-strong` e manípulo à esquerda; ligado: pista `accent-default` e manípulo à direita (posição, não só cor). As transições ficam a 0s com `prefers-reduced-motion` através de `styles/motion.css`.
+- **Ficheiros alterados:** `packages/ui/src/Switch/` (`Switch.tsx`, `Switch.css`, `Switch.test.tsx`, `Switch.stories.tsx`, `index.ts`), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 3fbd332 `feat(ui): DS-017 add Switch with sizes and Field integration`
+- **Critérios de aceitação cobertos:** todos; testes em `Switch.test.tsx`; stories `Default`, `Checked`, `Disabled`, `Sizes`, `WithField`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Switch.test.tsx` (role e nome, alternar e `onCheckedChange`, `defaultChecked`, controlado e com pai com estado, clique na etiqueta, `disabled`, `FormData` ligado/desligado/desativado, Tab/Espaço/Enter, Tab salta desativado, ref/className/size/displayName, Field com id/descrição/required/disabled e prioridade das props, axe).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 313) · build ✔ · test:a11y ✔ (90).
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-switch` (nomeada na tarefa).
+  - Contraste 3:1 da pista e do manípulo nos dois temas: não medi numericamente; a pista desligada usa `border-strong` (o mesmo token da borda do `Checkbox`) e o manípulo `bg-surface`; a pista ligada usa `accent-default` com manípulo `text-on-accent`. Convém confirmar com os valores dos temas.
+  - Estado desativado: pista `border-default` e manípulo `text-disabled`. O Stylelint do projeto proíbe larguras escritas à mão, por isso não há contorno via `box-shadow`.
+  - O `Switch` não tem `invalid` (a tarefa não o pede); `aria-invalid` do `Field` não é aplicado. Se o João o quiser, fica para outra tarefa.
+  - Esta entrada foi inserida antes da de DS-016 por limitação da ferramenta de edição (o fim do ficheiro tem linhas duplicadas); o conteúdo é independente.
+
 ### DS-016 · RadioGroup
 
 **Iteração 1 — 2026-10-15**
