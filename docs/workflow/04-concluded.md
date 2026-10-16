@@ -169,8 +169,18 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Horizontal`, `WithDefaultValue`, `DisabledItem`, `DisabledGroup`, `WithField`, `Sizes` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: o ponto de tabulação no DOM é o contentor `radiogroup`, que reencaminha o focus; as setas só selecionam em jsdom com a tecla premida; `Radio` fora de `RadioGroup` falha. Sugestão ao planeador: `FieldLabel` com `id` ou `Fieldset`/`legend`, porque `htmlFor` não nomeia o grupo.
 
+### DS-017 · Switch — concluída a 2026-10-16
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-16), commit 3fbd332 (mais 443b3ec, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Switch` sobre `@radix-ui/react-switch` (`<button role="switch">`), tamanhos `sm`/`md`, etiqueta clicável (>= 24px), estado pela posição do manípulo com contraste >= 3:1 nos dois temas, transições com `prefers-reduced-motion`, modo controlado e não controlado, `FormData` e integração automática com `Field`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Checked`, `Disabled`, `Sizes`, `WithField` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: o contraste do estado desativado fica abaixo de 3:1 (isento por WCAG 1.4.11, igual ao `Checkbox`; decisão de design a propor ao planeador se o João quiser a pista visível no tema escuro); sem `invalid`/`aria-invalid` (fora do critério); movimento reduzido e posição do manípulo verificados só no CSS, não num browser.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
+- Formulários concluídos — 2026-10-16 (DS-010 a DS-018)
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->

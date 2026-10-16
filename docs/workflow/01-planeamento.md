@@ -24,7 +24,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-014 | Textarea | Formulários | Média | DS-013 | Concluído |
 | DS-015 | Checkbox | Formulários | Alta | DS-008, DS-012 | Concluído |
 | DS-016 | RadioGroup | Formulários | Média | DS-012 | Concluído |
-| DS-017 | Switch | Formulários | Média | DS-012 | Aprovado |
+| DS-017 | Switch | Formulários | Média | DS-012 | Concluído |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Planeado |
 | DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
@@ -739,6 +739,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-16 · programador · Em desenvolvimento → Pronto para teste · commit 3fbd332
 - 2026-10-16 · testador · Pronto para teste → Em teste · início da verificação
 - 2026-10-16 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados
+- 2026-10-16 · finalizador · Aprovado → Concluído · relatório 1 aprovado, documentação em ordem, changeset não aplicável
 
 ### DS-018 · Select
 
