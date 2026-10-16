@@ -56,6 +56,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Proposta |
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
+| DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
 
 ## Decisões aplicadas
 
@@ -1674,3 +1675,57 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+
+### DS-049 · Referência técnica e apresentação do projeto (versão inicial)
+
+- **Fase do MVP:** Documentação
+- **Prioridade:** Média
+- **Depende de:** DS-041, DS-048 (é a última tarefa do plano: corre depois de todas as outras tarefas do MVP; a DS-048 já depende, de forma transitiva, da maior parte delas)
+- **Estimativa:** L (≤ 3 dias)
+
+**Objetivo:** criar a primeira versão de dois documentos em inglês que descrevem tudo o que existe no repositório nesse momento (todo o trabalho das tarefas DS-001 a DS-048): uma referência técnica ficheiro a ficheiro para quem mantém o código e uma apresentação para leitores não técnicos. A partir daí, o `finalizador` mantém os dois documentos atualizados ao fechar cada tarefa, seguindo **exatamente o formato definido abaixo** (a regra é acrescentada pelo João a `.claude/agents/finalizador.md`; esta tarefa não altera esse ficheiro).
+
+**Formato de `docs/technical-reference.md`** (é o formato que o finalizador vai seguir):
+- Referência técnica de todos os ficheiros versionados do repositório, **exceto**: ficheiros gerados (`dist/`, `storybook-static/`, ficheiros produzidos pelo Style Dictionary ou pelo SVGR, incluindo `packages/icons/src/generated/` e o `packages/icons/src/index.ts` regenerado pelo script `generate`), `pnpm-lock.yaml` e `docs/workflow/`.
+- Agrupada por pacote, com um `##` por grupo, por esta ordem: `packages/tokens`, `packages/ui`, `packages/icons`, `apps/docs`, `apps/example` (criada pela DS-044), raiz (a raiz inclui os ficheiros de configuração, `.claude/`, `.github/`, `docs/` fora de `docs/workflow/` e os próprios dois documentos desta tarefa).
+- Uma secção `###` por ficheiro, com o caminho relativo à raiz como título (ex.: `### packages/ui/src/Button/Button.tsx`).
+- Para cada ficheiro:
+  - **Purpose:** uma frase.
+  - **Exports and functions:** cada função, componente, hook, tipo ou constante exportada, numa linha no formato `` `name` — `path:line` — what it does ``, em que `line` é a linha onde a declaração começa no commit atual.
+  - **Patterns:** metodologias usadas (ex.: `forwardRef`, `Slot` do Radix / `asChild`, variantes por atributos `data-*`, controlado/não controlado).
+  - **Tools:** bibliotecas e ferramentas de que o ficheiro depende.
+  - **Tasks:** IDs das tarefas que o criaram ou alteraram.
+- Ficheiros de teste (`*.test.ts(x)`) e stories (`*.stories.tsx`): uma linha só, a dizer o que cobrem, sem lista de funções.
+- Os ícones gerados não têm secção própria: a secção do script de geração lista os nomes dos componentes que ele produz.
+
+**Formato de `docs/project-overview.md`** (é o formato que o finalizador vai seguir):
+- Apresentação para um leitor não técnico (cliente, recrutador, gestor): sem código, sem nomes de ficheiros nem caminhos, sem jargão por explicar (cada termo técnico inevitável, ex.: "design tokens", "componente", é explicado na primeira vez que aparece).
+- Secções: o que é o projeto e para que serve; o que está pronto (tabela de componentes com o estado `Ready`, `In progress` ou `Planned` e uma frase por componente); como se garante a qualidade (acessibilidade WCAG 2.1 AA, testes automáticos, temas claro e escuro), em linguagem simples; próximos passos por fase do MVP (Fundações, Formulários, Overlays e feedback, Layout e dados, Publicação, Documentação, com os nomes das fases em inglês); data da última atualização.
+- Correspondência entre os estados da tabela-índice e os da apresentação: `Concluído` → `Ready`; `Em desenvolvimento`, `Pronto para teste`, `Em teste`, `Aprovado` e `Reprovado` → `In progress`; `Proposta` e `Planeado` → `Planned`.
+
+**Critérios de aceitação:**
+- [ ] `docs/technical-reference.md` e `docs/project-overview.md` existem e estão escritos em inglês (regra de língua em "Decisões técnicas").
+- [ ] Cobertura: cada ficheiro de `git ls-files` que não esteja nas exclusões acima tem uma secção `###` em `technical-reference.md` com o caminho exato como título; não há secções para ficheiros que não existem nem para ficheiros excluídos. O programador regista no `02-desenvolvimento.md` o comando usado para fazer esta comparação, para o testador o repetir.
+- [ ] Cada secção de ficheiro que não seja teste nem story tem as cinco entradas **Purpose**, **Exports and functions**, **Patterns**, **Tools** e **Tasks** (com "None" quando não se aplica); cada secção de teste ou story tem uma só linha a dizer o que cobre.
+- [ ] Todos os símbolos exportados pelos `packages/*/src/**/index.ts` não gerados (incluindo `packages/ui/src/index.ts`, os `index.ts` de cada componente e `packages/tokens/src/index.ts`) aparecem em `technical-reference.md` com uma referência `path:line` no formato definido.
+- [ ] As referências `path:line` apontam para a linha onde a declaração começa (linha do `export`, `function`, `const`, `type` ou `interface`) no commit registado em `02-desenvolvimento.md`.
+- [ ] A coluna **Tasks** de cada ficheiro é coerente com o histórico (`git log --follow` do ficheiro mostra commits com esses IDs).
+- [ ] `project-overview.md` não contém caminhos de ficheiros (nenhum texto com `/` seguido de nome de ficheiro, nem extensões como `.ts`, `.tsx`, `.css`, `.json`, `.md`) nem blocos de código (nenhuma linha com ` ``` `), e não tem código inline.
+- [ ] `project-overview.md` lista na tabela todos os componentes do âmbito do MVP (Button, IconButton, Field, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Alert, Toast, Spinner, Skeleton, Badge, Dialog, Popover, Tooltip, DropdownMenu, Stack, Grid, Card, Tabs, Accordion, Table e Pagination), cada um com um estado coerente com a tabela-índice à data do commit, segundo a correspondência acima; tem as secções de qualidade, próximos passos por fase e a data da última atualização (formato `YYYY-MM-DD`).
+- [ ] `pnpm lint` continua a passar (o Prettier verifica os ficheiros Markdown em `docs/` fora de `docs/workflow/`).
+- [ ] Nenhum outro ficheiro do repositório é alterado além dos dois documentos (e dos registos do fluxo); `.claude/agents/finalizador.md` não é tocado.
+- [ ] G1 a G3 (sem dependências novas; changeset não aplicável).
+
+**Testes exigidos:**
+- Unitários: não aplicável (tarefa só de documentação; não se acrescentam testes Vitest).
+- Verificação do testador (cobertura): repetir a comparação entre `git ls-files` (menos as exclusões) e os títulos `###` de `technical-reference.md`, e entre os símbolos exportados dos `index.ts` não gerados e as referências do documento; zero ficheiros e zero símbolos em falta.
+- Verificação do testador (amostra de referências): escolher pelo menos 10 referências `path:line`, de pelo menos três grupos diferentes (ex.: `packages/ui`, `packages/tokens`, `apps/docs`), e confirmar que cada uma aponta para a linha onde a declaração começa; uma referência errada reprova a tarefa.
+- Verificação do testador (apresentação): procurar em `project-overview.md` blocos de código, código inline e caminhos/extensões de ficheiros (zero resultados); comparar a tabela de componentes com a tabela-índice do Planeamento.
+- Acessibilidade: títulos dos dois documentos sem saltos de nível; tabelas com linha de cabeçalho.
+- Visual/Storybook: não aplicável.
+- Verificação manual no terminal: `pnpm lint` com código 0.
+
+**Fora de âmbito:** a regra de manutenção no `finalizador` (acrescentada pelo João em `.claude/agents/finalizador.md`), documentar ficheiros de tarefas que ainda não estejam `Concluído`, gerar os documentos automaticamente por script, documentação da API em Storybook (DS-042, DS-043), README do repositório e dos pacotes (DS-046), traduções.
+
+**Histórico:**
+- 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
