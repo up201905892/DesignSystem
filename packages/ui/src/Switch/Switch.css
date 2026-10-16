@@ -1,0 +1,92 @@
+.ds-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  box-sizing: border-box;
+  min-width: var(--ds-space-6);
+  min-height: var(--ds-space-6);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-font-line-height-tight);
+  cursor: pointer;
+}
+
+.ds-switch[data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-switch__control {
+  --ds-switch-width: var(--ds-space-10);
+  --ds-switch-height: var(--ds-space-6);
+  --ds-switch-thumb: var(--ds-space-4);
+  --ds-switch-inset: var(--ds-space-1);
+
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  box-sizing: border-box;
+  width: var(--ds-switch-width);
+  height: var(--ds-switch-height);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ds-radius-full);
+  background-color: var(--ds-color-border-strong);
+  cursor: inherit;
+  transition: background-color var(--ds-duration-fast);
+}
+
+.ds-switch__control[data-size='sm'] {
+  --ds-switch-width: var(--ds-space-8);
+  --ds-switch-height: var(--ds-space-5);
+  --ds-switch-thumb: var(--ds-space-3);
+}
+
+.ds-switch__control:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-switch__control[data-state='checked'] {
+  background-color: var(--ds-color-accent-default);
+}
+
+.ds-switch__control[data-state='checked']:hover {
+  background-color: var(--ds-color-accent-hover);
+}
+
+.ds-switch__thumb {
+  display: block;
+  width: var(--ds-switch-thumb);
+  height: var(--ds-switch-thumb);
+  border-radius: var(--ds-radius-full);
+  background-color: var(--ds-color-bg-surface);
+  /* position, not only colour, tells on from off (WCAG 1.4.1) */
+  transform: translateX(var(--ds-switch-inset));
+  transition: transform var(--ds-duration-fast);
+}
+
+.ds-switch__control[data-state='checked'] .ds-switch__thumb {
+  background-color: var(--ds-color-text-on-accent);
+  transform: translateX(
+    calc(var(--ds-switch-width) - var(--ds-switch-thumb) - var(--ds-switch-inset))
+  );
+}
+
+/* disabled */
+.ds-switch[data-disabled] {
+  /* axe does not exempt the label of a button-based control, so keep AA contrast */
+  color: var(--ds-color-text-muted);
+  cursor: not-allowed;
+}
+
+.ds-switch[data-disabled] .ds-switch__control,
+.ds-switch[data-disabled] .ds-switch__control:hover {
+  background-color: var(--ds-color-border-default);
+}
+
+.ds-switch[data-disabled] .ds-switch__thumb {
+  background-color: var(--ds-color-text-disabled);
+}
