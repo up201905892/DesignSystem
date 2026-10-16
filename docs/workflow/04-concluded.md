@@ -178,6 +178,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Checked`, `Disabled`, `Sizes`, `WithField` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: o contraste do estado desativado fica abaixo de 3:1 (isento por WCAG 1.4.11, igual ao `Checkbox`; decisão de design a propor ao planeador se o João quiser a pista visível no tema escuro); sem `invalid`/`aria-invalid` (fora do critério); movimento reduzido e posição do manípulo verificados só no CSS, não num browser.
 
+### DS-019 · Badge — concluída a 2026-10-16
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-16), commit 15b540c
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Badge` (`<span class="ds-badge">`, ou o filho com `asChild`) com `variant` (6), `appearance` (`subtle`/`solid`) e `size` (`sm`/`md`), contraste >= 4,5:1 nas 12 combinações por tema, sem `role`, texto numa só linha com reticências.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Variants`, `Solid`, `Sizes`, `LongText` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: o contraste só é medido em browser pelo `test:a11y` e por cálculo em `Badge.css.test.ts`; com `asChild` sobre `<a>` não há estilo de hover.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
