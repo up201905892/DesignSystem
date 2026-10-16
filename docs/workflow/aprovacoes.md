@@ -10,6 +10,7 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | |
 | 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | |
 | 2026-10-12 | Responder | DS-003 | Passo pnpm test:a11y:setup já acrescentado ao ci.yml e ao diario.yml em 2026-10-11, antes de pnpm test:a11y. Pedido resolvido; não repetir. |
+| 2026-10-16 | Aprovar | DS-021 a DS-035 | |
 
 Decisões possíveis:
 
