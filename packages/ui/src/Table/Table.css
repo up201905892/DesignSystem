@@ -1,4 +1,5 @@
 .ds-table-container {
+  position: relative;
   box-sizing: border-box;
   max-width: 100%;
   max-height: var(--ds-table-max-height, none);
