@@ -57,6 +57,24 @@ export type {
   DropdownMenuGroupProps,
   DropdownMenuSeparatorProps,
 } from './DropdownMenu';
+export {
+  Table,
+  TableCaption,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableHeaderCell,
+  TableCell,
+} from './Table';
+export type {
+  TableProps,
+  TableCaptionProps,
+  TableHeadProps,
+  TableBodyProps,
+  TableRowProps,
+  TableHeaderCellProps,
+  TableCellProps,
+} from './Table';
 export { Select, SelectItem, SelectGroup, SelectSeparator } from './Select';
 export type {
   SelectProps,
