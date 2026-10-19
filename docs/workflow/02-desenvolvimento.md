@@ -430,3 +430,16 @@ Modelo de entrada:
   - O `tabIndex` no contentor tem um `eslint-disable` justificado (`jsx-a11y/no-noninteractive-tabindex`), exigido pela regra axe `scrollable-region-focusable`.
   - Sugestão para o planeador: `Table` não permite passar `className` nem props ao contentor (`ds-table-container`); se for preciso (ex.: DS-035), criar tarefa.
   - O contraste de `accent-subtle`/`bg-subtle` com `text-default` passou no `test:a11y` (browser), mas a story `DarkTheme` só confirma o tema escuro se o toggle for aplicado; o testador deve rever.
+
+### DS-032 · Table: estrutura base (continuação)
+
+**Iteração 2 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** corrigida a falha 1 do relatório 1 (falta o teste do scroll horizontal com as setas). Em `apps/docs/.storybook/test-runner.ts`, o `postVisit` da story `components-table--horizontal-scroll` usa teclado real do Playwright: confirma que a tabela é mais larga do que o contentor, foca a região, `ArrowRight` leva `scrollLeft` a > 0 e `ArrowLeft` devolve-o a 0. Um `play` na story não serve, porque eventos sintéticos não provocam o scroll nativo. Nota não bloqueante tratada: `position: relative` em `.ds-table-container` para o caption `visuallyHidden` (absolute) não escapar ao scroll.
+- **Ficheiros alterados:** `apps/docs/.storybook/test-runner.ts`, `packages/ui/src/Table/Table.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** f83f5cf `fix(ui): DS-032 test arrow-key horizontal scroll of Table region`
+- **Critérios de aceitação cobertos:** o teste de acessibilidade do scroll por setas passa a existir e corre em `pnpm test:a11y`.
+- **Testes escritos pelo programador:** verificação no test runner (Chromium). Confirmei que é efetiva: com a condição `scrollLeft > 99999` a suite da Table falha; com `> 0` passa.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 466) · build ✔ · test:a11y ✔ (123).
+- **Notas para o testador:** o teste vive no `test-runner.ts` (corre depois da story, junto do axe), não na story. Afeta só a story `HorizontalScroll`.
