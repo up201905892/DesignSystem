@@ -638,3 +638,37 @@ Modelo de relatório:
 - No jsdom o axe não mede `color-contrast`; a medição real vem do `test:a11y` (Chromium) e do cálculo em `Badge.css.test.ts`.
 - Com `asChild` sobre `<a>` não há estilo de hover, só `:focus-visible` (referido pelo programador). O focus ring de 2px não foi medido numericamente (3:1) por ser o mesmo token dos restantes componentes.
 - A `LongText` só tem o `play` no Chromium; não há teste unitário de layout (jsdom não calcula layout).
+
+### DS-025 · Dialog (Modal) — Relatório 1 — 2026-10-19
+
+- **Commit testado:** e1c2909 (presente no histórico de `develop`; sem alterações por guardar no início; registo 5ac7b7d por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 393 antes dos meus testes, 19 ficheiros; Dialog: `Dialog.test.tsx` + `Dialog.css.test.ts` = 35 depois) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (17 suites, 105 testes, incluindo as stories do Dialog no Chromium com axe) + teclado | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports dos nove componentes: lido `Dialog.tsx` e `index.ts` (componente e raiz, incluindo tipos); `DialogTrigger` e `DialogClose` aceitam `asChild` (testes usam-no).
+- [x] Props de `Dialog` e `DialogContent`: lido o código (omissões `size=md`, `closeLabel="Close"`, `closeOnOverlayClick=true`; `ref`/`className`); testes de `defaultOpen`, controlado (com e sem atualização do pai), `closeLabel`, `hideClose`, `size` em `data-size`, `ref`/`className`.
+- [x] ARIA: testes `getByRole('dialog', {name})`, `aria-modal="true"`, descrição ligada, ausência de `aria-describedby` e de aviso na consola sem descrição (o aviso do Radix para falta de título mantém-se).
+- [x] Portal, overlay e z-index: teste de portal fora do `container`; `Dialog.css.test.ts` (novo) confirma `z-index: var(--ds-z-modal)` no overlay e no conteúdo, `--ds-color-overlay` no overlay e que todos os tokens usados existem em `tokens.css`/`themes.css`. Scroll bloqueado (`data-scroll-locked`) e conteúdo de fundo `aria-hidden` testados.
+- [x] Focus ao abrir (primeiro focável) e regresso ao gatilho: testes unitários e story `KeyboardInteraction` (play em Chromium, passou no test runner).
+- [x] Ecrãs estreitos e scroll interno: CSS lido e coberto por regex em `Dialog.css.test.ts` (`min(largura, 100vw - space-8)`, `max-height` com `dvh`, `overflow-y: auto` no corpo, `flex: 0 0 auto` em cabeçalho e rodapé); story `LongContent` com axe no Chromium. Layout real não medido (jsdom).
+- [x] `prefers-reduced-motion`: as animações estão em `Dialog.css`; `styles/motion.css` anula `animation-duration` para todos os `[class^='ds-']`, que cobre as classes do Dialog; verificado por leitura e teste CSS (não medido em browser).
+- [x] Gatilho desativado: testes com `Button disabled` e `IconButton disabled` (clique, Enter, Espaço; `onOpenChange` não chamado; sem `role="dialog"`) e Tab que salta o gatilho (Before para After); story `DisabledTrigger`.
+- [x] G1 (cinco comandos verdes por mim); G2/G3 (dependência `@radix-ui/react-dialog` nomeada na tarefa, lockfile atualizado, commit em inglês com ID, nenhum ficheiro do João alterado); C1 (cinco ficheiros, exports, `@import` em `styles.css`); C2 (`forwardRef`, `displayName`, `className`); C3 (só tokens: confirmado pelo novo teste CSS, sem cores ou rem soltos; Stylelint passa); C4 (axe unitário aberto, stories incl. `DarkTheme` no `test:a11y`, `:focus-visible` com `--ds-color-focus-ring`); C5 (stories `Default`, `Sizes`, `WithForm`, `LongContent`, `Confirmation`, `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction`, `DarkTheme`).
+
+**Testes exigidos:** existem e testam o comportamento (abrir, `defaultOpen`, controlado, fecho por botão/`DialogClose`/overlay, `closeOnOverlayClick={false}`, `hideClose`, `size`, disabled, focus preso com Tab e Shift+Tab, Esc, regresso do focus, axe). Não são triviais.
+
+**Acessibilidade e casos limite:** contraste nos dois temas coberto pelo axe do Chromium nas stories (incluindo `DarkTheme` aberto); sem título, o Radix avisa (comportamento exigido); sem descrição, sem `aria-describedby`; modo controlado e não controlado cobertos.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Dialog/Dialog.css.test.ts` (6 casos: tokens existentes, z-index/overlay, largura em ecrã estreito, scroll interno, sem valores soltos, cobertura de movimento reduzido, focus ring). Passam. Commit `test(ui): DS-025 add Dialog CSS tests`.
+
+**Notas (não são falhas):**
+- A story `KeyboardInteraction` usa eventos `KeyboardEvent` sintéticos (como a do Select), não teclas reais do browser; o focus preso é também testado com `userEvent` em jsdom.
+- Movimento reduzido e layout estreito verificados por CSS, não por medição em browser.
