@@ -390,3 +390,23 @@ Modelo de entrada:
   - O axe em jsdom não mede `color-contrast`; a verificação real é o `test:a11y` (browser). Em `LongContent` o `DialogBody` tem `tabIndex={0}` para o scroll por teclado (regra `scrollable-region-focusable`).
   - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos (como a do Select); o Radix FocusScope trata o Tab nos extremos.
   - Com `hideClose`, o diálogo continua a fechar com Esc e com `DialogClose`.
+
+### DS-026 · DropdownMenu
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuGroup` e `DropdownMenuSeparator` sobre `@radix-ui/react-dropdown-menu`. `DropdownMenuContent` (classe `ds-dropdown-menu`) vai num portal com `z-index-dropdown`; `side` (omissão `bottom`), `align` (omissão `start`), `ref` e `className`. `DropdownMenuItem` tem `variant` (`default`/`danger`, em `data-variant`), `leadingIcon` (decorativo, `aria-hidden`), `onSelect` e `disabled` (Radix põe `aria-disabled="true"`). O realce é por `data-highlighted` (focus real no item). `danger` usa `danger-text` (e `danger-subtle` no realce); com ícone a distinção não depende só da cor.
+- **Ficheiros alterados:** `packages/ui/src/DropdownMenu/{DropdownMenu.tsx,DropdownMenu.css,DropdownMenu.css.test.ts,DropdownMenu.test.tsx,DropdownMenu.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d1f8738 `feat(ui): DS-026 add DropdownMenu with keyboard navigation and danger items`
+- **Critérios de aceitação cobertos:** todos; testes em `DropdownMenu.test.tsx`; stories `Default`, `WithIcons`, `WithGroupsAndLabels`, `DisabledItem`, `DangerItem`, `OnIconButton`, `DisabledTrigger`, `KeyboardInteraction` (play), `DarkTheme` (aberto).
+- **Testes escritos pelo programador:** `DropdownMenu.test.tsx` (fechado por omissão, `aria-haspopup`/`aria-expanded`, abrir, `defaultOpen`, `onSelect` + fecho + focus no gatilho, item desativado, controlado e `open={false}`, clicar fora, label/group/separator, portal e `side`/`align`, ref/className/variant/displayName, ícone decorativo, Enter/Espaço/Seta para baixo abrem com o primeiro item focado, setas com saltos de desativados, Home/End, pesquisa por letra, Enter/Espaço ativam, Esc, Tab fecha, gatilho `Button`/`IconButton` desativado (não abre, sem `onOpenChange`, Tab salta), axe com o menu aberto); `DropdownMenu.css.test.ts` (tokens existentes, `z-index-dropdown`, `data-highlighted`, `danger-text`, sem cores fixas).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 438) · build ✔ · test:a11y ✔ (114).
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-dropdown-menu` (nomeada na tarefa).
+  - O menu é não modal (`modal={false}` no Radix). Em modo modal o Radix põe `aria-hidden` no `#storybook-root` com o gatilho focável lá dentro, e o `test:a11y` falhava com `aria-hidden-focus` em 7 stories abertas. Consequência: a página por trás não fica inerte nem com scroll bloqueado; clicar fora fecha na mesma.
+  - O Radix não fecha o menu com Tab (mantém o focus lá dentro). A tarefa exige que Tab feche; `DropdownMenu` guarda o estado aberto (suporta controlado e não controlado) e `DropdownMenuContent` chama `setOpen(false)` em Tab. O focus volta ao gatilho (o Radix impede o Tab nativo).
+  - O Radix só respeita o seu `disabled`; com `asChild` sobre um `Button disabled`, o `pointerdown` e as teclas chegavam ao gatilho no teste e o menu abria. `DropdownMenuTrigger` faz `preventDefault` em `onPointerDown`/`onKeyDown` quando o elemento tem `disabled` ou `aria-disabled="true"`.
+  - O axe unitário corre sobre o `role="menu"` (sobre o `body` dava a regra `region`, ruído de jsdom); o contraste real fica no `test:a11y`.
+  - `sideOffset` tem omissão de 4px (valor literal, passado ao Radix, não é CSS).
+  - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos (como as de Select e Dialog).

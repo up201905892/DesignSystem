@@ -33,7 +33,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Planeado |
 | DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Planeado |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
-| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Planeado |
+| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Pronto para teste |
 | DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Planeado |
 | DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Planeado |
 | DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
@@ -1034,6 +1034,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o menu (clique, Enter, Espaço, Seta para baixo) nem recebe focus, com critério, testes e story DisabledTrigger
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit d1f8738
 
 ### DS-027 · Toast
 
