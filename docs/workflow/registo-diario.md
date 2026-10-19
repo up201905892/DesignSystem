@@ -2,6 +2,20 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-19
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 15 tarefas `Planeado` à espera de desenvolvimento.
+  2. Nota de design do DropdownMenu (DS-026): usa `modal={false}` no Radix, porque o modo modal punha `aria-hidden` no `#storybook-root` e o `test:a11y` falhava. A página atrás continua com scroll e interativa com o menu aberto; clicar fora, Esc e Tab fecham. Diz se queres o modo modal (exige outra solução para o Storybook).
+  3. Sem ação urgente: o Radix Dialog não define `aria-modal`, por isso o `DialogContent` acrescenta-o à mão.
+- **Concluídas:** DS-025 (Dialog), DS-026 (DropdownMenu)
+- **Testadas:** DS-025 (Aprovado), DS-026 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-025, DS-026 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** aprovações de 2026-10-16 (DS-021 a DS-035 e DS-050 passaram a `Planeado`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-032 e DS-033 (Alta), DS-050 (Alta), depois DS-020 e as restantes `Planeado`. Notas: o testador acrescentou `Dialog.css.test.ts` e `DropdownMenu.extra.test.tsx`; o relatório de DS-025 refere um commit de teste separado, mas o teste foi no mesmo commit do relatório (`dbe5ab0`); o planeador não tem `git`, por isso o commit das aprovações (`1479c05`) foi feito pelo orquestrador.
+
 ## 2026-10-16
 
 - **Decisões para o João:**
