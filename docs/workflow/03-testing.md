@@ -672,3 +672,38 @@ Modelo de relatório:
 **Notas (não são falhas):**
 - A story `KeyboardInteraction` usa eventos `KeyboardEvent` sintéticos (como a do Select), não teclas reais do browser; o focus preso é também testado com `userEvent` em jsdom.
 - Movimento reduzido e layout estreito verificados por CSS, não por medição em browser.
+
+### DS-026 · DropdownMenu — Relatório 1 — 2026-10-19
+
+- **Commit testado:** d1f8738 (presente no histórico de `develop`; sem alterações por guardar no início; registo f8853c8 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 22 ficheiros, 438 testes; DropdownMenu: 33 com os 3 meus em `DropdownMenu.extra.test.tsx`) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (18 suites, 114 testes, stories no Chromium com axe, incluindo `DarkTheme` aberto) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports dos sete componentes: lido `DropdownMenu.tsx`; `DropdownMenuTrigger` aceita `asChild` (usado nos testes).
+- [x] Props: `open`/`defaultOpen`/`onOpenChange`; `side='bottom'` e `align='start'` por omissão; `ref`, `className`; item com `onSelect`, `disabled`, `variant` (`data-variant`), `leadingIcon`. Verificado por leitura e testes.
+- [x] ARIA: `aria-haspopup="menu"`, `aria-expanded` (sincronização testada por mim com Esc), `role="menu"`, `role="menuitem"`; portal fora do container; `z-index: var(--ds-z-dropdown)` no CSS e no teste CSS.
+- [x] `data-highlighted` com focus real: os testes de teclado verificam `toHaveFocus` e `data-highlighted`; o CSS usa `[data-highlighted]`, não `:hover`.
+- [x] Seleção: `onSelect` + fecho + focus no gatilho (clique, Enter e Espaço); item desativado com `aria-disabled="true"` sem `onSelect` (clique e Enter, teste meu).
+- [x] Danger: `danger-text`; contraste AA coberto pelo axe do Chromium (`DangerItem`, `OnIconButton`, `DarkTheme`); com ícone (`Trash2Icon` na story `DangerItem`) a distinção não depende só da cor.
+- [x] Gatilho desativado (`Button` e `IconButton`): não abre com clique, Enter, Espaço nem Seta para baixo; `onOpenChange` não chamado; Tab salta o gatilho (Before para After) sem `role="menu"`; story `DisabledTrigger`.
+- [x] G1 (cinco comandos verdes por mim); G2/G3 (dependência `@radix-ui/react-dropdown-menu` nomeada na tarefa, lockfile alterado, commit em inglês com ID, nenhum ficheiro do João alterado); C1 (ficheiros, exports, `@import` em `styles.css`); C2 (`forwardRef`, `displayName`, `className`); C3 (só tokens; teste CSS e Stylelint passam; `sideOffset=4` é número passado ao Radix); C4 (axe unitário aberto, stories no `test:a11y`, realce por `data-highlighted`); C5 (as nove stories exigidas existem, `KeyboardInteraction` com `play`).
+
+**Sobre `modal={false}`:** a especificação não exige comportamento modal (nada sobre inércia da página, bloqueio de scroll ou `aria-hidden` no fundo). Exige abrir/fechar, clicar fora fecha (testado), Esc, Tab fecha, focus no gatilho ao fechar e axe sem violações com o menu aberto. Tudo isto cumpre-se. O modo não modal evita `aria-hidden` sobre o gatilho focável (regra `aria-hidden-focus`) e está documentado no código. Não é falha. Nota de design: a página atrás continua com scroll e interativa enquanto o menu está aberto.
+
+**Testes exigidos:** existem todos (fechado por omissão, abrir, `onSelect`, desativado, controlado, clicar fora, label/separator, gatilho desativado; Enter/Espaço/Seta para baixo com primeiro item focado, setas com salto de desativados, Home/End, letra, Enter/Espaço, Esc, Tab, Tab a saltar gatilho desativado, axe). Usam `userEvent` e `toHaveFocus`; não são triviais.
+
+**Acessibilidade e casos limite:** teclado completo; contraste nos dois temas via axe no Chromium (`DarkTheme` aberto); gatilho e item desativados; modo controlado e não controlado (incluindo Tab em modo controlado); `open={false}` controlado.
+
+**Testes adicionados pelo testador:** `packages/ui/src/DropdownMenu/DropdownMenu.extra.test.tsx` (3 casos: Tab fecha menu controlado com `onOpenChange(false)`; item desativado não chama `onSelect` com clique nem Enter; `aria-expanded` sincronizado). Passam; Prettier e ESLint limpos. Commit 988926b `test(ui): DS-026 add DropdownMenu controlled Tab, disabled item and aria-expanded tests`.
+
+**Notas (não são falhas):**
+- A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos, como as de Select e Dialog; o teclado real está nos testes unitários.
+- Layout real do popper (colisões) não medido em browser.
