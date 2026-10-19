@@ -11,6 +11,15 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  // Workspace packages resolve to their TypeScript source ("source" export condition),
+  // so Storybook does not need a previous build of @ds/icons.
+  viteFinal: (viteConfig) => ({
+    ...viteConfig,
+    resolve: {
+      ...viteConfig.resolve,
+      conditions: ['source', ...(viteConfig.resolve?.conditions ?? [])],
+    },
+  }),
 };
 
 export default config;
