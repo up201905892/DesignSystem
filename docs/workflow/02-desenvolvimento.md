@@ -410,3 +410,23 @@ Modelo de entrada:
   - O axe unitário corre sobre o `role="menu"` (sobre o `body` dava a regra `region`, ruído de jsdom); o contraste real fica no `test:a11y`.
   - `sideOffset` tem omissão de 4px (valor literal, passado ao Radix, não é CSS).
   - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos (como as de Select e Dialog).
+
+### DS-032 · Table: estrutura base
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Table`, `TableCaption`, `TableHead`, `TableBody`, `TableRow`, `TableHeaderCell` e `TableCell` sobre elementos HTML nativos. `Table` renderiza `div.ds-table-container` (`role="region"`, `tabIndex=0`, `overflow: auto`, nome por `aria-label`/`aria-labelledby`, obrigatório no tipo) à volta de `<table class="ds-table">`; o nome também vai para a `<table>`. `size` (`sm`/`md`), `striped` e `stickyHeader` em `data-size`, `data-striped`, `data-sticky-header`. `TableHeaderCell`: `scope` (omissão `col`) e `align`; `TableCell`: `align` e `numeric` (alinha ao fim, `tabular-nums`). `TableCaption`: `visuallyHidden`. `TableRow`: `selected` (`aria-selected` e `data-selected`). Striped, hover e selecionado usam `bg-subtle` / `accent-subtle` com `text-default`.
+- **Ficheiros alterados:** `packages/ui/src/Table/{Table.tsx,Table.css,Table.css.test.ts,Table.test.tsx,Table.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 6d8452a `feat(ui): DS-032 add Table base structure with sticky header and scroll region`
+- **Critérios de aceitação cobertos:** todos, exceto a verificação em browser das setas a fazer scroll (ver notas); testes em `Table.test.tsx`; stories `Default`, `Striped`, `Dense`, `WithCaption`, `NumericColumns`, `StickyHeader`, `HorizontalScroll`, `WithBadges`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Table.test.tsx` (estrutura nativa, região focável e nomeada, `aria-labelledby`, `getByRole('table', { name })`, contagens de `columnheader`/`rowheader`/`row`, `scope`, `align`/`numeric`, `size`/`striped`/`stickyHeader`, `selected`, legenda escondida, `ref`/`className` em cada subparte, `displayName`, Tab foca o contentor, axe com `Badge` numa célula); `Table.css.test.ts` (tokens existentes, `overflow: auto`, `tabular-nums`, sem cores fixas).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 466) · build ✔ · test:a11y ✔ (123). Sem dependências novas.
+- **Notas para o testador:**
+  - O scroll com as setas é comportamento nativo do browser num elemento com scroll e focus; o jsdom não o simula, por isso o teste unitário só confirma `tabIndex=0`, `role="region"` e o nome. Verificar no Storybook (`HorizontalScroll`).
+  - `stickyHeader` só tem efeito visível com altura limitada: o consumidor define `--ds-table-max-height` num ancestral (a story `StickyHeader` mostra como). Sem props extra no contentor.
+  - O nome é aplicado ao contentor e à `<table>`; por isso `getByRole('table', { name })` funciona mesmo sem `TableCaption`.
+  - `aria-selected` só é emitido quando `selected` é definido (`true`/`false`); `data-selected` só com `true`.
+  - O `tabIndex` no contentor tem um `eslint-disable` justificado (`jsx-a11y/no-noninteractive-tabindex`), exigido pela regra axe `scrollable-region-focusable`.
+  - Sugestão para o planeador: `Table` não permite passar `className` nem props ao contentor (`ds-table-container`); se for preciso (ex.: DS-035), criar tarefa.
+  - O contraste de `accent-subtle`/`bg-subtle` com `text-default` passou no `test:a11y` (browser), mas a story `DarkTheme` só confirma o tema escuro se o toggle for aplicado; o testador deve rever.

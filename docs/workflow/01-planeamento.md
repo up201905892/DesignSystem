@@ -39,7 +39,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
 | DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Planeado |
-| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Planeado |
+| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Pronto para teste |
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Planeado |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Planeado |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Planeado |
@@ -1217,6 +1217,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit 6d8452a
 
 ### DS-033 · Table: ordenação
 
