@@ -740,3 +740,29 @@ Modelo de relatório:
 - `TableCaption` com `visuallyHidden` usa `position: absolute` sem ancestral posicionado; sugere-se `position: relative` no contentor para evitar escapar ao scroll. Não bloqueia.
 - Sem `className` nem props para o contentor `ds-table-container` (sugestão do programador para o planeador).
 - `stickyHeader` só tem efeito com `--ds-table-max-height` definida; sem medição em browser.
+
+### DS-032 · Table: estrutura base — Relatório 2 — 2026-10-19
+
+- **Commit testado:** f83f5cf (presente no histórico de `develop`; 4245322 por cima; sem alterações por guardar no início)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 25 ficheiros, 466 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (19 suites, 123 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Todos os critérios do relatório 1 mantêm-se verificados (diff 6d8452a..HEAD só toca em `test-runner.ts` e numa linha de `Table.css`; unitários e axe continuam verdes).
+- [x] Teste exigido das setas com scroll horizontal: `postVisit` em `apps/docs/.storybook/test-runner.ts` para `components-table--horizontal-scroll` confirma `scrollWidth > clientWidth`, foca a região, `scrollLeft` inicial 0, `ArrowRight` real do Playwright leva `scrollLeft > 0`, `ArrowLeft` devolve a 0. Verificado por mutação: com `scrollLeft > 99999` o `test:a11y` falha (1 falhado, 122 passados); com `> 0` passa. Mutação revertida, árvore limpa.
+- [x] Nota do relatório 1 tratada: `position: relative` em `.ds-table-container` (stylelint e teste CSS verdes).
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):**
+- O teste das setas vive no `test-runner.ts`, não na story; só corre em `pnpm test:a11y`.
+- Continua sem `className`/props para o contentor `ds-table-container` (sugestão ao planeador) e `stickyHeader` depende de `--ds-table-max-height`.
