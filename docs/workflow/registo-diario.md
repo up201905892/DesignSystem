@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-19 (segunda execução)
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 13 tarefas `Planeado` à espera de desenvolvimento.
+  2. Sugestão sem ação urgente: o `ci.yml` já não precisa do `pnpm build` antes de `typecheck`, `test` e `lint` (DS-050); podes reverter a reordenação provisória. `.github/` é só teu.
+  3. Opcional: abrir `pnpm storybook` e ver os ícones do Checkbox e do Select (DS-050 foi validada sem browser interativo; `test:a11y` passa).
+  4. Sugestão para o planeador: `Table` não aceita `className` nem props no contentor `ds-table-container` (pode importar para DS-035).
+- **Concluídas:** DS-032 (Table: estrutura base), DS-050 (workspace a partir do código-fonte)
+- **Testadas:** DS-032 (Reprovado no relatório 1, Aprovado no 2), DS-050 (Aprovado ao primeiro)
+- **Desenvolvidas:** DS-032 (2 iterações), DS-050
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-033 (Alta), depois DS-020 e as restantes `Planeado`. Nota: o teste das setas da Table corre no `postVisit` de `apps/docs/.storybook/test-runner.ts` (só em `pnpm test:a11y`).
+
 ## 2026-10-19
 
 - **Decisões para o João:**
