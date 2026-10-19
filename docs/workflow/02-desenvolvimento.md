@@ -370,3 +370,23 @@ Modelo de entrada:
   - Dentro de um `Field`, o `FieldLabel` usa `htmlFor`, que não nomeia um `div`; o nome do grupo vem de `aria-labelledby` (ver story `WithField`, que usa um `<span id>`). Sugestão para o planeador: tarefa para um `FieldLabel` com `id` ou um `Fieldset`/`legend` (já fora de âmbito).
   - Como no `Checkbox`, o `<label>` exterior de cada `Radio` não aceita `className`; o texto desativado usa `text-muted` (contraste AA no axe) e o estilo desativado usa `:has(:disabled)`.
   - `Radio` fora de um `RadioGroup` falha no Radix (contexto em falta).
+
+### DS-025 · Dialog (Modal)
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogBody`, `DialogFooter` e `DialogClose` sobre `@radix-ui/react-dialog`. `DialogContent` (classe `ds-dialog`) vem num portal com overlay (`ds-dialog__overlay`, `color-overlay`), ambos com `z-index-modal`; `size` (`sm`/`md` por omissão/`lg`) em `data-size`; `closeLabel` (omissão `"Close"`), `hideClose` e `closeOnOverlayClick` (via `onPointerDownOutside`). O botão de fechar é um `IconButton` ghost com `XIcon`. O corpo faz scroll (`overflow-y: auto`) com cabeçalho e rodapé fixos; largura `min(<tamanho>, 100vw - space-8)`. Animações `fade`/`slide` de entrada e saída, anuladas por `prefers-reduced-motion` em `styles/motion.css`.
+- **Ficheiros alterados:** `packages/ui/src/Dialog/{Dialog.tsx,Dialog.css,Dialog.test.tsx,Dialog.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** e1c2909 `feat(ui): DS-025 add Dialog with focus trap, sizes and overlay`
+- **Critérios de aceitação cobertos:** todos; testes em `Dialog.test.tsx`; stories `Default`, `Sizes`, `WithForm`, `LongContent`, `Confirmation`, `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction` (play: focus preso com Tab/Shift+Tab, Esc e regresso do focus ao gatilho), `DarkTheme` (aberto).
+- **Testes escritos pelo programador:** `Dialog.test.tsx` (fechado por omissão, abrir, `defaultOpen`, controlado, `onOpenChange(false)` pelo botão, `DialogClose` e overlay, `closeOnOverlayClick={false}`, `hideClose`, `closeLabel`, `size`, ref/className/displayName, nome e descrição, ausência de `aria-describedby` e de aviso sem descrição, portal, conteúdo de fundo `aria-hidden`, scroll bloqueado, focus ao abrir, focus preso, Esc, Enter/Espaço no gatilho, gatilho `Button`/`IconButton` desativado (não abre, sem `onOpenChange`, Tab salta), axe com o diálogo aberto).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 393) · build ✔ · test:a11y ✔ (105) · `pnpm install --frozen-lockfile` ✔.
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-dialog` (nomeada na tarefa).
+  - O Radix Dialog não põe `aria-modal`; é acrescentado em `DialogContent`.
+  - Sem `DialogDescription` o Radix avisa na consola; para evitar ruído, `Dialog` regista a presença da descrição (contexto) e sem ela `DialogContent` passa `aria-describedby={undefined}`. Com descrição o Radix liga o id normalmente.
+  - Largura em tokens: `sm` = `space-16 * 6` (24rem), `md` = `space-16 * 8` (32rem), `lg` = `space-16 * 12` (48rem); margem em ecrãs estreitos = `space-8` no total.
+  - O axe em jsdom não mede `color-contrast`; a verificação real é o `test:a11y` (browser). Em `LongContent` o `DialogBody` tem `tabIndex={0}` para o scroll por teclado (regra `scrollable-region-focusable`).
+  - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos (como a do Select); o Radix FocusScope trata o Tab nos extremos.
+  - Com `hideClose`, o diálogo continua a fechar com Esc e com `DialogClose`.
