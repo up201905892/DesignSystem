@@ -707,3 +707,36 @@ Modelo de relatório:
 **Notas (não são falhas):**
 - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos, como as de Select e Dialog; o teclado real está nos testes unitários.
 - Layout real do popper (colisões) não medido em browser.
+
+### DS-032 · Table: estrutura base — Relatório 1 — 2026-10-19
+
+- **Commit testado:** 6d8452a (presente no histórico de `develop`; a761a32 por cima; sem alterações por guardar no início)
+- **Resultado:** Reprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 25 ficheiros, 466 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (19 suites, 123 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports e elementos nativos (`table`, `caption`, `thead`, `tbody`, `tr`, `th`, `td`) — lido `Table.tsx`, `index.ts` e `packages/ui/src/index.ts`; teste de estrutura com `:scope >`.
+- [x] `Table`: `size` (omissão `md`), `striped`, `stickyHeader` em `data-*`; contentor `ds-table-container` com `overflow: auto`, `role="region"`, `tabIndex=0`, nome obrigatório no tipo (união `aria-label` | `aria-labelledby`) — lido o CSS e o código; testes de região e `aria-labelledby`.
+- [x] `TableHeaderCell` (`scope` col/row, `align`) e `TableCell` (`align`, `numeric` com `tabular-nums` e alinhamento ao fim) — código, CSS e testes.
+- [x] `TableCaption visuallyHidden` — `data-visually-hidden` e CSS de ocultação.
+- [x] `TableRow selected` — `aria-selected` e `data-selected` testados.
+- [x] Contraste de striped/hover/selecionado — `text-default` sobre `bg-subtle`/`accent-subtle` (tokens: claro #0f172a sobre #f1f5f9/#eff6ff; escuro #f8fafc sobre #334155/#1e3a8a, bem acima de 4.5:1); axe passa nas stories.
+- [x] G1 a G3 e C1 a C5 — cinco comandos verdes; commit em inglês com ID; só tokens no CSS (teste CSS e Stylelint); `forwardRef`, `displayName`, `className`; as nove stories existem.
+- [ ] Teste exigido de acessibilidade: "as setas esquerda/direita fazem scroll horizontal quando a tabela é mais larga do que o contentor" — FALHA: não existe nenhum teste (nem unitário, nem `play` na story `HorizontalScroll`, que não tem `play`). Só se testa que Tab foca o contentor. O programador reconhece a lacuna nas notas.
+
+**Falhas:**
+1. Falta o teste exigido do scroll horizontal com as setas (esperado: teste em browser real, por exemplo `play` na story `HorizontalScroll` ou teste Playwright, que foca o contentor, prime ArrowRight e verifica `scrollLeft > 0`, e ArrowLeft que o reduz; obtido: nenhum). Ficheiro provável: `packages/ui/src/Table/Table.stories.tsx` (story `HorizontalScroll`). Passos: abrir `HorizontalScroll`, ver que não há `play` nem teste a cobrir o scroll por teclado.
+
+**Testes adicionados pelo testador:** nenhum. Tentei validar o scroll com Playwright num script temporário, mas o ambiente não permitiu criá-lo; o comportamento não ficou verificado por mim.
+
+**Notas (não são falhas):**
+- `TableCaption` com `visuallyHidden` usa `position: absolute` sem ancestral posicionado; sugere-se `position: relative` no contentor para evitar escapar ao scroll. Não bloqueia.
+- Sem `className` nem props para o contentor `ds-table-container` (sugestão do programador para o planeador).
+- `stickyHeader` só tem efeito com `--ds-table-max-height` definida; sem medição em browser.
