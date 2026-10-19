@@ -39,6 +39,24 @@ export type {
   DialogFooterProps,
   DialogCloseProps,
 } from './Dialog';
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuGroup,
+  DropdownMenuSeparator,
+} from './DropdownMenu';
+export type {
+  DropdownMenuProps,
+  DropdownMenuTriggerProps,
+  DropdownMenuContentProps,
+  DropdownMenuItemProps,
+  DropdownMenuLabelProps,
+  DropdownMenuGroupProps,
+  DropdownMenuSeparatorProps,
+} from './DropdownMenu';
 export { Select, SelectItem, SelectGroup, SelectSeparator } from './Select';
 export type {
   SelectProps,
