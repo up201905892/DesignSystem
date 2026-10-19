@@ -187,6 +187,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Variants`, `Solid`, `Sizes`, `LongText` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: o contraste só é medido em browser pelo `test:a11y` e por cálculo em `Badge.css.test.ts`; com `asChild` sobre `<a>` não há estilo de hover.
 
+### DS-025 · Dialog (Modal) — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-19), commit e1c2909 (mais dbe5ab0, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Dialog` e componentes associados sobre `@radix-ui/react-dialog`, em portal com overlay e `z-index-modal`, tamanhos `sm`/`md`/`lg`, focus preso e devolvido ao gatilho, scroll interno no corpo, botão de fechar configurável, fecho por overlay opcional, gatilho desativado que não abre, modo controlado e não controlado, `prefers-reduced-motion`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Sizes`, `WithForm`, `LongContent`, `Confirmation`, `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: `KeyboardInteraction` usa eventos sintéticos (focus preso também testado com `userEvent` em jsdom); movimento reduzido e layout estreito verificados por CSS, não medidos em browser.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
