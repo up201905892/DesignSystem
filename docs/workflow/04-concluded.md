@@ -214,6 +214,16 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Striped`, `Dense`, `WithCaption`, `NumericColumns`, `StickyHeader`, `HorizontalScroll`, `WithBadges` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** o teste das setas vive em `apps/docs/.storybook/test-runner.ts` (só corre em `pnpm test:a11y`); sem `className`/props para o contentor `ds-table-container` (sugestão ao planeador, relevante para DS-035); `stickyHeader` depende de `--ds-table-max-height` definida pelo consumidor.
 
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-19), commit fd42d21 (mais 82b593f, só de registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `typecheck`, `test` e `lint` passam num estado sem `dist/`. Condição de exportação `source` em `packages/icons/package.json`, ativada por `customConditions` no `tsconfig.base.json`, `resolve.conditions` no Vitest do `@ds/ui` e `viteFinal` no Storybook; `@ds/tokens` mantém a geração automática (`globalSetup` do Vitest no `ui`). Os `exports` para `dist/` ficaram iguais e os `.d.ts` do `ui` não contêm caminhos de código-fonte.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; pacotes privados em 0.0.0, sem pacote publicado alterado)
+- **Documentação:** não aplicável a componentes (sem alterações a componentes nem stories); inventário das dependências `@ds/*` e escolha do mecanismo registados em `02-desenvolvimento.md`. Sem `TODO` na tarefa.
+- **Avaliação do critério visual:** o critério "`pnpm storybook` arranca e as stories do Checkbox e do Select mostram os ícones" não teve verificação visual manual (sem browser no ambiente). Conclui que não impede o fecho: o relatório marca todos os critérios como verificados, `pnpm build:docs` passa sem `dist/` e o bundle contém o path do `CheckIcon`, e `pnpm test:a11y` (123 testes, em browser headless) renderiza as stories do Checkbox e do Select sem `dist/` de icons. A tarefa não altera componentes nem CSS, por isso o risco residual é só de aparência. Fica como verificação opcional para o João: abrir `pnpm storybook` e ver os ícones do Checkbox e do Select.
+- **Lições:** o `typecheck` do `ui` passa a verificar também o código-fonte de `icons`; o `globalSetup` constrói os tokens em cada `pnpm test` do `ui`; a reordenação provisória do `ci.yml` pode ser revertida pelo João, já que o CI não precisa de `build` antes de `typecheck`/`test`/`lint`. Fase Fundações: marco já registado a 2026-10-13, DS-050 foi acrescentada depois.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

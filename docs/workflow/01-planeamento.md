@@ -57,7 +57,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
-| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Aprovado |
+| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
 
 ## Decisões aplicadas
 
@@ -1810,3 +1810,4 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit fd42d21
 - 2026-10-19 · testador · Pronto para teste → Em teste · início do teste (commits fd42d21, 82b593f)
 - 2026-10-19 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-19 · finalizador · Aprovado → Concluído · changeset não aplicável (infraestrutura, pacotes privados); verificação visual dos ícones em browser não feita, coberta por build:docs e test:a11y (ver 04-concluded.md)
