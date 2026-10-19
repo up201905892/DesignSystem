@@ -766,3 +766,44 @@ Modelo de relatório:
 **Notas (não são falhas):**
 - O teste das setas vive no `test-runner.ts`, não na story; só corre em `pnpm test:a11y`.
 - Continua sem `className`/props para o contentor `ds-table-container` (sugestão ao planeador) e `stickyHeader` depende de `--ds-table-max-height`.
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte — Relatório 1 — 2026-10-19
+
+- **Commit testado:** fd42d21 (código) e 82b593f (registo), ambos no histórico de `develop`; sem alterações por guardar no início
+- **Resultado:** Aprovado
+
+Nota de método: o ambiente não permitiu criar um clone novo fora do repositório. Equivalente usado: `rm -rf packages/tokens/dist packages/icons/dist packages/ui/dist apps/docs/storybook-static` antes de cada comando (node_modules já instalado).
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Tipos (sem dist/) | `pnpm typecheck` | ✔ |
+| Unitários (sem dist/) | `pnpm test` (ui: 25 ficheiros, 466 testes) | ✔ |
+| Lint (sem dist/) | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Build docs (sem dist/ nem storybook-static) | `pnpm build:docs` | ✔ |
+| Acessibilidade (sem dist/ de icons/ui) | `pnpm test:a11y` (19 suites, 123 testes) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Inventário: tabela em `02-desenvolvimento.md` cobre ui→icons, ui→tokens (TS/CSS), docs→tokens, docs→ui (explicado: sem importação por nome) e icons indireto nas stories, com tipo e resolução.
+- [x] Sem `dist/`: typecheck, test e lint com código 0, cada um isolado, após remover `dist/` e `storybook-static/`.
+- [x] `pnpm build:docs` com código 0 sem `dist/`; o bundle contém o `CheckIcon` (path do ícone) e as stories Checkbox/Select passam no axe sem `dist/` de icons. Storybook interativo não aberto (sem browser): verificação visual manual não feita por mim, coberta indiretamente por build e test:a11y.
+- [x] `pnpm build` com código 0; ficheiros em `dist/` iguais aos listados pelo programador (tokens 5, icons 6, ui 7).
+- [x] `grep -nE "icons/src|packages/icons|src/index|IconBase|@ds/icons" packages/ui/dist/*.d.ts *.d.cts` sem resultados. `dist/index.js` e `index.cjs` importam `@ds/icons` pelo nome.
+- [x] `main`, `module`, `types`, `import`, `require`, `types` de `exports` mantêm-se em `dist/`; única entrada nova: `"source"` em `packages/icons/package.json`. `require.resolve('@ds/icons')` e `import.meta.resolve` (a partir de `packages/ui`, após build) dão `packages/icons/dist/index.{cjs,js}`. Variante a partir de `apps/docs` não aplicável (o docs não declara estes pacotes), como o programador justificou.
+- [x] `pnpm test:a11y` passa (123).
+- [x] Verificação de regressão registada em `02-desenvolvimento.md` com comandos e códigos.
+- [x] `.github/` intocado (`git diff --stat fd42d21~1 HEAD` só toca em configs, `packages/ui/test/global-setup.ts` e docs de workflow).
+- [x] G1 a G3: sem dependências novas (nenhum `package.json` de dependências nem lockfile alterado).
+
+**Testes exigidos:**
+- Sem testes novos exigidos; o `pnpm test` sem `dist/` prova a resolução (globalSetup gera os tokens).
+- Prova negativa (temporária, revertida, não commitada): `size?: number | string` para `size?: boolean` em `packages/icons/src/IconBase.tsx`; `pnpm --filter @ds/ui typecheck` falhou com TS2322 a apontar para `../icons/src/IconBase.tsx`. Revertido, `git status` só mostra os registos de workflow.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):**
+- O `globalSetup` do Vitest corre o build dos tokens em cada `pnpm test` do ui (custo pequeno); `@ds/tokens` segue a solução (a) aceite.
+- O typecheck do `ui` passa a verificar também o código-fonte de `icons` (erros de icons aparecem em `ui`).
+- O João pode reverter a reordenação provisória do `ci.yml`, como o programador sugere.
