@@ -39,7 +39,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
 | DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Planeado |
-| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Aprovado |
+| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Planeado |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Planeado |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Planeado |
@@ -1225,6 +1225,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit f83f5cf
 - 2026-10-19 · testador · Pronto para teste → Em teste · início do reteste (iteração 2)
 - 2026-10-19 · testador · Em teste → Aprovado · relatório 2: todas as verificações verdes, scroll por setas coberto no test-runner
+- 2026-10-19 · finalizador · Aprovado → Concluído · relatório 2 aprovado; sem changeset (pacote privado); documentação e stories verificadas
 
 ### DS-033 · Table: ordenação
 

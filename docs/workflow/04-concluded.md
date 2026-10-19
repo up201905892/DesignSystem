@@ -205,6 +205,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `WithIcons`, `WithGroupsAndLabels`, `DisabledItem`, `DangerItem`, `OnIconButton`, `DisabledTrigger`, `KeyboardInteraction` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: menu não modal (`modal={false}`) para evitar `aria-hidden-focus`, logo a página atrás continua interativa; `KeyboardInteraction` usa eventos sintéticos; colisões do popper não medidas em browser.
 
+### DS-032 · Table: estrutura base — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 2 (2026-10-19), commit f83f5cf
+- **Iterações de desenvolvimento:** 2
+- **Entregue:** `Table`, `TableCaption`, `TableHead`, `TableBody`, `TableRow`, `TableHeaderCell` e `TableCell` sobre elementos HTML nativos, numa região com scroll focável e nomeada, com `size`, `striped`, `stickyHeader`, `align`, `numeric`, legenda escondida e linha selecionada, contraste AA nos dois temas e scroll horizontal por setas verificado em browser real.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Striped`, `Dense`, `WithCaption`, `NumericColumns`, `StickyHeader`, `HorizontalScroll`, `WithBadges` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** o teste das setas vive em `apps/docs/.storybook/test-runner.ts` (só corre em `pnpm test:a11y`); sem `className`/props para o contentor `ds-table-container` (sugestão ao planeador, relevante para DS-035); `stickyHeader` depende de `--ds-table-max-height` definida pelo consumidor.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
