@@ -28,21 +28,21 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Concluído |
 | DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
-| DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Proposta |
-| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Proposta |
-| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Proposta |
-| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Proposta |
-| DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Proposta |
-| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Proposta |
-| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Proposta |
-| DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Proposta |
-| DS-029 | Card | Layout e dados | Média | DS-010 | Proposta |
-| DS-030 | Tabs | Layout e dados | Média | DS-009 | Proposta |
-| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Proposta |
-| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Proposta |
-| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Proposta |
-| DS-034 | Pagination | Layout e dados | Média | DS-011 | Proposta |
-| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Proposta |
+| DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Planeado |
+| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Planeado |
+| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Planeado |
+| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Planeado |
+| DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Planeado |
+| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Planeado |
+| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Planeado |
+| DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Planeado |
+| DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
+| DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
+| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Planeado |
+| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Planeado |
+| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Planeado |
+| DS-034 | Pagination | Layout e dados | Média | DS-011 | Planeado |
+| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Planeado |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Proposta |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035 | Proposta |
@@ -57,7 +57,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
-| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Proposta |
+| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Planeado |
 
 ## Decisões aplicadas
 
@@ -68,6 +68,8 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | 2026-10-12 |
 | 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | 2026-10-12 |
 | 2026-10-12 | Responder | DS-003 | 2026-10-12 |
+| 2026-10-16 | Aprovar | DS-021 a DS-035 | 2026-10-19 |
+| 2026-10-16 | Aprovar | DS-050 | 2026-10-19 |
 
 ## Decisões técnicas
 
@@ -877,6 +879,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loading focável com aria-disabled documentado como diferença intencional face a disabled; clique bloqueado na captura; asChild + loading; posição do Spinner via Slottable; loadingLabel por aria-describedby em vez de role="status"; nomes de exemplo em inglês
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loadingLabel por aria-describedby, bloqueio da submissão e largura sem leadingIcon confirmados; novo critério: a documentação diz que o resultado da ação é anunciado pelo Toast ou por outro feedback do consumidor, não pelo botão
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-022 · Alert
 
@@ -904,6 +907,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-023 · Tooltip
 
@@ -931,6 +935,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-024 · Popover
 
@@ -960,6 +965,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o popover nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-025 · Dialog (Modal)
 
@@ -991,6 +997,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o diálogo nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-026 · DropdownMenu
 
@@ -1021,6 +1028,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o menu (clique, Enter, Espaço, Seta para baixo) nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-027 · Toast
 
@@ -1053,6 +1061,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): story AfterLoading com o padrão "botão em loading → Toast com o resultado"; DS-021 acrescentada às dependências
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-028 · Stack e Grid
 
@@ -1081,6 +1090,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-029 · Card
 
@@ -1108,6 +1118,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-030 · Tabs
 
@@ -1137,6 +1148,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-031 · Accordion
 
@@ -1165,6 +1177,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-032 · Table: estrutura base
 
@@ -1193,6 +1206,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-033 · Table: ordenação
 
@@ -1222,6 +1236,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-034 · Pagination
 
@@ -1253,6 +1268,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): botões anterior/seguinte focáveis com aria-disabled nos limites documentados como exceção intencional face ao disabled do Button, com teste e story de teclado
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-035 · DataTable: Table com ordenação e paginação integradas
 
@@ -1281,6 +1297,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
 
@@ -1769,3 +1786,4 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
