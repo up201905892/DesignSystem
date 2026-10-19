@@ -17,6 +17,28 @@ export { Switch } from './Switch';
 export type { SwitchProps } from './Switch';
 export { Badge } from './Badge';
 export type { BadgeProps } from './Badge';
+export {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogBody,
+  DialogFooter,
+  DialogClose,
+} from './Dialog';
+export type {
+  DialogProps,
+  DialogTriggerProps,
+  DialogContentProps,
+  DialogHeaderProps,
+  DialogTitleProps,
+  DialogDescriptionProps,
+  DialogBodyProps,
+  DialogFooterProps,
+  DialogCloseProps,
+} from './Dialog';
 export { Select, SelectItem, SelectGroup, SelectSeparator } from './Select';
 export type {
   SelectProps,
