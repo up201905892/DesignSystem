@@ -443,3 +443,42 @@ Modelo de entrada:
 - **Testes escritos pelo programador:** verificação no test runner (Chromium). Confirmei que é efetiva: com a condição `scrollLeft > 99999` a suite da Table falha; com `> 0` passa.
 - **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 466) · build ✔ · test:a11y ✔ (123).
 - **Notas para o testador:** o teste vive no `test-runner.ts` (corre depois da story, junto do axe), não na story. Afeta só a story `HorizontalScroll`.
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio)
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** mecanismo escolhido: condição de exportação própria `"source"` (a primeira entrada de `exports["."]` em `packages/icons/package.json`, a apontar para `./src/index.ts`), ativada com `customConditions: ["source"]` no `tsconfig.base.json` (TypeScript), `resolve.conditions: ['source']` no Vitest do `@ds/ui` e `viteFinal` com `resolve.conditions` no Storybook. Motivo: uma só fonte de verdade (o `package.json` do pacote), sem duplicar caminhos em `paths`/`alias` em cada configuração; `main`, `module`, `types`, `import`, `require` continuam a apontar para `dist/`, e o `tsup` e os consumidores normais não usam a condição `source`. Para `@ds/tokens` (solução a: geração automática como passo prévio): o `src/index.ts` está vazio e o CSS/objeto só existem depois do Style Dictionary; `apps/docs` (`storybook`, `build-storybook`, `typecheck`, `test:a11y`) e `@ds/tokens test` já corriam o build dos tokens; faltava o `@ds/ui`, cujos testes de CSS leem `tokens/dist/*.css` e cujo `styles.test.ts` resolve `@ds/tokens/*.css` para `dist/`. Acrescentei `packages/ui/test/global-setup.ts` (`globalSetup` do Vitest), que corre `node scripts/build.mjs` em `packages/tokens` antes dos testes (também em `test:watch`).
+- **Inventário das dependências `@ds/*`:**
+
+  | Origem | Destino | Tipo | Resolução em desenvolvimento |
+  | --- | --- | --- | --- |
+  | `ui` (`Checkbox`, `Select`, `Dialog`, `DropdownMenu.stories`) | `@ds/icons` | TS/JS | condição `source` → `icons/src/index.ts` (tsc, Vitest, Storybook/Vite) |
+  | `ui` (`src/styles.css`, `scripts/build-css.mjs`) | `@ds/tokens/tokens.css`, `@ds/tokens/themes.css` | CSS | `dist/` gerado pelo Style Dictionary; `pnpm --filter @ds/tokens build` automático (globalSetup do Vitest do `ui`; script do `docs`) |
+  | `ui` (`*.css.test.ts`) | `tokens/dist/*.css` (caminho relativo) | CSS (leitura de ficheiro) | idem, gerado pelo globalSetup |
+  | `docs` (`Scales.stories.tsx`, `Colors.stories.tsx`) | `@ds/tokens` (`tokens`, `themes`) | TS/JS | `dist/` gerado; os scripts `storybook`, `build-storybook`, `typecheck` e `test:a11y` do `docs` correm o build dos tokens antes |
+  | `docs` (`.storybook/preview.tsx`) | `packages/ui/src/styles.css` (caminho relativo), que importa `@ds/tokens/*.css` | CSS | `dist/` dos tokens (acima) |
+  | `docs` (stories do `ui`, em `packages/*/src/**/*.stories.tsx`) | `@ds/icons` (indireto, sem dependência declarada no `docs`) | TS/JS | condição `source` no `viteFinal` |
+  | `docs` | `@ds/ui` | n/a | não há importação por nome (as stories usam caminhos relativos) e o `@ds/ui` não tem `main`/`exports`; nada a resolver |
+
+- **Ficheiros alterados:** `tsconfig.base.json`, `packages/icons/package.json`, `packages/ui/vitest.config.ts`, `packages/ui/test/global-setup.ts` (novo), `apps/docs/.storybook/main.ts`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** fd42d21 `feat(ui): DS-050 resolve workspace packages from source in development`
+- **Critérios de aceitação cobertos:** todos (verificação abaixo). Sem testes novos: o próprio `pnpm test` num estado sem `dist/` é a prova (os testes do `ui` dependem de `@ds/icons` e de `tokens/dist`).
+- **Testes escritos pelo programador:** nenhum novo (ver acima); `test/global-setup.ts` é infraestrutura de testes.
+- **Verificação de regressão (sem clone novo; `dist/` e `storybook-static/` removidos com `rm -rf packages/tokens/dist packages/icons/dist packages/ui/dist apps/docs/storybook-static`, depois `pnpm install --frozen-lockfile`):**
+  - `pnpm typecheck` → 0 (isolado, sem `dist/`)
+  - `rm -rf packages/*/dist` + `pnpm test` → 0 (tokens 89, icons 10, ui 466)
+  - `rm -rf packages/*/dist` + `pnpm lint` → 0
+  - `pnpm build` → 0; ficheiros em `dist/` iguais aos de antes: tokens (`index.cjs`, `index.d.ts`, `index.js`, `themes.css`, `tokens.css`), icons (`index.{cjs,cjs.map,d.cts,d.ts,js,js.map}`), ui (`index.{cjs,cjs.map,d.cts,d.ts,js,js.map}`, `styles.css`)
+  - `grep -nE "icons/src|packages/icons|src/index|IconBase|@ds/icons" packages/ui/dist/*.d.ts packages/ui/dist/*.d.cts` → sem resultados (o `.d.ts` do `ui` não referencia o `@ds/icons` nem copia declarações)
+  - `cd packages/ui && node -e "console.log(require.resolve('@ds/icons'))"` → `packages/icons/dist/index.cjs`; `import.meta.resolve('@ds/icons')` (ESM) → `packages/icons/dist/index.js`
+  - sem `dist/` nem `storybook-static/`: `pnpm build:docs` → 0
+  - sem `dist/` nem `storybook-static/`: `pnpm test:a11y` → 0 (123 testes)
+  - prova negativa (temporária, revertida, não commitada): em `packages/icons/src/IconBase.tsx`, `size?: number | string` passou a `size?: boolean`; `pnpm --filter @ds/ui typecheck` falhou (TS2322 em `../icons/src/IconBase.tsx`), logo os tipos vêm do código-fonte.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ · build:docs ✔. Sem dependências novas; `.github/` intocado.
+- **Notas para o testador:**
+  - O critério "`require('@ds/ui')` a partir de `apps/docs`" não é aplicável: o `docs` não declara `@ds/ui` nem `@ds/icons` e o `@ds/ui` não tem `main`/`exports` (metadados na DS-036). Verifiquei a resolução de `@ds/icons` a partir de `packages/ui`.
+  - `pnpm storybook` interativo não foi aberto (ambiente sem browser); as stories do Checkbox e do Select correm no `test:a11y` e o `build:docs` bundla `@ds/icons` a partir do código-fonte sem `dist/`. A verificação visual dos ícones fica ao testador.
+  - O `typecheck` de `ui` agora também verifica o código-fonte de `icons` com as opções do `ui` (iguais, vêm do `tsconfig.base.json`).
+  - Pedido para o João (não feito, ficheiro dele): nenhum obrigatório; o CI já não precisa de `build` antes de `typecheck`/`test`/`lint`, por isso a reordenação provisória do `ci.yml` pode ser revertida se quiser.
