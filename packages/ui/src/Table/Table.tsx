@@ -5,6 +5,7 @@ import {
   type TdHTMLAttributes,
   type ThHTMLAttributes,
 } from 'react';
+import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from '@ds/icons';
 import { cx } from '../utils/cx';
 
 type Align = 'start' | 'center' | 'end';
@@ -155,19 +156,55 @@ export interface TableHeaderCellProps extends Omit<
   scope?: 'col' | 'row';
   /** Horizontal alignment of the content. */
   align?: Align;
+  /** Make the column sortable: the content goes inside a button and the cell gets `aria-sort`. */
+  sortable?: boolean;
+  /** Current sort direction of the column. Only used when `sortable`. */
+  sortDirection?: 'asc' | 'desc' | 'none';
+  /** Called when the sort button is activated. */
+  onSort?: () => void;
 }
 
-/** A header cell (`<th>`). */
+const ariaSort = { asc: 'ascending', desc: 'descending', none: 'none' } as const;
+const sortIcon = { asc: ArrowUpIcon, desc: ArrowDownIcon, none: ArrowUpDownIcon } as const;
+
+/**
+ * A header cell (`<th>`). When `sortable`, the state is announced by `aria-sort` and
+ * the icon is decorative.
+ */
 export const TableHeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellProps>(
-  function TableHeaderCell({ scope = 'col', align = 'start', className, ...props }, ref) {
+  function TableHeaderCell(
+    {
+      scope = 'col',
+      align = 'start',
+      sortable = false,
+      sortDirection = 'none',
+      onSort,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) {
+    const SortIcon = sortIcon[sortDirection];
     return (
       <th
         ref={ref}
         className={cx('ds-table__header-cell', className)}
         scope={scope}
         data-align={align}
+        data-sortable={sortable ? 'true' : undefined}
+        aria-sort={sortable ? ariaSort[sortDirection] : undefined}
         {...props}
-      />
+      >
+        {sortable ? (
+          <button type="button" className="ds-table__sort-button" onClick={onSort}>
+            {children}
+            <SortIcon className="ds-table__sort-icon" />
+          </button>
+        ) : (
+          children
+        )}
+      </th>
     );
   },
 );

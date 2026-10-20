@@ -65,8 +65,15 @@ export {
   TableRow,
   TableHeaderCell,
   TableCell,
+  useTableSort,
 } from './Table';
 export type {
+  SortDirection,
+  TableSortState,
+  TableSortColumn,
+  TableSortProps,
+  UseTableSortOptions,
+  UseTableSortResult,
   TableProps,
   TableCaptionProps,
   TableHeadProps,

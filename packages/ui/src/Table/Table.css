@@ -100,3 +100,37 @@
 .ds-table__body .ds-table__row[data-selected='true'] {
   background-color: var(--ds-color-accent-subtle);
 }
+
+.ds-table__sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ds-table__header-cell[data-align='end'] .ds-table__sort-button {
+  flex-direction: row-reverse;
+}
+
+.ds-table__sort-button:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  /* Drawn inside the cell, so the scroll container does not clip the ring. */
+  outline-offset: calc(var(--ds-space-1) * -1);
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-table__sort-icon {
+  flex: none;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-table__header-cell[aria-sort='ascending'] .ds-table__sort-icon,
+.ds-table__header-cell[aria-sort='descending'] .ds-table__sort-icon {
+  color: var(--ds-color-text-default);
+}
