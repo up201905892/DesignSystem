@@ -233,6 +233,15 @@ Modelo de entrada:
 - **Documentação:** props em JSDoc (autodocs) e notas de acessibilidade; stories `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`) e `DarkTheme` com tabela ordenável, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** o `play` de `SortKeyboardInteraction` usa `focus()` + `click()` (Enter e Espaço reais só nos testes unitários); um `aria-sort` passado pelo utilizador sobrepõe-se ao calculado; sugestão ao planeador: tarefa para adicionar `@storybook/test` ou alargar o `test-runner.ts` para `play` com teclado real. Fase Layout e dados ainda incompleta (DS-028 a DS-031, DS-034 e DS-035 por concluir).
 
+### DS-020 · Spinner e Skeleton — concluída a 2026-10-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-20), commit 5374d91 (código) e e34014a (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Spinner` (`size` sm/md/lg, `label` com omissão "Loading", `role="status"` com nome acessível, SVG decorativo com `currentColor`) e `Skeleton` (`variant` text/rect/circle, `width`/`height` por custom properties, `lines`, `aria-hidden`), cada um na sua pasta; animações param com `prefers-reduced-motion: reduce`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc; stories `Spinner/Default`, `Sizes`, `CustomLabel`, `DarkTheme` e `Skeleton/Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** reduced motion verificado por leitura e testes do CSS, não por emulação em browser; `aria-labelledby` do Spinner ganha a um `aria-label` do consumidor, a menos que também seja sobreposto. Fase Overlays e feedback ainda incompleta (DS-021 a DS-024, DS-027 e outras por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
