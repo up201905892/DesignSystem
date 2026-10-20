@@ -40,7 +40,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
 | DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Planeado |
 | DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
-| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Pronto para teste |
+| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Aprovado |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Planeado |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Planeado |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
@@ -1258,6 +1258,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 - 2026-10-20 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-10-20 · programador · Em desenvolvimento → Pronto para teste · commit 754b37b
+- 2026-10-20 · testador · Pronto para teste → Em teste · início do teste (relatório 1)
+- 2026-10-20 · testador · Em teste → Aprovado · relatório 1: todas as verificações verdes, critérios verificados, zero falhas
 
 ### DS-034 · Pagination
 

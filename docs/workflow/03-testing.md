@@ -807,3 +807,36 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - O `globalSetup` do Vitest corre o build dos tokens em cada `pnpm test` do ui (custo pequeno); `@ds/tokens` segue a solução (a) aceite.
 - O typecheck do `ui` passa a verificar também o código-fonte de `icons` (erros de icons aparecem em `ui`).
 - O João pode reverter a reordenação provisória do `ci.yml`, como o programador sugere.
+
+### DS-033 · Table: ordenação — Relatório 1 — 2026-10-20
+
+- **Commit testado:** 754b37b (código) e 1db3668 (registo), no histórico de `develop`; sem alterações por guardar no início. Teste acrescentado em 36069f2.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 27 ficheiros, 488 testes; 493 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (19 suites, 128 testes, axe no Chromium, inclui `DarkTheme`) + testes de teclado | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props `sortable`/`sortDirection`/`onSort`, `<button>` dentro do `<th>`, `aria-sort` — lido o diff de `Table.tsx`; `TableSort.test.tsx` verifica ascending/descending/none.
+- [x] Ícones ArrowUp/ArrowDown/ArrowUpDown, decorativos — `aria-hidden="true"` testado; teste do testador confirma que os três ícones são distintos; estado comunicado por `aria-sort`.
+- [x] Hook `useTableSort` exportado de `packages/ui` (`src/index.ts`, tipos incluídos), devolve `{ sortedData, sort, getSortProps }`, controlado e não controlado — lido o código e `useTableSort.test.tsx`; build gera `.d.ts` com o hook.
+- [x] Ciclo asc → desc → nenhum e uma coluna de cada vez — testes do hook e teste de DOM com o hook.
+- [x] Ordenação por omissão (números, strings com `Intl.Collator` numeric/base, datas, nulos no fim nas duas direções) e `compare` próprio — testes do hook; código lido.
+- [x] Estável (também em desc) e sem mutar `data` — testes do hook; código ordena uma cópia.
+- [x] G1 a G3, C1 a C5 — sem dependências novas, sem cores/espaços à mão no CSS (só tokens), testes e stories na pasta `Table`.
+
+**Testes exigidos:** todos existem e não são triviais. Hook: ciclo, mudar de coluna, números, acentos, datas, nulos, `compare`, estabilidade, não mutação, controlado. Componente: `onSort` por clique/Enter/Espaço, `aria-sort`, sem botão nos não ordenáveis. Acessibilidade: axe, Tab pela ordem das colunas, focus mantido, ordem das linhas no DOM. Stories `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`) e `DarkTheme` com tabela ordenável presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Table/TableSort.extra.test.tsx` (ícone distinto por direção, `aria-sort="none"` por omissão, sem botão com `sortDirection` sem `sortable`, clique sem `onSort`, ref e `className`).
+
+**Notas (não são falhas):**
+- O `play` de `SortKeyboardInteraction` usa `focus()` + `click()`; Enter e Espaço reais só estão nos testes unitários (limitação já indicada pelo programador).
+- Props do utilizador são espalhadas depois de `aria-sort`, por isso um `aria-sort` passado manualmente sobrepõe-se ao calculado.
+- Contraste do ícone e do focus nos dois temas coberto por axe nas stories; não foi feita inspeção visual (sem browser interativo).
