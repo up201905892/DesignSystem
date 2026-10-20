@@ -482,3 +482,19 @@ Modelo de entrada:
   - `pnpm storybook` interativo não foi aberto (ambiente sem browser); as stories do Checkbox e do Select correm no `test:a11y` e o `build:docs` bundla `@ds/icons` a partir do código-fonte sem `dist/`. A verificação visual dos ícones fica ao testador.
   - O `typecheck` de `ui` agora também verifica o código-fonte de `icons` com as opções do `ui` (iguais, vêm do `tsconfig.base.json`).
   - Pedido para o João (não feito, ficheiro dele): nenhum obrigatório; o CI já não precisa de `build` antes de `typecheck`/`test`/`lint`, por isso a reordenação provisória do `ci.yml` pode ser revertida se quiser.
+
+### DS-033 · Table: ordenação
+
+**Iteração 1 — 2026-10-20**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `TableHeaderCell` ganha `sortable`, `sortDirection` e `onSort`: quando `sortable`, o conteúdo fica num `<button type="button">` com `ArrowUpIcon`/`ArrowDownIcon`/`ArrowUpDownIcon` (decorativos, `aria-hidden` por omissão do `IconBase`) e o `<th>` recebe `aria-sort` (`ascending`/`descending`/`none`); sem `sortable` não há botão nem `aria-sort`. Hook `useTableSort<T>({ data, columns, sort?, defaultSort?, onSortChange? })` em `Table/useTableSort.ts`, exportado de `packages/ui/src/index.ts`, com tipos. Ciclo asc → desc → nenhum, uma coluna de cada vez; números por valor, datas por tempo, strings com `Intl.Collator` (`numeric`, `sensitivity: 'base'`, equivalente a `localeCompare` com essas opções), `null`/`undefined` sempre no fim nas duas direções; `compare` próprio por coluna (invertido em `desc`) e `accessor` opcional; ordenação estável sobre uma cópia. Modo controlado quando `sort !== undefined` (`null` é um valor controlado válido). CSS do botão e do ícone em `Table.css` só com tokens; o focus do botão desenha-se por dentro da célula para o contentor com scroll não o cortar. Âmbito: não toquei no contentor `ds-table-container` (a nota sobre `className`/props no contentor não é exigida pela especificação).
+- **Ficheiros alterados:** `packages/ui/src/Table/Table.tsx`, `Table.css`, `Table.stories.tsx`, `index.ts`, `useTableSort.ts` (novo), `useTableSort.test.tsx` (novo), `TableSort.test.tsx` (novo), `packages/ui/src/index.ts`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 754b37b `feat(ui): DS-033 add sortable Table headers and useTableSort hook`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5 (pasta `Table` já existente).
+- **Testes escritos pelo programador:** `useTableSort.test.tsx` (16: ciclo, mudar de coluna, números, strings com acentos/maiúsculas/numeração, datas, nulos nas duas direções, `compare`, `accessor`, estabilidade, não mutação, `defaultSort`, coluna desconhecida, `onSortChange` e modo controlado); `TableSort.test.tsx` (aria-sort, sem botão nos não ordenáveis, clique/Enter/Espaço, Tab pela ordem das colunas, ícone decorativo, axe, focus mantido e ordem das linhas no DOM). Stories: `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`), e `DarkTheme` com tabela ordenável.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 488) · build ✔ · test:a11y ✔ (128).
+- **Notas para o testador:**
+  - O `play` de `SortKeyboardInteraction` usa DOM simples (`focus()` + `click()` e espera de um frame), porque `@storybook/test` não está instalado e a G2 não permite dependências novas. Enter e Espaço reais estão nos testes unitários (`userEvent`).
+  - Não acrescentei a `Table.test.tsx` para não o inflar: os testes de ordenação do componente estão em `TableSort.test.tsx`.
+  - Sugestão para o planeador: se se quiser `play` com teclado real nas stories, uma tarefa para adicionar `@storybook/test`, ou alargar o `test-runner.ts` como na DS-032.
