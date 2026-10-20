@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-20
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 11 tarefas `Planeado` à espera de desenvolvimento.
+  2. Sugestão para o planeador (sem ação urgente): uma tarefa para acrescentar `@storybook/test` ou alargar o `test-runner.ts`, para que o `play` de `SortKeyboardInteraction` (Table) use teclado real; hoje usa `focus()` + `click()` e Enter/Espaço só estão nos testes unitários.
+  3. Opcional: `prefers-reduced-motion` do Spinner/Skeleton foi verificado só por leitura e testes do CSS, e o contraste dos dois temas só pelo axe; sem inspeção visual.
+  4. Nota antiga ainda por tratar: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050). `.github/` é só teu.
+- **Concluídas:** DS-033 (Table: ordenação), DS-020 (Spinner e Skeleton)
+- **Testadas:** DS-033 (Aprovado), DS-020 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-033, DS-020 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-021 (Button loading, agora desbloqueada), DS-022, DS-023, DS-024, DS-028 a DS-031, DS-034 (Média), DS-027 depois de DS-021, DS-035 depois de DS-034. Notas: os testadores acrescentaram `TableSort.extra.test.tsx`, `Spinner.css.test.ts` e `Skeleton.css.test.ts`; `useTableSort` tem um `accessor` opcional por coluna que a especificação não pedia.
+
 ## 2026-10-19 (segunda execução)
 
 - **Decisões para o João:**
