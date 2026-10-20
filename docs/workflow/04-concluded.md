@@ -224,6 +224,15 @@ Modelo de entrada:
 - **Avaliação do critério visual:** o critério "`pnpm storybook` arranca e as stories do Checkbox e do Select mostram os ícones" não teve verificação visual manual (sem browser no ambiente). Conclui que não impede o fecho: o relatório marca todos os critérios como verificados, `pnpm build:docs` passa sem `dist/` e o bundle contém o path do `CheckIcon`, e `pnpm test:a11y` (123 testes, em browser headless) renderiza as stories do Checkbox e do Select sem `dist/` de icons. A tarefa não altera componentes nem CSS, por isso o risco residual é só de aparência. Fica como verificação opcional para o João: abrir `pnpm storybook` e ver os ícones do Checkbox e do Select.
 - **Lições:** o `typecheck` do `ui` passa a verificar também o código-fonte de `icons`; o `globalSetup` constrói os tokens em cada `pnpm test` do `ui`; a reordenação provisória do `ci.yml` pode ser revertida pelo João, já que o CI não precisa de `build` antes de `typecheck`/`test`/`lint`. Fase Fundações: marco já registado a 2026-10-13, DS-050 foi acrescentada depois.
 
+### DS-033 · Table: ordenação — concluída a 2026-10-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-20), commit 754b37b (código) e 36069f2 (teste do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `TableHeaderCell` com `sortable`, `sortDirection` e `onSort` (botão dentro do `<th>`, `aria-sort`, ícones decorativos ArrowUp/ArrowDown/ArrowUpDown) e hook `useTableSort` exportado de `packages/ui`, controlado e não controlado, ciclo asc → desc → nenhum, ordenação estável sem mutar `data`, com `compare` e `accessor` próprios por coluna.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props em JSDoc (autodocs) e notas de acessibilidade; stories `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`) e `DarkTheme` com tabela ordenável, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** o `play` de `SortKeyboardInteraction` usa `focus()` + `click()` (Enter e Espaço reais só nos testes unitários); um `aria-sort` passado pelo utilizador sobrepõe-se ao calculado; sugestão ao planeador: tarefa para adicionar `@storybook/test` ou alargar o `test-runner.ts` para `play` com teclado real. Fase Layout e dados ainda incompleta (DS-028 a DS-031, DS-034 e DS-035 por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
