@@ -82,6 +82,10 @@ export type {
   TableHeaderCellProps,
   TableCellProps,
 } from './Table';
+export { Spinner } from './Spinner';
+export type { SpinnerProps } from './Spinner';
+export { Skeleton } from './Skeleton';
+export type { SkeletonProps } from './Skeleton';
 export { Select, SelectItem, SelectGroup, SelectSeparator } from './Select';
 export type {
   SelectProps,
