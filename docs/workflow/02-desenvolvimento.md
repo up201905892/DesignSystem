@@ -498,3 +498,19 @@ Modelo de entrada:
   - O `play` de `SortKeyboardInteraction` usa DOM simples (`focus()` + `click()` e espera de um frame), porque `@storybook/test` não está instalado e a G2 não permite dependências novas. Enter e Espaço reais estão nos testes unitários (`userEvent`).
   - Não acrescentei a `Table.test.tsx` para não o inflar: os testes de ordenação do componente estão em `TableSort.test.tsx`.
   - Sugestão para o planeador: se se quiser `play` com teclado real nas stories, uma tarefa para adicionar `@storybook/test`, ou alargar o `test-runner.ts` como na DS-032.
+
+### DS-020 · Spinner e Skeleton
+
+**Iteração 1 — 2026-10-20**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** dois componentes, cada um na sua pasta (C1). `Spinner` (`size` sm/md/lg, `label` omissão "Loading"): `<span role="status">` com SVG decorativo (`aria-hidden`, `currentColor`) e o `label` em `VisuallyHidden`. O `role="status"` não tira o nome do conteúdo, por isso o root tem `aria-labelledby` (via `useId`) a apontar para o texto escondido; assim `getByRole('status', { name: 'Saving' })` funciona. Um `aria-label`/`aria-labelledby` do consumidor sobrepõe-se por vir depois no spread. `Skeleton` (`variant` text/rect/circle, `width`/`height`, `lines`): `<div aria-hidden="true">`; `width`/`height` vão para `--ds-skeleton-width`/`--ds-skeleton-height` (números em px) no atributo `style`, fundidos com o `style` do consumidor; `lines` só na variante `text` (mínimo 1; a última linha tem 70% de largura). Animações: o Spinner roda (800ms) e fica estático com `prefers-reduced-motion: reduce`; o brilho do Skeleton é escondido nesse caso. Tamanhos do Spinner por `--ds-space-4/6/8` (não há tokens de tamanho). Exportados em `packages/ui/src/index.ts`; CSS em `styles.css`.
+- **Ficheiros alterados:** `packages/ui/src/Spinner/{Spinner.tsx,Spinner.css,Spinner.test.tsx,Spinner.stories.tsx,index.ts}` (novos), `packages/ui/src/Skeleton/{Skeleton.tsx,Skeleton.css,Skeleton.test.tsx,Skeleton.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 5374d91 `feat(ui): DS-020 add Spinner and Skeleton`
+- **Critérios de aceitação cobertos:** todos; G1 a G3; C1 a C5 para os dois componentes.
+- **Testes escritos pelo programador:** `Spinner.test.tsx` (8: role e nome por omissão, `label`, `data-size`, gráfico `aria-hidden` e texto escondido, ref/className, displayName, Tab sem focus, axe); `Skeleton.test.tsx` (12: defaults e `aria-hidden`, variantes, `lines={3}`, `lines` ignorado fora de `text`, custom properties, sem propriedades por omissão, `style` do consumidor, ref/className, displayName, fora da árvore de acessibilidade, Tab sem focus, axe). Stories: Spinner `Default`, `Sizes`, `CustomLabel`, `DarkTheme`; Skeleton `Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 533) · build ✔ · test:a11y ✔ (137).
+- **Notas para o testador:**
+  - A regra de `prefers-reduced-motion` está em CSS (nos dois `.css` e na regra global de `motion.css`); o jsdom não avalia media queries, por isso a verificação é visual/por leitura do CSS ou por emulação no browser (Playwright `reducedMotion: 'reduce'`).
+  - O Skeleton não tem contraste de texto (é decorativo, `aria-hidden`); a cor de fundo usa `--ds-color-bg-subtle`, com o brilho em `--ds-color-bg-surface`.
+  - Sugestão para o planeador: nenhuma obrigatória.
