@@ -840,3 +840,34 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - O `play` de `SortKeyboardInteraction` usa `focus()` + `click()`; Enter e Espaço reais só estão nos testes unitários (limitação já indicada pelo programador).
 - Props do utilizador são espalhadas depois de `aria-sort`, por isso um `aria-sort` passado manualmente sobrepõe-se ao calculado.
 - Contraste do ícone e do focus nos dois temas coberto por axe nas stories; não foi feita inspeção visual (sem browser interativo).
+
+### DS-020 · Spinner e Skeleton — Relatório 1 — 2026-10-20
+
+- **Commit testado:** 5374d91 (código) e 9ae85cd (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em e34014a.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 30 ficheiros, 533 testes; 545 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (21 suites, 137 testes, axe no Chromium, inclui `DarkTheme` dos dois) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Spinner`: `size`, `label` (omissão "Loading"), `role="status"` com nome = `label`, SVG `aria-hidden`, `currentColor` — código lido; testes de nome por omissão, `label`, `data-size`, `aria-hidden`; teste do testador confirma só `currentcolor` no CSS.
+- [x] `Skeleton`: `variant` (omissão `text`), `width`/`height` por `--ds-skeleton-width`/`--ds-skeleton-height`, `lines` na variante `text`, `aria-hidden="true"` — código e testes lidos (números em px, strings tal como vêm, `lines` ignorado fora de `text`).
+- [x] `prefers-reduced-motion: reduce` — lido o CSS: o Spinner fica com `animation: none` e visível; o Skeleton esconde o brilho (`display: none`). A regra global de `motion.css` não interfere. jsdom não avalia media queries: testes de CSS do testador verificam as regras; sem emulação em browser.
+- [x] Cada componente na sua pasta com C1 — `Spinner/` e `Skeleton/` com `.tsx`, `.test.tsx`, `.stories.tsx`, `index.ts`; exportados em `index.ts` e `styles.css`.
+- [x] G1 a G3, C1 a C5 — sem dependências novas, só tokens no CSS (testado), `forwardRef`, `className`, `displayName`, JSDoc.
+
+**Testes exigidos:** todos existem e não são triviais: `role="status"` e nome por omissão, `label` personalizado, `data-size`, `lines={3}` com três linhas, custom properties, ref e `className` nos dois; `getByRole('status', { name })`; Skeleton fora da árvore de acessibilidade (`isInaccessible`); Tab sem focus; axe. Stories `Spinner/Sizes`, `CustomLabel`, `DarkTheme` e `Skeleton/Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme` presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `Spinner/Spinner.css.test.ts` (rotação por omissão, `animation: none` em reduced motion sem esconder, `currentColor`, tokens por tamanho) e `Skeleton/Skeleton.css.test.ts` (brilho removido em reduced motion, custom properties, sem cores à mão).
+
+**Notas (não são falhas):**
+- Reduced motion verificado por leitura e testes do CSS, não por emulação num browser; contraste e aspeto nos dois temas só por axe nas stories (sem inspeção visual).
+- `Spinner` com `aria-label` do consumidor: o `aria-labelledby` fica a ganhar na computação do nome, a menos que o consumidor também o sobreponha.
+- O `Skeleton` com `lines` limita o mínimo a 1 e arredonda para baixo (0 ou negativos dão uma linha).

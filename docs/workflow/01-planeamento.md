@@ -27,7 +27,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-017 | Switch | Formulários | Média | DS-012 | Concluído |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Concluído |
-| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Pronto para teste |
+| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Aprovado |
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Planeado |
 | DS-022 | Alert | Overlays e feedback | Média | DS-011 | Planeado |
 | DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Planeado |
@@ -845,6 +845,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
 - 2026-10-20 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-10-20 · programador · Em desenvolvimento → Pronto para teste · commit 5374d91
+- 2026-10-20 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-20 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
 
 ### DS-021 · Button: estado `loading`
 
