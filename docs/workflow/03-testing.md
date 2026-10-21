@@ -907,3 +907,34 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Contraste e aspeto nos dois temas só por axe nas stories (sem inspeção visual); o `play` de `LoadingToggle` usa `focus()` + `click()`, Enter e Espaço reais só nos testes unitários.
 - Com um `leadingIcon` de largura diferente de 16px o botão muda de largura ao entrar em loading; limitação já indicada pelo programador.
+
+### DS-022 · Alert — Relatório 1 — 2026-10-21
+
+- **Commit testado:** 1d99eb1 (código) e 28158cd (registo), no histórico de `develop`; sem alterações por guardar no início (só as minhas de registo depois). Testes acrescentados no commit `test(ui): DS-022 …`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 35 ficheiros, 594 testes; 600 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (22 suites, 149 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props `variant` (omissão `info`), `title`, `icon`, `onClose`, `closeLabel` (omissão "Close") — `Alert.tsx` lido; ícones `InfoIcon`, `CircleCheckIcon`, `TriangleAlertIcon`, `CircleXIcon` importados de `@ds/icons`; teste confirma 4 ícones diferentes.
+- [x] `role`: `alert` em `danger`/`warning`, `status` em `info`/`success`; `role` personalizado prevalece — testes por variante e com `role` personalizado.
+- [x] Botão de fechar só com `onClose`, é `IconButton` com `XIcon`; o Alert não se esconde — testes (sem botão, um clique = uma chamada, continua no DOM); teste do testador: `type="button"`, não submete formulário.
+- [x] Ícone num `span aria-hidden`; variante comunicada por forma do ícone e texto — testes e leitura do código.
+- [x] Contraste AA sobre `*-subtle` nos dois temas — `Alert.css.test.ts` (≥ 4,5:1 com os valores reais de `themes.css`); estado hover do botão (`bg-subtle`) lido: `*-text` sobre `bg-subtle` continua acima de 4,5:1 por inspeção dos valores; axe nas stories verde, incluindo `DarkTheme`.
+- [x] G1 a G3, C1 a C5 — pasta `Alert/` completa (tsx, test, stories, index), exportado em `index.ts` e `styles.css`, CSS só com tokens, `forwardRef`, `className`, JSDoc.
+
+**Testes exigidos:** todos existem e testam o comportamento (role, ícone, `icon={false}`, botão, `onClose`, `closeLabel`, Tab, Enter e Espaço com `userEvent`, axe nas 4 variantes). Stories `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent`, `DarkTheme` presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Alert/Alert.edge.test.tsx` (6: `ReactNode` em título e descrição, `icon={false}` sem conteúdo, botão `type="button"`, fechar dentro de `<form>` não submete, ordem de Tab antes/dentro/depois, `role` personalizado + palavra longa + axe).
+
+**Notas (não são falhas):**
+- Aspeto visual e contraste real nos dois temas só por cálculo sobre os tokens e axe nas stories (sem inspeção visual); quebra de palavras longas (`overflow-wrap: anywhere`) verificada por leitura do CSS.
+- Como `{...props}` vem depois de `data-variant`, um `data-variant` passado pelo consumidor sobrepõe-se ao interno; caso extremo fora da especificação.
