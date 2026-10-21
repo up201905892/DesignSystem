@@ -251,6 +251,15 @@ Modelo de entrada:
 - **Documentação:** JSDoc de `loading` e `disabled` (diferença intencional e resultado comunicado pelo consumidor, no autodocs); stories `Button/Loading`, `LoadingToggle` (com `play`), `AsLinkLoading`, `IconButton/Loading` e loading em `Button/DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** com um `leadingIcon` que não tenha 16px a largura muda ao entrar em loading (limitação conhecida); com `asChild`, o `aria-describedby` do filho não se perde (confirmado pelo testador, contra a nota do programador); contraste nos dois temas só por axe. Fase Overlays e feedback ainda incompleta (DS-022, DS-023, DS-024, DS-027 e outras por concluir).
 
+### DS-022 · Alert — concluída a 2026-10-21
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-21), commit 1d99eb1 (código) e 62232d7 (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Alert` com `variant` (info, success, warning, danger), `title`, `icon` (`ReactNode | false`), `onClose` e `closeLabel`; `role` `alert` em danger/warning e `status` em info/success (substituível); ícone decorativo por variante; botão de fechar (`IconButton`) só com `onClose`, o Alert nunca se esconde; CSS só com tokens e contraste AA nos dois temas.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props em JSDoc (autodocs) e notas de acessibilidade; stories `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** contraste real nos dois temas só por cálculo sobre tokens e axe (sem inspeção visual); um `data-variant` do consumidor sobrepõe-se ao interno (caso fora da especificação). Fase Overlays e feedback ainda incompleta (DS-023, DS-024, DS-027 e outras por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
