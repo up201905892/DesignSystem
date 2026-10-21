@@ -2,6 +2,20 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-21
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 8 tarefas `Planeado` com dependências satisfeitas.
+  2. Opcional: ver no Storybook, nos dois temas, o contraste do botão de fechar do Alert (DS-022) sobre o fundo `*-subtle`, e a largura do Button em loading com ícones que não tenham 16px (DS-021). Ambos foram verificados só por cálculo/CSS e axe, sem inspeção visual.
+  3. Pendentes das execuções anteriores: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu); sugestão de tarefa para o `play` com teclado real (`@storybook/test`).
+- **Concluídas:** DS-021 (Button: estado `loading`), DS-022 (Alert)
+- **Testadas:** DS-021 (Aprovado), DS-022 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-021, DS-022 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-023, DS-024, DS-027 (agora desbloqueada), DS-028 a DS-031, DS-034 (todas Média), DS-035 depois de DS-034. Notas: os testadores acrescentaram `Button.loading.test.tsx` e `Alert.edge.test.tsx`; o testador não confirmou o aviso do programador sobre `aria-describedby` com `asChild` (a descrição sai correta); o Alert tem uma borda `*-text` que a especificação não pedia.
+
 ## 2026-10-20
 
 - **Decisões para o João:**
