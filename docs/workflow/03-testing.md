@@ -871,3 +871,39 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Reduced motion verificado por leitura e testes do CSS, não por emulação num browser; contraste e aspeto nos dois temas só por axe nas stories (sem inspeção visual).
 - `Spinner` com `aria-label` do consumidor: o `aria-labelledby` fica a ganhar na computação do nome, a menos que o consumidor também o sobreponha.
 - O `Skeleton` com `lines` limita o mínimo a 1 e arredonda para baixo (0 ou negativos dão uma linha).
+
+### DS-021 · Button: estado `loading` — Relatório 1 — 2026-10-21
+
+- **Commit testado:** f9ada3d (código) e 333c98a (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em 83967fe.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 32 ficheiros, 555 testes; 561 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (21 suites, 141 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props `loading` e `loadingLabel` (omissão "Loading"), herdadas pelo `IconButton` — `Button.tsx` lido; `IconButton` passa por `...props`; teste do `IconButton` com `loading`.
+- [x] `aria-busy`, `aria-disabled`, `data-loading`, sem `disabled` nem `tabindex="-1"`, na ordem de Tab — testes do bloco `loading` e teste de Tab.
+- [x] Diferença face a `disabled` no JSDoc de `loading` e `disabled` e na descrição de `Button/Loading` — lido no código e nas stories.
+- [x] Clique bloqueado na captura: `fireEvent.click` devolve `false`, `onClick` não dispara, submit bloqueado com rato, Enter e Espaço; teste do testador confirma que o `onClickCapture` do consumidor só corre sem `loading`.
+- [x] Spinner no span `aria-hidden` do `leadingIcon`, criado se não existir, `trailingIcon` intacto, `IconButton` continua quadrado — testes; CSS de `data-icon-only` usa largura e altura fixas por tokens.
+- [x] `asChild` + `loading`: atributos, foco, clique cancelado (`onClick` do `Button` e do `<a>`), Spinner antes do texto sem elemento extra — testes; o testador acrescentou `trailingIcon` mantido e `disabled` + `loading` com `asChild` (`tabindex="-1"`, Spinner visível, fora do Tab).
+- [x] Nome e descrição: nome continua "Save", descrição "Loading", `loadingLabel` próprio, `aria-describedby` acrescentado ("Hint Loading"). O testador verificou também com `asChild`, com `aria-describedby` passado ao `Button` e posto no próprio filho: ambos dão "Hint Loading" (a nota do programador sobre o filho se sobrepor não se confirma).
+- [x] Resultado da ação não anunciado pelo botão: dito no JSDoc de `loading` e na descrição de `Button/Loading`.
+- [x] Largura: Spinner `sm` = `--ds-space-4` (16px), igual aos ícones das stories; o `play` de `LoadingToggle` mede a largura antes e depois; sem `leadingIcon` só cresce o Spinner mais o espaçamento (por construção). Verificação por leitura de CSS e `play`, sem inspeção visual.
+- [x] `disabled` + `loading`: atributo `disabled` presente, Spinner visível, `cursor: progress` só em `:not([data-disabled])`.
+- [x] G1 a G3, C1 a C5 — testes, stories e JSDoc nos ficheiros existentes; só tokens no CSS novo; sem dependências novas.
+
+**Testes exigidos:** todos existem e testam o comportamento pedido (atributos, `defaultPrevented`, submit, Tab loading vs disabled no mesmo teste, descrição acessível, `asChild`, `IconButton`, axe incluindo `asChild`). Stories `Button/Loading`, `LoadingToggle` (com `play`), `AsLinkLoading`, `IconButton/Loading` e loading em `Button/DarkTheme` presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Button/Button.loading.test.tsx` (6: `asChild` com `trailingIcon`, `asChild` + `disabled` + `loading`, `aria-describedby` no `Button` e no filho com `asChild`, remoção dos atributos ao terminar o loading, `onClickCapture` do consumidor).
+
+**Notas (não são falhas):**
+- Contraste e aspeto nos dois temas só por axe nas stories (sem inspeção visual); o `play` de `LoadingToggle` usa `focus()` + `click()`, Enter e Espaço reais só nos testes unitários.
+- Com um `leadingIcon` de largura diferente de 16px o botão muda de largura ao entrar em loading; limitação já indicada pelo programador.
