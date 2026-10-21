@@ -29,7 +29,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Concluído |
 | DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Concluído |
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Concluído |
-| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Planeado |
+| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Pronto para teste |
 | DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Planeado |
 | DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Planeado |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
@@ -918,6 +918,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-21 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-21 · programador · Em desenvolvimento → Pronto para teste · commit 1d99eb1
 
 ### DS-023 · Tooltip
 

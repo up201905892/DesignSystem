@@ -531,3 +531,19 @@ Modelo de entrada:
   - O `play` de `LoadingToggle` usa DOM simples (`focus()` + `click()`), como na DS-033, porque `@storybook/test` não está instalado.
   - Com `asChild`, um `aria-describedby` do próprio filho sobrepõe-se ao calculado pelo `Slot` (comportamento do Radix), pelo que perderia a descrição de loading. Caso limite não coberto pela especificação.
   - Sugestão para o planeador: nenhuma obrigatória.
+
+### DS-022 · Alert
+
+**Iteração 1 — 2026-10-21**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** componente `Alert` (`<div>` raiz) com `variant` (`info` por omissão, `success`, `warning`, `danger`), `title`, `icon` (`ReactNode | false`), `onClose` e `closeLabel` (omissão "Close"); `title` do HTML é omitido do tipo nativo para aceitar `ReactNode`. `role` por omissão `alert` para `danger`/`warning` e `status` para `info`/`success`, substituível pelo consumidor. Ícones por omissão `InfoIcon`, `CircleCheckIcon`, `TriangleAlertIcon`, `CircleXIcon` num `<span aria-hidden>`; ícone personalizado vai no mesmo span. O botão de fechar é um `IconButton` (`ghost`, `sm`, `XIcon`) e só existe com `onClose`; o Alert nunca se esconde. Os blocos de título e descrição só são renderizados quando existem. CSS só com tokens: fundo `*-subtle`, texto, ícone e borda `*-text` da variante (via `--ds-alert-bg`/`--ds-alert-fg`); `overflow-wrap: anywhere` para conteúdo longo.
+- **Ficheiros alterados:** `packages/ui/src/Alert/{Alert.tsx,Alert.css,Alert.css.test.ts,Alert.test.tsx,Alert.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 1d99eb1 `feat(ui): DS-022 add Alert with variants, icon and close button`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** `Alert.test.tsx` (role por variante e personalizado, ícone decorativo por variante e diferente em cada uma, ícone personalizado e `icon={false}`, sem botão sem `onClose`, clique chama `onClose` uma vez e o Alert não desaparece, `closeLabel`, sem título/descrição, ref/className/props, Tab + Enter + Espaço, axe nas quatro variantes); `Alert.css.test.ts` (contraste ≥ 4,5:1 de `*-text` sobre `*-subtle` nos dois temas). Stories: `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent`, `DarkTheme` (as quatro variantes com fecho).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 594) · build ✔ · test:a11y ✔ (149).
+- **Notas para o testador:**
+  - O botão de fechar é um `IconButton` `ghost` com `color: var(--ds-alert-fg)`; o contraste dele sobre `*-subtle` é o mesmo de `*-text` (coberto pelo teste de CSS), mas o jsdom não avalia o CSS real, por isso a verificação visual dos dois temas é no Storybook.
+  - A borda do alerta usa `*-text` (não está na especificação, é só um reforço visual).
+  - Sugestão para o planeador: nenhuma obrigatória.
