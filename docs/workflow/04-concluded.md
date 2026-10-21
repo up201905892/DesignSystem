@@ -242,6 +242,15 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc; stories `Spinner/Default`, `Sizes`, `CustomLabel`, `DarkTheme` e `Skeleton/Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** reduced motion verificado por leitura e testes do CSS, não por emulação em browser; `aria-labelledby` do Spinner ganha a um `aria-label` do consumidor, a menos que também seja sobreposto. Fase Overlays e feedback ainda incompleta (DS-021 a DS-024, DS-027 e outras por concluir).
 
+### DS-021 · Button: estado `loading` — concluída a 2026-10-21
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-21), commit f9ada3d (código) e 83967fe (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Button` e `IconButton` com `loading` e `loadingLabel`: o botão continua focável (`aria-busy`, `aria-disabled`, sem `disabled`), bloqueia o clique na captura (também com `asChild`), mostra um Spinner no lugar do `leadingIcon` e acrescenta o `loadingLabel` à descrição acessível, sem mudar o nome.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** JSDoc de `loading` e `disabled` (diferença intencional e resultado comunicado pelo consumidor, no autodocs); stories `Button/Loading`, `LoadingToggle` (com `play`), `AsLinkLoading`, `IconButton/Loading` e loading em `Button/DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** com um `leadingIcon` que não tenha 16px a largura muda ao entrar em loading (limitação conhecida); com `asChild`, o `aria-describedby` do filho não se perde (confirmado pelo testador, contra a nota do programador); contraste nos dois temas só por axe. Fase Overlays e feedback ainda incompleta (DS-022, DS-023, DS-024, DS-027 e outras por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
