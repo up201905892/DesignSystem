@@ -122,3 +122,8 @@
   color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
+
+/* loading: still focusable, clicks blocked; the disabled look wins when both are set */
+.ds-button[data-loading]:not([data-disabled]) {
+  cursor: progress;
+}
