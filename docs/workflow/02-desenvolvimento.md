@@ -514,3 +514,20 @@ Modelo de entrada:
   - A regra de `prefers-reduced-motion` está em CSS (nos dois `.css` e na regra global de `motion.css`); o jsdom não avalia media queries, por isso a verificação é visual/por leitura do CSS ou por emulação no browser (Playwright `reducedMotion: 'reduce'`).
   - O Skeleton não tem contraste de texto (é decorativo, `aria-hidden`); a cor de fundo usa `--ds-color-bg-subtle`, com o brilho em `--ds-color-bg-surface`.
   - Sugestão para o planeador: nenhuma obrigatória.
+
+### DS-021 · Button: estado `loading`
+
+**Iteração 1 — 2026-10-21**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Button` ganha `loading` e `loadingLabel` (omissão "Loading"); `IconButton` herda-as. Com `loading`, o root tem `aria-busy="true"`, `aria-disabled="true"` e `data-loading`, sem `disabled` nem `tabIndex={-1}` (continua na ordem de Tab), e o clique é bloqueado na captura (`blockClick`), incluindo com `asChild`. Um `Spinner` (`size="sm"`, `label={loadingLabel}`) substitui o `leadingIcon` no mesmo `<span aria-hidden>` (criado se não houver ícone); o `trailingIcon` não muda. O `id` do Spinner entra no `aria-describedby` do root, acrescentado ao que o consumidor passe, e o nome do botão não muda. Com `disabled` + `loading`, `disabled` prevalece (atributo `disabled` ou `tabIndex={-1}` no `asChild`) e o Spinner continua visível. JSDoc de `loading` e `disabled` documenta a diferença face a `disabled` e que o resultado é comunicado pelo consumidor (Toast ou outro feedback). CSS: `cursor: progress` em `[data-loading]:not([data-disabled])`.
+- **Ficheiros alterados:** `packages/ui/src/Button/{Button.tsx,Button.css,Button.test.tsx,Button.stories.tsx}`, `packages/ui/src/IconButton/{IconButton.test.tsx,IconButton.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** f9ada3d `feat(ui): DS-021 add loading state to Button and IconButton`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5 (pastas existentes). `IconButton.tsx` não precisou de alterações (a prop passa por `...props`).
+- **Testes escritos pelo programador:** `Button.test.tsx` (bloco `loading`, 13 testes: Spinner no lugar do ícone, span criado sem ícone, sem loading nada muda, descrição "Loading" e `loadingLabel` próprio, `aria-describedby` acrescentado, clique cancelado, submit bloqueado com rato/Enter/Espaço, `disabled` + `loading`, Tab loading vs disabled, focus mantido ao alternar, `asChild` (atributos, Spinner antes do texto, clique e Enter bloqueados, Tab), axe); `IconButton.test.tsx` (Spinner no lugar do ícone, nome pelo `aria-label`, axe). Stories: `Button/Loading`, `Button/LoadingToggle` (com `play`), `Button/AsLinkLoading`, `IconButton/Loading`, e loading em `Button/DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 555) · build ✔ · test:a11y ✔ (141).
+- **Notas para o testador:**
+  - Largura: o Spinner usa `size="sm"` (`--ds-space-4`, 16px), igual aos ícones de 16px das stories; com um `leadingIcon` de outra largura o botão muda de largura. Não há forma de medir o ícone do consumidor sem JS de layout. A verificação é visual (o `play` de `LoadingToggle` confirma largura igual com ícone de 16px).
+  - O `play` de `LoadingToggle` usa DOM simples (`focus()` + `click()`), como na DS-033, porque `@storybook/test` não está instalado.
+  - Com `asChild`, um `aria-describedby` do próprio filho sobrepõe-se ao calculado pelo `Slot` (comportamento do Radix), pelo que perderia a descrição de loading. Caso limite não coberto pela especificação.
+  - Sugestão para o planeador: nenhuma obrigatória.
