@@ -938,3 +938,35 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Aspeto visual e contraste real nos dois temas só por cálculo sobre os tokens e axe nas stories (sem inspeção visual); quebra de palavras longas (`overflow-wrap: anywhere`) verificada por leitura do CSS.
 - Como `{...props}` vem depois de `data-variant`, um `data-variant` passado pelo consumidor sobrepõe-se ao interno; caso extremo fora da especificação.
+
+### DS-023 · Tooltip — Relatório 1 — 2026-10-22
+
+- **Commit testado:** 76a9b0a (código) e 00ce214 (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados no commit `test(ui): DS-023 …`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 38 ficheiros, 633 testes; 636 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (23 suites, 155 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `TooltipProvider` e `Tooltip` com `content`, `children`, `side` (omissão `top`), `align`, `delayDuration` (omissão 400), `open`, `defaultOpen`, `onOpenChange` — `Tooltip.tsx` lido; exportados em `index.ts`; testes de omissões, controlado e atraso.
+- [x] `role="tooltip"`, portal, `z-index` por token, `aria-describedby` só enquanto aberto — teste de portal; `Tooltip.css` usa `var(--ds-z-tooltip)` e o token existe em `tokens/src/primitives/z-index.json`; teste do testador confirma que o atributo desaparece ao fechar.
+- [x] WCAG 1.4.13: hover com atraso (399/401 ms), focus por Tab, Esc fecha com focus mantido, Tab para fora fecha, sem fecho por tempo (60 s) — testes do programador; o testador acrescentou o ponteiro sobre o conteúdo (continua aberto 5 s depois de sair do gatilho). Comportamento hoverable depende do Radix e jsdom não faz layout: só verificado por simulação de eventos.
+- [x] `ref` e `className` no conteúdo; largura máxima por token e `overflow-wrap: anywhere` — teste de ref/className; CSS lido; testador: palavra de 300 caracteres sem quebra de renderização e sem violações axe no tema escuro.
+- [x] Animação só em `delayed-open`/`instant-open`; regra global de `prefers-reduced-motion` presente em `styles.css` (coberta por `styles.test.ts`) — por leitura de CSS, sem teste visual.
+- [x] G1 a G3 (dependência `@radix-ui/react-tooltip` em `package.json` e lockfile), C1 a C5 — pasta `Tooltip/` completa, exportada em `index.ts` e `styles.css`, CSS só com tokens (teste de tokens existentes e contraste nos dois temas).
+
+**Testes exigidos:** todos existem e testam o comportamento (fechado por omissão, `defaultOpen`, controlado, `data-side`, Tab abre e descrição igual ao `content`, Esc, Tab para fora, hover com timers falsos, axe aberto e fechado). Stories `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`) e `DarkTheme` (com `defaultOpen`) presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Tooltip/Tooltip.edge.test.tsx` (3: ponteiro sobre o conteúdo mantém-no aberto, `aria-describedby` removido ao fechar com Esc e focus mantido, palavra longa + axe no tema escuro).
+
+**Notas (não são falhas):**
+- Reposicionamento por colisão, aspeto e contraste reais só por cálculo sobre os tokens, axe nas stories e leitura de CSS (sem inspeção visual).
+- `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código por exigência do Radix (já indicado pelo programador).
+- Tooltip em elementos desativados está fora de âmbito e não foi testado.
