@@ -31,7 +31,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Concluído |
 | DS-022 | Alert | Overlays e feedback | Média | DS-011 | Concluído |
 | DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Concluído |
-| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Planeado |
+| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Pronto para teste |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
 | DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
 | DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Planeado |
@@ -986,6 +986,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o popover nem recebe focus, com critério, testes e story DisabledTrigger
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-22 · programador · Planeado → Em desenvolvimento · início
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit a09a0ff
 
 ### DS-025 · Dialog (Modal)
 

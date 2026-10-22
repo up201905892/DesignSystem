@@ -564,3 +564,20 @@ Modelo de entrada:
   - jsdom não faz layout: o teste de `side` usa `avoidCollisions={false}`, senão o Radix inverte o lado. O reposicionamento real verifica-se no Storybook.
   - O hover é simulado com `fireEvent.pointerMove` (`pointerType: 'mouse'`) e timers falsos.
   - `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código, porque o Radix os recebe como números. Sugestão para o planeador: se se quiser que venham de tokens, definir uma tarefa para isso (vale também para outros overlays).
+
+### DS-024 · Popover
+
+**Iteração 1 — 2026-10-22**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Popover`, `PopoverTrigger`, `PopoverContent` e `PopoverClose` sobre `@radix-ui/react-popover`. `Popover` aceita `open`, `defaultOpen`, `onOpenChange` e não renderiza elemento. `PopoverTrigger` (com `asChild`) recebe `aria-haspopup="dialog"`, `aria-expanded` e `aria-controls` do Radix. `PopoverContent` (`role="dialog"`, portal) tem `side` (omissão `bottom`), `align` (omissão `center`), `sideOffset` (omissão 6), `showClose` e `closeLabel` (omissão "Close"), `ref` e `className`; o nome acessível é exigido pelo tipo (união: `aria-label` ou `aria-labelledby`). O botão de fechar é um `IconButton` `ghost` `sm` dentro de `Radix.Close`. Colisão do Radix ativa (`collisionPadding` 8). Gatilho desativado: um `Button`/`IconButton` `disabled` já tem o atributo nativo, por isso o Radix não abre nem o focus lá chega; não foi preciso código extra (ao contrário do DropdownMenu, que abre em `pointerdown`). CSS só com tokens: `z-index: var(--ds-z-dropdown)`, `max-width: min(..., 100vw - space-4)`, `max-height` pela altura disponível do Radix, `overflow-wrap: anywhere`, outline de focus visível no conteúdo, animação de entrada anulada pela regra global de `prefers-reduced-motion`.
+- **Ficheiros alterados:** `packages/ui/src/Popover/{Popover.tsx,Popover.css,Popover.css.test.ts,Popover.test.tsx,Popover.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** a09a0ff `feat(ui): DS-024 add Popover with trigger, content and close button`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova: `@radix-ui/react-popover`); C1 a C5.
+- **Testes escritos pelo programador:** `Popover.test.tsx` (fechado por omissão, abrir/fechar com o gatilho, `defaultOpen`, controlado e controlado que recusa abrir, clique fora, `PopoverClose`, `showClose` e `closeLabel`, `aria-labelledby`, `side`/`align` e omissões, ref/className/props, portal, `displayName`; gatilho desativado com `Button` e `IconButton` (clique, Enter, Espaço, `onOpenChange` não chamado, Tab salta); axe aberto e fechado; `aria-haspopup`/`aria-expanded`/`aria-controls`; Enter e Espaço abrem com o focus dentro; Tab dentro do conteúdo; Esc e `PopoverClose` devolvem o focus ao gatilho); `Popover.css.test.ts` (tokens existentes, z-index, largura máxima, sem cores fixas, animação só na entrada). Stories: `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 674) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright; o axe corre nos testes unitários).
+- **Notas para o testador:**
+  - jsdom não faz layout: o teste de `side` usa `avoidCollisions={false}`. O reposicionamento por colisão e o limite à largura do viewport verificam-se no Storybook (redimensionar a janela, story `Placement`).
+  - Com `showClose`, o conteúdo ganha `data-close` e padding extra à direita para o botão não tapar texto.
+  - O nome acessível obrigatório é garantido só pelo tipo (TypeScript), não em runtime.
+  - Sugestão para o planeador: `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código, porque o Radix os recebe como números; o mesmo já foi referido na DS-023. Se se quiser que venham de tokens, definir uma tarefa transversal.
