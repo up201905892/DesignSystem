@@ -581,3 +581,18 @@ Modelo de entrada:
   - Com `showClose`, o conteúdo ganha `data-close` e padding extra à direita para o botão não tapar texto.
   - O nome acessível obrigatório é garantido só pelo tipo (TypeScript), não em runtime.
   - Sugestão para o planeador: `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código, porque o Radix os recebe como números; o mesmo já foi referido na DS-023. Se se quiser que venham de tokens, definir uma tarefa transversal.
+
+**Iteração 2 — 2026-10-22** (correção do relatório 1)
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:**
+  - Falha 1 (sideOffset por token): novo `packages/ui/src/utils/spaceToken.ts` (`readSpaceToken`, tipo `SpaceStep`) lê `--ds-space-<passo>` em runtime com `getComputedStyle` e converte `rem` para pixéis pelo tamanho de letra da raiz. `PopoverContent.sideOffset` passou de número para passo do token (`'0'`…`'16'`, omissão `'2'` = 0.5rem); `collisionPadding` usa `--ds-space-2`. Alteração de API: o valor omisso passa de 6 px para 8 px (o token mais próximo; não existe `space-1.5`), e o tipo deixa de aceitar números. Sem o CSS carregado o valor cai para 0 (o componente já depende de `styles.css`).
+  - Falha 2 (clique fora): `PopoverContent` trata `onCloseAutoFocus` (chama o do utilizador; se não houver `preventDefault` e o focus estiver no `body`, devolve-o ao gatilho). `Popover` guarda o gatilho num contexto e `PopoverTrigger` regista-o, mantendo o `ref` externo. Se o clique fora cair noutro elemento focável, o focus fica nesse elemento (comportamento esperado, evita roubar o focus).
+- **Ficheiros alterados:** `packages/ui/src/Popover/Popover.tsx`, `packages/ui/src/Popover/Popover.test.tsx`, `packages/ui/src/utils/spaceToken.ts`, `packages/ui/src/utils/spaceToken.test.ts` (novos testes), `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d2ca4f9 `fix(ui): DS-024 read Popover offsets from space tokens and restore focus after outside click`
+- **Critérios de aceitação cobertos:** os da iteração 1, mais `sideOffset` por token e regresso do focus após clique fora.
+- **Testes escritos pelo programador:** regressão em `Popover.test.tsx` (focus volta ao gatilho após clique fora num texto; fica no elemento focável clicado; `onCloseAutoFocus` próprio com `preventDefault` respeitado; `ref` do gatilho mantido; `--ds-space-4` e `--ds-space-2` lidos); `spaceToken.test.ts` (rem, px, fallback).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 683) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright).
+- **Notas para o testador:**
+  - jsdom não faz layout: o valor em pixéis do offset não é medido; o teste verifica que os tokens são lidos e `spaceToken.test.ts` a conversão.
+  - O Tooltip (DS-023, Concluído) tem o mesmo problema (`sideOffset ?? 6`, `collisionPadding={8}`) e NÃO foi alterado. Sugestão para o planeador: tarefa nova para aplicar `readSpaceToken` ao Tooltip, DropdownMenu (`sideOffset = 4`) e Select (`sideOffset={4}`).
