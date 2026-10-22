@@ -1,0 +1,45 @@
+.ds-popover {
+  position: relative;
+  z-index: var(--ds-z-dropdown);
+  box-sizing: border-box;
+  width: max-content;
+  min-width: calc(var(--ds-space-16) * 2);
+  max-width: min(calc(var(--ds-space-16) * 5), calc(100vw - var(--ds-space-4)));
+  max-height: var(--radix-popover-content-available-height);
+  overflow: auto;
+  padding: var(--ds-space-4);
+  border: 1px solid var(--ds-color-border-default);
+  border-radius: var(--ds-radius-md);
+  background-color: var(--ds-color-bg-surface);
+  box-shadow: var(--ds-shadow-md);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-font-line-height-normal);
+  overflow-wrap: anywhere;
+}
+
+.ds-popover:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.ds-popover[data-close] {
+  padding-inline-end: calc(var(--ds-space-4) + var(--ds-space-8));
+}
+
+.ds-popover[data-state='open'] {
+  animation: ds-popover-in var(--ds-duration-fast) ease-out;
+}
+
+.ds-popover__close {
+  position: absolute;
+  inset-block-start: var(--ds-space-2);
+  inset-inline-end: var(--ds-space-2);
+}
+
+@keyframes ds-popover-in {
+  from {
+    opacity: 0;
+  }
+}

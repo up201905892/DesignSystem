@@ -86,6 +86,13 @@ export type {
 } from './Table';
 export { Tooltip, TooltipProvider } from './Tooltip';
 export type { TooltipProps, TooltipProviderProps } from './Tooltip';
+export { Popover, PopoverTrigger, PopoverContent, PopoverClose } from './Popover';
+export type {
+  PopoverProps,
+  PopoverTriggerProps,
+  PopoverContentProps,
+  PopoverCloseProps,
+} from './Popover';
 export { Spinner } from './Spinner';
 export type { SpinnerProps } from './Spinner';
 export { Skeleton } from './Skeleton';
