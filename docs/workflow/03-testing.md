@@ -970,3 +970,37 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Reposicionamento por colisão, aspeto e contraste reais só por cálculo sobre os tokens, axe nas stories e leitura de CSS (sem inspeção visual).
 - `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código por exigência do Radix (já indicado pelo programador).
 - Tooltip em elementos desativados está fora de âmbito e não foi testado.
+
+### DS-024 · Popover — Relatório 1 — 2026-10-22
+
+- **Commit testado:** a09a0ff (código) e ff73d52 (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados no commit `test(ui): DS-024 …`.
+- **Resultado:** Reprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 41 ficheiros, 674 testes; 675 com o do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (24 suites, 163 testes, axe no Chromium; o programador não o tinha corrido) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports `Popover`, `PopoverTrigger` (`asChild`), `PopoverContent`, `PopoverClose` — `Popover.tsx` lido.
+- [ ] API: `open`, `defaultOpen`, `onOpenChange`, `side`, `align`, `showClose`, `closeLabel`, `ref`, `className` presentes e testados; **`sideOffset` por token não cumprido** (falha 1).
+- [x] `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `role="dialog"`, portal, `z-index` por `var(--ds-z-dropdown)`, nome acessível exigido por tipo — testes do programador e CSS lido.
+- [ ] Focus: ao abrir vai para o conteúdo e volta ao gatilho com Esc e `PopoverClose` (testado); **com clique fora não volta ao gatilho** (falha 2).
+- [x] Colisão do Radix ativa (`collisionPadding` 8), `max-width: min(..., 100vw - space-4)` e `max-height` pela altura disponível — só por leitura de CSS/código (jsdom não faz layout).
+- [x] Gatilho desativado (Button e IconButton): clique, Enter, Espaço não abrem, `onOpenChange` não chamado, Tab salta — testes do programador lidos e verdes.
+- [x] G1 a G3 (dependência `@radix-ui/react-popover` em `package.json` e lockfile), C1 a C5 — pasta completa, exportada, CSS só com tokens, stories `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction`, `DarkTheme` verdes no `test:a11y`.
+
+**Testes exigidos:** existem e são substantivos, exceto: nenhum teste cobre `sideOffset` nem o regresso do focus após clique fora (os testes só usam Esc e `PopoverClose`).
+
+**Falhas:**
+1. **`sideOffset` não vem de token.** Esperado: "`sideOffset` por token" (critério 2). Obtido: `sideOffset = 6` escrito em pixéis em `PopoverContent` (e `collisionPadding={8}`), sem ligação a `--ds-space-*`; não há teste. O programador sinalizou-o como nota, mas a especificação aprovada pede-o e a regra do CLAUDE.md ("sem espaçamentos escritos à mão") aplica-se. Ficheiro: `packages/ui/src/Popover/Popover.tsx` (linhas 86 e 98). Possíveis vias: ler o token em runtime (`getComputedStyle`) ou deslocar por CSS com o token; ou o planeador reformular o critério (decisão do João).
+2. **Clique fora não devolve o focus ao gatilho.** Passos: renderizar `<p>Texto</p>` e um `Popover` com `PopoverTrigger asChild` > `Button`; clicar no gatilho (abre); clicar no `<p>`. Esperado (critério 4): o popover fecha e `document.activeElement` é o gatilho. Obtido: fecha, mas o focus fica em `body`. Causa provável: o Radix Popover não restaura o focus quando o fecho vem de interação exterior; falta tratar `onCloseAutoFocus` em `PopoverContent`. Ficheiro: `packages/ui/src/Popover/Popover.tsx`. Reproduzido em jsdom; o teste falhado não foi guardado no repositório para não partir o CI.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Popover/Popover.edge.test.tsx` (1: conteúdo com 300 caracteres seguidos e `showClose` sem violações axe no tema escuro).
+
+**Notas (não são falhas):**
+- Reposicionamento por colisão e limite ao viewport não foram verificados visualmente.
+- O nome acessível obrigatório é garantido só pelo tipo, não em runtime (já indicado pelo programador).
