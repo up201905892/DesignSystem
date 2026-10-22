@@ -2,6 +2,22 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-22
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 6 tarefas `Planeado` com dependências satisfeitas.
+  2. Sugestão de tarefa nova (pede-se aprovação do planeador/tua): aplicar `readSpaceToken` (criado na DS-024) ao Tooltip, DropdownMenu e Select, que ainda têm `sideOffset`/`collisionPadding` em pixéis, contra a regra "sem valores à mão".
+  3. Nota de API do Popover (DS-024): `sideOffset` passou a ser um passo do token (`'0'` a `'16'`, omissão `'2'` = 8 px) e deixou de aceitar números. Sem o CSS carregado, o offset cai para 0.
+  4. Opcional: ver no Storybook a colisão/reposicionamento do Tooltip e do Popover; o jsdom não faz layout e só foi verificado por código e axe.
+  5. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu); tarefa para o `play` com teclado real (`@storybook/test`).
+- **Concluídas:** DS-023 (Tooltip), DS-024 (Popover)
+- **Testadas:** DS-023 (Aprovado ao primeiro relatório), DS-024 (Reprovado no relatório 1, Aprovado no 2)
+- **Desenvolvidas:** DS-023, DS-024 (2 iterações: `sideOffset` em pixéis e focus não devolvido ao gatilho após clique fora)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-027 (Toast), DS-028 a DS-031, DS-034 (todas Média), DS-035 depois de DS-034. O testador acrescentou `Tooltip.edge.test.tsx` e `Popover.edge.test.tsx`.
+
 ## 2026-10-21
 
 - **Decisões para o João:**
