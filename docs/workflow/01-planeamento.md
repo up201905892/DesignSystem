@@ -30,7 +30,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Concluído |
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Concluído |
 | DS-022 | Alert | Overlays e feedback | Média | DS-011 | Concluído |
-| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Aprovado |
+| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Concluído |
 | DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Planeado |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
 | DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
@@ -955,6 +955,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit 76a9b0a
 - 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 1
 - 2026-10-22 · testador · Em teste → Aprovado · relatório 1 aprovado, sem falhas
+- 2026-10-22 · finalizador · Aprovado → Concluído · relatório 1 aprovado; changeset não aplicável (pacote privado)
 
 ### DS-024 · Popover
 

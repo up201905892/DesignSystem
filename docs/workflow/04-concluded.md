@@ -260,6 +260,15 @@ Modelo de entrada:
 - **Documentação:** props em JSDoc (autodocs) e notas de acessibilidade; stories `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** contraste real nos dois temas só por cálculo sobre tokens e axe (sem inspeção visual); um `data-variant` do consumidor sobrepõe-se ao interno (caso fora da especificação). Fase Overlays e feedback ainda incompleta (DS-023, DS-024, DS-027 e outras por concluir).
 
+### DS-023 · Tooltip — concluída a 2026-10-22
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-22), commit 76a9b0a (código) e c883e31 (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `TooltipProvider` e `Tooltip` (`content`, `side`, `align`, `delayDuration`, controlado e não controlado), em portal com token de z-index, abre com hover e focus, Esc fecha sem mover o focus (WCAG 1.4.13), animação respeita `prefers-reduced-motion`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** comportamento hoverable e reposicionamento por colisão só verificados por simulação de eventos e leitura de CSS (jsdom não faz layout). Fase Overlays e feedback ainda incompleta (DS-024, DS-027 por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
