@@ -1004,3 +1004,38 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Reposicionamento por colisão e limite ao viewport não foram verificados visualmente.
 - O nome acessível obrigatório é garantido só pelo tipo, não em runtime (já indicado pelo programador).
+
+### DS-024 · Popover — Relatório 2 — 2026-10-22
+
+- **Commit testado:** d2ca4f9 (código) e 3abc3e4 (registo), no histórico de `develop`; sem alterações por guardar no início. Nenhum teste acrescentado nesta ronda.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 43 ficheiros, 683 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (24 suites, 163 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Verificação das falhas do relatório 1:**
+- Falha 1 (`sideOffset` por token): corrigida. `PopoverContent.sideOffset` é agora um passo do token (`SpaceStep`, omissão `'2'`) lido por `readSpaceToken` (`--ds-space-<passo>`, `rem` convertido pelo tamanho de letra da raiz); `collisionPadding` lê `--ds-space-2`. Os tokens `--ds-space-2` e `--ds-space-4` existem em `packages/tokens/dist/tokens.css`. Testes: `Popover.test.tsx` (lê `--ds-space-4` e `--ds-space-2`) e `spaceToken.test.ts` (rem, px, fallback).
+- Falha 2 (clique fora): corrigida. `onCloseAutoFocus` devolve o focus ao gatilho se estiver no `body`, respeita o `preventDefault` do utilizador e não rouba o focus de outro elemento focável clicado. Três testes de regressão em `Popover.test.tsx` (linhas 292, 307, 320) verdes.
+
+**Critérios de aceitação:**
+- [x] Exports `Popover`, `PopoverTrigger` (`asChild`), `PopoverContent`, `PopoverClose` — código lido e testes.
+- [x] API completa, incluindo `sideOffset` por token — código e testes acima. A mudança de API (número para passo de token; omissão 6 px para 8 px) cumpre o critério "por token".
+- [x] ARIA (`aria-haspopup`, `aria-expanded`, `aria-controls`, `role="dialog"`), portal, `z-index` `var(--ds-z-dropdown)`, nome acessível exigido por tipo — testes e CSS.
+- [x] Focus: abre para dentro do conteúdo; volta ao gatilho com Esc, `PopoverClose` e clique fora.
+- [x] Colisão ativa e largura limitada ao viewport — por leitura de código/CSS (jsdom não faz layout).
+- [x] Gatilho desativado (Button e IconButton): sem abrir, `onOpenChange` não chamado, Tab salta — testes lidos e verdes.
+- [x] G1 a G3, C1 a C5; as 8 stories passam no `test:a11y`.
+
+**Testes exigidos:** existem e são substantivos. Limitação: o teste do `sideOffset` verifica que os tokens são lidos, não o deslocamento em pixéis (jsdom não faz layout); a conversão está coberta por `spaceToken.test.ts`.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Reposicionamento por colisão e aspeto real não verificados visualmente.
+- Tooltip, DropdownMenu e Select mantêm offsets em pixéis (fora do âmbito desta tarefa); sugestão do programador para o planeador mantém-se.
+- `readSpaceToken` devolve 0 sem `styles.css` carregado; o componente já depende dele.

@@ -31,7 +31,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Concluído |
 | DS-022 | Alert | Overlays e feedback | Média | DS-011 | Concluído |
 | DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Concluído |
-| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Pronto para teste |
+| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Aprovado |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
 | DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
 | DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Planeado |
@@ -992,6 +992,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-22 · testador · Em teste → Reprovado · relatório 1: sideOffset em pixéis (não por token) e clique fora não devolve o focus ao gatilho
 - 2026-10-22 · programador · Reprovado → Em desenvolvimento · correção das duas falhas do relatório 1
 - 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit d2ca4f9
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 2
+- 2026-10-22 · testador · Em teste → Aprovado · relatório 2 aprovado, as duas falhas do relatório 1 corrigidas, sem falhas novas
 
 ### DS-025 · Dialog (Modal)
 
