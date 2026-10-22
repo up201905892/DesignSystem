@@ -287,3 +287,70 @@ describe('Popover accessibility', () => {
     expect(trigger).toHaveFocus();
   });
 });
+
+describe('Popover regressions (DS-024 report 1)', () => {
+  it('returns the focus to the trigger when closed by clicking outside', async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <p>Text</p>
+        <Example />
+      </>,
+    );
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    await user.click(trigger);
+    await user.click(screen.getByText('Text'));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('keeps the focus on another focusable element clicked outside', async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <button>Other</button>
+        <Example />
+      </>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.click(screen.getByRole('button', { name: 'Other' }));
+    expect(screen.getByRole('button', { name: 'Other' })).toHaveFocus();
+  });
+
+  it('calls a custom onCloseAutoFocus and respects preventDefault', async () => {
+    const user = userEvent.setup();
+    const onCloseAutoFocus = vi.fn((e: Event) => e.preventDefault());
+    render(
+      <>
+        <p>Text</p>
+        <Example content={{ onCloseAutoFocus }} />
+      </>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.click(screen.getByText('Text'));
+    expect(onCloseAutoFocus).toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Open' })).not.toHaveFocus();
+  });
+
+  it('still forwards the ref of the trigger', () => {
+    const ref = createRef<HTMLButtonElement>();
+    render(
+      <Popover>
+        <PopoverTrigger ref={ref}>Open</PopoverTrigger>
+        <PopoverContent aria-label="x">x</PopoverContent>
+      </Popover>,
+    );
+    expect(ref.current).toBe(screen.getByRole('button', { name: 'Open' }));
+  });
+
+  it('reads sideOffset and collision padding from the spacing tokens', async () => {
+    const user = userEvent.setup();
+    const spy = vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue');
+    render(<Example content={{ sideOffset: '4' }} />);
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    const names = spy.mock.calls.map(([name]) => name);
+    expect(names).toContain('--ds-space-4');
+    expect(names).toContain('--ds-space-2');
+    spy.mockRestore();
+  });
+});

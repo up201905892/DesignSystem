@@ -1,8 +1,20 @@
-import { forwardRef, type ComponentPropsWithoutRef, type ElementRef, type ReactNode } from 'react';
+import {
+  createContext,
+  forwardRef,
+  useContext,
+  useRef,
+  type ComponentPropsWithoutRef,
+  type ElementRef,
+  type MutableRefObject,
+  type ReactNode,
+} from 'react';
 import * as RadixPopover from '@radix-ui/react-popover';
 import { XIcon } from '@ds/icons';
 import { cx } from '../utils/cx';
+import { readSpaceToken, type SpaceStep } from '../utils/spaceToken';
 import { IconButton } from '../IconButton';
+
+const TriggerContext = createContext<MutableRefObject<HTMLButtonElement | null> | null>(null);
 
 export interface PopoverProps {
   /** Whether the popover is open (controlled). */
@@ -34,10 +46,13 @@ export interface PopoverProps {
  * (use Dialog for that).
  */
 export function Popover({ open, defaultOpen, onOpenChange, children }: PopoverProps) {
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
   return (
-    <RadixPopover.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
-      {children}
-    </RadixPopover.Root>
+    <TriggerContext.Provider value={triggerRef}>
+      <RadixPopover.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+        {children}
+      </RadixPopover.Root>
+    </TriggerContext.Provider>
   );
 }
 
@@ -49,7 +64,17 @@ export type PopoverTriggerProps = ComponentPropsWithoutRef<typeof RadixPopover.T
  */
 export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(
   function PopoverTrigger(props, ref) {
-    return <RadixPopover.Trigger ref={ref} {...props} />;
+    const triggerRef = useContext(TriggerContext);
+    return (
+      <RadixPopover.Trigger
+        ref={(node) => {
+          if (triggerRef) triggerRef.current = node;
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+        }}
+        {...props}
+      />
+    );
   },
 );
 
@@ -62,13 +87,15 @@ type AccessibleName =
 
 export type PopoverContentProps = Omit<
   ComponentPropsWithoutRef<typeof RadixPopover.Content>,
-  'asChild' | 'aria-label' | 'aria-labelledby'
+  'asChild' | 'aria-label' | 'aria-labelledby' | 'sideOffset' | 'collisionPadding'
 > &
   AccessibleName & {
     /** Side of the trigger where the popover appears. Defaults to `bottom`. */
     side?: 'top' | 'right' | 'bottom' | 'left';
     /** Alignment relative to the trigger. Defaults to `center`. */
     align?: 'start' | 'center' | 'end';
+    /** Gap between trigger and popover, as a step of the `--ds-space-*` tokens. Defaults to `'2'`. */
+    sideOffset?: SpaceStep;
     /** Shows a close button in the corner. */
     showClose?: boolean;
     /** Accessible name of the close button. Defaults to `"Close"`. */
@@ -83,24 +110,35 @@ export const PopoverContent = forwardRef<
   {
     side = 'bottom',
     align = 'center',
-    sideOffset = 6,
+    sideOffset = '2',
     showClose = false,
     closeLabel = 'Close',
     className,
     children,
+    onCloseAutoFocus,
     ...props
   },
   ref,
 ) {
+  const triggerRef = useContext(TriggerContext);
   return (
     <RadixPopover.Portal>
       <RadixPopover.Content
-        collisionPadding={8}
         {...props}
+        collisionPadding={readSpaceToken('2')}
+        onCloseAutoFocus={(event) => {
+          onCloseAutoFocus?.(event);
+          // Radix leaves the focus alone after an outside click; when nothing else took it
+          // (it is on the body), give it back to the trigger.
+          if (!event.defaultPrevented) {
+            const active = document.activeElement;
+            if (!active || active === document.body) triggerRef?.current?.focus();
+          }
+        }}
         ref={ref}
         side={side}
         align={align}
-        sideOffset={sideOffset}
+        sideOffset={readSpaceToken(sideOffset)}
         className={cx('ds-popover', className)}
         data-close={showClose ? '' : undefined}
       >
