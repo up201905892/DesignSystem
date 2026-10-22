@@ -547,3 +547,20 @@ Modelo de entrada:
   - O botão de fechar é um `IconButton` `ghost` com `color: var(--ds-alert-fg)`; o contraste dele sobre `*-subtle` é o mesmo de `*-text` (coberto pelo teste de CSS), mas o jsdom não avalia o CSS real, por isso a verificação visual dos dois temas é no Storybook.
   - A borda do alerta usa `*-text` (não está na especificação, é só um reforço visual).
   - Sugestão para o planeador: nenhuma obrigatória.
+
+### DS-023 · Tooltip
+
+**Iteração 1 — 2026-10-22**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tooltip` e `TooltipProvider` sobre `@radix-ui/react-tooltip`. `Tooltip` aceita `content`, `children` (um elemento gatilho, usado com `asChild`), `side` (omissão `top`), `align`, `delayDuration` (omissão 400 ms), `open`, `defaultOpen`, `onOpenChange`; as restantes props, `ref` e `className` vão para o conteúdo (`.ds-tooltip`), renderizado num portal. Sem `TooltipProvider`, o `Tooltip` cria o seu próprio provider (um contexto interno deteta o provider do consumidor), por isso funciona isolado. O Radix dá `role="tooltip"` e o `aria-describedby` no gatilho enquanto aberto; Esc fecha sem mover o focus, o conteúdo aceita hover e não há fecho por tempo (WCAG 1.4.13). CSS só com tokens: `z-index: var(--ds-z-tooltip)`, fundo `bg-inverse` com texto `bg-canvas` (contraste verificado nos dois temas), `max-width` por `--ds-space-16` e `overflow-wrap: anywhere`; animação de entrada só em `delayed-open`/`instant-open`, anulada pela regra global de `prefers-reduced-motion`.
+- **Ficheiros alterados:** `packages/ui/src/Tooltip/{Tooltip.tsx,Tooltip.css,Tooltip.css.test.ts,Tooltip.test.tsx,Tooltip.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 76a9b0a `feat(ui): DS-023 add Tooltip with provider, sides and keyboard support`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova: `@radix-ui/react-tooltip`); C1 a C5.
+- **Testes escritos pelo programador:** `Tooltip.test.tsx` (fechado por omissão, `defaultOpen`, `data-side`, portal, modo controlado, `open={false}`, abre com Tab e descrição acessível igual ao `content`, Esc mantém o focus, Tab para fora fecha, hover com timers falsos (399/401 ms, `delayDuration` próprio, sem fecho por tempo, Esc após hover), ref/className/props, `displayName`, dentro de `TooltipProvider`, `ReactNode`, axe aberto e fechado); `Tooltip.css.test.ts` (tokens existentes, z-index, largura máxima, contraste nos dois temas). Stories: `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`), `DarkTheme` (com `defaultOpen`).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 633) · build ✔ · test:a11y ✔ (155).
+- **Notas para o testador:**
+  - O Radix cria um elemento visualmente oculto com `role="tooltip"` para leitores de ecrã, com o mesmo texto do elemento visível (`.ds-tooltip`, que recebe `ref`/`className`/`data-side`). `getByRole('tooltip')` devolve o oculto.
+  - jsdom não faz layout: o teste de `side` usa `avoidCollisions={false}`, senão o Radix inverte o lado. O reposicionamento real verifica-se no Storybook.
+  - O hover é simulado com `fireEvent.pointerMove` (`pointerType: 'mouse'`) e timers falsos.
+  - `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código, porque o Radix os recebe como números. Sugestão para o planeador: se se quiser que venham de tokens, definir uma tarefa para isso (vale também para outros overlays).
