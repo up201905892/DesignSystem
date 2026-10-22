@@ -84,6 +84,8 @@ export type {
   TableHeaderCellProps,
   TableCellProps,
 } from './Table';
+export { Tooltip, TooltipProvider } from './Tooltip';
+export type { TooltipProps, TooltipProviderProps } from './Tooltip';
 export { Spinner } from './Spinner';
 export type { SpinnerProps } from './Spinner';
 export { Skeleton } from './Skeleton';
