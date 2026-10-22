@@ -269,6 +269,15 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** comportamento hoverable e reposicionamento por colisão só verificados por simulação de eventos e leitura de CSS (jsdom não faz layout). Fase Overlays e feedback ainda incompleta (DS-024, DS-027 por concluir).
 
+### DS-024 · Popover — concluída a 2026-10-22
+
+- **Relatório de testes que aprovou:** Relatório 2 (2026-10-22), commit d2ca4f9 (código) e 3abc3e4 (registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 2 (o relatório 1 reprovou por `sideOffset` em pixéis e por o clique fora não devolver o focus ao gatilho)
+- **Entregue:** `Popover`, `PopoverTrigger` (`asChild`), `PopoverContent` e `PopoverClose` (`open`, `defaultOpen`, `onOpenChange`, `side`, `align`, `sideOffset` como passo do token de espaço, `showClose` e `closeLabel`); painel não modal em portal, `role="dialog"`, focus entra no conteúdo e volta ao gatilho com Esc, `PopoverClose` e clique fora; gatilho `Button`/`IconButton` desativado não abre.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** reposicionamento por colisão só verificado por leitura de código/CSS (jsdom não faz layout). Sugestão ao planeador (já registada pelo programador): tarefa nova para aplicar `readSpaceToken` ao Tooltip, DropdownMenu (`sideOffset = 4`) e Select (`sideOffset={4}`), que mantêm offsets em pixéis. Fase Overlays e feedback ainda incompleta (DS-027 por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
