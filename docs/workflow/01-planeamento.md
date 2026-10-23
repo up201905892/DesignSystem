@@ -34,7 +34,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Concluído |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
 | DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
-| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Pronto para teste |
+| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Reprovado |
 | DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Planeado |
 | DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
@@ -1103,6 +1103,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 - 2026-10-23 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 93c3cbb
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-23 · testador · Em teste → Reprovado · relatório 1 em 03-testing.md (falha de contraste axe na story DarkTheme)
 
 ### DS-028 · Stack e Grid
 

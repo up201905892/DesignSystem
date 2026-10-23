@@ -1038,4 +1038,38 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Reposicionamento por colisão e aspeto real não verificados visualmente.
 - Tooltip, DropdownMenu e Select mantêm offsets em pixéis (fora do âmbito desta tarefa); sugestão do programador para o planeador mantém-se.
+
+### DS-027 · Toast — Relatório 1 — 2026-10-23
+
+- **Commit testado:** 93c3cbb (código) e 21e1561 (registo), no histórico de `develop`; sem alterações por guardar no início. Nenhum teste acrescentado.
+- **Resultado:** Reprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 45 ficheiros, 719 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (25 suites, 171 testes; 1 falha: `Components/Toast › DarkTheme`) | ✘ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `ToastProvider` e `useToast()` (`toast`, `dismiss`) — testes lidos e verdes.
+- [x] Opções de `toast()`, `variant` por omissão `info`, `duration` 5000 e `Infinity`, `action`, devolve `id` — testes lidos e verdes.
+- [x] Props do `ToastProvider` (`position`, `max`, `label`, `closeLabel`) — testes lidos e verdes.
+- [x] Anúncio assertive/polite sem mover o focus — testes de `aria-live` e `document.activeElement`.
+- [x] Pausa com ponteiro e com focus na região — testes com timers falsos.
+- [x] Botão de fechar `IconButton`, `z-index-toast`, largura com `100vw` — testes de CSS e leitura; largura em ecrã estreito não verificada visualmente (jsdom).
+- [x] Erro fora do provider — teste.
+- [x] `prefers-reduced-motion` — pela regra global (leitura de CSS); não verificado no navegador.
+- [x] Story `AfterLoading` com `play` (loading, toast de sucesso, `aria-busy` removido, focus no botão) — lida; passa no `test:a11y`.
+- [ ] G1 a G3, C1 a C5: **C (acessibilidade das stories) não cumprido** — a story `DarkTheme` falha o axe (falha 1). Restantes stories (`Default`, `Variants`, `WithAction`, `Persistent`, `Stacked`, `Positions`, `AfterLoading`) passam.
+
+**Testes exigidos:** existem e são substantivos (fecho por tempo, `Infinity`, `dismiss`, `max`, ação, fechar, erro fora do provider, F8, Tab, Esc, pausa). Lacuna: o axe unitário corre só no tema claro, por isso a falha de contraste do tema escuro não foi apanhada.
+
+**Falhas:**
+1. **Contraste insuficiente na story `DarkTheme`.** Passos: `pnpm test:a11y` (ou abrir `Components/Toast/DarkTheme` com o addon-a11y). Esperado: zero violações axe (wcag2a/aa, wcag21a/aa). Obtido: `color-contrast` (serious) em 2 nós do toast `info`: `li[data-variant="info"] > .ds-toast__content > .ds-toast__title` ("Information") e `... > .ds-toast__description` ("Something to know."). Reproduzido em 3 execuções seguidas; os toasts `success`, `warning` e `danger` não são assinalados. Causa provável (não confirmada): o axe corre durante a animação de entrada (`ds-toast-in`, opacidade 0 a 1), em que o primeiro toast ainda está semitransparente; ou as cores do texto sobre `--ds-color-bg-surface` no tema escuro não cumprem 4.5:1. Em qualquer caso a story tem de passar o axe de forma estável (por exemplo, `play` que espere pelo fim da animação, ou corrigir as cores se for o contraste real). Ficheiros prováveis: `packages/ui/src/Toast/Toast.stories.tsx` (`DarkTheme`) e `packages/ui/src/Toast/Toast.css`.
+
+**Notas (não são falhas):**
+- Posição, largura em ecrãs estreitos, animação de saída e swipe não foram verificados visualmente (jsdom); `prefers-reduced-motion` só por leitura de CSS.
+- Sugestão do programador (offsets em pixéis no Tooltip, DropdownMenu e Select) mantém-se para o planeador.
 - `readSpaceToken` devolve 0 sem `styles.css` carregado; o componente já depende dele.
