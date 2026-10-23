@@ -34,7 +34,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Concluído |
 | DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
 | DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
-| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Aprovado |
+| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Concluído |
 | DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Planeado |
 | DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
@@ -1109,6 +1109,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 0679d4b
 - 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 2
 - 2026-10-23 · testador · Em teste → Aprovado · relatório 2 em 03-testing.md (test:a11y estável em 5 execuções)
+- 2026-10-23 · finalizador · Aprovado → Concluído · registo em 04-concluded.md; changeset não aplicável (`@ds/ui` privado)
 
 ### DS-028 · Stack e Grid
 

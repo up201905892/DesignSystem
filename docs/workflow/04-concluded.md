@@ -278,9 +278,19 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** reposicionamento por colisão só verificado por leitura de código/CSS (jsdom não faz layout). Sugestão ao planeador (já registada pelo programador): tarefa nova para aplicar `readSpaceToken` ao Tooltip, DropdownMenu (`sideOffset = 4`) e Select (`sideOffset={4}`), que mantêm offsets em pixéis. Fase Overlays e feedback ainda incompleta (DS-027 por concluir).
 
+### DS-027 · Toast — concluída a 2026-10-23
+
+- **Relatório de testes que aprovou:** Relatório 2 (2026-10-23), commit 0679d4b (correção) e 442dc0b (registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 2 (o relatório 1 reprovou por falha de contraste axe na story `DarkTheme`, medido durante a animação de entrada)
+- **Entregue:** `ToastProvider` (`position`, `max`, `label`, `closeLabel`) e `useToast()` com `toast()` e `dismiss()`, sobre `@radix-ui/react-toast`; variantes `info`, `success`, `warning`, `danger`, ação opcional, `duration` (incluindo `Infinity`), anúncio assertive/polite sem mover o focus, pausa do temporizador com ponteiro ou focus na região, botão de fechar (`IconButton`), `z-index-toast` e animações com `prefers-reduced-motion`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Variants`, `WithAction`, `Persistent`, `Stacked`, `Positions`, `AfterLoading` (com `play`, padrão botão em loading e Toast com o resultado) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** posição, largura em ecrãs estreitos, saída animada, swipe e reduced motion só verificados por leitura de CSS e testes (jsdom não anima nem faz layout). Sugestões ao planeador (já registadas nos relatórios): `Variants` e `Stacked` também medem o axe durante a animação de entrada; esperar também por uma frame no `play` da `DarkTheme`.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
 - Formulários concluídos — 2026-10-16 (DS-010 a DS-018)
+- Overlays e feedback concluídos — 2026-10-23 (DS-019 a DS-027)
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
