@@ -614,3 +614,16 @@ Modelo de entrada:
   - O hover é simulado com `pointerMove` na região (o Radix pausa em `pointermove` e retoma em `pointerleave`).
   - Nota de contexto sobre offsets: o Toast não usa `readSpaceToken` porque não usa posicionamento flutuante do Radix; todos os afastamentos (margem da região, intervalos) estão em CSS com `--ds-space-*`, sem pixéis à mão. Em `Tooltip` e `Select` (e `DropdownMenu`) os offsets continuam em pixéis (`readSpaceToken` só está aplicado ao `Popover`), contrariamente ao que o pedido de hoje assumia; não foram alterados por estarem fora do âmbito (já está sugerida tarefa nova na DS-024).
   - Sugestão para o planeador: tarefa transversal para aplicar `readSpaceToken` ao Tooltip, DropdownMenu e Select.
+
+**Iteração 2 — 2026-10-23**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** corrigida a falha 1 do relatório 1 (contraste axe na story `DarkTheme`). A causa provável é o axe correr durante a animação de entrada (`ds-toast-in`, opacidade 0 a 1): o toast `info`, o primeiro a abrir, ainda estava semitransparente. Os tokens de cor não foram alterados. A story `DarkTheme` ganhou um `play` que espera que os quatro toasts existam e que nenhuma animação esteja a correr (`getAnimations()`) antes de o axe medir. Com isto `Components/Toast › DarkTheme` passa.
+- **Ficheiros alterados:** `packages/ui/src/Toast/Toast.stories.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 0679d4b `fix(ui): DS-027 wait for toast entry animation in DarkTheme story before axe`
+- **Critérios de aceitação cobertos:** os da iteração 1; G1 a G3 e C1 a C5 (acessibilidade das stories).
+- **Testes escritos pelo programador:** nenhum teste unitário novo: a causa (animação em curso num navegador real) não existe em jsdom, que não anima; a cobertura é a própria story com `play`, validada por `pnpm test:a11y`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ (25 suites, 171 testes).
+- **Notas para o testador:**
+  - Executei `pnpm test:a11y` uma vez após a correção (passou); convém repetir algumas vezes para confirmar a estabilidade.
+  - Sugestão para o planeador (opcional): `Variants` e `Stacked` também medem o axe durante a animação de entrada; passam hoje porque o tema claro tem folga de contraste.
