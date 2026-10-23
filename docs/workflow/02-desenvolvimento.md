@@ -627,3 +627,21 @@ Modelo de entrada:
 - **Notas para o testador:**
   - Executei `pnpm test:a11y` uma vez após a correção (passou); convém repetir algumas vezes para confirmar a estabilidade.
   - Sugestão para o planeador (opcional): `Variants` e `Stacked` também medem o axe durante a animação de entrada; passam hoje porque o tema claro tem folga de contraste.
+
+### DS-028 · Stack e Grid
+
+**Iteração 1 — 2026-10-23**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Stack` (flexbox), `Grid` (CSS grid) e `GridItem`, cada um com a sua pasta (`GridItem` vive na pasta `Grid`). `Stack`: `direction` (omissão `vertical`), `gap` (omissão `4`), `align`, `justify`, `wrap`, `asChild`; as props saem como `data-direction`, `data-gap`, `data-align`, `data-justify` e `data-wrap` (os três últimos só existem se a prop for dada). `Grid`: `columns` (`1|2|3|4|6|12`, omissão 1) ou `minColumnWidth` (união de tipos: as duas são mutuamente exclusivas), `gap`, `asChild`; `columns` vai para `data-columns`; `minColumnWidth` para a custom property `--ds-grid-min-column` (em `style`, como o Skeleton) e `data-responsive`, com `repeat(auto-fit, minmax(min(var(--ds-grid-min-column), 100%), 1fr))`, sem media queries. `GridItem`: `colSpan` em `data-col-span` e `--ds-grid-col-span`. `SpaceKey` (`0|1|2|3|4|5|6|8|10|12|16`) é o tipo do `gap` e é exportado de `Stack`; `gap={7}` não compila. No CSS cada chave mapeia para `var(--ds-space-*)`. Sem `role`, sem `tabIndex`, sem `order` nem `row-reverse`.
+- **Ficheiros alterados:** `packages/ui/src/Stack/{Stack.tsx,Stack.css,Stack.css.test.ts,Stack.test.tsx,Stack.stories.tsx,index.ts}` e `packages/ui/src/Grid/{Grid.tsx,Grid.css,Grid.css.test.ts,Grid.test.tsx,Grid.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 03a4aa4 `feat(ui): DS-028 add Stack and Grid layout primitives`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (sem dependências novas); C1 a C5.
+- **Testes escritos pelo programador:** `Stack.test.tsx` (omissões, cada prop em `data-*`, todas as chaves de `gap`, `@ts-expect-error` para `gap={7}`, className/ref/props/displayName, `asChild` com `<ul>` e `<li>` filhos diretos, ordem de Tab, axe); `Grid.test.tsx` (omissões, colunas, gap, `minColumnWidth` na custom property e sem `data-columns`, `style` do consumidor preservado, `@ts-expect-error` para gap, colunas e uso conjunto, `asChild`, `GridItem colSpan={2}`, className/ref, Tab, axe); `Stack.css.test.ts` e `Grid.css.test.ts` (cada chave mapeia para um token existente, sem `order`/`row-reverse`, sem `@media`, sem cores nem comprimentos fixos). Stories: `Stack/{Vertical,Horizontal,Gaps,AlignAndJustify,Wrap,AsList,DarkTheme}`, `Grid/{Columns,Responsive,Spans,AsList,DarkTheme}`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 791) · build ✔ · test:a11y ✔ (27 suites, 183 testes).
+- **Notas para o testador:**
+  - O valor de `minColumnWidth` é a única exceção a "só tokens" (documentada no JSDoc e no CSS); o `style` só leva custom properties (`--ds-grid-min-column`, `--ds-grid-col-span`), como o Skeleton.
+  - jsdom não faz layout: o número real de colunas, o `auto-fit`, o `colSpan` e o `wrap` verificam-se no Storybook (`Grid/Responsive`, `Grid/Spans`, `Stack/Wrap`; redimensionar a janela).
+  - `colSpan` maior do que `columns` cria colunas implícitas (documentado no JSDoc); não há validação em runtime.
+  - Sem `align`/`justify`, o `Stack` usa o comportamento por omissão do flexbox (esticar / início); por isso não há `data-align`/`data-justify` nesse caso.
+  - Os `style` inline das stories são só de demonstração (caixas com tokens).
