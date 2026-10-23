@@ -226,8 +226,27 @@ export const AfterLoading: Story = {
   },
 };
 
+/**
+ * Waits for the entry animation (opacity 0 to 1) to end, so axe measures the
+ * final colours and not a half transparent toast.
+ */
+async function waitForToastsSettled(canvasElement: HTMLElement, count: number) {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    const toasts = Array.from(canvasElement.ownerDocument.querySelectorAll('.ds-toast'));
+    const running = toasts.some((el) =>
+      el.getAnimations().some((animation) => animation.playState === 'running'),
+    );
+    if (toasts.length >= count && !running) return;
+    await wait(50);
+  }
+  throw new Error('Toasts did not settle');
+}
+
 export const DarkTheme: Story = {
   parameters: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    await waitForToastsSettled(canvasElement, 4);
+  },
   render: (args) => (
     <ToastProvider {...args} max={4}>
       <OpenOnMount
