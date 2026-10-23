@@ -137,3 +137,32 @@ describe('GridItem', () => {
     expect(ref.current).toHaveClass('ds-grid-item', 'extra');
   });
 });
+
+describe('Grid and GridItem (QA edge cases)', () => {
+  it('merges the style of an asChild child with the custom properties', () => {
+    render(
+      <Grid asChild minColumnWidth="10rem">
+        <ul data-testid="g" style={{ margin: '0px' }}>
+          <GridItem asChild colSpan={3}>
+            <li data-testid="i" style={{ padding: '0px' }}>
+              a
+            </li>
+          </GridItem>
+        </ul>
+      </Grid>,
+    );
+    const g = screen.getByTestId('g');
+    expect(g.style.getPropertyValue('--ds-grid-min-column')).toBe('10rem');
+    expect(g.style.margin).toBe('0px');
+    const i = screen.getByTestId('i');
+    expect(i.tagName).toBe('LI');
+    expect(i.parentElement).toBe(g);
+    expect(i.style.getPropertyValue('--ds-grid-col-span')).toBe('3');
+    expect(i.style.padding).toBe('0px');
+  });
+
+  it('keeps gap 0 as a data attribute', () => {
+    render(<Grid gap={0} data-testid="g" />);
+    expect(screen.getByTestId('g')).toHaveAttribute('data-gap', '0');
+  });
+});
