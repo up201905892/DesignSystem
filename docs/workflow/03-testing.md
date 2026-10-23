@@ -1099,3 +1099,35 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - O `play` devolve assim que existem 4 toasts e nenhuma animação está em `running`; se o axe correr antes de a animação começar (antes do primeiro frame), a espera não bloquearia. Não se observou em 5 execuções; o programador pode considerar esperar também por uma frame.
 - `Variants` e `Stacked` também medem durante a animação de entrada; passam por folga de contraste no tema claro (sugestão já feita pelo programador).
 - Posição, largura em ecrãs estreitos, saída animada, swipe e `prefers-reduced-motion` continuam sem verificação visual (jsdom/leitura de CSS).
+
+### DS-028 · Stack e Grid — Relatório 1 — 2026-10-23
+
+- **Commit testado:** 03a4aa4 (implementação) e 3fc0094 (registo), no histórico de `develop`; sem alterações por guardar no início. Teste acrescentado em `packages/ui/src/Grid/Grid.test.tsx` (merge de `style` com `asChild` e `GridItem asChild`, `gap={0}`), commit `test(ui): DS-028 ...`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 49 ficheiros, 791 testes); Grid com os 2 testes novos: 27 verdes | ✔ |
+| Acessibilidade | `pnpm test:a11y` executado 2 vezes: 27 suites, 183 testes, 0 falhas | ✔ |
+| Build | `pnpm build` (ESM, CJS, d.ts) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Stack` com `direction` (omissão vertical), `gap` (omissão 4), `align`, `justify`, `wrap`, `asChild`: leitura de `Stack.tsx` e `Stack.css`, testes unitários.
+- [x] `Grid` com `columns` (1|2|3|4|6|12) ou `minColumnWidth` (`auto-fit` + `minmax`, sem `@media`), `gap`, `asChild`; `GridItem colSpan`: leitura de `Grid.tsx`/`Grid.css`, testes.
+- [x] `gap` resolvido para `var(--ds-space-*)` nas 11 chaves (teste de CSS); `gap={7}` não compila (`@ts-expect-error` com `pnpm typecheck` verde, o que confirma que a diretiva é necessária).
+- [x] Props em `data-*` e custom properties (`--ds-grid-min-column`, `--ds-grid-col-span`); exceção de `minColumnWidth` documentada no JSDoc e no CSS.
+- [x] `<div>` por omissão, sem `role`; `asChild` com `<ul>`/`<li>` filhos diretos: testes, incluindo o meu com `GridItem asChild` em `<li>`.
+- [x] Pastas `Stack/` e `Grid/` (`GridItem` na pasta `Grid`) com componente, teste, stories e `index.ts`; exportados em `index.ts` e `styles.css`.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (stories com axe a passar, incluindo `DarkTheme`).
+
+**Testes exigidos:** existem e são substantivos (omissões, cada prop, todas as chaves de `gap`, tipos, `asChild`, `colSpan`, className/ref, Tab, axe, CSS sem `order`/`row-reverse`/`@media`). Stories exigidas todas presentes (`Vertical`, `Horizontal`, `Gaps`, `AlignAndJustify`, `Wrap`, `DarkTheme`, `Columns`, `Responsive`, `Spans`, mais `AsList`). Lacuna que cobri: merge de `style` do filho com `asChild` e `gap={0}`.
+
+**Acessibilidade e casos limite:** nenhum é focável nem tem role; a ordem do DOM é a visual; as stories usam tokens e passam o axe nos dois temas. Props em falta usam as omissões; `colSpan` maior do que `columns` cria colunas implícitas (documentado).
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O layout real (colunas com `auto-fit`, `colSpan`, `wrap`) não é verificável em jsdom e não foi inspecionado visualmente; coberto por leitura de CSS e testes de atributos.
+- `colSpan` não é validado em runtime (0, negativo ou decimal gera CSS inválido, ignorado pelo navegador).
