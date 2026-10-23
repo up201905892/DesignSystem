@@ -287,6 +287,15 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Variants`, `WithAction`, `Persistent`, `Stacked`, `Positions`, `AfterLoading` (com `play`, padrão botão em loading e Toast com o resultado) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** posição, largura em ecrãs estreitos, saída animada, swipe e reduced motion só verificados por leitura de CSS e testes (jsdom não anima nem faz layout). Sugestões ao planeador (já registadas nos relatórios): `Variants` e `Stacked` também medem o axe durante a animação de entrada; esperar também por uma frame no `play` da `DarkTheme`.
 
+### DS-028 · Stack e Grid — concluída a 2026-10-23
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-23), commit 03a4aa4 (implementação); o único commit posterior (cf67034) é só de testes; sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** primitivos de layout `Stack` (flexbox: `direction`, `gap`, `align`, `justify`, `wrap`, `asChild`) e `Grid` com `GridItem` (`columns` ou `minColumnWidth` responsivo sem media queries, `gap`, `colSpan`, `asChild`), com `gap` tipado pela escala de espaçamento dos tokens.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas em JSDoc (autodocs); stories `Stack/{Vertical,Horizontal,Gaps,AlignAndJustify,Wrap,AsList,DarkTheme}` e `Grid/{Columns,Responsive,Spans,AsList,DarkTheme}`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** layout real (`auto-fit`, `colSpan`, `wrap`) só verificado por leitura de CSS e testes de atributos (jsdom não faz layout). Sugestão ao planeador (nota do testador): `colSpan` não é validado em runtime (0, negativo ou decimal gera CSS inválido, ignorado pelo navegador).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
