@@ -259,4 +259,197 @@ describe('Button', () => {
       expect(screen.getByRole('button', { name: 'after' })).toHaveFocus();
     });
   });
+
+  describe('loading', () => {
+    it('replaces the leading icon with a Spinner and sets the busy state', () => {
+      render(
+        <Button loading leadingIcon={<Icon />} trailingIcon={<span data-testid="trail" />}>
+          Save
+        </Button>,
+      );
+      const button = screen.getByRole('button', { name: 'Save' });
+      expect(button).toHaveAttribute('aria-busy', 'true');
+      expect(button).toHaveAttribute('aria-disabled', 'true');
+      expect(button).toHaveAttribute('data-loading');
+      expect(button).not.toHaveAttribute('disabled');
+      expect(button).not.toHaveAttribute('tabindex', '-1');
+      expect(screen.queryByTestId('icon')).not.toBeInTheDocument();
+      expect(screen.getByTestId('trail')).toBeInTheDocument();
+      const wrapper = button.querySelector('.ds-spinner')?.parentElement;
+      expect(wrapper).toHaveAttribute('aria-hidden', 'true');
+      expect(wrapper).toBe(button.firstElementChild);
+    });
+
+    it('creates the icon span when there is no leadingIcon', () => {
+      render(<Button loading>Save</Button>);
+      const button = screen.getByRole('button');
+      expect(button.firstElementChild).toHaveAttribute('aria-hidden', 'true');
+      expect(button.firstElementChild?.querySelector('.ds-spinner')).not.toBeNull();
+    });
+
+    it('has no busy state or Spinner without loading', () => {
+      render(<Button leadingIcon={<Icon />}>Save</Button>);
+      const button = screen.getByRole('button');
+      expect(button).not.toHaveAttribute('aria-busy');
+      expect(button).not.toHaveAttribute('aria-disabled');
+      expect(button).not.toHaveAttribute('data-loading');
+      expect(button).not.toHaveAttribute('aria-describedby');
+      expect(button.querySelector('.ds-spinner')).toBeNull();
+    });
+
+    it('keeps the name and describes the button with the loadingLabel', () => {
+      const { rerender } = render(<Button loading>Save</Button>);
+      expect(screen.getByRole('button', { name: 'Save' })).toHaveAccessibleDescription('Loading');
+      rerender(
+        <Button loading loadingLabel="Saving changes">
+          Save
+        </Button>,
+      );
+      expect(screen.getByRole('button', { name: 'Save' })).toHaveAccessibleDescription(
+        'Saving changes',
+      );
+    });
+
+    it('adds to an existing aria-describedby', () => {
+      render(
+        <>
+          <p id="hint">Hint</p>
+          <Button loading aria-describedby="hint">
+            Save
+          </Button>
+        </>,
+      );
+      expect(screen.getByRole('button')).toHaveAccessibleDescription('Hint Loading');
+    });
+
+    it('blocks clicks and cancels the event', () => {
+      const onClick = vi.fn();
+      render(
+        <Button loading onClick={onClick}>
+          Save
+        </Button>,
+      );
+      expect(fireEvent.click(screen.getByRole('button'))).toBe(false);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it('does not submit a form', async () => {
+      const user = userEvent.setup();
+      const onSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+      render(
+        <form onSubmit={onSubmit}>
+          <Button type="submit" loading>
+            Save
+          </Button>
+        </form>,
+      );
+      await user.click(screen.getByRole('button'));
+      await user.tab();
+      await user.keyboard('{Enter} ');
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    it('with disabled, disabled prevails and the Spinner stays', () => {
+      render(
+        <Button loading disabled>
+          Save
+        </Button>,
+      );
+      const button = screen.getByRole('button');
+      expect(button).toBeDisabled();
+      expect(button.querySelector('.ds-spinner')).not.toBeNull();
+    });
+
+    it('stays in the Tab order, unlike disabled', async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      const { rerender } = render(
+        <>
+          <Button loading onClick={onClick}>
+            x
+          </Button>
+          <button type="button">after</button>
+        </>,
+      );
+      await user.tab();
+      expect(screen.getByRole('button', { name: 'x' })).toHaveFocus();
+      await user.keyboard('{Enter} ');
+      expect(onClick).not.toHaveBeenCalled();
+      rerender(
+        <>
+          <Button disabled onClick={onClick}>
+            x
+          </Button>
+          <button type="button">after</button>
+        </>,
+      );
+      screen.getByRole('button', { name: 'x' }).blur();
+      await user.tab();
+      expect(screen.getByRole('button', { name: 'after' })).toHaveFocus();
+    });
+
+    it('keeps focus on the button when loading toggles', () => {
+      const { rerender } = render(<Button>Save</Button>);
+      const button = screen.getByRole('button');
+      button.focus();
+      rerender(<Button loading>Save</Button>);
+      expect(button).toHaveFocus();
+    });
+
+    describe('asChild', () => {
+      it('marks the link, blocks clicks and puts the Spinner before the text', async () => {
+        const user = userEvent.setup();
+        const outer = vi.fn();
+        const inner = vi.fn();
+        render(
+          <Button asChild loading onClick={outer}>
+            <a href="/x" onClick={inner}>
+              Save
+            </a>
+          </Button>,
+        );
+        const link = screen.getByRole('link', { name: 'Save' });
+        expect(link).toHaveAttribute('aria-disabled', 'true');
+        expect(link).toHaveAttribute('aria-busy', 'true');
+        expect(link).toHaveAttribute('data-loading');
+        expect(link).not.toHaveAttribute('tabindex', '-1');
+        expect(link).toHaveAccessibleDescription('Loading');
+        const spinner = link.querySelector('.ds-spinner');
+        expect(spinner).not.toBeNull();
+        expect(link.firstElementChild).toContainElement(spinner as HTMLElement);
+        expect(link.childNodes).toHaveLength(2);
+        expect(fireEvent.click(link)).toBe(false);
+        link.focus();
+        await user.keyboard('{Enter}');
+        expect(outer).not.toHaveBeenCalled();
+        expect(inner).not.toHaveBeenCalled();
+      });
+
+      it('is focusable with Tab', async () => {
+        const user = userEvent.setup();
+        render(
+          <Button asChild loading>
+            <a href="/x">Save</a>
+          </Button>,
+        );
+        await user.tab();
+        expect(screen.getByRole('link')).toHaveFocus();
+      });
+    });
+
+    it('has no axe violations', async () => {
+      const { container } = render(
+        <div>
+          <Button loading>Save</Button>
+          <Button loading leadingIcon={<Icon />} variant="danger">
+            Delete
+          </Button>
+          <Button asChild loading>
+            <a href="/x">Open</a>
+          </Button>
+        </div>,
+      );
+      await expectNoA11yViolations(container);
+    });
+  });
 });

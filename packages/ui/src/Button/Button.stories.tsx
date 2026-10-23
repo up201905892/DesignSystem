@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
@@ -81,6 +82,69 @@ export const Disabled: Story = {
   ),
 };
 
+export const Loading: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A loading button shows a `Spinner` in place of the leading icon, sets `aria-busy` and ' +
+          '`aria-disabled`, and blocks clicks. Unlike `disabled`, it stays focusable and in the ' +
+          'Tab order, so keyboard and screen reader users keep their place while the action runs. ' +
+          'The button does not announce the result: use a `Toast` or another visible, announced ' +
+          'feedback for success or error.',
+      },
+    },
+  },
+  render: () => (
+    <div style={row}>
+      <Button loading variant="primary">
+        Primary
+      </Button>
+      <Button loading variant="secondary">
+        Secondary
+      </Button>
+      <Button loading variant="ghost">
+        Ghost
+      </Button>
+      <Button loading variant="danger">
+        Danger
+      </Button>
+    </div>
+  ),
+};
+
+export const LoadingToggle: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Click the button to start loading. Focus stays on the button and its width does not ' +
+          'change, because the `Spinner` replaces the leading icon.',
+      },
+    },
+  },
+  render: function Render() {
+    const [loading, setLoading] = useState(false);
+    return (
+      <Button leadingIcon={<Icon />} loading={loading} onClick={() => setLoading(true)}>
+        Save
+      </Button>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const button = canvasElement.querySelector<HTMLButtonElement>('button');
+    if (!button) throw new Error('No button');
+    button.focus();
+    const before = button.getBoundingClientRect().width;
+    button.click();
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+    if (!button.hasAttribute('data-loading')) throw new Error('Button is not loading');
+    if (document.activeElement !== button) throw new Error('Focus left the button');
+    const after = button.getBoundingClientRect().width;
+    if (Math.abs(after - before) > 0.5) throw new Error(`Width changed: ${before} -> ${after}`);
+  },
+};
+
 export const AsLink: Story = {
   render: () => (
     <Button asChild leadingIcon={<Icon />} trailingIcon={<Icon />}>
@@ -97,6 +161,14 @@ export const AsLinkDisabled: Story = {
   ),
 };
 
+export const AsLinkLoading: Story = {
+  render: () => (
+    <Button asChild loading>
+      <a href="#docs">Documentation</a>
+    </Button>
+  ),
+};
+
 export const DarkTheme: Story = {
   parameters: { theme: 'dark' },
   render: () => (
@@ -106,6 +178,7 @@ export const DarkTheme: Story = {
       <Button variant="ghost">Ghost</Button>
       <Button variant="danger">Danger</Button>
       <Button disabled>Disabled</Button>
+      <Button loading>Loading</Button>
       <Button asChild>
         <a href="#docs">Link</a>
       </Button>

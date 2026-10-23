@@ -73,6 +73,17 @@ export const Disabled: Story = {
   ),
 };
 
+export const Loading: Story = {
+  render: () => (
+    <div style={row}>
+      <IconButton aria-label="Saving" icon={<Icon />} loading />
+      <IconButton aria-label="Saving" icon={<Icon />} variant="secondary" loading />
+      <IconButton aria-label="Saving" icon={<Icon />} variant="ghost" loading />
+      <IconButton aria-label="Saving" icon={<Icon />} variant="danger" loading />
+    </div>
+  ),
+};
+
 export const AsLink: Story = {
   render: () => (
     <IconButton asChild aria-label="Settings" icon={<Icon />}>

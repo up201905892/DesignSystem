@@ -2,6 +2,97 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-23
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 4 tarefas `Planeado` com dependências satisfeitas (DS-029, DS-030, DS-031, DS-034).
+  2. Marco: a fase "Overlays e feedback" (DS-019 a DS-027) está concluída.
+  3. Sugestão de tarefa nova, repetida: `readSpaceToken` só é usado no Popover; Tooltip, DropdownMenu e Select ainda têm offsets em pixéis (contra "sem valores à mão"). Corrigi a nota de ontem, que dizia que o Tooltip já o usava.
+  4. Opcional: ver no Storybook a posição, a largura em ecrã estreito, o swipe e `prefers-reduced-motion` do Toast, e o layout real do Grid (`auto-fit`, `colSpan`) e do Stack `wrap`. O jsdom não faz layout; só foram verificados por código e axe.
+  5. Pequenas sugestões: o `colSpan` do Grid não é validado em runtime (0, negativo ou decimal gera CSS inválido); as stories `Variants` e `Stacked` do Toast medem o axe durante a animação de entrada (passam, mas o `DarkTheme` precisou de esperar).
+  6. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu); tarefa para o `play` com teclado real (`@storybook/test`).
+- **Concluídas:** DS-027 (Toast), DS-028 (Stack e Grid)
+- **Testadas:** DS-027 (Reprovado no relatório 1 por contraste axe no `DarkTheme`, Aprovado no 2 com 5 execuções estáveis de `test:a11y`), DS-028 (Aprovado ao primeiro relatório)
+- **Desenvolvidas:** DS-027 (2 iterações), DS-028
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-029, DS-030, DS-031, DS-034 (todas Média), DS-035 depois de DS-034. O testador acrescentou 2 testes a `Grid.test.tsx`. `@ds/ui` é privado e não há `.changeset/`, por isso os finalizadores não criam changesets (DS-037 trata disso, ainda `Proposta`).
+
+## 2026-10-22
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 6 tarefas `Planeado` com dependências satisfeitas.
+  2. Sugestão de tarefa nova (pede-se aprovação do planeador/tua): aplicar `readSpaceToken` (criado na DS-024) ao Tooltip, DropdownMenu e Select, que ainda têm `sideOffset`/`collisionPadding` em pixéis, contra a regra "sem valores à mão".
+  3. Nota de API do Popover (DS-024): `sideOffset` passou a ser um passo do token (`'0'` a `'16'`, omissão `'2'` = 8 px) e deixou de aceitar números. Sem o CSS carregado, o offset cai para 0.
+  4. Opcional: ver no Storybook a colisão/reposicionamento do Tooltip e do Popover; o jsdom não faz layout e só foi verificado por código e axe.
+  5. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu); tarefa para o `play` com teclado real (`@storybook/test`).
+- **Concluídas:** DS-023 (Tooltip), DS-024 (Popover)
+- **Testadas:** DS-023 (Aprovado ao primeiro relatório), DS-024 (Reprovado no relatório 1, Aprovado no 2)
+- **Desenvolvidas:** DS-023, DS-024 (2 iterações: `sideOffset` em pixéis e focus não devolvido ao gatilho após clique fora)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-027 (Toast), DS-028 a DS-031, DS-034 (todas Média), DS-035 depois de DS-034. O testador acrescentou `Tooltip.edge.test.tsx` e `Popover.edge.test.tsx`.
+
+## 2026-10-21
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 8 tarefas `Planeado` com dependências satisfeitas.
+  2. Opcional: ver no Storybook, nos dois temas, o contraste do botão de fechar do Alert (DS-022) sobre o fundo `*-subtle`, e a largura do Button em loading com ícones que não tenham 16px (DS-021). Ambos foram verificados só por cálculo/CSS e axe, sem inspeção visual.
+  3. Pendentes das execuções anteriores: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu); sugestão de tarefa para o `play` com teclado real (`@storybook/test`).
+- **Concluídas:** DS-021 (Button: estado `loading`), DS-022 (Alert)
+- **Testadas:** DS-021 (Aprovado), DS-022 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-021, DS-022 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-023, DS-024, DS-027 (agora desbloqueada), DS-028 a DS-031, DS-034 (todas Média), DS-035 depois de DS-034. Notas: os testadores acrescentaram `Button.loading.test.tsx` e `Alert.edge.test.tsx`; o testador não confirmou o aviso do programador sobre `aria-describedby` com `asChild` (a descrição sai correta); o Alert tem uma borda `*-text` que a especificação não pedia.
+
+## 2026-10-20
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 11 tarefas `Planeado` à espera de desenvolvimento.
+  2. Sugestão para o planeador (sem ação urgente): uma tarefa para acrescentar `@storybook/test` ou alargar o `test-runner.ts`, para que o `play` de `SortKeyboardInteraction` (Table) use teclado real; hoje usa `focus()` + `click()` e Enter/Espaço só estão nos testes unitários.
+  3. Opcional: `prefers-reduced-motion` do Spinner/Skeleton foi verificado só por leitura e testes do CSS, e o contraste dos dois temas só pelo axe; sem inspeção visual.
+  4. Nota antiga ainda por tratar: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050). `.github/` é só teu.
+- **Concluídas:** DS-033 (Table: ordenação), DS-020 (Spinner e Skeleton)
+- **Testadas:** DS-033 (Aprovado), DS-020 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-033, DS-020 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-021 (Button loading, agora desbloqueada), DS-022, DS-023, DS-024, DS-028 a DS-031, DS-034 (Média), DS-027 depois de DS-021, DS-035 depois de DS-034. Notas: os testadores acrescentaram `TableSort.extra.test.tsx`, `Spinner.css.test.ts` e `Skeleton.css.test.ts`; `useTableSort` tem um `accessor` opcional por coluna que a especificação não pedia.
+
+## 2026-10-19 (segunda execução)
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 13 tarefas `Planeado` à espera de desenvolvimento.
+  2. Sugestão sem ação urgente: o `ci.yml` já não precisa do `pnpm build` antes de `typecheck`, `test` e `lint` (DS-050); podes reverter a reordenação provisória. `.github/` é só teu.
+  3. Opcional: abrir `pnpm storybook` e ver os ícones do Checkbox e do Select (DS-050 foi validada sem browser interativo; `test:a11y` passa).
+  4. Sugestão para o planeador: `Table` não aceita `className` nem props no contentor `ds-table-container` (pode importar para DS-035).
+- **Concluídas:** DS-032 (Table: estrutura base), DS-050 (workspace a partir do código-fonte)
+- **Testadas:** DS-032 (Reprovado no relatório 1, Aprovado no 2), DS-050 (Aprovado ao primeiro)
+- **Desenvolvidas:** DS-032 (2 iterações), DS-050
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-033 (Alta), depois DS-020 e as restantes `Planeado`. Nota: o teste das setas da Table corre no `postVisit` de `apps/docs/.storybook/test-runner.ts` (só em `pnpm test:a11y`).
+
+## 2026-10-19
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 15 tarefas `Planeado` à espera de desenvolvimento.
+  2. Nota de design do DropdownMenu (DS-026): usa `modal={false}` no Radix, porque o modo modal punha `aria-hidden` no `#storybook-root` e o `test:a11y` falhava. A página atrás continua com scroll e interativa com o menu aberto; clicar fora, Esc e Tab fecham. Diz se queres o modo modal (exige outra solução para o Storybook).
+  3. Sem ação urgente: o Radix Dialog não define `aria-modal`, por isso o `DialogContent` acrescenta-o à mão.
+- **Concluídas:** DS-025 (Dialog), DS-026 (DropdownMenu)
+- **Testadas:** DS-025 (Aprovado), DS-026 (Aprovado), ambas ao primeiro relatório
+- **Desenvolvidas:** DS-025, DS-026 (ciclo completo no mesmo dia, uma de cada vez)
+- **Decisões aplicadas:** aprovações de 2026-10-16 (DS-021 a DS-035 e DS-050 passaram a `Planeado`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-032 e DS-033 (Alta), DS-050 (Alta), depois DS-020 e as restantes `Planeado`. Notas: o testador acrescentou `Dialog.css.test.ts` e `DropdownMenu.extra.test.tsx`; o relatório de DS-025 refere um commit de teste separado, mas o teste foi no mesmo commit do relatório (`dbe5ab0`); o planeador não tem `git`, por isso o commit das aprovações (`1479c05`) foi feito pelo orquestrador.
+
 ## 2026-10-16
 
 - **Decisões para o João:**

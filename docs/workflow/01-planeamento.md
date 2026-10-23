@@ -27,22 +27,22 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-017 | Switch | Formulários | Média | DS-012 | Concluído |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Concluído |
-| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
-| DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Proposta |
-| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Proposta |
-| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Proposta |
-| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Proposta |
-| DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Proposta |
-| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Proposta |
-| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Proposta |
-| DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Proposta |
-| DS-029 | Card | Layout e dados | Média | DS-010 | Proposta |
-| DS-030 | Tabs | Layout e dados | Média | DS-009 | Proposta |
-| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Proposta |
-| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Proposta |
-| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Proposta |
-| DS-034 | Pagination | Layout e dados | Média | DS-011 | Proposta |
-| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Proposta |
+| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Concluído |
+| DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Concluído |
+| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Concluído |
+| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Concluído |
+| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Concluído |
+| DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
+| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
+| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Concluído |
+| DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Concluído |
+| DS-029 | Card | Layout e dados | Média | DS-010 | Planeado |
+| DS-030 | Tabs | Layout e dados | Média | DS-009 | Planeado |
+| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Planeado |
+| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
+| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
+| DS-034 | Pagination | Layout e dados | Média | DS-011 | Planeado |
+| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Planeado |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Proposta |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035 | Proposta |
@@ -57,6 +57,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
+| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
 
 ## Decisões aplicadas
 
@@ -67,6 +68,8 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | 2026-10-12 |
 | 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | 2026-10-12 |
 | 2026-10-12 | Responder | DS-003 | 2026-10-12 |
+| 2026-10-16 | Aprovar | DS-021 a DS-035 | 2026-10-19 |
+| 2026-10-16 | Aprovar | DS-050 | 2026-10-19 |
 
 ## Decisões técnicas
 
@@ -840,6 +843,11 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Saving')
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
+- 2026-10-20 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-20 · programador · Em desenvolvimento → Pronto para teste · commit 5374d91
+- 2026-10-20 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-20 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-20 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem código de produção depois do commit testado; changeset não aplicável
 
 ### DS-021 · Button: estado `loading`
 
@@ -876,6 +884,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loading focável com aria-disabled documentado como diferença intencional face a disabled; clique bloqueado na captura; asChild + loading; posição do Spinner via Slottable; loadingLabel por aria-describedby em vez de role="status"; nomes de exemplo em inglês
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loadingLabel por aria-describedby, bloqueio da submissão e largura sem leadingIcon confirmados; novo critério: a documentação diz que o resultado da ação é anunciado pelo Toast ou por outro feedback do consumidor, não pelo botão
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-21 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-21 · programador · Em desenvolvimento → Pronto para teste · commit f9ada3d
+- 2026-10-21 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-21 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-21 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem código de produção depois do commit testado; changeset não aplicável
 
 ### DS-022 · Alert
 
@@ -903,6 +917,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-21 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-21 · programador · Em desenvolvimento → Pronto para teste · commit 1d99eb1
+- 2026-10-21 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-21 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-21 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem código de produção depois do commit testado; changeset não aplicável
 
 ### DS-023 · Tooltip
 
@@ -930,6 +950,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-22 · programador · Planeado → Em desenvolvimento · início
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit 76a9b0a
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-22 · testador · Em teste → Aprovado · relatório 1 aprovado, sem falhas
+- 2026-10-22 · finalizador · Aprovado → Concluído · relatório 1 aprovado; changeset não aplicável (pacote privado)
 
 ### DS-024 · Popover
 
@@ -959,6 +985,16 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o popover nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-22 · programador · Planeado → Em desenvolvimento · início
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit a09a0ff
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-22 · testador · Em teste → Reprovado · relatório 1: sideOffset em pixéis (não por token) e clique fora não devolve o focus ao gatilho
+- 2026-10-22 · programador · Reprovado → Em desenvolvimento · correção das duas falhas do relatório 1
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit d2ca4f9
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 2
+- 2026-10-22 · testador · Em teste → Aprovado · relatório 2 aprovado, as duas falhas do relatório 1 corrigidas, sem falhas novas
+- 2026-10-22 · finalizador · Aprovado → Concluído · relatório 2 aprovado (d2ca4f9); changeset não aplicável (@ds/ui privado)
 
 ### DS-025 · Dialog (Modal)
 
@@ -990,6 +1026,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o diálogo nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit e1c2909
+- 2026-10-19 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, todos os critérios verificados
+- 2026-10-19 · finalizador · Aprovado → Concluído · definição de concluído verificada; changeset não aplicável (pacote privado)
 
 ### DS-026 · DropdownMenu
 
@@ -1020,6 +1062,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o menu (clique, Enter, Espaço, Seta para baixo) nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit d1f8738
+- 2026-10-19 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md
+- 2026-10-19 · finalizador · Aprovado → Concluído · definição de concluído verificada; changeset não aplicável (pacote privado)
 
 ### DS-027 · Toast
 
@@ -1052,6 +1100,16 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): story AfterLoading com o padrão "botão em loading → Toast com o resultado"; DS-021 acrescentada às dependências
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-23 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 93c3cbb
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-23 · testador · Em teste → Reprovado · relatório 1 em 03-testing.md (falha de contraste axe na story DarkTheme)
+- 2026-10-23 · programador · Reprovado → Em desenvolvimento · correção da falha 1 do relatório 1
+- 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 0679d4b
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 2
+- 2026-10-23 · testador · Em teste → Aprovado · relatório 2 em 03-testing.md (test:a11y estável em 5 execuções)
+- 2026-10-23 · finalizador · Aprovado → Concluído · registo em 04-concluded.md; changeset não aplicável (`@ds/ui` privado)
 
 ### DS-028 · Stack e Grid
 
@@ -1080,6 +1138,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-23 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 03a4aa4
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-23 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md
+- 2026-10-23 · finalizador · Aprovado → Concluído · changeset não aplicável (@ds/ui privado)
 
 ### DS-029 · Card
 
@@ -1107,6 +1171,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-030 · Tabs
 
@@ -1136,6 +1201,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-031 · Accordion
 
@@ -1164,6 +1230,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-032 · Table: estrutura base
 
@@ -1192,6 +1259,16 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit 6d8452a
+- 2026-10-19 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-19 · testador · Em teste → Reprovado · relatório 1: falta o teste exigido das setas a fazer scroll horizontal (ver 03-testing.md)
+- 2026-10-19 · programador · Reprovado → Em desenvolvimento · correção da falha do relatório 1
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit f83f5cf
+- 2026-10-19 · testador · Pronto para teste → Em teste · início do reteste (iteração 2)
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 2: todas as verificações verdes, scroll por setas coberto no test-runner
+- 2026-10-19 · finalizador · Aprovado → Concluído · relatório 2 aprovado; sem changeset (pacote privado); documentação e stories verificadas
 
 ### DS-033 · Table: ordenação
 
@@ -1221,6 +1298,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-20 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-20 · programador · Em desenvolvimento → Pronto para teste · commit 754b37b
+- 2026-10-20 · testador · Pronto para teste → Em teste · início do teste (relatório 1)
+- 2026-10-20 · testador · Em teste → Aprovado · relatório 1: todas as verificações verdes, critérios verificados, zero falhas
+- 2026-10-20 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem commits de produção posteriores; changeset não aplicável (pacotes privados)
 
 ### DS-034 · Pagination
 
@@ -1252,6 +1335,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): botões anterior/seguinte focáveis com aria-disabled nos limites documentados como exceção intencional face ao disabled do Button, com teste e story de teclado
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-035 · DataTable: Table com ordenação e paginação integradas
 
@@ -1280,6 +1364,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 
 ### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
 
@@ -1729,3 +1814,48 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio)
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Alta
+- **Depende de:** — (DS-008 e DS-015 já estão `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** fazer com que os comandos do `CLAUDE.md` funcionem num clone limpo, sem `pnpm build` prévio. Em desenvolvimento (typecheck, Vitest, Storybook), os pacotes `@ds/*` do workspace passam a ser resolvidos a partir do código-fonte (`src/index.ts`); o resultado construído e publicado continua a resolver para `dist/`.
+
+**Contexto (verificado pelo João num clone limpo de `develop` em 2026-10-16):** `packages/icons/package.json` só expõe tipos a partir de `./dist/index.d.ts` (campo `types` e `exports["."].types`). Desde a DS-015 (Checkbox) e a DS-018 (Select), o `@ds/ui` importa `@ds/icons`. Por isso, num clone limpo, `pnpm typecheck` falha com `TS2307: Cannot find module '@ds/icons'` em `src/Checkbox/Checkbox.tsx` e `src/Select/Select.tsx`, e só passa depois de `pnpm build`. O CI do GitHub corre os passos de tipos e de testes antes do build, e por isso está vermelho desde 2026-10-14. O João vai reordenar o `ci.yml` como solução provisória, mas essa mudança não substitui esta tarefa.
+
+**Abordagem sugerida (não obrigatória):** `paths` no `tsconfig.base.json`, ou uma condição de exportação própria (ex.: `"source"` em `exports`, a apontar para `./src/index.ts`) com `customConditions` no TypeScript; nos dois casos, acompanhada de `resolve.alias` ou `resolve.conditions` equivalentes nas configurações do Vitest e na configuração Vite do Storybook. O programador escolhe o mecanismo e regista a escolha e o motivo em `02-desenvolvimento.md`. Os `.d.ts` construídos e os `exports` para `dist/` ficam iguais para quem consome os pacotes.
+
+**Nota sobre `@ds/tokens`:** o `src/index.ts` deste pacote está vazio (`export {}`). O objeto `tokens`/`themes` e os ficheiros `tokens.css`/`themes.css` são produzidos pelo Style Dictionary e só existem em `dist/`. Hoje, os scripts de `apps/docs` (`storybook`, `build-storybook`, `typecheck`, `test:a11y`) e o `test` do próprio pacote correm `pnpm --filter @ds/tokens build` antes. Para este pacote há duas soluções aceites: (a) manter a geração automática como passo prévio dentro de cada comando que precisa dela, ou (b) expor uma fonte TypeScript sem geração. Em qualquer dos casos, a solução tem de cobrir todos os consumidores e fica registada.
+
+**Critérios de aceitação:**
+- [ ] Inventário: `02-desenvolvimento.md` lista todas as dependências `@ds/*` entre workspaces, no mínimo `ui → icons`, `ui → tokens`, `docs → ui`, `docs → icons` e `docs → tokens` (incluindo importações diretas nas stories, mesmo sem dependência declarada). Para cada uma, indica o tipo de importação (TS/JS ou CSS) e como passa a ser resolvida em desenvolvimento.
+- [ ] Clone limpo: depois de `git clone` + `pnpm install --frozen-lockfile`, sem nenhuma pasta `dist/` nem `storybook-static/` no repositório, `pnpm typecheck`, `pnpm test` e `pnpm lint` saem com código 0, cada um corrido isoladamente e sem `pnpm build` antes.
+- [ ] Num clone limpo, `pnpm build:docs` sai com código 0, e `pnpm storybook` arranca sem erros de resolução de módulos; as stories do Checkbox e do Select mostram os ícones.
+- [ ] `pnpm build` continua a sair com código 0 e gera os mesmos ficheiros em `packages/*/dist/` que antes da tarefa (mesma lista de ficheiros).
+- [ ] Os `dist/*.d.ts` do `@ds/ui` importam `@ds/icons` pelo nome do pacote: não contêm caminhos para o código-fonte de outros pacotes (nem `../icons/src`, nem `packages/icons`, nem `src/index`), e não copiam as declarações dos ícones para dentro (`grep` sem resultados).
+- [ ] Os campos `main`, `module`, `types` e as entradas `import`/`require`/`types` de `exports` dos três pacotes continuam a apontar para `dist/`. Se for acrescentada uma condição de desenvolvimento (ex.: `"source"`), ela é a única entrada nova e não é usada pelo `tsup` nem por um consumidor normal: `node -e "require('@ds/ui')"`, a partir de `apps/docs`, depois do build, resolve para `dist/`.
+- [ ] `pnpm test:a11y` continua a passar.
+- [ ] Verificação de regressão registada em `02-desenvolvimento.md` com os comandos exatos usados, incluindo a forma de remover `dist/` (clone novo, ou `git clean -xdf` seguido de `pnpm install --frozen-lockfile`), e o código de saída de cada comando.
+- [ ] Nenhum ficheiro em `.github/` é alterado. Se o CI precisar de alguma mudança (ex.: deixar de depender da ordem dos passos), o pedido fica em "Decisões para o João" no registo diário.
+- [ ] G1 a G3 (sem dependências novas de runtime; uma devDependency só entra se o mecanismo a exigir e se ficar justificada no registo).
+
+**Testes exigidos:**
+- Unitários: não são precisos testes novos, salvo se o mecanismo escolhido precisar de um (ex.: um teste que confirma que `@ds/icons` resolve para `src/` no Vitest). Os testes existentes continuam a passar sem build prévio.
+- Verificação do testador: repetir a verificação de clone limpo (clone novo ou `git clean -xdf`, depois `pnpm install --frozen-lockfile`, depois `pnpm typecheck`, `pnpm test` e `pnpm lint`, cada um com código 0); depois `pnpm build`, inspeção com `grep` dos `packages/ui/dist/*.d.ts` (sem caminhos de código-fonte de outros pacotes) e `pnpm build:docs` com código 0.
+- Prova negativa (temporária, não commitada): num clone limpo, introduzir um erro de tipos em `packages/icons/src`, por exemplo mudando o tipo de `size` de um ícone usado pelo Checkbox, e confirmar que `pnpm typecheck` no `@ds/ui` falha. Isto prova que os tipos vêm do código-fonte e não de um `dist/` antigo.
+- Acessibilidade: não aplicável (sem alterações a componentes); `pnpm test:a11y` continua a passar.
+- Visual/Storybook: verificação manual de que as stories do Checkbox e do Select mostram os ícones com `pnpm storybook` num clone limpo.
+
+**Fora de âmbito:** alterar a ordem dos passos em `ci.yml` ou `diario.yml` (é do João), metadados de publicação e mudança de nome dos pacotes (DS-036), project references do TypeScript (`tsc -b`) com build incremental, alterar o Style Dictionary ou os tokens.
+
+**Histórico:**
+- 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit fd42d21
+- 2026-10-19 · testador · Pronto para teste → Em teste · início do teste (commits fd42d21, 82b593f)
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-19 · finalizador · Aprovado → Concluído · changeset não aplicável (infraestrutura, pacotes privados); verificação visual dos ícones em browser não feita, coberta por build:docs e test:a11y (ver 04-concluded.md)
