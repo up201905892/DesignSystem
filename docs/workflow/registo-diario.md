@@ -2,6 +2,23 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-23
+
+- **Decisões para o João:**
+  1. Aprovar DS-036 a DS-049 em `aprovacoes.md` (14 propostas por aprovar). Não propus tarefas novas: há 4 tarefas `Planeado` com dependências satisfeitas (DS-029, DS-030, DS-031, DS-034).
+  2. Marco: a fase "Overlays e feedback" (DS-019 a DS-027) está concluída.
+  3. Sugestão de tarefa nova, repetida: `readSpaceToken` só é usado no Popover; Tooltip, DropdownMenu e Select ainda têm offsets em pixéis (contra "sem valores à mão"). Corrigi a nota de ontem, que dizia que o Tooltip já o usava.
+  4. Opcional: ver no Storybook a posição, a largura em ecrã estreito, o swipe e `prefers-reduced-motion` do Toast, e o layout real do Grid (`auto-fit`, `colSpan`) e do Stack `wrap`. O jsdom não faz layout; só foram verificados por código e axe.
+  5. Pequenas sugestões: o `colSpan` do Grid não é validado em runtime (0, negativo ou decimal gera CSS inválido); as stories `Variants` e `Stacked` do Toast medem o axe durante a animação de entrada (passam, mas o `DarkTheme` precisou de esperar).
+  6. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu); tarefa para o `play` com teclado real (`@storybook/test`).
+- **Concluídas:** DS-027 (Toast), DS-028 (Stack e Grid)
+- **Testadas:** DS-027 (Reprovado no relatório 1 por contraste axe no `DarkTheme`, Aprovado no 2 com 5 execuções estáveis de `test:a11y`), DS-028 (Aprovado ao primeiro relatório)
+- **Desenvolvidas:** DS-027 (2 iterações), DS-028
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** DS-029, DS-030, DS-031, DS-034 (todas Média), DS-035 depois de DS-034. O testador acrescentou 2 testes a `Grid.test.tsx`. `@ds/ui` é privado e não há `.changeset/`, por isso os finalizadores não criam changesets (DS-037 trata disso, ainda `Proposta`).
+
 ## 2026-10-22
 
 - **Decisões para o João:**
