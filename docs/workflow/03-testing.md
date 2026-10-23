@@ -1073,3 +1073,29 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Posição, largura em ecrãs estreitos, animação de saída e swipe não foram verificados visualmente (jsdom); `prefers-reduced-motion` só por leitura de CSS.
 - Sugestão do programador (offsets em pixéis no Tooltip, DropdownMenu e Select) mantém-se para o planeador.
 - `readSpaceToken` devolve 0 sem `styles.css` carregado; o componente já depende dele.
+
+### DS-027 · Toast — Relatório 2 — 2026-10-23
+
+- **Commit testado:** 0679d4b (correção) e 442dc0b (registo), no histórico de `develop`; sem alterações por guardar no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 45 ficheiros, 719 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` executado 5 vezes seguidas: 25 suites, 171 testes, 0 falhas em todas; `Toast.stories.tsx` PASS nas 5 | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Verificação da falha 1 do relatório 1:** o diff de 0679d4b só toca em `Toast.stories.tsx`. A story `DarkTheme` ganhou um `play` que espera pelos 4 toasts e pelo fim das animações (`getAnimations()`) antes do axe. A violação `color-contrast` no toast `info` já não aparece em nenhuma das 5 execuções (no relatório 1 reproduzia-se em 3 de 3). Isto confirma a causa provável: o axe media durante a animação de entrada. Cores e tokens não foram alterados.
+
+**Critérios de aceitação:** os verificados no relatório 1 mantêm-se (o código de produção do componente não mudou desde 93c3cbb; testes unitários verdes). O critério que falhava, G1 a G3 e C1 a C5 (acessibilidade das stories, incluindo `DarkTheme`), cumpre-se agora de forma estável.
+
+**Testes exigidos:** existem e são substantivos (ver relatório 1). A lacuna do axe unitário só no tema claro fica coberta pela story `DarkTheme` no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O `play` devolve assim que existem 4 toasts e nenhuma animação está em `running`; se o axe correr antes de a animação começar (antes do primeiro frame), a espera não bloquearia. Não se observou em 5 execuções; o programador pode considerar esperar também por uma frame.
+- `Variants` e `Stacked` também medem durante a animação de entrada; passam por folga de contraste no tema claro (sugestão já feita pelo programador).
+- Posição, largura em ecrãs estreitos, saída animada, swipe e `prefers-reduced-motion` continuam sem verificação visual (jsdom/leitura de CSS).
