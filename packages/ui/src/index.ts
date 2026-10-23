@@ -113,6 +113,10 @@ export type {
   SelectGroupProps,
   SelectSeparatorProps,
 } from './Select';
+export { Stack } from './Stack';
+export type { StackProps, SpaceKey } from './Stack';
+export { Grid, GridItem } from './Grid';
+export type { GridProps, GridItemProps } from './Grid';
 export type {
   FieldProps,
   FieldLabelProps,
