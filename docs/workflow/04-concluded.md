@@ -296,6 +296,15 @@ Modelo de entrada:
 - **Documentação:** props e notas em JSDoc (autodocs); stories `Stack/{Vertical,Horizontal,Gaps,AlignAndJustify,Wrap,AsList,DarkTheme}` e `Grid/{Columns,Responsive,Spans,AsList,DarkTheme}`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** layout real (`auto-fit`, `colSpan`, `wrap`) só verificado por leitura de CSS e testes de atributos (jsdom não faz layout). Sugestão ao planeador (nota do testador): `colSpan` não é validado em runtime (0, negativo ou decimal gera CSS inválido, ignorado pelo navegador).
 
+### DS-029 · Card — concluída a 2026-10-26
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-26), commit 829c873 (implementação) e 89366b6 (registo); o único commit posterior de código (f4ad0ec) é só de testes; sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Card`, `CardHeader`, `CardTitle` (`as` h2 a h6, omissão h3), `CardDescription`, `CardBody` e `CardFooter`; `variant` (`outlined`/`elevated`), `padding` (`none` a `lg`) e `asChild` (cartão clicável sobre `<a>` com focus visível), só com tokens e nos dois temas.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** sombra `elevated` no tema escuro pouco visível e `overflow-wrap` não definido (palavra longa sem espaços pode transbordar): sugestões ao planeador, só verificáveis num navegador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
