@@ -58,6 +58,11 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
 | DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
+| DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Proposta |
+| DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Proposta |
+| DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Proposta |
+| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033 | Proposta |
+| DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Proposta |
 
 ## Decisões aplicadas
 
@@ -1869,3 +1874,156 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-19 · testador · Pronto para teste → Em teste · início do teste (commits fd42d21, 82b593f)
 - 2026-10-19 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
 - 2026-10-19 · finalizador · Aprovado → Concluído · changeset não aplicável (infraestrutura, pacotes privados); verificação visual dos ícones em browser não feita, coberta por build:docs e test:a11y (ver 04-concluded.md)
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select)
+
+- **Fase do MVP:** Overlays e feedback
+- **Prioridade:** Média
+- **Depende de:** DS-018, DS-023, DS-024, DS-026 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** acabar com os afastamentos em pixéis escritos à mão nos overlays posicionados pelo Radix, aplicando o `readSpaceToken` criado na DS-024 (hoje só o Popover o usa), para cumprir a regra "sem valores escritos à mão" e manter os quatro overlays coerentes.
+
+**Contexto (verificado no código em 2026-10-26):** `Tooltip.tsx` usa `sideOffset ?? 6` e `collisionPadding={8}`; `DropdownMenu.tsx` usa `sideOffset = 4` como omissão de `DropdownMenuContent`; `Select.tsx` usa `sideOffset={4}` fixo em `RadixSelect.Content`. O `Popover` já usa `sideOffset?: SpaceStep` (omissão `'2'`) e `collisionPadding={readSpaceToken('2')}`.
+
+**Critérios de aceitação:**
+- [ ] `Tooltip`: a prop `sideOffset` passa a ser do tipo `SpaceStep` (de `packages/ui/src/utils/spaceToken.ts`), com omissão `'2'`, convertida com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')`.
+- [ ] `DropdownMenuContent`: `sideOffset?: SpaceStep` com omissão `'1'`, convertida com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')`.
+- [ ] `Select`: o conteúdo usa `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}` (o `Select` não ganha props novas).
+- [ ] Passar um número a `sideOffset` no `Tooltip` ou no `DropdownMenuContent` é erro de compilação (o tipo herdado do Radix é omitido e substituído por `SpaceStep`, como no `Popover`).
+- [ ] Nos ficheiros `.tsx` de `packages/ui/src` (sem contar testes e stories), `grep -nE "(sideOffset|collisionPadding)(=\{| \?\? | = )[0-9]"` não devolve resultados.
+- [ ] O JSDoc de `sideOffset` no `Tooltip` e no `DropdownMenuContent` diz que o valor é um passo da escala `--ds-space-*`, como no `Popover`.
+- [ ] Os testes e as stories existentes das DS-018, DS-023 e DS-026 continuam a passar sem alterar o que verificam (só se ajustam se usarem `sideOffset` numérico).
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se às pastas existentes).
+
+**Testes exigidos:**
+- Unitários: para `Tooltip` (aberto com `defaultOpen`), `DropdownMenu` (aberto ao clicar) e `Select` (aberto ao clicar), um teste como o da DS-024 (`vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')`) confirma que são lidos `--ds-space-<passo do sideOffset>` e `--ds-space-2`; com `sideOffset="4"` no `Tooltip` e no `DropdownMenuContent`, é lido `--ds-space-4`; teste de tipos com `// @ts-expect-error` para `sideOffset={6}` no `Tooltip` e no `DropdownMenuContent`.
+- Acessibilidade: axe sem violações com cada overlay aberto (os testes existentes continuam a cobrir o teclado; nada muda no comportamento).
+- Visual/Storybook: nova story `Offset` no `Tooltip`, no `DropdownMenu` e no `Select`, com o overlay aberto do lado `bottom` e `play` que mede, em browser real, a distância entre o fundo do gatilho e o topo do conteúdo (`getBoundingClientRect`) e falha se diferir em mais de 1px do valor de `--ds-space-<passo>` em pixéis; as stories `DarkTheme` continuam a passar.
+
+**Fora de âmbito:** mudar o `Popover` (já cumpre), reagir a mudanças do tamanho de letra da raiz depois de o overlay abrir, setas decorativas, outros valores numéricos que não sejam afastamentos (ex.: `delayDuration`).
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-024, DS-027; registo diário)
+
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px`
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Média
+- **Depende de:** DS-007, DS-029, DS-030 (todas `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** dar às larguras de borda, ao indicador dos separadores e ao anel de focus tokens próprios, em vez dos `1px`/`2px` hoje permitidos como exceção no Stylelint, para que uma mudança de espessura se faça num só sítio e a regra "só tokens" fique sem exceções nas bordas.
+
+**Contexto (verificado no código em 2026-10-26):** há `1px`/`2px` escritos à mão em `border*`, `outline` e `outline-offset` em `styles/focus.css` e nos `.css` de Button, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Badge, Alert, Toast, Popover, DropdownMenu, Dialog, Card, Table e Tabs (indicador do separador ativo com `2px`, `outline-offset: -2px` e `2px solid Highlight` em `forced-colors`).
+
+**Critérios de aceitação:**
+- [ ] Novo ficheiro `packages/tokens/src/primitives/border.json` com `border.width.1` (`1px`) e `border.width.2` (`2px`), e tokens do anel de focus `focus.ring.width` (referência a `border.width.2`) e `focus.ring.offset` (`2px`); o build gera `--ds-border-width-1`, `--ds-border-width-2`, `--ds-focus-ring-width` e `--ds-focus-ring-offset` em `tokens.css` e as chaves correspondentes no objeto `tokens`.
+- [ ] Os testes de tokens da DS-004 continuam a passar (prefixo `--ds-`, número de variáveis CSS igual ao de folhas do objeto TypeScript, sem referências por resolver).
+- [ ] Em `packages/ui/src/**/*.css`, todas as larguras em `border`, `border-*`, `outline`, `outline-width` e `outline-offset` usam esses tokens; o indicador dos `Tabs` usa `--ds-border-width-2`; o `outline-offset` negativo dos `Tabs` usa `calc(-1 * var(--ds-focus-ring-offset))`; a regra de `forced-colors` dos `Tabs` usa o token de largura.
+- [ ] Os separadores de 1px de altura (`DropdownMenuSeparator`, `SelectSeparator`) usam `--ds-border-width-1`. As dimensões `1px` da técnica de `clip` (`VisuallyHidden` e legenda escondida da `Table`) não são bordas e ficam como estão.
+- [ ] O Stylelint (DS-007) deixa de aceitar comprimentos literais (`px`, `rem`, `em`) em `border`, `border-*` (exceto `border-radius`, já coberto), `outline`, `outline-width` e `outline-offset`; o comentário no topo de `stylelint.config.js` e o README de `packages/ui` deixam de listar a exceção `1px`/`2px`.
+- [ ] Um `.css` temporário com `border: 1px solid var(--ds-color-border-default)` ou `outline-offset: 2px` faz `pnpm lint` falhar (não commitado).
+- [ ] Nada muda visualmente: os valores resolvidos são os mesmos de antes (1px nas bordas, 2px no indicador e no anel de focus, offset de 2px).
+- [ ] A página "Foundations" do Storybook (DS-006) ganha a secção ou story `Borders`, gerada a partir do objeto `tokens` (sem lista escrita à mão).
+- [ ] Tarefas de componentes desenvolvidas depois desta (ex.: DS-031, DS-034, DS-035) já ficam obrigadas aos tokens pelo Stylelint; se uma delas estiver `Em desenvolvimento` ao mesmo tempo, o programador regista em `02-desenvolvimento.md` como resolveu a sobreposição.
+- [ ] G1 a G3 (sem dependências novas).
+
+**Testes exigidos:**
+- Unitários: teste de tokens que confirma `--ds-border-width-1: 1px`, `--ds-border-width-2: 2px`, `--ds-focus-ring-width` e `--ds-focus-ring-offset` em `dist/tokens.css`; teste Vitest que percorre `packages/ui/src/**/*.css` e falha se alguma declaração `border*` (exceto `border-radius`) ou `outline*` tiver um número seguido de `px`, `rem` ou `em`; o teste de `styles.css` da DS-007 continua a passar.
+- Acessibilidade: `pnpm test:a11y` passa sem alterações nas stories existentes, incluindo `FocusRing` e `FocusRing/DarkTheme`; com Tab, o anel de focus continua visível com 2px nos dois temas (story `FocusRing`, `play` que lê `getComputedStyle(el).outlineWidth === '2px'` depois de focar o botão com teclado).
+- Visual/Storybook: story `Foundations/Borders`; a story `Tabs/Default` ganha `play` que confirma, em browser real, que o separador ativo tem `border-bottom-width` de `2px`.
+
+**Fora de âmbito:** mudar espessuras ou o aspeto de algum componente, tokens de estilo de borda (`solid`/`dashed`), tokens de largura por componente, `forced-colors` noutros componentes além do que já existe.
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão do programador e do testador (DS-029, DS-030)
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas
+
+- **Fase do MVP:** Layout e dados
+- **Prioridade:** Média
+- **Depende de:** DS-005, DS-029, DS-052 (a DS-052 altera também `Card.css`; esta tarefa vem a seguir para não haver alterações cruzadas)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** tornar a elevação visível no tema escuro (onde as sombras pretas de baixa opacidade quase não se veem) com tokens de sombra que mudam por tema, e impedir que uma palavra longa sem espaços transborde do `Card`.
+
+**Contexto (verificado no código em 2026-10-26):** as sombras primitivas (`shadow.sm|md|lg`) usam preto com opacidade 0,05–0,1 e são as mesmas nos dois temas; o `Card elevated` tem borda transparente e `--ds-shadow-md`; Tooltip, Popover, DropdownMenu e Select usam `--ds-shadow-md`, Dialog e Toast usam `--ds-shadow-lg`; `Card.css` não define `overflow-wrap`.
+
+**Critérios de aceitação:**
+- [ ] Novas sombras primitivas para fundos escuros, `shadow.strong.md` e `shadow.strong.lg`, com a mesma geometria de `md` e `lg` e preto com opacidade ≥ 0,5.
+- [ ] Novos tokens semânticos em `light.json` e `dark.json` (mesmas chaves nos dois, como exige a DS-005): `shadow-raised` (cartões), `shadow-floating` (Tooltip, Popover, DropdownMenu, Select) e `shadow-modal` (Dialog, Toast). No tema claro referenciam as sombras atuais (`md`, `md`, `lg`), de modo que o tema claro não muda; no tema escuro referenciam `strong.md`, `strong.md` e `strong.lg`.
+- [ ] Novo token semântico `color-border-raised`: no tema claro referencia o mesmo primitivo de `color-bg-surface` (a borda fica invisível sobre o próprio cartão, como hoje); no tema escuro referencia o mesmo primitivo de `color-border-default`. Só referencia primitivos (sem valores literais).
+- [ ] `Card elevated` usa `box-shadow: var(--ds-shadow-raised)` e `border-color: var(--ds-color-border-raised)`; os seis overlays passam a usar `--ds-shadow-floating` ou `--ds-shadow-modal`; em `packages/ui/src/**/*.css` deixa de haver referências diretas a `--ds-shadow-sm|md|lg`.
+- [ ] `Card` (e as subpartes de texto) com `overflow-wrap: anywhere` e `min-width: 0`, para que uma palavra longa quebre dentro do cartão também quando o cartão está dentro de um `Grid` ou de um `Stack`.
+- [ ] Os testes de temas da DS-005 continuam a passar (mesmas chaves nos dois temas, sem referências por resolver) e os pares de contraste existentes não mudam.
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se à pasta `Card` e às dos overlays apenas onde indicado).
+
+**Testes exigidos:**
+- Unitários: teste de tokens que confirma que `shadow-raised`, `shadow-floating`, `shadow-modal` e `color-border-raised` existem nos dois temas e que, no tema escuro, as sombras têm opacidade ≥ 0,5 (lida do valor gerado); teste Vitest que percorre `packages/ui/src/**/*.css` e falha se encontrar `--ds-shadow-sm`, `--ds-shadow-md` ou `--ds-shadow-lg`; os testes existentes do `Card` continuam a passar.
+- Acessibilidade: axe sem violações; `pnpm test:a11y` passa em todas as stories `DarkTheme` dos componentes alterados.
+- Visual/Storybook: nova story `Card/LongWord` (cartão com 240px de largura máxima, título e texto com uma palavra de 200 caracteres sem espaços) com `play` que falha se `scrollWidth > clientWidth` no cartão; a story `Card/InGrid` ganha o mesmo caso dentro de um `Grid` com `play` equivalente; a story `Card/DarkTheme` ganha `play` que confirma, em browser real, que o cartão `elevated` tem `border-top-color` diferente de `rgba(0, 0, 0, 0)` e `box-shadow` diferente de `none`.
+
+**Fora de âmbito:** escala de elevação com mais níveis, superfícies mais claras por nível de elevação no tema escuro, contraste mínimo da borda do cartão (o cartão não é um controlo; a WCAG 1.4.11 não o exige), alterar a geometria das sombras do tema claro.
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão do programador e do testador (DS-029)
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Média
+- **Depende de:** DS-003, DS-033 (todas `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** fazer com que os `play` de interação das stories usem o teclado e o rato através do `userEvent` e as verificações através do `expect` do `@storybook/test`, em vez de `focus()`, `click()` e `KeyboardEvent` despachados à mão, para que as stories `KeyboardInteraction` provem de facto o teclado num browser real.
+
+**Contexto (verificado no código em 2026-10-26):** o `@storybook/test` não está instalado (as tarefas anteriores não o podiam acrescentar, pela G2). O `play` de `Table/SortKeyboardInteraction` usa `focus()` + `click()`; os de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog` despacham `KeyboardEvent` ou chamam `click()`; os `play` verificam com `throw new Error`. Há 12 ocorrências de `new KeyboardEvent`, `dispatchEvent(` ou `.click()` em 8 ficheiros de stories (`Button`, `Toast`, `Tooltip`, `Popover`, `DropdownMenu`, `Select`, `Table`, `Dialog`).
+
+**Critérios de aceitação:**
+- [ ] `@storybook/test` instalado com a mesma versão menor do Storybook já usado (8.6.x), como devDependency de `packages/ui` (onde as stories são verificadas pelo `pnpm typecheck`) e, se o Storybook o exigir para resolver, de `apps/docs`.
+- [ ] Nas stories de `packages/ui/src`, `grep -nE "new KeyboardEvent|dispatchEvent\(|\.click\(\)"` não devolve resultados: todas as interações dos `play` usam `userEvent` (`click`, `tab`, `keyboard`, `hover`) e `within(canvasElement)` ou `screen` para encontrar os elementos.
+- [ ] `Table/SortKeyboardInteraction`: chega ao primeiro cabeçalho ordenável com `userEvent.tab()`, ativa a ordenação com `{Enter}` (asc) e com espaço (desc), e verifica com `expect` o `aria-sort`, a primeira célula e que o focus continua no botão.
+- [ ] As stories `KeyboardInteraction` de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog`, e as stories `Button/LoadingToggle` e `Toast/AfterLoading`, cobrem as mesmas teclas e verificações que cobrem hoje, agora com `userEvent` e `expect` (com `waitFor` ou `findBy*` onde há animações ou portais), sem `setTimeout` de duração fixa.
+- [ ] Os restantes `play` que só medem dimensões (ex.: `Sizes`) podem manter-se; se forem tocados, passam a usar `expect`.
+- [ ] O comportamento nativo que o `userEvent` não reproduz (ex.: scroll horizontal com as setas em `Table/HorizontalScroll`) continua no `postVisit` de `apps/docs/.storybook/test-runner.ts`, com teclas reais do Playwright; esta divisão fica escrita em `apps/docs/README.md`, junto com a convenção de que os `play` novos (ex.: DS-031, DS-034, DS-035) usam `@storybook/test`.
+- [ ] `pnpm test:a11y` corre os `play` migrados e passa; o painel "Interactions" do Storybook mostra os passos dessas stories.
+- [ ] G1 a G3 (dependência nova: `@storybook/test`); nenhuma alteração ao código dos componentes.
+
+**Testes exigidos:**
+- Unitários: não aplicável (os testes Vitest existentes não mudam e continuam a passar).
+- Acessibilidade: `pnpm test:a11y` com código 0, cobrindo os `play` migrados; prova negativa temporária: mudar o `aria-sort` esperado em `Table/SortKeyboardInteraction` para um valor errado faz `pnpm test:a11y` falhar e identificar a story (não commitado); segunda prova negativa: acrescentar temporariamente `onKeyDown={(e) => e.preventDefault()}` ao botão de ordenação faz a mesma story falhar no passo do Enter (não commitado).
+- Visual/Storybook: as stories migradas listadas acima, abertas no Storybook, mostram os passos no painel "Interactions" sem erros.
+
+**Fora de âmbito:** testes de componentes com Playwright fora do Storybook, `@storybook/experimental-addon-test`/Vitest em browser, migrar o `play` de stories que não têm interação, alterar o CI (ficheiro do João).
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-010, DS-018, DS-021, DS-033; registo diário)
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
+
+- **Fase do MVP:** Layout e dados
+- **Prioridade:** Baixa
+- **Depende de:** DS-028 (`Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** impedir que um `colSpan` inválido gere CSS inválido em silêncio e que um `colSpan` maior do que o número de colunas crie colunas implícitas que partem a grelha.
+
+**Contexto (verificado no código em 2026-10-26):** `GridItem` escreve qualquer número em `data-col-span` e em `--ds-grid-col-span`; `0`, negativos, decimais e `NaN` geram `grid-column: span 0` (ou equivalente), que o navegador ignora; o JSDoc diz que um span maior do que `columns` cria colunas implícitas.
+
+**Critérios de aceitação:**
+- [ ] Só são aceites inteiros ≥ 1. Um `colSpan` inválido (`0`, negativo, decimal, `NaN`, `Infinity`) é ignorado: o elemento não recebe `data-col-span` nem `--ds-grid-col-span` e ocupa uma coluna.
+- [ ] Fora de produção, um `colSpan` inválido emite um único `console.warn` por elemento com o valor recebido (ex.: `GridItem: colSpan must be a whole number ≥ 1, received 1.5`); em produção não emite nada. O mecanismo para distinguir produção fica registado em `02-desenvolvimento.md` e não pode partir a renderização no servidor nem o build ESM/CJS.
+- [ ] O `Grid` partilha por contexto o valor de `columns` quando é numérico; dentro dele, um `colSpan` maior do que `columns` é limitado a `columns` (e é esse o valor em `data-col-span`). Com `minColumnWidth` (número de colunas desconhecido) ou fora de um `Grid`, o valor válido mantém-se.
+- [ ] O JSDoc de `colSpan` descreve as duas regras (valores aceites e limite) e substitui a nota sobre colunas implícitas.
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se à pasta `Grid`).
+
+**Testes exigidos:**
+- Unitários: `colSpan` `0`, `-1`, `1.5` e `NaN` → sem `data-col-span`, sem custom property e `console.warn` chamado uma vez com o valor; `colSpan={2}` continua igual ao comportamento da DS-028; `colSpan={5}` dentro de `Grid columns={3}` → `data-col-span="3"`; `colSpan={5}` dentro de `Grid minColumnWidth="10rem"` → `data-col-span="5"`; nenhum aviso com valores válidos; os testes existentes continuam a passar.
+- Acessibilidade: axe sem violações; nada muda na árvore de acessibilidade.
+- Visual/Storybook: nova story `Grid/SpanClamped` (`columns={3}` com um item `colSpan={5}`) com `play` que confirma, em browser real, que a largura do item é igual à largura de conteúdo do `Grid` e que a grelha continua com 3 colunas (`getComputedStyle(grid).gridTemplateColumns` tem 3 valores).
+
+**Fora de âmbito:** `rowSpan`, `colStart`, `colSpan` responsivo por breakpoint, validação das outras props do `Grid`.
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão do testador (DS-028)
