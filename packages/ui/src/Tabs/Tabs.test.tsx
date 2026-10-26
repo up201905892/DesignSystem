@@ -160,6 +160,58 @@ describe('Tabs', () => {
     expect(content.current).toHaveClass('ds-tabs__content', 'w');
   });
 
+  it('defaults to horizontal orientation and automatic activation', async () => {
+    const root = createRef<HTMLDivElement>();
+    render(<Example ref={root} />);
+    expect(root.current).toHaveAttribute('data-orientation', 'horizontal');
+    await userEvent.tab();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(tab('Alpha')).toHaveFocus();
+    await userEvent.keyboard('{ArrowRight}');
+    expect(tab('Beta')).toHaveFocus();
+    expect(tab('Beta')).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('wraps, skips disabled tabs and supports Home/End when vertical', async () => {
+    render(<Example orientation="vertical" />);
+    await userEvent.tab();
+    await userEvent.keyboard('{ArrowUp}');
+    expect(tab('Delta')).toHaveFocus();
+    await userEvent.keyboard('{ArrowUp}');
+    expect(tab('Beta')).toHaveFocus();
+    await userEvent.keyboard('{End}');
+    expect(tab('Delta')).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(tab('Alpha')).toHaveFocus();
+    expect(tab('Alpha')).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('accepts aria-labelledby as the accessible name of the list', () => {
+    render(
+      <>
+        <h2 id="lbl">Named by heading</h2>
+        <Tabs defaultValue="a">
+          <TabsList aria-labelledby="lbl">
+            <TabsTrigger value="a">A</TabsTrigger>
+          </TabsList>
+          <TabsContent value="a">P</TabsContent>
+        </Tabs>
+      </>,
+    );
+    expect(screen.getByRole('tablist', { name: 'Named by heading' })).toBeInTheDocument();
+  });
+
+  it('requires an accessible name on TabsList (type level)', () => {
+    render(
+      <Tabs defaultValue="a">
+        {/* @ts-expect-error TabsList needs aria-label or aria-labelledby */}
+        <TabsList>
+          <TabsTrigger value="a">A</TabsTrigger>
+        </TabsList>
+      </Tabs>,
+    );
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(<Example />);
     await expectNoA11yViolations(container);
