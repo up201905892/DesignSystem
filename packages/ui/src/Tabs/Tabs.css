@@ -1,0 +1,87 @@
+.ds-tabs {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-font-line-height-normal);
+  color: var(--ds-color-text-default);
+}
+
+.ds-tabs[data-orientation='vertical'] {
+  flex-direction: row;
+}
+
+.ds-tabs__list {
+  display: flex;
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--ds-color-border-default);
+}
+
+.ds-tabs__list[data-orientation='vertical'] {
+  flex-direction: column;
+  overflow-x: visible;
+  border-bottom: 0;
+  border-inline-end: 1px solid var(--ds-color-border-default);
+}
+
+.ds-tabs__trigger {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ds-color-text-muted);
+  font: inherit;
+  font-weight: var(--ds-font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  /* Indicator bar: the active tab is marked by more than colour. */
+  border-bottom: 2px solid transparent;
+}
+
+.ds-tabs__list[data-orientation='vertical'] .ds-tabs__trigger {
+  text-align: start;
+  border-bottom: 0;
+  border-inline-end: 2px solid transparent;
+}
+
+.ds-tabs__trigger:hover:not([data-disabled]) {
+  background-color: var(--ds-color-bg-subtle);
+  color: var(--ds-color-text-default);
+}
+
+.ds-tabs__trigger[data-state='active'] {
+  color: var(--ds-color-text-default);
+  border-bottom-color: var(--ds-color-accent-default);
+}
+
+.ds-tabs__list[data-orientation='vertical'] .ds-tabs__trigger[data-state='active'] {
+  border-bottom-color: transparent;
+  border-inline-end-color: var(--ds-color-accent-default);
+}
+
+.ds-tabs__trigger[data-disabled] {
+  color: var(--ds-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-tabs__trigger:focus-visible,
+.ds-tabs__content:focus-visible {
+  outline: 2px solid var(--ds-color-focus-ring);
+  outline-offset: -2px;
+}
+
+.ds-tabs__content {
+  flex: 1;
+  padding: var(--ds-space-4);
+}
+
+@media (forced-colors: active) {
+  .ds-tabs__trigger[data-state='active'] {
+    border-bottom: 2px solid Highlight;
+  }
+}
