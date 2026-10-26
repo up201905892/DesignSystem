@@ -305,6 +305,15 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** sombra `elevated` no tema escuro pouco visível e `overflow-wrap` não definido (palavra longa sem espaços pode transbordar): sugestões ao planeador, só verificáveis num navegador.
 
+### DS-030 · Tabs — concluída a 2026-10-26
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-26), commit 06f72e4 (implementação) e a0b210f (registo); o único commit posterior de código (6040f80) é só de testes; sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` sobre `@radix-ui/react-tabs` (`value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`); `TabsList` exige `aria-label` ou `aria-labelledby` e faz scroll horizontal; indicador de 2px com `color-accent-default` (contraste ≥ 3:1 nos dois temas); teclado do APG (setas, Home/End, volta nas pontas, saltar desativados, ativação manual).
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** scroll de `ManyTabs` e indicador vertical só verificados por CSS e axe (não inspecionados num navegador). Sugestão ao planeador (já registada pelo programador): token de largura de borda/indicador (`--ds-border-width-*`) para evitar o `2px` fixo em Tabs, Card e outros. `value` com espaços gera ids inválidos (documentado no JSDoc).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
