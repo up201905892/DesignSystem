@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-26
+
+- **Decisões para o João:**
+  1. Aprovar propostas em `aprovacoes.md`: DS-036 a DS-049 (14, pendentes há dias) e as novas DS-051 a DS-055 (19 no total). DS-051, DS-052, DS-054 e DS-055 podem começar logo; DS-053 espera pela DS-052.
+  2. Decidir se a auditoria de acessibilidade (DS-040) e o limite de bundle (DS-038) devem esperar pelas DS-051 a DS-055 (hoje dependem só de "DS-010 a DS-035"). Se sim, linha "Alterar" em `aprovacoes.md`.
+  3. Opcional: ver no Storybook o Card (sombra `elevated` no tema escuro, palavras longas sem espaços) e as Tabs (scroll de `ManyTabs`, indicador vertical). O jsdom não faz layout; foram verificados por código, axe e cálculo de contraste (indicador ≥ 4,1:1 nos dois temas).
+  4. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (DS-050; `.github/` é só teu).
+- **Concluídas:** DS-029 (Card), DS-030 (Tabs)
+- **Testadas:** DS-029 e DS-030, Aprovado ao primeiro relatório (o testador acrescentou testes a `Card.test.tsx` e `Tabs.test.tsx`)
+- **Desenvolvidas:** DS-029, DS-030 (a story `ManyTabs` falhou no axe por `value` com espaço; corrigido e documentado no JSDoc)
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Propostas à espera de aprovação:** DS-036 a DS-049, DS-051 a DS-055 (novas: overlays com tokens de espaçamento, tokens de largura de borda/focus, sombras e Card, `@storybook/test`, validação do `colSpan`)
+- **Violações de regras encontradas:** nenhuma. Nota de processo: os subagentes `finalizador` e `planeador` não conseguiram fazer `git commit`; o orquestrador fez os commits. O `programador` da DS-029 registou `Em desenvolvimento` e `Pronto para teste` ao mesmo tempo, não antes de escrever código.
+- **Próximo passo:** DS-031 (Accordion) e DS-034 (Pagination), depois DS-035. Sem aprovações tuas, o backlog `Planeado` acaba nestas três.
+
 ## 2026-10-23
 
 - **Decisões para o João:**
