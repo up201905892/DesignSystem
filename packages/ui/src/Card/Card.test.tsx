@@ -54,6 +54,33 @@ describe('Card', () => {
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
   });
 
+  it('renders every heading level and keeps long titles in the heading', () => {
+    const long = 'Supercalifragilistic '.repeat(30).trim();
+    for (const [as, level] of [
+      ['h2', 2],
+      ['h3', 3],
+      ['h4', 4],
+      ['h5', 5],
+      ['h6', 6],
+    ] as const) {
+      const { unmount } = render(<CardTitle as={as}>{long}</CardTitle>);
+      expect(screen.getByRole('heading', { level })).toHaveTextContent(long);
+      unmount();
+    }
+  });
+
+  it('renders as a list item with asChild and keeps the list semantics', () => {
+    render(
+      <ul>
+        <Card asChild>
+          <li>One</li>
+        </Card>
+      </ul>,
+    );
+    expect(screen.getByRole('listitem')).toHaveClass('ds-card');
+    expect(screen.getByRole('list')).toBeInTheDocument();
+  });
+
   it('renders the child with asChild', () => {
     render(
       <Card asChild>
