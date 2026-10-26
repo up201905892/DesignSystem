@@ -1163,3 +1163,36 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Contraste de `text-muted` sobre `bg-surface` e borda visível medidos só pelo axe das stories; o aspeto real (sombra `elevated` no tema escuro, que o programador considera pouco visível) não foi avaliado visualmente.
 - O CSS não define `overflow-wrap`; uma palavra muito longa sem espaços pode transbordar o cartão (não testável em jsdom).
 - Em `AsLink`, `CardHeader`/`CardBody` (`div`) ficam dentro de `<a>`: válido em HTML5.
+
+### DS-030 · Tabs — Relatório 1 — 2026-10-26
+
+- **Commit testado:** 06f72e4 (implementação) e a0b210f (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em `packages/ui/src/Tabs/Tabs.test.tsx` (omissões de `orientation`/`activationMode`, volta/saltar desativados/Home/End em vertical, `aria-labelledby` na lista, `aria-label` obrigatório ao nível do tipo com `@ts-expect-error`), commit 6040f80 `test(ui): DS-030 ...`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` (inclui o `@ts-expect-error` novo) | ✔ |
+| Unitários | `pnpm test` (ui: 53 ficheiros, 840 testes antes dos meus 4); Tabs com os testes novos: 21 verdes | ✔ |
+| Acessibilidade | `pnpm test:a11y`: 29 suites, 197 testes, 0 falhas (axe, Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta as quatro partes e tipos: `Tabs/index.ts`, `index.ts`; CSS importado em `styles.css`.
+- [x] Props: `Tabs` com `orientation` (omissão `horizontal`) e `activationMode` (omissão `automatic`) explícitos em `Tabs.tsx`, verificado também por teste meu; `value`/`defaultValue`/`onValueChange` do Radix; `value` obrigatório em `TabsTrigger`/`TabsContent` pelo tipo do Radix; `disabled` testado.
+- [x] Papéis e ARIA: teste de `tablist` (nome, `aria-orientation`), `tab` (`aria-selected`, `aria-controls`), `tabpanel` (`aria-labelledby`); `aria-label`/`aria-labelledby` exigidos no tipo (teste meu com `@ts-expect-error`; `aria-labelledby` aceite).
+- [x] Ordem de tabulação: teste Tab, separador ativo, Tab, painel (`tabindex=0`).
+- [x] Indicador: barra de 2px com `color-accent-default` no separador ativo (`border-bottom`; vertical `border-inline-end`), além da cor do texto; `forced-colors` usa `Highlight`. Contraste calculado por mim a partir dos tokens de `themes.css`: claro #2563eb vs canvas #f8fafc ≈ 4,96:1 e vs subtle (hover) #f1f5f9 ≈ 4,75:1; escuro #60a5fa vs canvas #0f172a ≈ 7,0:1, vs surface #1e293b ≈ 5,8:1, vs subtle #334155 ≈ 4,1:1. Todos ≥ 3:1 nos dois temas.
+- [x] Scroll: `.ds-tabs__list` com `overflow-x: auto`, `max-width: 100%`, gatilhos `flex-shrink: 0` e `nowrap`; story `ManyTabs` passa o axe (sem `scrollable-region-focusable`).
+- [x] Controlado e não controlado: testes (incluindo controlado sem atualização do valor).
+- [x] G1 a G3 (`@radix-ui/react-tabs` em `packages/ui/package.json` e lockfile), C1 a C5 (stories com axe nos dois temas, `DarkTheme`).
+
+**Testes exigidos:** existem e são substantivos: `defaultValue`, clique + `onValueChange`, controlado, desativado, Tab/painel, setas com volta e salto de desativados, Home/End, vertical, manual com Enter e Espaço, axe, CSS. Stories exigidas todas presentes: `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled`, `DarkTheme`.
+
+**Acessibilidade e casos limite:** focus visível (`:focus-visible` com `color-focus-ring`, em separadores e painel); separador desativado com `text-disabled`; teclas de outra orientação são ignoradas (testado); `value` com espaços gera ids inválidos (documentado no JSDoc).
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O axe não mede contraste de elementos não textuais; o do indicador foi calculado a partir dos valores dos tokens. O aspeto real (scroll de `ManyTabs`, indicador vertical) não foi inspecionado num navegador.
+- A espessura de 2px é fixa (não há token de largura de borda); sugestão do programador ao planeador.

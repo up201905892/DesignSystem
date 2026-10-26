@@ -37,7 +37,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Concluído |
 | DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Concluído |
 | DS-029 | Card | Layout e dados | Média | DS-010 | Concluído |
-| DS-030 | Tabs | Layout e dados | Média | DS-009 | Pronto para teste |
+| DS-030 | Tabs | Layout e dados | Média | DS-009 | Aprovado |
 | DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Planeado |
 | DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
@@ -1209,6 +1209,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
 - 2026-10-26 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-10-26 · programador · Em desenvolvimento → Pronto para teste · commit 06f72e4
+- 2026-10-26 · testador · Pronto para teste → Em teste · início do teste
+- 2026-10-26 · testador · Em teste → Aprovado · relatório 1, zero falhas
 
 ### DS-031 · Accordion
 
