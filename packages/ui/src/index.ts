@@ -117,6 +117,15 @@ export { Stack } from './Stack';
 export type { StackProps, SpaceKey } from './Stack';
 export { Grid, GridItem } from './Grid';
 export type { GridProps, GridItemProps } from './Grid';
+export { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter } from './Card';
+export type {
+  CardProps,
+  CardHeaderProps,
+  CardTitleProps,
+  CardDescriptionProps,
+  CardBodyProps,
+  CardFooterProps,
+} from './Card';
 export type {
   FieldProps,
   FieldLabelProps,
