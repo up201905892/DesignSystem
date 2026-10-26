@@ -645,3 +645,20 @@ Modelo de entrada:
   - `colSpan` maior do que `columns` cria colunas implícitas (documentado no JSDoc); não há validação em runtime.
   - Sem `align`/`justify`, o `Stack` usa o comportamento por omissão do flexbox (esticar / início); por isso não há `data-align`/`data-justify` nesse caso.
   - Os `style` inline das stories são só de demonstração (caixas com tokens).
+
+### DS-029 · Card
+
+**Iteração 1 — 2026-10-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardBody` e `CardFooter` numa só pasta. `Card`: `variant` (`outlined` por omissão, `elevated`), `padding` (`none|sm|md|lg`, omissão `md`) em `data-variant` e `data-padding`, e `asChild` (via `Slot`). `CardTitle` aceita `as` (`h2` a `h6`, omissão `h3`). Sem `role` nem `tabIndex`; o focus visível (`:focus-visible` com o token de focus) serve o cartão clicável feito com `asChild` sobre `<a>`. CSS só com tokens: `color-bg-surface`, `color-border-default`, `radius-lg`, `shadow-md`; a variante `elevated` tem a borda transparente (a sombra faz o limite).
+- **Ficheiros alterados:** `packages/ui/src/Card/{Card.tsx,Card.css,Card.css.test.ts,Card.test.tsx,Card.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 829c873 `feat(ui): DS-029 add Card with header, title, description, body and footer`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (sem dependências novas); C1 a C5.
+- **Testes escritos pelo programador:** `Card.test.tsx` (partes, omissões nos `data-*`, sem role/tabindex, variant e padding, `CardTitle` h3 por omissão e `as="h2"`, `asChild` com `<article>`, Tab e Enter num `<a>`, className/ref/props em cada subparte, displayName, axe); `Card.css.test.ts` (tokens, `:focus-visible`, sem cores nem comprimentos fixos). Stories: `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` (com `Grid`, DS-028 concluída), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 813) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright; o axe corre nos testes unitários).
+- **Notas para o testador:**
+  - Convém correr `pnpm test:a11y`, sobretudo `AsLink` e `DarkTheme`: a borda `outlined` e o contraste do texto secundário (`text-muted` sobre `bg-surface`) nos dois temas só se medem num navegador.
+  - Na variante `elevated` a borda é transparente; no tema escuro a sombra é pouco visível (decisão visual a avaliar).
+  - O enchimento (`padding`) é do `Card`; as subpartes não têm padding próprio, o espaçamento entre elas é um `gap` de `space-3`.
+  - Em `AsLink`, a story coloca `CardHeader`/`CardBody` (`div`) dentro de um `<a>` (permitido em HTML5); o `CardTitle` fica dentro da ligação.
