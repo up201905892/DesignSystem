@@ -662,3 +662,20 @@ Modelo de entrada:
   - Na variante `elevated` a borda é transparente; no tema escuro a sombra é pouco visível (decisão visual a avaliar).
   - O enchimento (`padding`) é do `Card`; as subpartes não têm padding próprio, o espaçamento entre elas é um `gap` de `space-3`.
   - Em `AsLink`, a story coloca `CardHeader`/`CardBody` (`div`) dentro de um `<a>` (permitido em HTML5); o `CardTitle` fica dentro da ligação.
+
+### DS-030 · Tabs
+
+**Iteração 1 — 2026-10-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` sobre `@radix-ui/react-tabs` (dependência nova em `packages/ui`). `Tabs` com `orientation` (`horizontal` por omissão) e `activationMode` (`automatic` por omissão) explícitos; `TabsList` exige `aria-label` ou `aria-labelledby` no tipo e faz scroll horizontal (`overflow-x: auto`); o separador ativo tem uma barra de 2px com `color-accent-default` (inferior na horizontal, no lado final na vertical). Papéis, `aria-*`, roving tabindex, `tabIndex=0` no painel e teclado (setas, Home/End, volta nas pontas, saltar desativados) vêm do Radix.
+- **Ficheiros alterados:** `packages/ui/src/Tabs/{Tabs.tsx,Tabs.css,Tabs.css.test.ts,Tabs.test.tsx,Tabs.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 06f72e4 `feat(ui): DS-030 add Tabs with list, trigger and content`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova `@radix-ui/react-tabs`); C1 a C5.
+- **Testes escritos pelo programador:** `Tabs.test.tsx` (painel do `defaultValue`, semântica tablist/tab/tabpanel, clique + `onValueChange`, controlado, separador desativado, Tab para o separador ativo e depois para o painel, setas com volta e salto de desativados, Home/End, vertical, modo manual com Enter e Espaço, ref/className, axe); `Tabs.css.test.ts` (barra de acento, scroll, `:focus-visible`, sem cores nem comprimentos fixos). Stories: `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 840) · build ✔ · test:a11y ✔ (29 suites, 197 testes; correu `pnpm test:a11y:setup` antes).
+- **Notas para o testador:**
+  - O Stylelint do projeto proíbe `px` em `box-shadow`, e não há token de largura de borda; por isso o indicador é uma `border-bottom`/`border-inline-end` de `2px` (o mesmo valor de 2px permitido já usado no anel de focus). A tarefa não fixa a espessura. Convém medir o contraste ≥ 3:1 de `accent-default` contra `bg-canvas` nos dois temas.
+  - Os `value` dos separadores entram nos ids (`aria-controls`); com espaços o axe reporta `aria-valid-attr-value` (apanhado na story `ManyTabs`, já com valores sem espaços). Está documentado no JSDoc de `TabsTrigger`.
+  - Radix: o `tablist` tem `tabindex=0` até receber focus e encaminha-o para o separador ativo; com a lista a fazer scroll não há violação `scrollable-region-focusable`.
+  - Sugestão ao planeador: um token de largura de borda/indicador (`--ds-border-width-*`) evitaria o `2px` fixo em Tabs, Card e outros.
