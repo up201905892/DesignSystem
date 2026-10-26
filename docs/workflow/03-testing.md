@@ -1131,3 +1131,35 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - O layout real (colunas com `auto-fit`, `colSpan`, `wrap`) não é verificável em jsdom e não foi inspecionado visualmente; coberto por leitura de CSS e testes de atributos.
 - `colSpan` não é validado em runtime (0, negativo ou decimal gera CSS inválido, ignorado pelo navegador).
+
+### DS-029 · Card — Relatório 1 — 2026-10-26
+
+- **Commit testado:** 829c873 (implementação) e 89366b6 (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em `packages/ui/src/Card/Card.test.tsx` (todos os níveis de `as` com título longo; `asChild` com `<li>` dentro de `<ul>`), commit `test(ui): DS-029 ...`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 51 ficheiros, 813 testes); Card com os 2 testes novos: 14 verdes | ✔ |
+| Acessibilidade | `pnpm test:a11y`: 28 suites, 190 testes, 0 falhas; `Card.stories.tsx` PASS | ✔ |
+| Build | `pnpm build` (ESM, CJS, d.ts, Storybook) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta as seis partes: leitura de `Card.tsx`, `Card/index.ts` e `index.ts` (componentes e tipos); CSS importado em `styles.css`.
+- [x] `variant` (omissão `outlined`), `padding` (omissão `md`), `asChild` (`Slot`): `Card.tsx`, testes de omissões, `<article>` e o meu com `<li>`.
+- [x] `CardTitle as` h2 a h6, omissão h3: testes (`getByRole('heading', { level })`), todos os níveis no meu teste.
+- [x] Tokens `color-bg-surface`, `color-border-default`, `radius-lg`, `shadow-md`: existem em `tokens.css`/`themes.css`; `Card.css.test.ts` garante sem cores nem comprimentos fixos; borda `outlined` de 1px com o token nos dois temas (`DarkTheme` passa o axe no navegador).
+- [x] Sem `role` nem `tabIndex`; cartão clicável com `asChild` sobre `<a>`: teste de Tab e Enter, `:focus-visible` com `color-focus-ring` no CSS.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (stories com axe a passar nos dois temas).
+
+**Testes exigidos:** existem e são substantivos (partes, omissões em `data-*`, ausência de role/tabindex, `as`, `asChild`, className/ref/props em cada subparte, Tab+Enter, axe, CSS). Stories exigidas todas presentes: `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` (com `Grid`), `DarkTheme`.
+
+**Acessibilidade e casos limite:** o cartão não é focável nem tem role; o título mantém a hierarquia escolhida; texto longo permanece no título (sem truncagem). Props em falta usam as omissões.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Contraste de `text-muted` sobre `bg-surface` e borda visível medidos só pelo axe das stories; o aspeto real (sombra `elevated` no tema escuro, que o programador considera pouco visível) não foi avaliado visualmente.
+- O CSS não define `overflow-wrap`; uma palavra muito longa sem espaços pode transbordar o cartão (não testável em jsdom).
+- Em `AsLink`, `CardHeader`/`CardBody` (`div`) ficam dentro de `<a>`: válido em HTML5.
