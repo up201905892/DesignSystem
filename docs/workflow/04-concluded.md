@@ -314,6 +314,15 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** scroll de `ManyTabs` e indicador vertical só verificados por CSS e axe (não inspecionados num navegador). Sugestão ao planeador (já registada pelo programador): token de largura de borda/indicador (`--ds-border-width-*`) para evitar o `2px` fixo em Tabs, Card e outros. `value` com espaços gera ids inválidos (documentado no JSDoc).
 
+### DS-031 · Accordion — concluída a 2026-10-27
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-27), commit 9e7c233 (implementação) e 7eebbdc (registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Accordion`, `AccordionItem`, `AccordionTrigger` e `AccordionContent` sobre `@radix-ui/react-accordion`; `type` `single`/`multiple` (`collapsible` só em `single`), `value`/`defaultValue`/`onValueChange`, `disabled`, `headingLevel` (2 a 6, omissão 3); botão dentro de título, `aria-expanded`/`aria-controls`, painel `region`; chevron rotativo e animação de altura com `prefers-reduced-motion`; teclado do APG.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** rotação, animação e contraste do gatilho desativado só verificados por CSS e axe (não inspecionados num navegador). Sugestão ao planeador (nota do testador): `overflow-wrap` não definido, uma palavra longa sem espaços pode transbordar. Com o item fechado, `aria-controls` aponta para um painel ausente do DOM (comportamento do Radix; axe não reporta).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

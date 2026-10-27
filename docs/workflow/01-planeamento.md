@@ -38,7 +38,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Concluído |
 | DS-029 | Card | Layout e dados | Média | DS-010 | Concluído |
 | DS-030 | Tabs | Layout e dados | Média | DS-009 | Concluído |
-| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Aprovado |
+| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Concluído |
 | DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Planeado |
@@ -1250,6 +1250,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-27 · programador · Em desenvolvimento → Pronto para teste · commit 9e7c233
 - 2026-10-27 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-27 · testador · Em teste → Aprovado · relatório 1, zero falhas
+- 2026-10-27 · finalizador · Aprovado → Concluído · changeset não aplicável (pacote privado), sem TODO, stories com DarkTheme
 
 ### DS-032 · Table: estrutura base
 
