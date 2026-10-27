@@ -1196,3 +1196,36 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - O axe não mede contraste de elementos não textuais; o do indicador foi calculado a partir dos valores dos tokens. O aspeto real (scroll de `ManyTabs`, indicador vertical) não foi inspecionado num navegador.
 - A espessura de 2px é fixa (não há token de largura de borda); sugestão do programador ao planeador.
+
+### DS-031 · Accordion — Relatório 1 — 2026-10-27
+
+- **Commit testado:** 9e7c233 (implementação) e 7eebbdc (registo), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 55 ficheiros, 883 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (30 suites, 204 testes, axe em Chromium) + testes de teclado em jsdom | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta as quatro partes e tipos: `Accordion/index.ts` e `src/index.ts`; CSS em `styles.css`.
+- [x] Props: `type` obrigatório (união discriminada, `collapsible` só em `single`), `value`/`defaultValue`/`onValueChange` (string em single, array em multiple, testado), `disabled`, `headingLevel` (2 a 6, omissão 3, testado h3 e h2); `AccordionItem` com `value` e `disabled`.
+- [x] Botão dentro de título, `aria-expanded`, `aria-controls`, painel `region` com `aria-labelledby`: teste de semântica.
+- [x] Chevron `aria-hidden`, rotação 180 graus em `data-state="open"`, animação de altura; `prefers-reduced-motion` desliga ambas (`Accordion.css` e `Accordion.css.test.ts`).
+- [x] Conteúdo fechado não focável nem lido: o Radix desmonta-o (nem existe no DOM); teste de região/texto ausente e Tab não lá chega. Equivale ao pretendido.
+- [x] Controlado e não controlado: testes, incluindo controlado sem atualização do pai.
+- [x] G1 a G3 (`@radix-ui/react-accordion` em `package.json` e lockfile), C1 a C5 (stories com axe, `DarkTheme`).
+
+**Testes exigidos:** todos presentes e substantivos: single/collapsible/sem collapsible, multiple com array, `defaultValue`, controlado, item e acordeão desativados, `headingLevel`; teclado (Tab, Enter, Espaço, setas com volta, Home/End, salto de desativados, Tab para dentro do painel); axe aberto, fechado e desativado. Stories exigidas todas presentes: `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled`, `DarkTheme`.
+
+**Acessibilidade e casos limite:** focus visível (`:focus-visible` com `color-focus-ring`, offset negativo); gatilho desativado com `text-disabled`; só tokens no CSS (Stylelint verde).
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Com o item fechado, `aria-controls` aponta para um painel que não está no DOM (comportamento do Radix); o axe não reporta.
+- Rotação, animação e contraste do gatilho desativado não foram inspecionados num navegador.
+- Sem `overflow-wrap`, uma palavra muito longa sem espaços pode transbordar (não testável em jsdom).
