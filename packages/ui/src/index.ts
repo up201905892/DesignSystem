@@ -136,6 +136,8 @@ export type {
   AccordionContentProps,
   AccordionHeadingLevel,
 } from './Accordion';
+export { Pagination, usePagination } from './Pagination';
+export type { PaginationProps, UsePaginationOptions, UsePaginationResult } from './Pagination';
 export type {
   FieldProps,
   FieldLabelProps,
