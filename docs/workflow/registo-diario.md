@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-27
+
+- **Decisões para o João:**
+  1. Aprovar propostas em `aprovacoes.md`: 21 por aprovar (DS-036 a DS-049 e DS-051 a DS-057). **O backlog `Planeado` acabou:** só resta a DS-035 (DataTable), que corre amanhã. Sem aprovações, o ciclo pára depois dela. As de Publicação (DS-036 a DS-041) e DS-051, DS-052, DS-054 a DS-057 podem começar logo.
+  2. Novas propostas: DS-056 (`focusableWhenDisabled` no Button/IconButton, usado na Pagination) e DS-057 (`overflow-wrap` em Accordion e Dialog). DS-054 passou a depender também da DS-034 e a cobrir o `play` da Pagination.
+  3. Pendente de ontem: DS-040 e DS-038 devem esperar pelas DS-051 a DS-055? Se sim, linha "Alterar" em `aprovacoes.md`.
+  4. Opcional: ver no Storybook o Accordion (chevron, animação, contraste do gatilho desativado) e a Pagination (botões desativados, muitas páginas). O jsdom não faz layout.
+  5. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (`.github/` é só teu).
+- **Concluídas:** DS-031 (Accordion), DS-034 (Pagination)
+- **Testadas:** DS-031 e DS-034, Aprovado ao primeiro relatório (o testador acrescentou um teste à Pagination)
+- **Desenvolvidas:** DS-031, DS-034. Na Pagination, o `play` `KeyboardInteraction` usa `click()` e não só Enter, porque `@storybook/test` não está instalado (vai para a DS-054).
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Violações de regras encontradas:** nenhuma. Nota de processo: o `planeador` não tem shell e não consegue fazer commit; o orquestrador fez-o.
+- **Próximo passo:** DS-035 (DataTable). Depois, só com aprovações tuas.
+
 ## 2026-10-26
 
 - **Decisões para o João:**
