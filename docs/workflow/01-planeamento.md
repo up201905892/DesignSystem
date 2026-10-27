@@ -61,8 +61,10 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Proposta |
 | DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Proposta |
 | DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Proposta |
-| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033 | Proposta |
+| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Proposta |
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Proposta |
+| DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Proposta |
+| DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Proposta |
 
 ## Decisões aplicadas
 
@@ -1983,18 +1985,20 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 - **Fase do MVP:** Fundações
 - **Prioridade:** Média
-- **Depende de:** DS-003, DS-033 (todas `Concluído`)
+- **Depende de:** DS-003, DS-033, DS-034 (todas `Concluído`)
 - **Estimativa:** M (≤ 1 dia)
 
 **Objetivo:** fazer com que os `play` de interação das stories usem o teclado e o rato através do `userEvent` e as verificações através do `expect` do `@storybook/test`, em vez de `focus()`, `click()` e `KeyboardEvent` despachados à mão, para que as stories `KeyboardInteraction` provem de facto o teclado num browser real.
 
-**Contexto (verificado no código em 2026-10-26):** o `@storybook/test` não está instalado (as tarefas anteriores não o podiam acrescentar, pela G2). O `play` de `Table/SortKeyboardInteraction` usa `focus()` + `click()`; os de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog` despacham `KeyboardEvent` ou chamam `click()`; os `play` verificam com `throw new Error`. Há 12 ocorrências de `new KeyboardEvent`, `dispatchEvent(` ou `.click()` em 8 ficheiros de stories (`Button`, `Toast`, `Tooltip`, `Popover`, `DropdownMenu`, `Select`, `Table`, `Dialog`).
+**Contexto (verificado no código em 2026-10-26):** o `@storybook/test` não está instalado (as tarefas anteriores não o podiam acrescentar, pela G2). O `play` de `Table/SortKeyboardInteraction` usa `focus()` + `click()`; os de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog` despacham `KeyboardEvent` ou chamam `click()`; os `play` verificam com `throw new Error`. Há 12 ocorrências de `new KeyboardEvent`, `dispatchEvent(` ou `.click()` em 8 ficheiros de stories (`Button`, `Toast`, `Tooltip`, `Popover`, `DropdownMenu`, `Select`, `Table`, `Dialog`). **Atualização de 2026-10-27:** a DS-034 acrescentou 2 ocorrências de `.click()` em `Pagination.stories.tsx` (story `KeyboardInteraction`, que a especificação da DS-034 pedia "só com Enter"); são hoje 14 linhas em 9 ficheiros. A `Accordion` (DS-031) não tem `play` de interação.
 
 **Critérios de aceitação:**
 - [ ] `@storybook/test` instalado com a mesma versão menor do Storybook já usado (8.6.x), como devDependency de `packages/ui` (onde as stories são verificadas pelo `pnpm typecheck`) e, se o Storybook o exigir para resolver, de `apps/docs`.
 - [ ] Nas stories de `packages/ui/src`, `grep -nE "new KeyboardEvent|dispatchEvent\(|\.click\(\)"` não devolve resultados: todas as interações dos `play` usam `userEvent` (`click`, `tab`, `keyboard`, `hover`) e `within(canvasElement)` ou `screen` para encontrar os elementos.
 - [ ] `Table/SortKeyboardInteraction`: chega ao primeiro cabeçalho ordenável com `userEvent.tab()`, ativa a ordenação com `{Enter}` (asc) e com espaço (desc), e verifica com `expect` o `aria-sort`, a primeira célula e que o focus continua no botão.
 - [ ] As stories `KeyboardInteraction` de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog`, e as stories `Button/LoadingToggle` e `Toast/AfterLoading`, cobrem as mesmas teclas e verificações que cobrem hoje, agora com `userEvent` e `expect` (com `waitFor` ou `findBy*` onde há animações ou portais), sem `setTimeout` de duração fixa.
+- [ ] `Pagination/KeyboardInteraction`: foca o botão "seguinte" com `userEvent.tab()` (não com `focus()`), avança até à última página só com `userEvent.keyboard('{Enter}')`, e verifica com `expect`, a cada passo, que `aria-current="page"` está na página esperada e que `document.activeElement` continua a ser o botão "seguinte"; na última página, mais um `{Enter}` não muda a página e o botão tem `aria-disabled="true"`.
+- [ ] Se a DS-035 já estiver `Concluído` quando esta tarefa começar, `DataTable/KeyboardInteraction` também fica coberta pelo critério do `grep` acima e passa a usar `userEvent` e `expect`; se não estiver, a DS-035 segue a convenção registada em `apps/docs/README.md` quando for feita depois.
 - [ ] Os restantes `play` que só medem dimensões (ex.: `Sizes`) podem manter-se; se forem tocados, passam a usar `expect`.
 - [ ] O comportamento nativo que o `userEvent` não reproduz (ex.: scroll horizontal com as setas em `Table/HorizontalScroll`) continua no `postVisit` de `apps/docs/.storybook/test-runner.ts`, com teclas reais do Playwright; esta divisão fica escrita em `apps/docs/README.md`, junto com a convenção de que os `play` novos (ex.: DS-031, DS-034, DS-035) usam `@storybook/test`.
 - [ ] `pnpm test:a11y` corre os `play` migrados e passa; o painel "Interactions" do Storybook mostra os passos dessas stories.
@@ -2002,13 +2006,14 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Testes exigidos:**
 - Unitários: não aplicável (os testes Vitest existentes não mudam e continuam a passar).
-- Acessibilidade: `pnpm test:a11y` com código 0, cobrindo os `play` migrados; prova negativa temporária: mudar o `aria-sort` esperado em `Table/SortKeyboardInteraction` para um valor errado faz `pnpm test:a11y` falhar e identificar a story (não commitado); segunda prova negativa: acrescentar temporariamente `onKeyDown={(e) => e.preventDefault()}` ao botão de ordenação faz a mesma story falhar no passo do Enter (não commitado).
-- Visual/Storybook: as stories migradas listadas acima, abertas no Storybook, mostram os passos no painel "Interactions" sem erros.
+- Acessibilidade: `pnpm test:a11y` com código 0, cobrindo os `play` migrados; prova negativa temporária: mudar o `aria-sort` esperado em `Table/SortKeyboardInteraction` para um valor errado faz `pnpm test:a11y` falhar e identificar a story (não commitado); segunda prova negativa: acrescentar temporariamente `onKeyDown={(e) => e.preventDefault()}` ao botão de ordenação faz a mesma story falhar no passo do Enter (não commitado); terceira prova negativa: acrescentar temporariamente `tabIndex={-1}` ao botão "seguinte" da `Pagination` quando está desativado faz `Pagination/KeyboardInteraction` falhar (não commitado).
+- Visual/Storybook: as stories migradas listadas acima (incluindo `Pagination/KeyboardInteraction`), abertas no Storybook, mostram os passos no painel "Interactions" sem erros.
 
 **Fora de âmbito:** testes de componentes com Playwright fora do Storybook, `@storybook/experimental-addon-test`/Vitest em browser, migrar o `play` de stories que não têm interação, alterar o CI (ficheiro do João).
 
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-010, DS-018, DS-021, DS-033; registo diário)
+- 2026-10-27 · planeador · Proposta (sem mudança de estado) · especificação revista: absorve a migração de `Pagination/KeyboardInteraction` sugerida na conclusão da DS-034 (critério, prova negativa e dependência DS-034); a DS-035 fica abrangida se já estiver concluída
 
 ### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
 
@@ -2037,3 +2042,65 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão do testador (DS-028)
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la
+
+- **Fase do MVP:** Formulários
+- **Prioridade:** Média
+- **Depende de:** DS-021, DS-034 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** dar ao `Button` (e, por herança, ao `IconButton`) uma forma suportada de ficar desativado sem sair da ordem de Tab, para que o padrão `aria-disabled` focável deixe de ser escrito à mão em cada componente (hoje só na `Pagination`) e tenha o mesmo bloqueio de clique, de envio de formulário e de navegação que o `loading` já tem.
+
+**Contexto (verificado no código em 2026-10-27):** em `Button.tsx`, `disabled` num `<button>` nativo usa o atributo `disabled`; com `asChild` põe `aria-disabled` e `tabIndex={-1}`. O `loading` já usa `aria-disabled` focável com `blockClick` em captura. `Pagination.tsx` repete à mão `aria-disabled`/`data-disabled` e o bloqueio do clique nos botões anterior e seguinte (linhas 113–114 e 147–148), sem passar `disabled` ao `IconButton`. Sugestão do programador e do finalizador na conclusão da DS-034.
+
+**Critérios de aceitação:**
+- [ ] `ButtonProps` ganha `focusableWhenDisabled?: boolean` (omissão `false`). Sem `disabled`, a prop não tem efeito nenhum (nem atributos nem `data-*`).
+- [ ] Com `disabled` e `focusableWhenDisabled` num `<button>` nativo: sem atributo `disabled`, com `aria-disabled="true"` e `data-disabled`, sem `tabIndex={-1}`; o clique é bloqueado em captura como no `loading` (`onClick` não é chamado; com `type="submit"`, o formulário não é enviado, nem por clique nem por Enter num campo do mesmo formulário).
+- [ ] Com `asChild` (ex.: `<a href>`): `aria-disabled="true"`, `data-disabled`, sem `tabIndex={-1}`, e o clique não navega (`defaultPrevented`).
+- [ ] Com `loading` ao mesmo tempo, o botão continua focável (a prop prevalece sobre a regra "se `disabled` também estiver, `disabled` ganha" do JSDoc de `loading`, que é atualizado).
+- [ ] O aspeto desativado é o mesmo de hoje (`[data-disabled]`); o `Button.css` não muda.
+- [ ] `IconButton` aceita a mesma prop e passa-a ao `Button` (o nome acessível obrigatório mantém-se).
+- [ ] O JSDoc de `focusableWhenDisabled` explica quando usar: quando o próprio controlo focado pode ficar desativado em consequência da sua ativação (ex.: "seguinte" na última página), para o focus não se perder; e que, por omissão, `disabled` continua a tirar o botão da ordem de Tab.
+- [ ] `Pagination.tsx` passa a usar `disabled={!canPrevious}`/`disabled={!canNext}` com `focusableWhenDisabled` nos dois `IconButton`, sem `aria-disabled`, `data-disabled` nem bloqueio do clique escritos à mão; o JSDoc da `Pagination` deixa de descrever uma "exceção" implementada no componente e passa a referir a prop. O HTML gerado nos limites é o mesmo de antes (`aria-disabled="true"`, `data-disabled`, sem `disabled`, sem `tabindex`).
+- [ ] Os testes existentes da DS-010, DS-011, DS-021 e DS-034 continuam a passar sem alterar o que verificam; as stories da `Pagination` não são alteradas (a DS-054 também as altera).
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se às pastas `Button` e `IconButton`).
+
+**Testes exigidos:**
+- Unitários: sem `disabled`, `focusableWhenDisabled` não acrescenta atributos; com os dois, `<button>` sem `disabled`, com `aria-disabled="true"` e `data-disabled`; `onClick` não é chamado ao clicar; `type="submit"` dentro de um `<form>`: `onSubmit` não é chamado ao clicar no botão nem ao carregar Enter num `Input` do mesmo formulário; `asChild` com `<a href>`: sem `tabindex="-1"` e evento de clique com `defaultPrevented`; `loading` + `disabled` + `focusableWhenDisabled` continua focável; o mesmo conjunto essencial (atributos, clique bloqueado, focável) para o `IconButton`.
+- Acessibilidade: axe sem violações; teclado: Tab chega ao botão desativado focável; Enter e Espaço não chamam `onClick`; um botão focado que passa a `disabled` com `focusableWhenDisabled` (rerender) mantém `document.activeElement`, e sem a prop o focus sai do botão (comportamento atual, documentado no teste).
+- Visual/Storybook: novas stories `Button/FocusableWhenDisabled` (com a descrição de quando usar) e `IconButton/FocusableWhenDisabled`; as stories `DarkTheme` do `Button` e do `IconButton` ganham um exemplo com a prop; `Pagination/FirstPage`, `LastPage` e `KeyboardInteraction` continuam a passar `pnpm test:a11y` sem alterações.
+
+**Fora de âmbito:** aplicar a prop a outros componentes (Checkbox, Switch, Select, itens de menu), anunciar o motivo da desativação (`aria-describedby` com explicação), mudar o aspeto visual do estado desativado.
+
+**Histórico:**
+- 2026-10-27 · planeador · — → Proposta · sugestão do programador e do finalizador (DS-034)
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`)
+
+- **Fase do MVP:** Layout e dados
+- **Prioridade:** Baixa
+- **Depende de:** DS-025, DS-031 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** impedir que uma palavra longa sem espaços (URL, identificador, nome de ficheiro) transborde do gatilho ou do painel do `Accordion` e do título, descrição ou corpo do `Dialog`, como já acontece corretamente em `Alert`, `Toast`, `Tooltip` e `Popover` (que usam `overflow-wrap: anywhere`).
+
+**Contexto (verificado no código em 2026-10-27):** `Accordion.css` e `Dialog.css` não definem `overflow-wrap`; o texto do gatilho do `Accordion` está em `.ds-accordion__trigger-label`, filho de um `flex` sem regra CSS própria (o `min-width: auto` impede-o de encolher, empurrando o `ChevronDownIcon` para fora); `.ds-dialog__body` tem `overflow-y: auto`, pelo que uma palavra longa gera scroll horizontal em vez de quebrar. O `Card` é tratado na DS-053 e fica fora desta tarefa. Nota do testador na DS-031.
+
+**Critérios de aceitação:**
+- [ ] `Accordion.css`: `.ds-accordion__trigger-label` com `min-width: 0`, `flex: 1 1 auto` e `overflow-wrap: anywhere`; `.ds-accordion__content-inner` com `overflow-wrap: anywhere`. O `ChevronDownIcon` mantém `flex-shrink: 0` e fica sempre visível dentro do gatilho.
+- [ ] `Dialog.css`: `.ds-dialog__title`, `.ds-dialog__description` e `.ds-dialog__body` com `overflow-wrap: anywhere`; se o cabeçalho for `flex`, o título tem também `min-width: 0` para o botão de fechar não ser empurrado para fora.
+- [ ] Texto normal (com espaços) não muda de aspeto: só quebra dentro de palavras quando uma palavra não cabe sozinha na linha.
+- [ ] Sem valores escritos à mão (Stylelint verde); nenhuma alteração ao `.tsx` dos dois componentes nem à API.
+- [ ] Se a DS-052 estiver `Em desenvolvimento` ao mesmo tempo (também altera estes `.css`), o programador regista em `02-desenvolvimento.md` como resolveu a sobreposição.
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se às pastas `Accordion` e `Dialog`).
+
+**Testes exigidos:**
+- Unitários: em `Accordion.css.test.ts`, verificação de `overflow-wrap: anywhere` e `min-width: 0` nas regras indicadas; novo `Dialog.css.test.ts` (ou o existente, se houver) com `overflow-wrap: anywhere` no título, na descrição e no corpo; os testes existentes continuam a passar.
+- Acessibilidade: axe sem violações; nada muda no teclado nem na árvore de acessibilidade (os testes existentes de teclado da DS-025 e da DS-031 continuam a passar).
+- Visual/Storybook: nova story `Accordion/LongWord` (contentor com 240px de largura máxima; um gatilho e um painel aberto com uma palavra de 200 caracteres sem espaços) com `play` que falha se `scrollWidth > clientWidth` no gatilho ou no painel e se o `ChevronDownIcon` ficar fora do retângulo do gatilho (`getBoundingClientRect`); nova story `Dialog/LongWord` (aberto, `size="sm"`, título, descrição e corpo com uma palavra de 200 caracteres) com `play` que falha se `scrollWidth > clientWidth` no diálogo ou no corpo e se o botão de fechar ficar fora do retângulo do diálogo; as stories `DarkTheme` continuam a passar.
+
+**Fora de âmbito:** `Card` (DS-053), `Tabs` (os separadores não quebram linha por desenho), itens de `Select` e `DropdownMenu`, células da `Table` (o contentor tem scroll horizontal por desenho), truncagem com reticências.
+
+**Histórico:**
+- 2026-10-27 · planeador · — → Proposta · sugestão do testador e do finalizador (DS-031)
