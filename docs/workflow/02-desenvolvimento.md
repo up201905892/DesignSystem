@@ -697,3 +697,21 @@ Modelo de entrada:
   - A rotação e a animação de altura só se veem num navegador (`prefers-reduced-motion` verifica-se nas DevTools).
   - Convém ver `DarkTheme` e `DisabledItem` no Storybook (aspeto e contraste do gatilho desativado).
   - Sem sugestões novas para o planeador além do token de largura de borda já registado em DS-030 (o `2px` do anel de focus mantém-se).
+
+### DS-034 · Pagination
+
+**Iteração 1 — 2026-10-27**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Pagination` (`<nav aria-label>` com `<ul>`/`<li>` de botões) e o hook `usePagination`, exportados em `packages/ui/src/index.ts`. Os botões são `Button`/`IconButton` (`ghost`; a página atual `primary` com `aria-current="page"`), com `ChevronLeftIcon`/`ChevronRightIcon`. Anterior/seguinte nos limites usam `aria-disabled="true"` e `data-disabled`, sem `disabled` nem `tabIndex`, e o clique é ignorado; a exceção face ao `Button` está no JSDoc e nas descrições das stories `FirstPage` e `LastPage`. Reticências em `<li aria-hidden>` (não focáveis); com `pageCount` grande mostra sempre `2*siblingCount + 5` entradas (ex.: `1 … 4 5 6 … 20`). `pageCount <= 1` mostra a página 1 com os dois botões desativados. A `Pagination` usa o próprio `usePagination` (`totalItems = pageCount`, `pageSize = 1`) para o limite da página e o modo controlado/não controlado. Dependências novas: nenhuma.
+- **Ficheiros alterados:** `packages/ui/src/Pagination/{Pagination.tsx,usePagination.ts,Pagination.css,Pagination.css.test.ts,Pagination.test.tsx,Pagination.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** a00a754 `feat(ui): DS-034 add Pagination and usePagination`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** `Pagination.test.tsx` (semântica nav/lista/botões, `aria-current`, etiquetas personalizadas, clique/anterior/seguinte, limites com `aria-disabled` sem `disabled`, `pageCount` 1 e 0, página fora do intervalo, reticências para `pageCount=20` nas páginas 1, 5 e 20, `siblingCount={2}`, controlado e não controlado, Tab por ordem, Enter/Espaço com focus mantido, "anterior" focável e inerte na página 1, focus em "seguinte" ao chegar à última página, ref/className/size/displayName, axe; hook: 95 itens/10 por página nas páginas 1 e 10, página fora do intervalo, 0 itens, `setPage`/`next`/`previous`, correção quando `totalItems` diminui, controlado e não controlado); `Pagination.css.test.ts`. Stories: `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 925) · build ✔ · test:a11y ✔ (31 suites, 213 testes)
+- **Notas para o testador:**
+  - `endIndex` do hook é exclusivo (`items.slice(startIndex, endIndex)`): 95 itens, 10 por página, página 10 dá `startIndex=90`, `endIndex=95`; com 0 itens ambos são 0. A especificação não fixa se é inclusivo ou exclusivo.
+  - Quando `totalItems` diminui, o hook não controlado corrige o estado durante o render (o lint `react-hooks/set-state-in-effect` proíbe fazê-lo num efeito) e não chama `onPageChange`; no modo controlado só limita o valor devolvido, porque o estado é do consumidor.
+  - O `@storybook/test` não está instalado (G2 só permite dependências nomeadas), por isso o `play` de `KeyboardInteraction` usa `click()` no botão focado (o que o Enter faz num `<button>`) e verifica que `document.activeElement` nunca sai de "seguinte". As teclas reais Enter/Espaço estão cobertas nos testes unitários com `userEvent`.
+  - O botão desativado usa o aspeto `[data-disabled]` do `Button` (texto `text-disabled` sobre `bg-subtle`); convém ver `FirstPage`, `LastPage` e `DarkTheme` no Storybook. Texto desativado está isento de contraste mínimo no WCAG.
+  - Sugestão ao planeador: a lógica de `aria-disabled` focável repete-se à mão em dois botões; se a DS-035 ou outro componente precisar do mesmo padrão, avaliar uma prop no `Button` (por exemplo `focusableWhenDisabled`).
