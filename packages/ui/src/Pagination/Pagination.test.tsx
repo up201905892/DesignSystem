@@ -154,6 +154,21 @@ describe('Pagination', () => {
       expect(pages()).toEqual(['1', '…', '8', '9', '10', '11', '12', '…', '20']);
     });
 
+    it('keeps a constant number of entries and always shows the current page', () => {
+      for (const siblingCount of [0, 1, 2]) {
+        for (let page = 1; page <= 20; page += 1) {
+          const { unmount } = renderPagination({ page, siblingCount });
+          const entries = pages();
+          expect(entries).toHaveLength(siblingCount * 2 + 5);
+          expect(entries).toContain(String(page));
+          expect(entries[0]).toBe('1');
+          expect(entries.at(-1)).toBe('20');
+          expect(screen.getByRole('button', { current: 'page' })).toHaveTextContent(String(page));
+          unmount();
+        }
+      }
+    });
+
     it('shows every page when they fit', () => {
       renderPagination({ pageCount: 7 });
       expect(pages()).toEqual(['1', '2', '3', '4', '5', '6', '7']);
