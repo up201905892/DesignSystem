@@ -1229,3 +1229,37 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Com o item fechado, `aria-controls` aponta para um painel que não está no DOM (comportamento do Radix); o axe não reporta.
 - Rotação, animação e contraste do gatilho desativado não foram inspecionados num navegador.
 - Sem `overflow-wrap`, uma palavra muito longa sem espaços pode transbordar (não testável em jsdom).
+
+### DS-034 · Pagination — Relatório 1 — 2026-10-27
+
+- **Commit testado:** a00a754 (implementação) e 76df863 (registo), no histórico de `develop`; `git status` limpo no início. Teste acrescentado em 05e5ae1 (`test(ui): DS-034 ...`).
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 57 ficheiros, 925 testes; 926 com o teste acrescentado) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (31 suites, 213 testes, axe em Chromium) + testes de teclado em jsdom | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props e valores por omissão (`page`, `defaultPage`=1, `onPageChange`, `pageCount`, `siblingCount`=1, `size`, `label`, `previousLabel`, `nextLabel`, `getPageLabel`): leitura de `Pagination.tsx` e testes de etiquetas personalizadas.
+- [x] `<nav aria-label>` com `<ul>/<li>`, `aria-current="page"`, ícones Chevron com nome acessível: teste de semântica.
+- [x] Limites com `aria-disabled="true"` e `data-disabled`, sem `disabled` nem `tabindex`; clique bloqueado: testes da primeira e da última página.
+- [x] Exceção face ao `disabled` do `Button` escrita no JSDoc e nas descrições de `FirstPage` e `LastPage`; a `Pagination` não usa `disabled`.
+- [x] Reticências: `1 … 4 5 6 … 20`, `siblingCount={2}`, `aria-hidden`, fora de botões. Teste acrescentado: com `siblingCount` 0, 1 e 2 e todas as páginas de 1 a 20, o número de entradas é constante (`2*sibling+5`), a primeira e a última aparecem e a página atual está sempre visível.
+- [x] Hook `usePagination`: devolve o conjunto pedido; 95 itens/10 por página (páginas 1 e 10: `endIndex` exclusivo, 90 a 95), página fora do intervalo corrigida, 0 itens dá `pageCount=1` e intervalo vazio, correção quando `totalItems` diminui (controlado e não controlado).
+- [x] `pageCount <= 1` (testado com 1 e 0): uma página e os dois botões desativados.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (stories com axe nos dois temas, `DarkTheme`, só tokens: Stylelint verde).
+
+**Testes exigidos:** existem e são substantivos (cliques, limites, reticências em 1/5/20, `siblingCount`, controlado e não controlado, hook, axe, Tab por ordem, Enter e Espaço com focus mantido, "anterior" focável e inerte na página 1, focus em "seguinte" ao chegar à última página). Stories exigidas todas presentes: `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+
+**Acessibilidade e casos limite:** focus visível herdado de `Button`/`IconButton`; aspeto desativado via `[data-disabled]` do `Button`; `pageCount` 0, fracionário ou não finito e `siblingCount` inválido são normalizados.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- A especificação pede que o `play` de `KeyboardInteraction` avance "só com Enter"; o `play` usa `click()` no botão focado (o que Enter faz num `<button>`), porque o `@storybook/test` não está instalado e G2 proíbe dependências não nomeadas. Enter e Espaço reais estão cobertos nos testes com `userEvent`. A migração dos `play` para `userEvent` está prevista noutra tarefa do plano, que deve incluir esta story.
+- `endIndex` do hook é exclusivo (a especificação não o fixa); documentado no JSDoc.
+- Aspeto visual (botão desativado, contraste, quebra de linha com muitas páginas) não foi inspecionado num navegador.
