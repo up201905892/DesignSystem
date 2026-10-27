@@ -679,3 +679,21 @@ Modelo de entrada:
   - Os `value` dos separadores entram nos ids (`aria-controls`); com espaços o axe reporta `aria-valid-attr-value` (apanhado na story `ManyTabs`, já com valores sem espaços). Está documentado no JSDoc de `TabsTrigger`.
   - Radix: o `tablist` tem `tabindex=0` até receber focus e encaminha-o para o separador ativo; com a lista a fazer scroll não há violação `scrollable-region-focusable`.
   - Sugestão ao planeador: um token de largura de borda/indicador (`--ds-border-width-*`) evitaria o `2px` fixo em Tabs, Card e outros.
+
+### DS-031 · Accordion
+
+**Iteração 1 — 2026-10-27**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Accordion`, `AccordionItem`, `AccordionTrigger` e `AccordionContent` sobre `@radix-ui/react-accordion` (dependência nova em `packages/ui`). `Accordion` aceita `type` (obrigatório, união discriminada `single`/`multiple` com `collapsible` só em `single`), `value`/`defaultValue`/`onValueChange`, `disabled` e `headingLevel` (2 a 6, omissão 3; passa por contexto e o `AccordionTrigger` envolve o botão num `<hN>` via `Header asChild`). O gatilho mostra o `ChevronDownIcon` (`aria-hidden`), que roda 180 graus com `data-state="open"`; o painel anima a altura com `--radix-accordion-content-height`. Com `prefers-reduced-motion` a rotação e a animação de altura ficam desligadas. `dir` e `orientation` foram retirados do tipo.
+- **Ficheiros alterados:** `packages/ui/src/Accordion/{Accordion.tsx,Accordion.css,Accordion.css.test.ts,Accordion.test.tsx,Accordion.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 9e7c233 `feat(ui): DS-031 add Accordion with items, triggers and content`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova `@radix-ui/react-accordion`); C1 a C5.
+- **Testes escritos pelo programador:** `Accordion.test.tsx` (semântica botão/título/região, `aria-expanded`/`aria-controls`/`aria-labelledby`, `headingLevel`, single com e sem `collapsible`, multiple com array, string em single, `defaultValue`, controlado, item e acordeão `disabled`, Tab, Enter e Espaço, setas com volta, Home/End, salto de desativados, Tab para dentro do painel aberto, ref/className/displayName, axe aberto/fechado/desativado); `Accordion.css.test.ts` (rotação, altura, reduced motion, `:focus-visible`, sem cores nem comprimentos fixos). Stories: `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 883) · build ✔ · test:a11y ✔ (30 suites, 204 testes)
+- **Notas para o testador:**
+  - O Radix desmonta o conteúdo fechado (não só `hidden`): o texto do painel fechado nem existe no DOM, por isso não é focável nem lido. Só o painel aberto tem `role="region"`.
+  - Em `single` sem `collapsible` o item aberto mantém-se aberto ao clicar; `onValueChange` não é chamado nesse caso.
+  - A rotação e a animação de altura só se veem num navegador (`prefers-reduced-motion` verifica-se nas DevTools).
+  - Convém ver `DarkTheme` e `DisabledItem` no Storybook (aspeto e contraste do gatilho desativado).
+  - Sem sugestões novas para o planeador além do token de largura de borda já registado em DS-030 (o `2px` do anel de focus mantém-se).
