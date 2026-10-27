@@ -323,6 +323,15 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** rotação, animação e contraste do gatilho desativado só verificados por CSS e axe (não inspecionados num navegador). Sugestão ao planeador (nota do testador): `overflow-wrap` não definido, uma palavra longa sem espaços pode transbordar. Com o item fechado, `aria-controls` aponta para um painel ausente do DOM (comportamento do Radix; axe não reporta).
 
+### DS-034 · Pagination — concluída a 2026-10-27
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-27), commit a00a754 (código) e 05e5ae1 (teste do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Pagination` (`<nav aria-label>` com `<ul>`/`<li>`, `aria-current="page"`, reticências `aria-hidden`, `siblingCount`, `size` sm/md, etiquetas configuráveis) e hook `usePagination` exportado de `packages/ui` (`page`, `pageCount`, `startIndex`, `endIndex` exclusivo, `setPage`, `next`, `previous`, `canNext`, `canPrevious`), controlados e não controlados. Anterior/seguinte nos limites usam `aria-disabled` e `data-disabled` sem `disabled`, para o focus não se perder.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado; o versionamento fica para DS-037)
+- **Documentação:** props e exceção do `aria-disabled` em JSDoc (autodocs); stories `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** o `play` de `KeyboardInteraction` usa `click()` (Enter e Espaço reais só nos testes unitários), a migrar para `@storybook/test` noutra tarefa; sugestão ao planeador: prop `focusableWhenDisabled` no `Button` se o padrão `aria-disabled` focável se repetir (por exemplo na DS-035); aspeto visual do botão desativado não inspecionado num navegador. Fase Layout e dados ainda incompleta (DS-035 por concluir).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

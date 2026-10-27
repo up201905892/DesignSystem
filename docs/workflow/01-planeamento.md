@@ -41,7 +41,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Concluído |
 | DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
-| DS-034 | Pagination | Layout e dados | Média | DS-011 | Aprovado |
+| DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Planeado |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Proposta |
@@ -1360,6 +1360,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-27 · programador · Em desenvolvimento → Pronto para teste · commit a00a754
 - 2026-10-27 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-27 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-10-27 · finalizador · Aprovado → Concluído · relatório 1 aprovado, só 05e5ae1 (teste) depois do commit testado; changeset não aplicável
 
 ### DS-035 · DataTable: Table com ordenação e paginação integradas
 
