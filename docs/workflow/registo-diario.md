@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-28
+
+- **Decisões para o João:**
+  1. **O ciclo está parado: não há tarefas `Planeado`.** Aprovar propostas em `aprovacoes.md`: 21 por aprovar (DS-036 a DS-049, DS-051 a DS-057). Começam logo: DS-036 a DS-041 (Publicação), DS-051, DS-052, DS-054 a DS-057. Não propus mais tarefas, para não aumentar uma fila que já está por aprovar.
+  2. Marco: a fase "Layout e dados" (DS-028 a DS-035) fechou. O finalizador tratou DS-053, DS-055 e DS-057 (ainda `Proposta`) como seguimentos, não como bloqueio; se preferires esperar por elas, diz.
+  3. Pendente: DS-040 e DS-038 devem esperar pelas DS-051 a DS-055? Se sim, linha "Alterar" em `aprovacoes.md`.
+  4. Opcional: ver no Storybook o DataTable (rodapé, `aria-live` ao mudar de página, tema escuro). O jsdom não faz layout e o anúncio não foi testado com leitor de ecrã. Com `pageSize={0}` o resumo também desaparece (escolha do programador; a especificação só pede que não haja Pagination).
+  5. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (`.github/` é só teu).
+- **Concluídas:** DS-035 (DataTable)
+- **Testadas:** DS-035, Aprovado ao primeiro relatório (o testador acrescentou 4 casos limite)
+- **Desenvolvidas:** DS-035. O `play` de `KeyboardInteraction` usa `focus()` e `click()` (vai para a DS-054).
+- **Decisões aplicadas:** nenhuma (sem linhas novas em `aprovacoes.md`)
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** nada até haver aprovações tuas.
+
 ## 2026-10-27
 
 - **Decisões para o João:**
