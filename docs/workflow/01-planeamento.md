@@ -42,7 +42,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
-| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Aprovado |
+| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Proposta |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035 | Proposta |
@@ -1396,6 +1396,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-28 · programador · Em desenvolvimento → Pronto para teste · commit 21f4e4f
 - 2026-10-28 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-28 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-10-28 · finalizador · Aprovado → Concluído · entrada em 04-concluded.md; changeset não aplicável (pacote privado); marco Layout e dados atingido
 
 ### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
 

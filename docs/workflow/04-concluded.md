@@ -332,10 +332,20 @@ Modelo de entrada:
 - **Documentação:** props e exceção do `aria-disabled` em JSDoc (autodocs); stories `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** o `play` de `KeyboardInteraction` usa `click()` (Enter e Espaço reais só nos testes unitários), a migrar para `@storybook/test` noutra tarefa; sugestão ao planeador: prop `focusableWhenDisabled` no `Button` se o padrão `aria-disabled` focável se repetir (por exemplo na DS-035); aspeto visual do botão desativado não inspecionado num navegador. Fase Layout e dados ainda incompleta (DS-035 por concluir).
 
+### DS-035 · DataTable — concluída a 2026-10-28
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-28), commit 21f4e4f (implementação) e 38f9755 (testes do testador); sem commits de código de produção depois do commit testado (o único commit posterior em `packages/ui/src` é só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `DataTable<T>` por composição de `Table`, `useTableSort`, `usePagination` e `Pagination`; colunas com `accessor`, `cell`, `sortable`, `compare`, `align`, `numeric`; `getRowId`, `caption`/`captionHidden`, `pageSize` (omissão 10, 0 desliga), `defaultSort`, `sort`/`onSortChange`, `page`/`onPageChange`, `emptyMessage`, `size`, `striped`; ordenação antes da paginação (mudar a ordenação volta à página 1); resumo "início–fim of total" em `aria-live="polite"`; estado vazio com `colSpan`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado; o versionamento fica para DS-037)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `WithCustomCells`, `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** com `pageSize={0}` o resumo também desaparece (decisão do programador). O `play` de `KeyboardInteraction` usa `focus()`/`click()`; migração para `@storybook/test` prevista na DS-054. Anúncio `aria-live` num leitor de ecrã, aspeto visual, contraste no tema escuro e transbordo de texto longo sem espaços só verificados por CSS e axe (não inspecionados num navegador).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
 - Formulários concluídos — 2026-10-16 (DS-010 a DS-018)
 - Overlays e feedback concluídos — 2026-10-23 (DS-019 a DS-027)
+- Layout e dados concluídos — 2026-10-28 (DS-028 a DS-035; as tarefas de seguimento DS-053, DS-055 e DS-057 continuam como Proposta, tal como nas fases anteriores)
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
