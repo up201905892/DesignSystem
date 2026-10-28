@@ -259,6 +259,53 @@ describe('DataTable', () => {
   });
 });
 
+describe('DataTable edge cases', () => {
+  it('goes back to a valid page when the data shrinks', async () => {
+    const user = userEvent.setup();
+    const { rerender } = renderTable();
+    await user.click(screen.getByRole('button', { name: 'Page 3' }));
+    rerender(
+      <DataTable
+        caption="People"
+        data={people.slice(0, 12)}
+        columns={columns}
+        getRowId={(p) => p.id}
+      />,
+    );
+    expect(bodyRows()).toHaveLength(2);
+    expect(screen.getByText('11–12 of 12')).toBeInTheDocument();
+  });
+
+  it('shows the empty message with pagination off and when data becomes empty', () => {
+    const { rerender } = renderTable({ pageSize: 0, data: [] });
+    expect(screen.getByRole('cell', { name: 'No results' })).toHaveAttribute('colspan', '2');
+    rerender(<DataTable caption="People" data={people} columns={columns} getRowId={(p) => p.id} />);
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
+    rerender(<DataTable caption="People" data={[]} columns={columns} getRowId={(p) => p.id} />);
+    expect(screen.queryByRole('navigation')).toBeNull();
+    expect(screen.getByRole('cell', { name: 'No results' })).toBeInTheDocument();
+  });
+
+  it('sorts all rows with pagination off and renders missing values as empty', async () => {
+    const user = userEvent.setup();
+    renderTable({
+      pageSize: 0,
+      data: [...people, { id: 'x', name: 'Nobody', age: undefined as unknown as number }],
+    });
+    await user.click(screen.getByRole('button', { name: 'Age' }));
+    await user.click(screen.getByRole('button', { name: 'Age' }));
+    expect(bodyRows()).toHaveLength(26);
+    expect(screen.queryByText('undefined')).toBeNull();
+  });
+
+  it('keeps very long cell text in the DOM without breaking the layout structure', () => {
+    const long = 'x'.repeat(500);
+    renderTable({ data: [{ id: 'l', name: long, age: 1 }] });
+    expect(screen.getByText(long)).toBeInTheDocument();
+    expect(screen.getByText('1–1 of 1')).toBeInTheDocument();
+  });
+});
+
 describe('DataTable accessibility', () => {
   it('has no axe violations with data', async () => {
     const { container } = renderTable();
