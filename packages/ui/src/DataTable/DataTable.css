@@ -1,0 +1,21 @@
+.ds-data-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+  font-family: var(--ds-font-family-sans);
+  color: var(--ds-color-text-default);
+}
+
+.ds-data-table__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+}
+
+.ds-data-table__summary {
+  margin: 0;
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-muted);
+}

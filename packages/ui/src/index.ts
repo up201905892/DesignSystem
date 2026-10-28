@@ -138,6 +138,8 @@ export type {
 } from './Accordion';
 export { Pagination, usePagination } from './Pagination';
 export type { PaginationProps, UsePaginationOptions, UsePaginationResult } from './Pagination';
+export { DataTable } from './DataTable';
+export type { DataTableProps, DataTableColumn, DataTableRange } from './DataTable';
 export type {
   FieldProps,
   FieldLabelProps,
