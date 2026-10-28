@@ -1263,3 +1263,39 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - A especificação pede que o `play` de `KeyboardInteraction` avance "só com Enter"; o `play` usa `click()` no botão focado (o que Enter faz num `<button>`), porque o `@storybook/test` não está instalado e G2 proíbe dependências não nomeadas. Enter e Espaço reais estão cobertos nos testes com `userEvent`. A migração dos `play` para `userEvent` está prevista noutra tarefa do plano, que deve incluir esta story.
 - `endIndex` do hook é exclusivo (a especificação não o fixa); documentado no JSDoc.
 - Aspeto visual (botão desativado, contraste, quebra de linha com muitas páginas) não foi inspecionado num navegador.
+
+### DS-035 · DataTable — Relatório 1 — 2026-10-28
+
+- **Commit testado:** 21f4e4f (implementação) e 3b5eccf (registo), no histórico de `develop`; `git status` limpo no início. Teste acrescentado em 38f9755 (`test(ui): DS-035 ...`).
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 59 ficheiros, 963 testes; 967 com os testes acrescentados) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 220 testes, axe em Chromium) + testes de teclado e axe em jsdom | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] API: `data`, `columns` (`id`, `header`, `accessor`, `cell`, `sortable`, `compare`, `align`, `numeric`), `getRowId`, `caption`, `captionHidden`, `pageSize` (omissão 10, 0 desliga), `defaultSort`, `sort`/`onSortChange`, `page`/`onPageChange`, `emptyMessage` (omissão "No results"), `size`, `striped`: leitura de `DataTable.tsx` e testes.
+- [x] Só composição de `Table`, `useTableSort`, `usePagination` e `Pagination`: leitura do código, sem lógica própria de ordenação nem de paginação.
+- [x] Ordenação antes da paginação (o 99 está na última linha da página 3 e sobe à primeira com `desc`); mudar a ordenação volta à página 1 (não controlado e controlado, que pede `onPageChange(1)`).
+- [x] Resumo "início–fim of total" em `<p aria-live="polite">`, `getRangeLabel` e `Pagination` por baixo.
+- [x] `data` vazio: uma linha com `colSpan` igual ao número de colunas, sem paginação (testado também com `pageSize={0}` e na transição dados para vazio).
+- [x] Genéricos: `@ts-expect-error` para accessor inexistente (o `typecheck` confirma que a diretiva é necessária); `cell` recebe a linha tipada.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (`DataTable.css` só com tokens, Stylelint verde; CSS em `styles.css`; exports em `index.ts`; stories com axe e `DarkTheme`).
+
+**Testes exigidos:** todos presentes e substantivos: 25 linhas com 10 por página (3 páginas), página 3 com 5 linhas, ordenar `desc`, ordenar na página 2, `pageSize={0}`, `data=[]`, `cell` personalizado, `sort` e `page` controlados (e ambos), tipos; axe com dados e vazia; nome da `caption`; resumo atualizado com focus mantido no botão da paginação; ordem de tabulação cabeçalhos, células, paginação; ordenar e paginar só com teclado. Stories exigidas todas presentes: `Default`, `WithCustomCells`, `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+
+**Testes acrescentados (casos limite):** dados que diminuem estando na página 3 (corrige para a última página válida); `pageSize={0}` com dados vazios e transições dados, vazio e dados; ordenar 26 linhas sem paginação com valor `undefined` (não aparece o texto "undefined"); texto de 500 caracteres.
+
+**Acessibilidade e casos limite:** tabela e região com o nome da `caption`; focus visível herdado de `Table`, `Button` e `IconButton`; modos controlado e não controlado cobertos; texto escuro/claro só via tokens.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Com `pageSize={0}` o resumo também desaparece (a especificação só exige a ausência da `Pagination`); decisão do programador, registada.
+- O `play` de `KeyboardInteraction` usa `focus()` e `click()` em vez de `userEvent` (sem `@storybook/test`); a migração está prevista na tarefa DS-054, e as teclas reais estão cobertas nos testes unitários.
+- O anúncio real da região `aria-live` num leitor de ecrã, o aspeto visual e o contraste no tema escuro não foram inspecionados num navegador (o axe das stories passa nos dois temas).
+- Texto muito longo sem espaços pode transbordar a célula (não testável em jsdom).
