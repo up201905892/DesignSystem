@@ -715,3 +715,22 @@ Modelo de entrada:
   - O `@storybook/test` não está instalado (G2 só permite dependências nomeadas), por isso o `play` de `KeyboardInteraction` usa `click()` no botão focado (o que o Enter faz num `<button>`) e verifica que `document.activeElement` nunca sai de "seguinte". As teclas reais Enter/Espaço estão cobertas nos testes unitários com `userEvent`.
   - O botão desativado usa o aspeto `[data-disabled]` do `Button` (texto `text-disabled` sobre `bg-subtle`); convém ver `FirstPage`, `LastPage` e `DarkTheme` no Storybook. Texto desativado está isento de contraste mínimo no WCAG.
   - Sugestão ao planeador: a lógica de `aria-disabled` focável repete-se à mão em dois botões; se a DS-035 ou outro componente precisar do mesmo padrão, avaliar uma prop no `Button` (por exemplo `focusableWhenDisabled`).
+
+### DS-035 · DataTable: Table com ordenação e paginação integradas
+
+**Iteração 1 — 2026-10-28**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `DataTable<T>` genérico (`forwardRef` com cast para manter o genérico; `ref` aponta para o `div` raiz), implementado só por composição de `Table`, `useTableSort`, `usePagination` e `Pagination`. As colunas são `DataTableColumn<T>` (`accessor: keyof T | (row) => unknown`, `cell`, `sortable`, `compare`, `align`, `numeric`). A tabela é nomeada pela `caption` (`aria-labelledby` para o id da legenda, que `captionHidden` esconde só visualmente). `usePagination` corre sobre `data.length` e a ordenação sobre todos os dados antes de `slice(startIndex, endIndex)`; o `onSortChange` interno chama `setPage(1)` (no modo controlado pede `onPageChange(1)`) e depois o `onSortChange` do consumidor. O rodapé tem o resumo `<início>–<fim> of <total>` (`getRangeLabel`) num `<p aria-live="polite">` e a `Pagination`. Com `data` vazio mostra uma linha com `colSpan` e sem rodapé; `pageSize={0}` mostra todas as linhas sem rodapé. Dependências novas: nenhuma.
+- **Ficheiros alterados:** `packages/ui/src/DataTable/{DataTable.tsx,DataTable.css,DataTable.css.test.ts,DataTable.test.tsx,DataTable.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 21f4e4f `feat(ui): DS-035 add DataTable with sorting and pagination`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** `DataTable.test.tsx` (25 linhas com `pageSize=10`: 10 linhas e 3 páginas, 5 linhas na página 3, ordenar `desc` por coluna numérica põe o maior valor global na página 1, ordenar na página 2 volta à 1, `pageSize={0}`, `data=[]` com `colSpan` e sem paginação, mensagem vazia personalizada, `cell` personalizado, accessor em função, `compare`, `numeric`, só colunas `sortable` têm botão, `sort` controlado, `page` controlado (e pedido de página 1 ao ordenar), ambos controlados, `getRangeLabel`, ref/className/props nativas/displayName, `size`/`striped`, `data` não alterado, `@ts-expect-error` para accessor inexistente, axe com dados e vazia, região `aria-live` atualizada com focus mantido no botão da paginação, ordem de tabulação cabeçalhos → células → paginação, ordenar e mudar de página só com teclado); `DataTable.css.test.ts`. Stories: `Default` (50 linhas), `WithCustomCells` (Badge e IconButton), `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 963) · build ✔ · test:a11y ✔ (32 suites, 220 testes; correu `pnpm test:a11y:setup` antes)
+- **Notas para o testador:**
+  - Com `pageSize={0}` o rodapé inteiro (resumo e paginação) desaparece; a especificação só diz que não há `Pagination`, e optei por esconder também o resumo.
+  - O tipo de `DataTable` é uma função genérica com `ref`; nas stories usa-se `component: DataTable<Person>` (instantiation expression) para o Storybook tipar as props.
+  - Como na DS-034, o `play` de `KeyboardInteraction` usa `focus()` e `click()` (o que Enter faz num `<button>`), porque `@storybook/test` não está instalado; as teclas reais estão nos testes unitários com `userEvent`.
+  - `aria-live` está no `<p>` do resumo, que só existe com dados e paginação; o leitor de ecrã anuncia a alteração de texto ao mudar de página. Convém confirmar num leitor real.
+  - O `Table` exige `aria-label`/`aria-labelledby`; o `DataTable` usa `aria-labelledby` para a `caption`, por isso o `region` e a `table` têm o mesmo nome.
+  - Sem sugestões novas para o planeador.
