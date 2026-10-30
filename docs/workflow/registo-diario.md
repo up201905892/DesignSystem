@@ -2,6 +2,20 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-10-30
+
+- **Decisões para o João:**
+  1. **O ciclo continua parado: não há tarefas `Planeado`.** Sem linhas novas em `aprovacoes.md`. Aprovar propostas: 21 por aprovar (DS-036 a DS-049, DS-051 a DS-057). Podem começar logo: DS-036 a DS-041 (Publicação), DS-051, DS-052, DS-054 a DS-057. Não propus mais tarefas, para não aumentar uma fila que já está por aprovar.
+  2. Pendente: DS-040 e DS-038 devem esperar pelas DS-051 a DS-055? Se sim, linha "Alterar" em `aprovacoes.md`.
+  3. Pendentes anteriores (DataTable no Storybook, `pageSize={0}`, DS-053/DS-055/DS-057 como seguimentos) mantêm-se como no registo de 2026-10-28.
+  4. Pendente antigo: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (`.github/` é só teu).
+- **Concluídas:** nenhuma
+- **Testadas:** nenhuma
+- **Desenvolvidas:** nenhuma
+- **Decisões aplicadas:** nenhuma
+- **Violações de regras encontradas:** nenhuma (DS-001 a DS-035 e DS-050 `Concluído`, as restantes `Proposta`; árvore de trabalho limpa)
+- **Próximo passo:** nada até haver aprovações tuas.
+
 ## 2026-10-29
 
 - **Decisões para o João:**
