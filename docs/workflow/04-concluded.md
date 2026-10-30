@@ -187,9 +187,165 @@ Modelo de entrada:
 - **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Variants`, `Solid`, `Sizes`, `LongText` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
 - **Lições:** notas do testador: o contraste só é medido em browser pelo `test:a11y` e por cálculo em `Badge.css.test.ts`; com `asChild` sobre `<a>` não há estilo de hover.
 
+### DS-025 · Dialog (Modal) — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-19), commit e1c2909 (mais dbe5ab0, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Dialog` e componentes associados sobre `@radix-ui/react-dialog`, em portal com overlay e `z-index-modal`, tamanhos `sm`/`md`/`lg`, focus preso e devolvido ao gatilho, scroll interno no corpo, botão de fechar configurável, fecho por overlay opcional, gatilho desativado que não abre, modo controlado e não controlado, `prefers-reduced-motion`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Sizes`, `WithForm`, `LongContent`, `Confirmation`, `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: `KeyboardInteraction` usa eventos sintéticos (focus preso também testado com `userEvent` em jsdom); movimento reduzido e layout estreito verificados por CSS, não medidos em browser.
+
+### DS-026 · DropdownMenu — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-19), commit d1f8738 (mais 988926b, só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `DropdownMenu` e componentes associados sobre `@radix-ui/react-dropdown-menu`, em portal com `z-index-dropdown`, navegação completa por teclado (setas, Home/End, letra, Enter/Espaço, Esc, Tab fecha), itens `danger` com ícone, itens e gatilho desativados que não ativam, modo controlado e não controlado.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `WithIcons`, `WithGroupsAndLabels`, `DisabledItem`, `DangerItem`, `OnIconButton`, `DisabledTrigger`, `KeyboardInteraction` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** notas do testador: menu não modal (`modal={false}`) para evitar `aria-hidden-focus`, logo a página atrás continua interativa; `KeyboardInteraction` usa eventos sintéticos; colisões do popper não medidas em browser.
+
+### DS-032 · Table: estrutura base — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 2 (2026-10-19), commit f83f5cf
+- **Iterações de desenvolvimento:** 2
+- **Entregue:** `Table`, `TableCaption`, `TableHead`, `TableBody`, `TableRow`, `TableHeaderCell` e `TableCell` sobre elementos HTML nativos, numa região com scroll focável e nomeada, com `size`, `striped`, `stickyHeader`, `align`, `numeric`, legenda escondida e linha selecionada, contraste AA nos dois temas e scroll horizontal por setas verificado em browser real.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; sem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc, exemplo e notas de acessibilidade; stories `Default`, `Striped`, `Dense`, `WithCaption`, `NumericColumns`, `StickyHeader`, `HorizontalScroll`, `WithBadges` e `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** o teste das setas vive em `apps/docs/.storybook/test-runner.ts` (só corre em `pnpm test:a11y`); sem `className`/props para o contentor `ds-table-container` (sugestão ao planeador, relevante para DS-035); `stickyHeader` depende de `--ds-table-max-height` definida pelo consumidor.
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte — concluída a 2026-10-19
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-19), commit fd42d21 (mais 82b593f, só de registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `typecheck`, `test` e `lint` passam num estado sem `dist/`. Condição de exportação `source` em `packages/icons/package.json`, ativada por `customConditions` no `tsconfig.base.json`, `resolve.conditions` no Vitest do `@ds/ui` e `viteFinal` no Storybook; `@ds/tokens` mantém a geração automática (`globalSetup` do Vitest no `ui`). Os `exports` para `dist/` ficaram iguais e os `.d.ts` do `ui` não contêm caminhos de código-fonte.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; pacotes privados em 0.0.0, sem pacote publicado alterado)
+- **Documentação:** não aplicável a componentes (sem alterações a componentes nem stories); inventário das dependências `@ds/*` e escolha do mecanismo registados em `02-desenvolvimento.md`. Sem `TODO` na tarefa.
+- **Avaliação do critério visual:** o critério "`pnpm storybook` arranca e as stories do Checkbox e do Select mostram os ícones" não teve verificação visual manual (sem browser no ambiente). Conclui que não impede o fecho: o relatório marca todos os critérios como verificados, `pnpm build:docs` passa sem `dist/` e o bundle contém o path do `CheckIcon`, e `pnpm test:a11y` (123 testes, em browser headless) renderiza as stories do Checkbox e do Select sem `dist/` de icons. A tarefa não altera componentes nem CSS, por isso o risco residual é só de aparência. Fica como verificação opcional para o João: abrir `pnpm storybook` e ver os ícones do Checkbox e do Select.
+- **Lições:** o `typecheck` do `ui` passa a verificar também o código-fonte de `icons`; o `globalSetup` constrói os tokens em cada `pnpm test` do `ui`; a reordenação provisória do `ci.yml` pode ser revertida pelo João, já que o CI não precisa de `build` antes de `typecheck`/`test`/`lint`. Fase Fundações: marco já registado a 2026-10-13, DS-050 foi acrescentada depois.
+
+### DS-033 · Table: ordenação — concluída a 2026-10-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-20), commit 754b37b (código) e 36069f2 (teste do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `TableHeaderCell` com `sortable`, `sortDirection` e `onSort` (botão dentro do `<th>`, `aria-sort`, ícones decorativos ArrowUp/ArrowDown/ArrowUpDown) e hook `useTableSort` exportado de `packages/ui`, controlado e não controlado, ciclo asc → desc → nenhum, ordenação estável sem mutar `data`, com `compare` e `accessor` próprios por coluna.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props em JSDoc (autodocs) e notas de acessibilidade; stories `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`) e `DarkTheme` com tabela ordenável, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** o `play` de `SortKeyboardInteraction` usa `focus()` + `click()` (Enter e Espaço reais só nos testes unitários); um `aria-sort` passado pelo utilizador sobrepõe-se ao calculado; sugestão ao planeador: tarefa para adicionar `@storybook/test` ou alargar o `test-runner.ts` para `play` com teclado real. Fase Layout e dados ainda incompleta (DS-028 a DS-031, DS-034 e DS-035 por concluir).
+
+### DS-020 · Spinner e Skeleton — concluída a 2026-10-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-20), commit 5374d91 (código) e e34014a (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Spinner` (`size` sm/md/lg, `label` com omissão "Loading", `role="status"` com nome acessível, SVG decorativo com `currentColor`) e `Skeleton` (`variant` text/rect/circle, `width`/`height` por custom properties, `lines`, `aria-hidden`), cada um na sua pasta; animações param com `prefers-reduced-motion: reduce`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** autodocs com props em JSDoc; stories `Spinner/Default`, `Sizes`, `CustomLabel`, `DarkTheme` e `Skeleton/Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme` (cobertas pelo `test:a11y`). Sem `TODO` na tarefa.
+- **Lições:** reduced motion verificado por leitura e testes do CSS, não por emulação em browser; `aria-labelledby` do Spinner ganha a um `aria-label` do consumidor, a menos que também seja sobreposto. Fase Overlays e feedback ainda incompleta (DS-021 a DS-024, DS-027 e outras por concluir).
+
+### DS-021 · Button: estado `loading` — concluída a 2026-10-21
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-21), commit f9ada3d (código) e 83967fe (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Button` e `IconButton` com `loading` e `loadingLabel`: o botão continua focável (`aria-busy`, `aria-disabled`, sem `disabled`), bloqueia o clique na captura (também com `asChild`), mostra um Spinner no lugar do `leadingIcon` e acrescenta o `loadingLabel` à descrição acessível, sem mudar o nome.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** JSDoc de `loading` e `disabled` (diferença intencional e resultado comunicado pelo consumidor, no autodocs); stories `Button/Loading`, `LoadingToggle` (com `play`), `AsLinkLoading`, `IconButton/Loading` e loading em `Button/DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** com um `leadingIcon` que não tenha 16px a largura muda ao entrar em loading (limitação conhecida); com `asChild`, o `aria-describedby` do filho não se perde (confirmado pelo testador, contra a nota do programador); contraste nos dois temas só por axe. Fase Overlays e feedback ainda incompleta (DS-022, DS-023, DS-024, DS-027 e outras por concluir).
+
+### DS-022 · Alert — concluída a 2026-10-21
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-21), commit 1d99eb1 (código) e 62232d7 (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Alert` com `variant` (info, success, warning, danger), `title`, `icon` (`ReactNode | false`), `onClose` e `closeLabel`; `role` `alert` em danger/warning e `status` em info/success (substituível); ícone decorativo por variante; botão de fechar (`IconButton`) só com `onClose`, o Alert nunca se esconde; CSS só com tokens e contraste AA nos dois temas.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props em JSDoc (autodocs) e notas de acessibilidade; stories `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** contraste real nos dois temas só por cálculo sobre tokens e axe (sem inspeção visual); um `data-variant` do consumidor sobrepõe-se ao interno (caso fora da especificação). Fase Overlays e feedback ainda incompleta (DS-023, DS-024, DS-027 e outras por concluir).
+
+### DS-023 · Tooltip — concluída a 2026-10-22
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-22), commit 76a9b0a (código) e c883e31 (testes do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `TooltipProvider` e `Tooltip` (`content`, `side`, `align`, `delayDuration`, controlado e não controlado), em portal com token de z-index, abre com hover e focus, Esc fecha sem mover o focus (WCAG 1.4.13), animação respeita `prefers-reduced-motion`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** comportamento hoverable e reposicionamento por colisão só verificados por simulação de eventos e leitura de CSS (jsdom não faz layout). Fase Overlays e feedback ainda incompleta (DS-024, DS-027 por concluir).
+
+### DS-024 · Popover — concluída a 2026-10-22
+
+- **Relatório de testes que aprovou:** Relatório 2 (2026-10-22), commit d2ca4f9 (código) e 3abc3e4 (registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 2 (o relatório 1 reprovou por `sideOffset` em pixéis e por o clique fora não devolver o focus ao gatilho)
+- **Entregue:** `Popover`, `PopoverTrigger` (`asChild`), `PopoverContent` e `PopoverClose` (`open`, `defaultOpen`, `onOpenChange`, `side`, `align`, `sideOffset` como passo do token de espaço, `showClose` e `closeLabel`); painel não modal em portal, `role="dialog"`, focus entra no conteúdo e volta ao gatilho com Esc, `PopoverClose` e clique fora; gatilho `Button`/`IconButton` desativado não abre.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** reposicionamento por colisão só verificado por leitura de código/CSS (jsdom não faz layout). Sugestão ao planeador (já registada pelo programador): tarefa nova para aplicar `readSpaceToken` ao Tooltip, DropdownMenu (`sideOffset = 4`) e Select (`sideOffset={4}`), que mantêm offsets em pixéis. Fase Overlays e feedback ainda incompleta (DS-027 por concluir).
+
+### DS-027 · Toast — concluída a 2026-10-23
+
+- **Relatório de testes que aprovou:** Relatório 2 (2026-10-23), commit 0679d4b (correção) e 442dc0b (registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 2 (o relatório 1 reprovou por falha de contraste axe na story `DarkTheme`, medido durante a animação de entrada)
+- **Entregue:** `ToastProvider` (`position`, `max`, `label`, `closeLabel`) e `useToast()` com `toast()` e `dismiss()`, sobre `@radix-ui/react-toast`; variantes `info`, `success`, `warning`, `danger`, ação opcional, `duration` (incluindo `Infinity`), anúncio assertive/polite sem mover o focus, pausa do temporizador com ponteiro ou focus na região, botão de fechar (`IconButton`), `z-index-toast` e animações com `prefers-reduced-motion`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Variants`, `WithAction`, `Persistent`, `Stacked`, `Positions`, `AfterLoading` (com `play`, padrão botão em loading e Toast com o resultado) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** posição, largura em ecrãs estreitos, saída animada, swipe e reduced motion só verificados por leitura de CSS e testes (jsdom não anima nem faz layout). Sugestões ao planeador (já registadas nos relatórios): `Variants` e `Stacked` também medem o axe durante a animação de entrada; esperar também por uma frame no `play` da `DarkTheme`.
+
+### DS-028 · Stack e Grid — concluída a 2026-10-23
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-23), commit 03a4aa4 (implementação); o único commit posterior (cf67034) é só de testes; sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** primitivos de layout `Stack` (flexbox: `direction`, `gap`, `align`, `justify`, `wrap`, `asChild`) e `Grid` com `GridItem` (`columns` ou `minColumnWidth` responsivo sem media queries, `gap`, `colSpan`, `asChild`), com `gap` tipado pela escala de espaçamento dos tokens.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas em JSDoc (autodocs); stories `Stack/{Vertical,Horizontal,Gaps,AlignAndJustify,Wrap,AsList,DarkTheme}` e `Grid/{Columns,Responsive,Spans,AsList,DarkTheme}`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** layout real (`auto-fit`, `colSpan`, `wrap`) só verificado por leitura de CSS e testes de atributos (jsdom não faz layout). Sugestão ao planeador (nota do testador): `colSpan` não é validado em runtime (0, negativo ou decimal gera CSS inválido, ignorado pelo navegador).
+
+### DS-029 · Card — concluída a 2026-10-26
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-26), commit 829c873 (implementação) e 89366b6 (registo); o único commit posterior de código (f4ad0ec) é só de testes; sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Card`, `CardHeader`, `CardTitle` (`as` h2 a h6, omissão h3), `CardDescription`, `CardBody` e `CardFooter`; `variant` (`outlined`/`elevated`), `padding` (`none` a `lg`) e `asChild` (cartão clicável sobre `<a>` com focus visível), só com tokens e nos dois temas.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** sombra `elevated` no tema escuro pouco visível e `overflow-wrap` não definido (palavra longa sem espaços pode transbordar): sugestões ao planeador, só verificáveis num navegador.
+
+### DS-030 · Tabs — concluída a 2026-10-26
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-26), commit 06f72e4 (implementação) e a0b210f (registo); o único commit posterior de código (6040f80) é só de testes; sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` sobre `@radix-ui/react-tabs` (`value`, `defaultValue`, `onValueChange`, `orientation`, `activationMode`); `TabsList` exige `aria-label` ou `aria-labelledby` e faz scroll horizontal; indicador de 2px com `color-accent-default` (contraste ≥ 3:1 nos dois temas); teclado do APG (setas, Home/End, volta nas pontas, saltar desativados, ativação manual).
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** scroll de `ManyTabs` e indicador vertical só verificados por CSS e axe (não inspecionados num navegador). Sugestão ao planeador (já registada pelo programador): token de largura de borda/indicador (`--ds-border-width-*`) para evitar o `2px` fixo em Tabs, Card e outros. `value` com espaços gera ids inválidos (documentado no JSDoc).
+
+### DS-031 · Accordion — concluída a 2026-10-27
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-27), commit 9e7c233 (implementação) e 7eebbdc (registo); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Accordion`, `AccordionItem`, `AccordionTrigger` e `AccordionContent` sobre `@radix-ui/react-accordion`; `type` `single`/`multiple` (`collapsible` só em `single`), `value`/`defaultValue`/`onValueChange`, `disabled`, `headingLevel` (2 a 6, omissão 3); botão dentro de título, `aria-expanded`/`aria-controls`, painel `region`; chevron rotativo e animação de altura com `prefers-reduced-motion`; teclado do APG.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled` e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** rotação, animação e contraste do gatilho desativado só verificados por CSS e axe (não inspecionados num navegador). Sugestão ao planeador (nota do testador): `overflow-wrap` não definido, uma palavra longa sem espaços pode transbordar. Com o item fechado, `aria-controls` aponta para um painel ausente do DOM (comportamento do Radix; axe não reporta).
+
+### DS-034 · Pagination — concluída a 2026-10-27
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-27), commit a00a754 (código) e 05e5ae1 (teste do testador); sem commits de código de produção depois do commit testado
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Pagination` (`<nav aria-label>` com `<ul>`/`<li>`, `aria-current="page"`, reticências `aria-hidden`, `siblingCount`, `size` sm/md, etiquetas configuráveis) e hook `usePagination` exportado de `packages/ui` (`page`, `pageCount`, `startIndex`, `endIndex` exclusivo, `setPage`, `next`, `previous`, `canNext`, `canPrevious`), controlados e não controlados. Anterior/seguinte nos limites usam `aria-disabled` e `data-disabled` sem `disabled`, para o focus não se perder.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado; o versionamento fica para DS-037)
+- **Documentação:** props e exceção do `aria-disabled` em JSDoc (autodocs); stories `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** o `play` de `KeyboardInteraction` usa `click()` (Enter e Espaço reais só nos testes unitários), a migrar para `@storybook/test` noutra tarefa; sugestão ao planeador: prop `focusableWhenDisabled` no `Button` se o padrão `aria-disabled` focável se repetir (por exemplo na DS-035); aspeto visual do botão desativado não inspecionado num navegador. Fase Layout e dados ainda incompleta (DS-035 por concluir).
+
+### DS-035 · DataTable — concluída a 2026-10-28
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-10-28), commit 21f4e4f (implementação) e 38f9755 (testes do testador); sem commits de código de produção depois do commit testado (o único commit posterior em `packages/ui/src` é só de testes)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `DataTable<T>` por composição de `Table`, `useTableSort`, `usePagination` e `Pagination`; colunas com `accessor`, `cell`, `sortable`, `compare`, `align`, `numeric`; `getRowId`, `caption`/`captionHidden`, `pageSize` (omissão 10, 0 desliga), `defaultSort`, `sort`/`onSortChange`, `page`/`onPageChange`, `emptyMessage`, `size`, `striped`; ordenação antes da paginação (mudar a ordenação volta à página 1); resumo "início–fim of total" em `aria-live="polite"`; estado vazio com `colSpan`.
+- **Changeset:** não aplicável (`@ds/ui` é privado e a versão é 0.0.0; não existe `.changeset/` nem pacote publicado alterado; o versionamento fica para DS-037)
+- **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `WithCustomCells`, `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** com `pageSize={0}` o resumo também desaparece (decisão do programador). O `play` de `KeyboardInteraction` usa `focus()`/`click()`; migração para `@storybook/test` prevista na DS-054. Anúncio `aria-live` num leitor de ecrã, aspeto visual, contraste no tema escuro e transbordo de texto longo sem espaços só verificados por CSS e axe (não inspecionados num navegador).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
 - Formulários concluídos — 2026-10-16 (DS-010 a DS-018)
+- Overlays e feedback concluídos — 2026-10-23 (DS-019 a DS-027)
+- Layout e dados concluídos — 2026-10-28 (DS-028 a DS-035; as tarefas de seguimento DS-053, DS-055 e DS-057 continuam como Proposta, tal como nas fases anteriores)
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->

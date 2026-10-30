@@ -1,0 +1,56 @@
+.ds-spinner {
+  --ds-spinner-size: var(--ds-space-6);
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-spinner-size);
+  height: var(--ds-spinner-size);
+  color: inherit;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.ds-spinner[data-size='sm'] {
+  --ds-spinner-size: var(--ds-space-4);
+}
+
+.ds-spinner[data-size='md'] {
+  --ds-spinner-size: var(--ds-space-6);
+}
+
+.ds-spinner[data-size='lg'] {
+  --ds-spinner-size: var(--ds-space-8);
+}
+
+.ds-spinner__graphic {
+  width: 100%;
+  height: 100%;
+  animation: ds-spinner-rotate 800ms linear infinite;
+}
+
+.ds-spinner__track {
+  stroke: currentcolor;
+  stroke-width: 3;
+  opacity: 0.25;
+}
+
+.ds-spinner__arc {
+  stroke: currentcolor;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+@keyframes ds-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Stays visible but static. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-spinner__graphic {
+    animation: none;
+  }
+}

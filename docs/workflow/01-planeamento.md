@@ -27,22 +27,22 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-017 | Switch | Formulários | Média | DS-012 | Concluído |
 | DS-018 | Select | Formulários | Alta | DS-008, DS-013 | Concluído |
 | DS-019 | Badge | Overlays e feedback | Média | DS-009 | Concluído |
-| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Planeado |
-| DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Proposta |
-| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Proposta |
-| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Proposta |
-| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Proposta |
-| DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Proposta |
-| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Proposta |
-| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Proposta |
-| DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Proposta |
-| DS-029 | Card | Layout e dados | Média | DS-010 | Proposta |
-| DS-030 | Tabs | Layout e dados | Média | DS-009 | Proposta |
-| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Proposta |
-| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Proposta |
-| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Proposta |
-| DS-034 | Pagination | Layout e dados | Média | DS-011 | Proposta |
-| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Proposta |
+| DS-020 | Spinner e Skeleton | Overlays e feedback | Média | DS-009 | Concluído |
+| DS-021 | Button: estado `loading` | Overlays e feedback | Média | DS-011, DS-020 | Concluído |
+| DS-022 | Alert | Overlays e feedback | Média | DS-011 | Concluído |
+| DS-023 | Tooltip | Overlays e feedback | Média | DS-011 | Concluído |
+| DS-024 | Popover | Overlays e feedback | Média | DS-011, DS-013 | Concluído |
+| DS-025 | Dialog (Modal) | Overlays e feedback | Alta | DS-011, DS-013 | Concluído |
+| DS-026 | DropdownMenu | Overlays e feedback | Alta | DS-011 | Concluído |
+| DS-027 | Toast | Overlays e feedback | Média | DS-011, DS-021 | Concluído |
+| DS-028 | Stack e Grid | Layout e dados | Média | DS-009 | Concluído |
+| DS-029 | Card | Layout e dados | Média | DS-010 | Concluído |
+| DS-030 | Tabs | Layout e dados | Média | DS-009 | Concluído |
+| DS-031 | Accordion | Layout e dados | Média | DS-008, DS-009 | Concluído |
+| DS-032 | Table: estrutura base | Layout e dados | Alta | DS-019 | Concluído |
+| DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
+| DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
+| DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Proposta |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035 | Proposta |
@@ -57,6 +57,14 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
+| DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
+| DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Proposta |
+| DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Proposta |
+| DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Proposta |
+| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Proposta |
+| DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Proposta |
+| DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Proposta |
+| DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Proposta |
 
 ## Decisões aplicadas
 
@@ -67,6 +75,8 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | 2026-10-11 | Aprovar | DS-011, DS-014, DS-015, DS-020 | 2026-10-12 |
 | 2026-10-11 | Aprovar | DS-012, DS-013, DS-016 a DS-019 | 2026-10-12 |
 | 2026-10-12 | Responder | DS-003 | 2026-10-12 |
+| 2026-10-16 | Aprovar | DS-021 a DS-035 | 2026-10-19 |
+| 2026-10-16 | Aprovar | DS-050 | 2026-10-19 |
 
 ## Decisões técnicas
 
@@ -840,6 +850,11 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): nome de exemplo do teste em inglês ('Saving')
 - 2026-10-12 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-11)
+- 2026-10-20 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-20 · programador · Em desenvolvimento → Pronto para teste · commit 5374d91
+- 2026-10-20 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-20 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-20 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem código de produção depois do commit testado; changeset não aplicável
 
 ### DS-021 · Button: estado `loading`
 
@@ -876,6 +891,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loading focável com aria-disabled documentado como diferença intencional face a disabled; clique bloqueado na captura; asChild + loading; posição do Spinner via Slottable; loadingLabel por aria-describedby em vez de role="status"; nomes de exemplo em inglês
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): loadingLabel por aria-describedby, bloqueio da submissão e largura sem leadingIcon confirmados; novo critério: a documentação diz que o resultado da ação é anunciado pelo Toast ou por outro feedback do consumidor, não pelo botão
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-21 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-21 · programador · Em desenvolvimento → Pronto para teste · commit f9ada3d
+- 2026-10-21 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-21 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-21 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem código de produção depois do commit testado; changeset não aplicável
 
 ### DS-022 · Alert
 
@@ -903,6 +924,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-21 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-21 · programador · Em desenvolvimento → Pronto para teste · commit 1d99eb1
+- 2026-10-21 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-21 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-21 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem código de produção depois do commit testado; changeset não aplicável
 
 ### DS-023 · Tooltip
 
@@ -930,6 +957,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-22 · programador · Planeado → Em desenvolvimento · início
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit 76a9b0a
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-22 · testador · Em teste → Aprovado · relatório 1 aprovado, sem falhas
+- 2026-10-22 · finalizador · Aprovado → Concluído · relatório 1 aprovado; changeset não aplicável (pacote privado)
 
 ### DS-024 · Popover
 
@@ -959,6 +992,16 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o popover nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-22 · programador · Planeado → Em desenvolvimento · início
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit a09a0ff
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-22 · testador · Em teste → Reprovado · relatório 1: sideOffset em pixéis (não por token) e clique fora não devolve o focus ao gatilho
+- 2026-10-22 · programador · Reprovado → Em desenvolvimento · correção das duas falhas do relatório 1
+- 2026-10-22 · programador · Em desenvolvimento → Pronto para teste · commit d2ca4f9
+- 2026-10-22 · testador · Pronto para teste → Em teste · início do relatório 2
+- 2026-10-22 · testador · Em teste → Aprovado · relatório 2 aprovado, as duas falhas do relatório 1 corrigidas, sem falhas novas
+- 2026-10-22 · finalizador · Aprovado → Concluído · relatório 2 aprovado (d2ca4f9); changeset não aplicável (@ds/ui privado)
 
 ### DS-025 · Dialog (Modal)
 
@@ -990,6 +1033,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o diálogo nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit e1c2909
+- 2026-10-19 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, todos os critérios verificados
+- 2026-10-19 · finalizador · Aprovado → Concluído · definição de concluído verificada; changeset não aplicável (pacote privado)
 
 ### DS-026 · DropdownMenu
 
@@ -1020,6 +1069,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): gatilho com Button disabled não abre o menu (clique, Enter, Espaço, Seta para baixo) nem recebe focus, com critério, testes e story DisabledTrigger
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit d1f8738
+- 2026-10-19 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md
+- 2026-10-19 · finalizador · Aprovado → Concluído · definição de concluído verificada; changeset não aplicável (pacote privado)
 
 ### DS-027 · Toast
 
@@ -1052,6 +1107,16 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): story AfterLoading com o padrão "botão em loading → Toast com o resultado"; DS-021 acrescentada às dependências
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-23 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 93c3cbb
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-23 · testador · Em teste → Reprovado · relatório 1 em 03-testing.md (falha de contraste axe na story DarkTheme)
+- 2026-10-23 · programador · Reprovado → Em desenvolvimento · correção da falha 1 do relatório 1
+- 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 0679d4b
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 2
+- 2026-10-23 · testador · Em teste → Aprovado · relatório 2 em 03-testing.md (test:a11y estável em 5 execuções)
+- 2026-10-23 · finalizador · Aprovado → Concluído · registo em 04-concluded.md; changeset não aplicável (`@ds/ui` privado)
 
 ### DS-028 · Stack e Grid
 
@@ -1080,6 +1145,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-23 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-23 · programador · Em desenvolvimento → Pronto para teste · commit 03a4aa4
+- 2026-10-23 · testador · Pronto para teste → Em teste · início do relatório 1
+- 2026-10-23 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md
+- 2026-10-23 · finalizador · Aprovado → Concluído · changeset não aplicável (@ds/ui privado)
 
 ### DS-029 · Card
 
@@ -1107,6 +1178,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-26 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-26 · programador · Em desenvolvimento → Pronto para teste · commit 829c873
+- 2026-10-26 · testador · Pronto para teste → Em teste · início do teste
+- 2026-10-26 · testador · Em teste → Aprovado · relatório 1, zero falhas
+- 2026-10-26 · finalizador · Aprovado → Concluído · changeset não aplicável (@ds/ui privado)
 
 ### DS-030 · Tabs
 
@@ -1136,6 +1213,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-26 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-26 · programador · Em desenvolvimento → Pronto para teste · commit 06f72e4
+- 2026-10-26 · testador · Pronto para teste → Em teste · início do teste
+- 2026-10-26 · testador · Em teste → Aprovado · relatório 1, zero falhas
+- 2026-10-26 · finalizador · Aprovado → Concluído · relatório 1 aprovado, changeset não aplicável
 
 ### DS-031 · Accordion
 
@@ -1164,6 +1247,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-27 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-27 · programador · Em desenvolvimento → Pronto para teste · commit 9e7c233
+- 2026-10-27 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-27 · testador · Em teste → Aprovado · relatório 1, zero falhas
+- 2026-10-27 · finalizador · Aprovado → Concluído · changeset não aplicável (pacote privado), sem TODO, stories com DarkTheme
 
 ### DS-032 · Table: estrutura base
 
@@ -1192,6 +1281,16 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit 6d8452a
+- 2026-10-19 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-19 · testador · Em teste → Reprovado · relatório 1: falta o teste exigido das setas a fazer scroll horizontal (ver 03-testing.md)
+- 2026-10-19 · programador · Reprovado → Em desenvolvimento · correção da falha do relatório 1
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit f83f5cf
+- 2026-10-19 · testador · Pronto para teste → Em teste · início do reteste (iteração 2)
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 2: todas as verificações verdes, scroll por setas coberto no test-runner
+- 2026-10-19 · finalizador · Aprovado → Concluído · relatório 2 aprovado; sem changeset (pacote privado); documentação e stories verificadas
 
 ### DS-033 · Table: ordenação
 
@@ -1221,6 +1320,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-20 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-20 · programador · Em desenvolvimento → Pronto para teste · commit 754b37b
+- 2026-10-20 · testador · Pronto para teste → Em teste · início do teste (relatório 1)
+- 2026-10-20 · testador · Em teste → Aprovado · relatório 1: todas as verificações verdes, critérios verificados, zero falhas
+- 2026-10-20 · finalizador · Aprovado → Concluído · relatório 1 aprovado, sem commits de produção posteriores; changeset não aplicável (pacotes privados)
 
 ### DS-034 · Pagination
 
@@ -1252,6 +1357,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): botões anterior/seguinte focáveis com aria-disabled nos limites documentados como exceção intencional face ao disabled do Button, com teste e story de teclado
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-27 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-27 · programador · Em desenvolvimento → Pronto para teste · commit a00a754
+- 2026-10-27 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-27 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-10-27 · finalizador · Aprovado → Concluído · relatório 1 aprovado, só 05e5ae1 (teste) depois do commit testado; changeset não aplicável
 
 ### DS-035 · DataTable: Table com ordenação e paginação integradas
 
@@ -1280,6 +1391,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-28 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-28 · programador · Em desenvolvimento → Pronto para teste · commit 21f4e4f
+- 2026-10-28 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-10-28 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-10-28 · finalizador · Aprovado → Concluído · entrada em 04-concluded.md; changeset não aplicável (pacote privado); marco Layout e dados atingido
 
 ### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
 
@@ -1729,3 +1846,266 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio)
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Alta
+- **Depende de:** — (DS-008 e DS-015 já estão `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** fazer com que os comandos do `CLAUDE.md` funcionem num clone limpo, sem `pnpm build` prévio. Em desenvolvimento (typecheck, Vitest, Storybook), os pacotes `@ds/*` do workspace passam a ser resolvidos a partir do código-fonte (`src/index.ts`); o resultado construído e publicado continua a resolver para `dist/`.
+
+**Contexto (verificado pelo João num clone limpo de `develop` em 2026-10-16):** `packages/icons/package.json` só expõe tipos a partir de `./dist/index.d.ts` (campo `types` e `exports["."].types`). Desde a DS-015 (Checkbox) e a DS-018 (Select), o `@ds/ui` importa `@ds/icons`. Por isso, num clone limpo, `pnpm typecheck` falha com `TS2307: Cannot find module '@ds/icons'` em `src/Checkbox/Checkbox.tsx` e `src/Select/Select.tsx`, e só passa depois de `pnpm build`. O CI do GitHub corre os passos de tipos e de testes antes do build, e por isso está vermelho desde 2026-10-14. O João vai reordenar o `ci.yml` como solução provisória, mas essa mudança não substitui esta tarefa.
+
+**Abordagem sugerida (não obrigatória):** `paths` no `tsconfig.base.json`, ou uma condição de exportação própria (ex.: `"source"` em `exports`, a apontar para `./src/index.ts`) com `customConditions` no TypeScript; nos dois casos, acompanhada de `resolve.alias` ou `resolve.conditions` equivalentes nas configurações do Vitest e na configuração Vite do Storybook. O programador escolhe o mecanismo e regista a escolha e o motivo em `02-desenvolvimento.md`. Os `.d.ts` construídos e os `exports` para `dist/` ficam iguais para quem consome os pacotes.
+
+**Nota sobre `@ds/tokens`:** o `src/index.ts` deste pacote está vazio (`export {}`). O objeto `tokens`/`themes` e os ficheiros `tokens.css`/`themes.css` são produzidos pelo Style Dictionary e só existem em `dist/`. Hoje, os scripts de `apps/docs` (`storybook`, `build-storybook`, `typecheck`, `test:a11y`) e o `test` do próprio pacote correm `pnpm --filter @ds/tokens build` antes. Para este pacote há duas soluções aceites: (a) manter a geração automática como passo prévio dentro de cada comando que precisa dela, ou (b) expor uma fonte TypeScript sem geração. Em qualquer dos casos, a solução tem de cobrir todos os consumidores e fica registada.
+
+**Critérios de aceitação:**
+- [ ] Inventário: `02-desenvolvimento.md` lista todas as dependências `@ds/*` entre workspaces, no mínimo `ui → icons`, `ui → tokens`, `docs → ui`, `docs → icons` e `docs → tokens` (incluindo importações diretas nas stories, mesmo sem dependência declarada). Para cada uma, indica o tipo de importação (TS/JS ou CSS) e como passa a ser resolvida em desenvolvimento.
+- [ ] Clone limpo: depois de `git clone` + `pnpm install --frozen-lockfile`, sem nenhuma pasta `dist/` nem `storybook-static/` no repositório, `pnpm typecheck`, `pnpm test` e `pnpm lint` saem com código 0, cada um corrido isoladamente e sem `pnpm build` antes.
+- [ ] Num clone limpo, `pnpm build:docs` sai com código 0, e `pnpm storybook` arranca sem erros de resolução de módulos; as stories do Checkbox e do Select mostram os ícones.
+- [ ] `pnpm build` continua a sair com código 0 e gera os mesmos ficheiros em `packages/*/dist/` que antes da tarefa (mesma lista de ficheiros).
+- [ ] Os `dist/*.d.ts` do `@ds/ui` importam `@ds/icons` pelo nome do pacote: não contêm caminhos para o código-fonte de outros pacotes (nem `../icons/src`, nem `packages/icons`, nem `src/index`), e não copiam as declarações dos ícones para dentro (`grep` sem resultados).
+- [ ] Os campos `main`, `module`, `types` e as entradas `import`/`require`/`types` de `exports` dos três pacotes continuam a apontar para `dist/`. Se for acrescentada uma condição de desenvolvimento (ex.: `"source"`), ela é a única entrada nova e não é usada pelo `tsup` nem por um consumidor normal: `node -e "require('@ds/ui')"`, a partir de `apps/docs`, depois do build, resolve para `dist/`.
+- [ ] `pnpm test:a11y` continua a passar.
+- [ ] Verificação de regressão registada em `02-desenvolvimento.md` com os comandos exatos usados, incluindo a forma de remover `dist/` (clone novo, ou `git clean -xdf` seguido de `pnpm install --frozen-lockfile`), e o código de saída de cada comando.
+- [ ] Nenhum ficheiro em `.github/` é alterado. Se o CI precisar de alguma mudança (ex.: deixar de depender da ordem dos passos), o pedido fica em "Decisões para o João" no registo diário.
+- [ ] G1 a G3 (sem dependências novas de runtime; uma devDependency só entra se o mecanismo a exigir e se ficar justificada no registo).
+
+**Testes exigidos:**
+- Unitários: não são precisos testes novos, salvo se o mecanismo escolhido precisar de um (ex.: um teste que confirma que `@ds/icons` resolve para `src/` no Vitest). Os testes existentes continuam a passar sem build prévio.
+- Verificação do testador: repetir a verificação de clone limpo (clone novo ou `git clean -xdf`, depois `pnpm install --frozen-lockfile`, depois `pnpm typecheck`, `pnpm test` e `pnpm lint`, cada um com código 0); depois `pnpm build`, inspeção com `grep` dos `packages/ui/dist/*.d.ts` (sem caminhos de código-fonte de outros pacotes) e `pnpm build:docs` com código 0.
+- Prova negativa (temporária, não commitada): num clone limpo, introduzir um erro de tipos em `packages/icons/src`, por exemplo mudando o tipo de `size` de um ícone usado pelo Checkbox, e confirmar que `pnpm typecheck` no `@ds/ui` falha. Isto prova que os tipos vêm do código-fonte e não de um `dist/` antigo.
+- Acessibilidade: não aplicável (sem alterações a componentes); `pnpm test:a11y` continua a passar.
+- Visual/Storybook: verificação manual de que as stories do Checkbox e do Select mostram os ícones com `pnpm storybook` num clone limpo.
+
+**Fora de âmbito:** alterar a ordem dos passos em `ci.yml` ou `diario.yml` (é do João), metadados de publicação e mudança de nome dos pacotes (DS-036), project references do TypeScript (`tsc -b`) com build incremental, alterar o Style Dictionary ou os tokens.
+
+**Histórico:**
+- 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+- 2026-10-19 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-10-16)
+- 2026-10-19 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-10-19 · programador · Em desenvolvimento → Pronto para teste · commit fd42d21
+- 2026-10-19 · testador · Pronto para teste → Em teste · início do teste (commits fd42d21, 82b593f)
+- 2026-10-19 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-10-19 · finalizador · Aprovado → Concluído · changeset não aplicável (infraestrutura, pacotes privados); verificação visual dos ícones em browser não feita, coberta por build:docs e test:a11y (ver 04-concluded.md)
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select)
+
+- **Fase do MVP:** Overlays e feedback
+- **Prioridade:** Média
+- **Depende de:** DS-018, DS-023, DS-024, DS-026 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** acabar com os afastamentos em pixéis escritos à mão nos overlays posicionados pelo Radix, aplicando o `readSpaceToken` criado na DS-024 (hoje só o Popover o usa), para cumprir a regra "sem valores escritos à mão" e manter os quatro overlays coerentes.
+
+**Contexto (verificado no código em 2026-10-26):** `Tooltip.tsx` usa `sideOffset ?? 6` e `collisionPadding={8}`; `DropdownMenu.tsx` usa `sideOffset = 4` como omissão de `DropdownMenuContent`; `Select.tsx` usa `sideOffset={4}` fixo em `RadixSelect.Content`. O `Popover` já usa `sideOffset?: SpaceStep` (omissão `'2'`) e `collisionPadding={readSpaceToken('2')}`.
+
+**Critérios de aceitação:**
+- [ ] `Tooltip`: a prop `sideOffset` passa a ser do tipo `SpaceStep` (de `packages/ui/src/utils/spaceToken.ts`), com omissão `'2'`, convertida com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')`.
+- [ ] `DropdownMenuContent`: `sideOffset?: SpaceStep` com omissão `'1'`, convertida com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')`.
+- [ ] `Select`: o conteúdo usa `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}` (o `Select` não ganha props novas).
+- [ ] Passar um número a `sideOffset` no `Tooltip` ou no `DropdownMenuContent` é erro de compilação (o tipo herdado do Radix é omitido e substituído por `SpaceStep`, como no `Popover`).
+- [ ] Nos ficheiros `.tsx` de `packages/ui/src` (sem contar testes e stories), `grep -nE "(sideOffset|collisionPadding)(=\{| \?\? | = )[0-9]"` não devolve resultados.
+- [ ] O JSDoc de `sideOffset` no `Tooltip` e no `DropdownMenuContent` diz que o valor é um passo da escala `--ds-space-*`, como no `Popover`.
+- [ ] Os testes e as stories existentes das DS-018, DS-023 e DS-026 continuam a passar sem alterar o que verificam (só se ajustam se usarem `sideOffset` numérico).
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se às pastas existentes).
+
+**Testes exigidos:**
+- Unitários: para `Tooltip` (aberto com `defaultOpen`), `DropdownMenu` (aberto ao clicar) e `Select` (aberto ao clicar), um teste como o da DS-024 (`vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')`) confirma que são lidos `--ds-space-<passo do sideOffset>` e `--ds-space-2`; com `sideOffset="4"` no `Tooltip` e no `DropdownMenuContent`, é lido `--ds-space-4`; teste de tipos com `// @ts-expect-error` para `sideOffset={6}` no `Tooltip` e no `DropdownMenuContent`.
+- Acessibilidade: axe sem violações com cada overlay aberto (os testes existentes continuam a cobrir o teclado; nada muda no comportamento).
+- Visual/Storybook: nova story `Offset` no `Tooltip`, no `DropdownMenu` e no `Select`, com o overlay aberto do lado `bottom` e `play` que mede, em browser real, a distância entre o fundo do gatilho e o topo do conteúdo (`getBoundingClientRect`) e falha se diferir em mais de 1px do valor de `--ds-space-<passo>` em pixéis; as stories `DarkTheme` continuam a passar.
+
+**Fora de âmbito:** mudar o `Popover` (já cumpre), reagir a mudanças do tamanho de letra da raiz depois de o overlay abrir, setas decorativas, outros valores numéricos que não sejam afastamentos (ex.: `delayDuration`).
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-024, DS-027; registo diário)
+
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px`
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Média
+- **Depende de:** DS-007, DS-029, DS-030 (todas `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** dar às larguras de borda, ao indicador dos separadores e ao anel de focus tokens próprios, em vez dos `1px`/`2px` hoje permitidos como exceção no Stylelint, para que uma mudança de espessura se faça num só sítio e a regra "só tokens" fique sem exceções nas bordas.
+
+**Contexto (verificado no código em 2026-10-26):** há `1px`/`2px` escritos à mão em `border*`, `outline` e `outline-offset` em `styles/focus.css` e nos `.css` de Button, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Badge, Alert, Toast, Popover, DropdownMenu, Dialog, Card, Table e Tabs (indicador do separador ativo com `2px`, `outline-offset: -2px` e `2px solid Highlight` em `forced-colors`).
+
+**Critérios de aceitação:**
+- [ ] Novo ficheiro `packages/tokens/src/primitives/border.json` com `border.width.1` (`1px`) e `border.width.2` (`2px`), e tokens do anel de focus `focus.ring.width` (referência a `border.width.2`) e `focus.ring.offset` (`2px`); o build gera `--ds-border-width-1`, `--ds-border-width-2`, `--ds-focus-ring-width` e `--ds-focus-ring-offset` em `tokens.css` e as chaves correspondentes no objeto `tokens`.
+- [ ] Os testes de tokens da DS-004 continuam a passar (prefixo `--ds-`, número de variáveis CSS igual ao de folhas do objeto TypeScript, sem referências por resolver).
+- [ ] Em `packages/ui/src/**/*.css`, todas as larguras em `border`, `border-*`, `outline`, `outline-width` e `outline-offset` usam esses tokens; o indicador dos `Tabs` usa `--ds-border-width-2`; o `outline-offset` negativo dos `Tabs` usa `calc(-1 * var(--ds-focus-ring-offset))`; a regra de `forced-colors` dos `Tabs` usa o token de largura.
+- [ ] Os separadores de 1px de altura (`DropdownMenuSeparator`, `SelectSeparator`) usam `--ds-border-width-1`. As dimensões `1px` da técnica de `clip` (`VisuallyHidden` e legenda escondida da `Table`) não são bordas e ficam como estão.
+- [ ] O Stylelint (DS-007) deixa de aceitar comprimentos literais (`px`, `rem`, `em`) em `border`, `border-*` (exceto `border-radius`, já coberto), `outline`, `outline-width` e `outline-offset`; o comentário no topo de `stylelint.config.js` e o README de `packages/ui` deixam de listar a exceção `1px`/`2px`.
+- [ ] Um `.css` temporário com `border: 1px solid var(--ds-color-border-default)` ou `outline-offset: 2px` faz `pnpm lint` falhar (não commitado).
+- [ ] Nada muda visualmente: os valores resolvidos são os mesmos de antes (1px nas bordas, 2px no indicador e no anel de focus, offset de 2px).
+- [ ] A página "Foundations" do Storybook (DS-006) ganha a secção ou story `Borders`, gerada a partir do objeto `tokens` (sem lista escrita à mão).
+- [ ] Tarefas de componentes desenvolvidas depois desta (ex.: DS-031, DS-034, DS-035) já ficam obrigadas aos tokens pelo Stylelint; se uma delas estiver `Em desenvolvimento` ao mesmo tempo, o programador regista em `02-desenvolvimento.md` como resolveu a sobreposição.
+- [ ] G1 a G3 (sem dependências novas).
+
+**Testes exigidos:**
+- Unitários: teste de tokens que confirma `--ds-border-width-1: 1px`, `--ds-border-width-2: 2px`, `--ds-focus-ring-width` e `--ds-focus-ring-offset` em `dist/tokens.css`; teste Vitest que percorre `packages/ui/src/**/*.css` e falha se alguma declaração `border*` (exceto `border-radius`) ou `outline*` tiver um número seguido de `px`, `rem` ou `em`; o teste de `styles.css` da DS-007 continua a passar.
+- Acessibilidade: `pnpm test:a11y` passa sem alterações nas stories existentes, incluindo `FocusRing` e `FocusRing/DarkTheme`; com Tab, o anel de focus continua visível com 2px nos dois temas (story `FocusRing`, `play` que lê `getComputedStyle(el).outlineWidth === '2px'` depois de focar o botão com teclado).
+- Visual/Storybook: story `Foundations/Borders`; a story `Tabs/Default` ganha `play` que confirma, em browser real, que o separador ativo tem `border-bottom-width` de `2px`.
+
+**Fora de âmbito:** mudar espessuras ou o aspeto de algum componente, tokens de estilo de borda (`solid`/`dashed`), tokens de largura por componente, `forced-colors` noutros componentes além do que já existe.
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão do programador e do testador (DS-029, DS-030)
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas
+
+- **Fase do MVP:** Layout e dados
+- **Prioridade:** Média
+- **Depende de:** DS-005, DS-029, DS-052 (a DS-052 altera também `Card.css`; esta tarefa vem a seguir para não haver alterações cruzadas)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** tornar a elevação visível no tema escuro (onde as sombras pretas de baixa opacidade quase não se veem) com tokens de sombra que mudam por tema, e impedir que uma palavra longa sem espaços transborde do `Card`.
+
+**Contexto (verificado no código em 2026-10-26):** as sombras primitivas (`shadow.sm|md|lg`) usam preto com opacidade 0,05–0,1 e são as mesmas nos dois temas; o `Card elevated` tem borda transparente e `--ds-shadow-md`; Tooltip, Popover, DropdownMenu e Select usam `--ds-shadow-md`, Dialog e Toast usam `--ds-shadow-lg`; `Card.css` não define `overflow-wrap`.
+
+**Critérios de aceitação:**
+- [ ] Novas sombras primitivas para fundos escuros, `shadow.strong.md` e `shadow.strong.lg`, com a mesma geometria de `md` e `lg` e preto com opacidade ≥ 0,5.
+- [ ] Novos tokens semânticos em `light.json` e `dark.json` (mesmas chaves nos dois, como exige a DS-005): `shadow-raised` (cartões), `shadow-floating` (Tooltip, Popover, DropdownMenu, Select) e `shadow-modal` (Dialog, Toast). No tema claro referenciam as sombras atuais (`md`, `md`, `lg`), de modo que o tema claro não muda; no tema escuro referenciam `strong.md`, `strong.md` e `strong.lg`.
+- [ ] Novo token semântico `color-border-raised`: no tema claro referencia o mesmo primitivo de `color-bg-surface` (a borda fica invisível sobre o próprio cartão, como hoje); no tema escuro referencia o mesmo primitivo de `color-border-default`. Só referencia primitivos (sem valores literais).
+- [ ] `Card elevated` usa `box-shadow: var(--ds-shadow-raised)` e `border-color: var(--ds-color-border-raised)`; os seis overlays passam a usar `--ds-shadow-floating` ou `--ds-shadow-modal`; em `packages/ui/src/**/*.css` deixa de haver referências diretas a `--ds-shadow-sm|md|lg`.
+- [ ] `Card` (e as subpartes de texto) com `overflow-wrap: anywhere` e `min-width: 0`, para que uma palavra longa quebre dentro do cartão também quando o cartão está dentro de um `Grid` ou de um `Stack`.
+- [ ] Os testes de temas da DS-005 continuam a passar (mesmas chaves nos dois temas, sem referências por resolver) e os pares de contraste existentes não mudam.
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se à pasta `Card` e às dos overlays apenas onde indicado).
+
+**Testes exigidos:**
+- Unitários: teste de tokens que confirma que `shadow-raised`, `shadow-floating`, `shadow-modal` e `color-border-raised` existem nos dois temas e que, no tema escuro, as sombras têm opacidade ≥ 0,5 (lida do valor gerado); teste Vitest que percorre `packages/ui/src/**/*.css` e falha se encontrar `--ds-shadow-sm`, `--ds-shadow-md` ou `--ds-shadow-lg`; os testes existentes do `Card` continuam a passar.
+- Acessibilidade: axe sem violações; `pnpm test:a11y` passa em todas as stories `DarkTheme` dos componentes alterados.
+- Visual/Storybook: nova story `Card/LongWord` (cartão com 240px de largura máxima, título e texto com uma palavra de 200 caracteres sem espaços) com `play` que falha se `scrollWidth > clientWidth` no cartão; a story `Card/InGrid` ganha o mesmo caso dentro de um `Grid` com `play` equivalente; a story `Card/DarkTheme` ganha `play` que confirma, em browser real, que o cartão `elevated` tem `border-top-color` diferente de `rgba(0, 0, 0, 0)` e `box-shadow` diferente de `none`.
+
+**Fora de âmbito:** escala de elevação com mais níveis, superfícies mais claras por nível de elevação no tema escuro, contraste mínimo da borda do cartão (o cartão não é um controlo; a WCAG 1.4.11 não o exige), alterar a geometria das sombras do tema claro.
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão do programador e do testador (DS-029)
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Média
+- **Depende de:** DS-003, DS-033, DS-034 (todas `Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** fazer com que os `play` de interação das stories usem o teclado e o rato através do `userEvent` e as verificações através do `expect` do `@storybook/test`, em vez de `focus()`, `click()` e `KeyboardEvent` despachados à mão, para que as stories `KeyboardInteraction` provem de facto o teclado num browser real.
+
+**Contexto (verificado no código em 2026-10-26):** o `@storybook/test` não está instalado (as tarefas anteriores não o podiam acrescentar, pela G2). O `play` de `Table/SortKeyboardInteraction` usa `focus()` + `click()`; os de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog` despacham `KeyboardEvent` ou chamam `click()`; os `play` verificam com `throw new Error`. Há 12 ocorrências de `new KeyboardEvent`, `dispatchEvent(` ou `.click()` em 8 ficheiros de stories (`Button`, `Toast`, `Tooltip`, `Popover`, `DropdownMenu`, `Select`, `Table`, `Dialog`). **Atualização de 2026-10-27:** a DS-034 acrescentou 2 ocorrências de `.click()` em `Pagination.stories.tsx` (story `KeyboardInteraction`, que a especificação da DS-034 pedia "só com Enter"); são hoje 14 linhas em 9 ficheiros. A `Accordion` (DS-031) não tem `play` de interação.
+
+**Critérios de aceitação:**
+- [ ] `@storybook/test` instalado com a mesma versão menor do Storybook já usado (8.6.x), como devDependency de `packages/ui` (onde as stories são verificadas pelo `pnpm typecheck`) e, se o Storybook o exigir para resolver, de `apps/docs`.
+- [ ] Nas stories de `packages/ui/src`, `grep -nE "new KeyboardEvent|dispatchEvent\(|\.click\(\)"` não devolve resultados: todas as interações dos `play` usam `userEvent` (`click`, `tab`, `keyboard`, `hover`) e `within(canvasElement)` ou `screen` para encontrar os elementos.
+- [ ] `Table/SortKeyboardInteraction`: chega ao primeiro cabeçalho ordenável com `userEvent.tab()`, ativa a ordenação com `{Enter}` (asc) e com espaço (desc), e verifica com `expect` o `aria-sort`, a primeira célula e que o focus continua no botão.
+- [ ] As stories `KeyboardInteraction` de `Select`, `Tooltip`, `Popover`, `DropdownMenu` e `Dialog`, e as stories `Button/LoadingToggle` e `Toast/AfterLoading`, cobrem as mesmas teclas e verificações que cobrem hoje, agora com `userEvent` e `expect` (com `waitFor` ou `findBy*` onde há animações ou portais), sem `setTimeout` de duração fixa.
+- [ ] `Pagination/KeyboardInteraction`: foca o botão "seguinte" com `userEvent.tab()` (não com `focus()`), avança até à última página só com `userEvent.keyboard('{Enter}')`, e verifica com `expect`, a cada passo, que `aria-current="page"` está na página esperada e que `document.activeElement` continua a ser o botão "seguinte"; na última página, mais um `{Enter}` não muda a página e o botão tem `aria-disabled="true"`.
+- [ ] Se a DS-035 já estiver `Concluído` quando esta tarefa começar, `DataTable/KeyboardInteraction` também fica coberta pelo critério do `grep` acima e passa a usar `userEvent` e `expect`; se não estiver, a DS-035 segue a convenção registada em `apps/docs/README.md` quando for feita depois.
+- [ ] Os restantes `play` que só medem dimensões (ex.: `Sizes`) podem manter-se; se forem tocados, passam a usar `expect`.
+- [ ] O comportamento nativo que o `userEvent` não reproduz (ex.: scroll horizontal com as setas em `Table/HorizontalScroll`) continua no `postVisit` de `apps/docs/.storybook/test-runner.ts`, com teclas reais do Playwright; esta divisão fica escrita em `apps/docs/README.md`, junto com a convenção de que os `play` novos (ex.: DS-031, DS-034, DS-035) usam `@storybook/test`.
+- [ ] `pnpm test:a11y` corre os `play` migrados e passa; o painel "Interactions" do Storybook mostra os passos dessas stories.
+- [ ] G1 a G3 (dependência nova: `@storybook/test`); nenhuma alteração ao código dos componentes.
+
+**Testes exigidos:**
+- Unitários: não aplicável (os testes Vitest existentes não mudam e continuam a passar).
+- Acessibilidade: `pnpm test:a11y` com código 0, cobrindo os `play` migrados; prova negativa temporária: mudar o `aria-sort` esperado em `Table/SortKeyboardInteraction` para um valor errado faz `pnpm test:a11y` falhar e identificar a story (não commitado); segunda prova negativa: acrescentar temporariamente `onKeyDown={(e) => e.preventDefault()}` ao botão de ordenação faz a mesma story falhar no passo do Enter (não commitado); terceira prova negativa: acrescentar temporariamente `tabIndex={-1}` ao botão "seguinte" da `Pagination` quando está desativado faz `Pagination/KeyboardInteraction` falhar (não commitado).
+- Visual/Storybook: as stories migradas listadas acima (incluindo `Pagination/KeyboardInteraction`), abertas no Storybook, mostram os passos no painel "Interactions" sem erros.
+
+**Fora de âmbito:** testes de componentes com Playwright fora do Storybook, `@storybook/experimental-addon-test`/Vitest em browser, migrar o `play` de stories que não têm interação, alterar o CI (ficheiro do João).
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-010, DS-018, DS-021, DS-033; registo diário)
+- 2026-10-27 · planeador · Proposta (sem mudança de estado) · especificação revista: absorve a migração de `Pagination/KeyboardInteraction` sugerida na conclusão da DS-034 (critério, prova negativa e dependência DS-034); a DS-035 fica abrangida se já estiver concluída
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
+
+- **Fase do MVP:** Layout e dados
+- **Prioridade:** Baixa
+- **Depende de:** DS-028 (`Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** impedir que um `colSpan` inválido gere CSS inválido em silêncio e que um `colSpan` maior do que o número de colunas crie colunas implícitas que partem a grelha.
+
+**Contexto (verificado no código em 2026-10-26):** `GridItem` escreve qualquer número em `data-col-span` e em `--ds-grid-col-span`; `0`, negativos, decimais e `NaN` geram `grid-column: span 0` (ou equivalente), que o navegador ignora; o JSDoc diz que um span maior do que `columns` cria colunas implícitas.
+
+**Critérios de aceitação:**
+- [ ] Só são aceites inteiros ≥ 1. Um `colSpan` inválido (`0`, negativo, decimal, `NaN`, `Infinity`) é ignorado: o elemento não recebe `data-col-span` nem `--ds-grid-col-span` e ocupa uma coluna.
+- [ ] Fora de produção, um `colSpan` inválido emite um único `console.warn` por elemento com o valor recebido (ex.: `GridItem: colSpan must be a whole number ≥ 1, received 1.5`); em produção não emite nada. O mecanismo para distinguir produção fica registado em `02-desenvolvimento.md` e não pode partir a renderização no servidor nem o build ESM/CJS.
+- [ ] O `Grid` partilha por contexto o valor de `columns` quando é numérico; dentro dele, um `colSpan` maior do que `columns` é limitado a `columns` (e é esse o valor em `data-col-span`). Com `minColumnWidth` (número de colunas desconhecido) ou fora de um `Grid`, o valor válido mantém-se.
+- [ ] O JSDoc de `colSpan` descreve as duas regras (valores aceites e limite) e substitui a nota sobre colunas implícitas.
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se à pasta `Grid`).
+
+**Testes exigidos:**
+- Unitários: `colSpan` `0`, `-1`, `1.5` e `NaN` → sem `data-col-span`, sem custom property e `console.warn` chamado uma vez com o valor; `colSpan={2}` continua igual ao comportamento da DS-028; `colSpan={5}` dentro de `Grid columns={3}` → `data-col-span="3"`; `colSpan={5}` dentro de `Grid minColumnWidth="10rem"` → `data-col-span="5"`; nenhum aviso com valores válidos; os testes existentes continuam a passar.
+- Acessibilidade: axe sem violações; nada muda na árvore de acessibilidade.
+- Visual/Storybook: nova story `Grid/SpanClamped` (`columns={3}` com um item `colSpan={5}`) com `play` que confirma, em browser real, que a largura do item é igual à largura de conteúdo do `Grid` e que a grelha continua com 3 colunas (`getComputedStyle(grid).gridTemplateColumns` tem 3 valores).
+
+**Fora de âmbito:** `rowSpan`, `colStart`, `colSpan` responsivo por breakpoint, validação das outras props do `Grid`.
+
+**Histórico:**
+- 2026-10-26 · planeador · — → Proposta · sugestão do testador (DS-028)
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la
+
+- **Fase do MVP:** Formulários
+- **Prioridade:** Média
+- **Depende de:** DS-021, DS-034 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** dar ao `Button` (e, por herança, ao `IconButton`) uma forma suportada de ficar desativado sem sair da ordem de Tab, para que o padrão `aria-disabled` focável deixe de ser escrito à mão em cada componente (hoje só na `Pagination`) e tenha o mesmo bloqueio de clique, de envio de formulário e de navegação que o `loading` já tem.
+
+**Contexto (verificado no código em 2026-10-27):** em `Button.tsx`, `disabled` num `<button>` nativo usa o atributo `disabled`; com `asChild` põe `aria-disabled` e `tabIndex={-1}`. O `loading` já usa `aria-disabled` focável com `blockClick` em captura. `Pagination.tsx` repete à mão `aria-disabled`/`data-disabled` e o bloqueio do clique nos botões anterior e seguinte (linhas 113–114 e 147–148), sem passar `disabled` ao `IconButton`. Sugestão do programador e do finalizador na conclusão da DS-034.
+
+**Critérios de aceitação:**
+- [ ] `ButtonProps` ganha `focusableWhenDisabled?: boolean` (omissão `false`). Sem `disabled`, a prop não tem efeito nenhum (nem atributos nem `data-*`).
+- [ ] Com `disabled` e `focusableWhenDisabled` num `<button>` nativo: sem atributo `disabled`, com `aria-disabled="true"` e `data-disabled`, sem `tabIndex={-1}`; o clique é bloqueado em captura como no `loading` (`onClick` não é chamado; com `type="submit"`, o formulário não é enviado, nem por clique nem por Enter num campo do mesmo formulário).
+- [ ] Com `asChild` (ex.: `<a href>`): `aria-disabled="true"`, `data-disabled`, sem `tabIndex={-1}`, e o clique não navega (`defaultPrevented`).
+- [ ] Com `loading` ao mesmo tempo, o botão continua focável (a prop prevalece sobre a regra "se `disabled` também estiver, `disabled` ganha" do JSDoc de `loading`, que é atualizado).
+- [ ] O aspeto desativado é o mesmo de hoje (`[data-disabled]`); o `Button.css` não muda.
+- [ ] `IconButton` aceita a mesma prop e passa-a ao `Button` (o nome acessível obrigatório mantém-se).
+- [ ] O JSDoc de `focusableWhenDisabled` explica quando usar: quando o próprio controlo focado pode ficar desativado em consequência da sua ativação (ex.: "seguinte" na última página), para o focus não se perder; e que, por omissão, `disabled` continua a tirar o botão da ordem de Tab.
+- [ ] `Pagination.tsx` passa a usar `disabled={!canPrevious}`/`disabled={!canNext}` com `focusableWhenDisabled` nos dois `IconButton`, sem `aria-disabled`, `data-disabled` nem bloqueio do clique escritos à mão; o JSDoc da `Pagination` deixa de descrever uma "exceção" implementada no componente e passa a referir a prop. O HTML gerado nos limites é o mesmo de antes (`aria-disabled="true"`, `data-disabled`, sem `disabled`, sem `tabindex`).
+- [ ] Os testes existentes da DS-010, DS-011, DS-021 e DS-034 continuam a passar sem alterar o que verificam; as stories da `Pagination` não são alteradas (a DS-054 também as altera).
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se às pastas `Button` e `IconButton`).
+
+**Testes exigidos:**
+- Unitários: sem `disabled`, `focusableWhenDisabled` não acrescenta atributos; com os dois, `<button>` sem `disabled`, com `aria-disabled="true"` e `data-disabled`; `onClick` não é chamado ao clicar; `type="submit"` dentro de um `<form>`: `onSubmit` não é chamado ao clicar no botão nem ao carregar Enter num `Input` do mesmo formulário; `asChild` com `<a href>`: sem `tabindex="-1"` e evento de clique com `defaultPrevented`; `loading` + `disabled` + `focusableWhenDisabled` continua focável; o mesmo conjunto essencial (atributos, clique bloqueado, focável) para o `IconButton`.
+- Acessibilidade: axe sem violações; teclado: Tab chega ao botão desativado focável; Enter e Espaço não chamam `onClick`; um botão focado que passa a `disabled` com `focusableWhenDisabled` (rerender) mantém `document.activeElement`, e sem a prop o focus sai do botão (comportamento atual, documentado no teste).
+- Visual/Storybook: novas stories `Button/FocusableWhenDisabled` (com a descrição de quando usar) e `IconButton/FocusableWhenDisabled`; as stories `DarkTheme` do `Button` e do `IconButton` ganham um exemplo com a prop; `Pagination/FirstPage`, `LastPage` e `KeyboardInteraction` continuam a passar `pnpm test:a11y` sem alterações.
+
+**Fora de âmbito:** aplicar a prop a outros componentes (Checkbox, Switch, Select, itens de menu), anunciar o motivo da desativação (`aria-describedby` com explicação), mudar o aspeto visual do estado desativado.
+
+**Histórico:**
+- 2026-10-27 · planeador · — → Proposta · sugestão do programador e do finalizador (DS-034)
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`)
+
+- **Fase do MVP:** Layout e dados
+- **Prioridade:** Baixa
+- **Depende de:** DS-025, DS-031 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** impedir que uma palavra longa sem espaços (URL, identificador, nome de ficheiro) transborde do gatilho ou do painel do `Accordion` e do título, descrição ou corpo do `Dialog`, como já acontece corretamente em `Alert`, `Toast`, `Tooltip` e `Popover` (que usam `overflow-wrap: anywhere`).
+
+**Contexto (verificado no código em 2026-10-27):** `Accordion.css` e `Dialog.css` não definem `overflow-wrap`; o texto do gatilho do `Accordion` está em `.ds-accordion__trigger-label`, filho de um `flex` sem regra CSS própria (o `min-width: auto` impede-o de encolher, empurrando o `ChevronDownIcon` para fora); `.ds-dialog__body` tem `overflow-y: auto`, pelo que uma palavra longa gera scroll horizontal em vez de quebrar. O `Card` é tratado na DS-053 e fica fora desta tarefa. Nota do testador na DS-031.
+
+**Critérios de aceitação:**
+- [ ] `Accordion.css`: `.ds-accordion__trigger-label` com `min-width: 0`, `flex: 1 1 auto` e `overflow-wrap: anywhere`; `.ds-accordion__content-inner` com `overflow-wrap: anywhere`. O `ChevronDownIcon` mantém `flex-shrink: 0` e fica sempre visível dentro do gatilho.
+- [ ] `Dialog.css`: `.ds-dialog__title`, `.ds-dialog__description` e `.ds-dialog__body` com `overflow-wrap: anywhere`; se o cabeçalho for `flex`, o título tem também `min-width: 0` para o botão de fechar não ser empurrado para fora.
+- [ ] Texto normal (com espaços) não muda de aspeto: só quebra dentro de palavras quando uma palavra não cabe sozinha na linha.
+- [ ] Sem valores escritos à mão (Stylelint verde); nenhuma alteração ao `.tsx` dos dois componentes nem à API.
+- [ ] Se a DS-052 estiver `Em desenvolvimento` ao mesmo tempo (também altera estes `.css`), o programador regista em `02-desenvolvimento.md` como resolveu a sobreposição.
+- [ ] G1 a G3 (sem dependências novas); C1 a C5 (testes e stories acrescentam-se às pastas `Accordion` e `Dialog`).
+
+**Testes exigidos:**
+- Unitários: em `Accordion.css.test.ts`, verificação de `overflow-wrap: anywhere` e `min-width: 0` nas regras indicadas; novo `Dialog.css.test.ts` (ou o existente, se houver) com `overflow-wrap: anywhere` no título, na descrição e no corpo; os testes existentes continuam a passar.
+- Acessibilidade: axe sem violações; nada muda no teclado nem na árvore de acessibilidade (os testes existentes de teclado da DS-025 e da DS-031 continuam a passar).
+- Visual/Storybook: nova story `Accordion/LongWord` (contentor com 240px de largura máxima; um gatilho e um painel aberto com uma palavra de 200 caracteres sem espaços) com `play` que falha se `scrollWidth > clientWidth` no gatilho ou no painel e se o `ChevronDownIcon` ficar fora do retângulo do gatilho (`getBoundingClientRect`); nova story `Dialog/LongWord` (aberto, `size="sm"`, título, descrição e corpo com uma palavra de 200 caracteres) com `play` que falha se `scrollWidth > clientWidth` no diálogo ou no corpo e se o botão de fechar ficar fora do retângulo do diálogo; as stories `DarkTheme` continuam a passar.
+
+**Fora de âmbito:** `Card` (DS-053), `Tabs` (os separadores não quebram linha por desenho), itens de `Select` e `DropdownMenu`, células da `Table` (o contentor tem scroll horizontal por desenho), truncagem com reticências.
+
+**Histórico:**
+- 2026-10-27 · planeador · — → Proposta · sugestão do testador e do finalizador (DS-031)

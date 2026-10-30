@@ -638,3 +638,664 @@ Modelo de relatório:
 - No jsdom o axe não mede `color-contrast`; a medição real vem do `test:a11y` (Chromium) e do cálculo em `Badge.css.test.ts`.
 - Com `asChild` sobre `<a>` não há estilo de hover, só `:focus-visible` (referido pelo programador). O focus ring de 2px não foi medido numericamente (3:1) por ser o mesmo token dos restantes componentes.
 - A `LongText` só tem o `play` no Chromium; não há teste unitário de layout (jsdom não calcula layout).
+
+### DS-025 · Dialog (Modal) — Relatório 1 — 2026-10-19
+
+- **Commit testado:** e1c2909 (presente no histórico de `develop`; sem alterações por guardar no início; registo 5ac7b7d por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 393 antes dos meus testes, 19 ficheiros; Dialog: `Dialog.test.tsx` + `Dialog.css.test.ts` = 35 depois) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (17 suites, 105 testes, incluindo as stories do Dialog no Chromium com axe) + teclado | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports dos nove componentes: lido `Dialog.tsx` e `index.ts` (componente e raiz, incluindo tipos); `DialogTrigger` e `DialogClose` aceitam `asChild` (testes usam-no).
+- [x] Props de `Dialog` e `DialogContent`: lido o código (omissões `size=md`, `closeLabel="Close"`, `closeOnOverlayClick=true`; `ref`/`className`); testes de `defaultOpen`, controlado (com e sem atualização do pai), `closeLabel`, `hideClose`, `size` em `data-size`, `ref`/`className`.
+- [x] ARIA: testes `getByRole('dialog', {name})`, `aria-modal="true"`, descrição ligada, ausência de `aria-describedby` e de aviso na consola sem descrição (o aviso do Radix para falta de título mantém-se).
+- [x] Portal, overlay e z-index: teste de portal fora do `container`; `Dialog.css.test.ts` (novo) confirma `z-index: var(--ds-z-modal)` no overlay e no conteúdo, `--ds-color-overlay` no overlay e que todos os tokens usados existem em `tokens.css`/`themes.css`. Scroll bloqueado (`data-scroll-locked`) e conteúdo de fundo `aria-hidden` testados.
+- [x] Focus ao abrir (primeiro focável) e regresso ao gatilho: testes unitários e story `KeyboardInteraction` (play em Chromium, passou no test runner).
+- [x] Ecrãs estreitos e scroll interno: CSS lido e coberto por regex em `Dialog.css.test.ts` (`min(largura, 100vw - space-8)`, `max-height` com `dvh`, `overflow-y: auto` no corpo, `flex: 0 0 auto` em cabeçalho e rodapé); story `LongContent` com axe no Chromium. Layout real não medido (jsdom).
+- [x] `prefers-reduced-motion`: as animações estão em `Dialog.css`; `styles/motion.css` anula `animation-duration` para todos os `[class^='ds-']`, que cobre as classes do Dialog; verificado por leitura e teste CSS (não medido em browser).
+- [x] Gatilho desativado: testes com `Button disabled` e `IconButton disabled` (clique, Enter, Espaço; `onOpenChange` não chamado; sem `role="dialog"`) e Tab que salta o gatilho (Before para After); story `DisabledTrigger`.
+- [x] G1 (cinco comandos verdes por mim); G2/G3 (dependência `@radix-ui/react-dialog` nomeada na tarefa, lockfile atualizado, commit em inglês com ID, nenhum ficheiro do João alterado); C1 (cinco ficheiros, exports, `@import` em `styles.css`); C2 (`forwardRef`, `displayName`, `className`); C3 (só tokens: confirmado pelo novo teste CSS, sem cores ou rem soltos; Stylelint passa); C4 (axe unitário aberto, stories incl. `DarkTheme` no `test:a11y`, `:focus-visible` com `--ds-color-focus-ring`); C5 (stories `Default`, `Sizes`, `WithForm`, `LongContent`, `Confirmation`, `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction`, `DarkTheme`).
+
+**Testes exigidos:** existem e testam o comportamento (abrir, `defaultOpen`, controlado, fecho por botão/`DialogClose`/overlay, `closeOnOverlayClick={false}`, `hideClose`, `size`, disabled, focus preso com Tab e Shift+Tab, Esc, regresso do focus, axe). Não são triviais.
+
+**Acessibilidade e casos limite:** contraste nos dois temas coberto pelo axe do Chromium nas stories (incluindo `DarkTheme` aberto); sem título, o Radix avisa (comportamento exigido); sem descrição, sem `aria-describedby`; modo controlado e não controlado cobertos.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Dialog/Dialog.css.test.ts` (6 casos: tokens existentes, z-index/overlay, largura em ecrã estreito, scroll interno, sem valores soltos, cobertura de movimento reduzido, focus ring). Passam. Commit `test(ui): DS-025 add Dialog CSS tests`.
+
+**Notas (não são falhas):**
+- A story `KeyboardInteraction` usa eventos `KeyboardEvent` sintéticos (como a do Select), não teclas reais do browser; o focus preso é também testado com `userEvent` em jsdom.
+- Movimento reduzido e layout estreito verificados por CSS, não por medição em browser.
+
+### DS-026 · DropdownMenu — Relatório 1 — 2026-10-19
+
+- **Commit testado:** d1f8738 (presente no histórico de `develop`; sem alterações por guardar no início; registo f8853c8 por cima)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 22 ficheiros, 438 testes; DropdownMenu: 33 com os 3 meus em `DropdownMenu.extra.test.tsx`) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (18 suites, 114 testes, stories no Chromium com axe, incluindo `DarkTheme` aberto) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports dos sete componentes: lido `DropdownMenu.tsx`; `DropdownMenuTrigger` aceita `asChild` (usado nos testes).
+- [x] Props: `open`/`defaultOpen`/`onOpenChange`; `side='bottom'` e `align='start'` por omissão; `ref`, `className`; item com `onSelect`, `disabled`, `variant` (`data-variant`), `leadingIcon`. Verificado por leitura e testes.
+- [x] ARIA: `aria-haspopup="menu"`, `aria-expanded` (sincronização testada por mim com Esc), `role="menu"`, `role="menuitem"`; portal fora do container; `z-index: var(--ds-z-dropdown)` no CSS e no teste CSS.
+- [x] `data-highlighted` com focus real: os testes de teclado verificam `toHaveFocus` e `data-highlighted`; o CSS usa `[data-highlighted]`, não `:hover`.
+- [x] Seleção: `onSelect` + fecho + focus no gatilho (clique, Enter e Espaço); item desativado com `aria-disabled="true"` sem `onSelect` (clique e Enter, teste meu).
+- [x] Danger: `danger-text`; contraste AA coberto pelo axe do Chromium (`DangerItem`, `OnIconButton`, `DarkTheme`); com ícone (`Trash2Icon` na story `DangerItem`) a distinção não depende só da cor.
+- [x] Gatilho desativado (`Button` e `IconButton`): não abre com clique, Enter, Espaço nem Seta para baixo; `onOpenChange` não chamado; Tab salta o gatilho (Before para After) sem `role="menu"`; story `DisabledTrigger`.
+- [x] G1 (cinco comandos verdes por mim); G2/G3 (dependência `@radix-ui/react-dropdown-menu` nomeada na tarefa, lockfile alterado, commit em inglês com ID, nenhum ficheiro do João alterado); C1 (ficheiros, exports, `@import` em `styles.css`); C2 (`forwardRef`, `displayName`, `className`); C3 (só tokens; teste CSS e Stylelint passam; `sideOffset=4` é número passado ao Radix); C4 (axe unitário aberto, stories no `test:a11y`, realce por `data-highlighted`); C5 (as nove stories exigidas existem, `KeyboardInteraction` com `play`).
+
+**Sobre `modal={false}`:** a especificação não exige comportamento modal (nada sobre inércia da página, bloqueio de scroll ou `aria-hidden` no fundo). Exige abrir/fechar, clicar fora fecha (testado), Esc, Tab fecha, focus no gatilho ao fechar e axe sem violações com o menu aberto. Tudo isto cumpre-se. O modo não modal evita `aria-hidden` sobre o gatilho focável (regra `aria-hidden-focus`) e está documentado no código. Não é falha. Nota de design: a página atrás continua com scroll e interativa enquanto o menu está aberto.
+
+**Testes exigidos:** existem todos (fechado por omissão, abrir, `onSelect`, desativado, controlado, clicar fora, label/separator, gatilho desativado; Enter/Espaço/Seta para baixo com primeiro item focado, setas com salto de desativados, Home/End, letra, Enter/Espaço, Esc, Tab, Tab a saltar gatilho desativado, axe). Usam `userEvent` e `toHaveFocus`; não são triviais.
+
+**Acessibilidade e casos limite:** teclado completo; contraste nos dois temas via axe no Chromium (`DarkTheme` aberto); gatilho e item desativados; modo controlado e não controlado (incluindo Tab em modo controlado); `open={false}` controlado.
+
+**Testes adicionados pelo testador:** `packages/ui/src/DropdownMenu/DropdownMenu.extra.test.tsx` (3 casos: Tab fecha menu controlado com `onOpenChange(false)`; item desativado não chama `onSelect` com clique nem Enter; `aria-expanded` sincronizado). Passam; Prettier e ESLint limpos. Commit 988926b `test(ui): DS-026 add DropdownMenu controlled Tab, disabled item and aria-expanded tests`.
+
+**Notas (não são falhas):**
+- A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos, como as de Select e Dialog; o teclado real está nos testes unitários.
+- Layout real do popper (colisões) não medido em browser.
+
+### DS-032 · Table: estrutura base — Relatório 1 — 2026-10-19
+
+- **Commit testado:** 6d8452a (presente no histórico de `develop`; a761a32 por cima; sem alterações por guardar no início)
+- **Resultado:** Reprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 25 ficheiros, 466 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (19 suites, 123 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports e elementos nativos (`table`, `caption`, `thead`, `tbody`, `tr`, `th`, `td`) — lido `Table.tsx`, `index.ts` e `packages/ui/src/index.ts`; teste de estrutura com `:scope >`.
+- [x] `Table`: `size` (omissão `md`), `striped`, `stickyHeader` em `data-*`; contentor `ds-table-container` com `overflow: auto`, `role="region"`, `tabIndex=0`, nome obrigatório no tipo (união `aria-label` | `aria-labelledby`) — lido o CSS e o código; testes de região e `aria-labelledby`.
+- [x] `TableHeaderCell` (`scope` col/row, `align`) e `TableCell` (`align`, `numeric` com `tabular-nums` e alinhamento ao fim) — código, CSS e testes.
+- [x] `TableCaption visuallyHidden` — `data-visually-hidden` e CSS de ocultação.
+- [x] `TableRow selected` — `aria-selected` e `data-selected` testados.
+- [x] Contraste de striped/hover/selecionado — `text-default` sobre `bg-subtle`/`accent-subtle` (tokens: claro #0f172a sobre #f1f5f9/#eff6ff; escuro #f8fafc sobre #334155/#1e3a8a, bem acima de 4.5:1); axe passa nas stories.
+- [x] G1 a G3 e C1 a C5 — cinco comandos verdes; commit em inglês com ID; só tokens no CSS (teste CSS e Stylelint); `forwardRef`, `displayName`, `className`; as nove stories existem.
+- [ ] Teste exigido de acessibilidade: "as setas esquerda/direita fazem scroll horizontal quando a tabela é mais larga do que o contentor" — FALHA: não existe nenhum teste (nem unitário, nem `play` na story `HorizontalScroll`, que não tem `play`). Só se testa que Tab foca o contentor. O programador reconhece a lacuna nas notas.
+
+**Falhas:**
+1. Falta o teste exigido do scroll horizontal com as setas (esperado: teste em browser real, por exemplo `play` na story `HorizontalScroll` ou teste Playwright, que foca o contentor, prime ArrowRight e verifica `scrollLeft > 0`, e ArrowLeft que o reduz; obtido: nenhum). Ficheiro provável: `packages/ui/src/Table/Table.stories.tsx` (story `HorizontalScroll`). Passos: abrir `HorizontalScroll`, ver que não há `play` nem teste a cobrir o scroll por teclado.
+
+**Testes adicionados pelo testador:** nenhum. Tentei validar o scroll com Playwright num script temporário, mas o ambiente não permitiu criá-lo; o comportamento não ficou verificado por mim.
+
+**Notas (não são falhas):**
+- `TableCaption` com `visuallyHidden` usa `position: absolute` sem ancestral posicionado; sugere-se `position: relative` no contentor para evitar escapar ao scroll. Não bloqueia.
+- Sem `className` nem props para o contentor `ds-table-container` (sugestão do programador para o planeador).
+- `stickyHeader` só tem efeito com `--ds-table-max-height` definida; sem medição em browser.
+
+### DS-032 · Table: estrutura base — Relatório 2 — 2026-10-19
+
+- **Commit testado:** f83f5cf (presente no histórico de `develop`; 4245322 por cima; sem alterações por guardar no início)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 25 ficheiros, 466 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (19 suites, 123 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Todos os critérios do relatório 1 mantêm-se verificados (diff 6d8452a..HEAD só toca em `test-runner.ts` e numa linha de `Table.css`; unitários e axe continuam verdes).
+- [x] Teste exigido das setas com scroll horizontal: `postVisit` em `apps/docs/.storybook/test-runner.ts` para `components-table--horizontal-scroll` confirma `scrollWidth > clientWidth`, foca a região, `scrollLeft` inicial 0, `ArrowRight` real do Playwright leva `scrollLeft > 0`, `ArrowLeft` devolve a 0. Verificado por mutação: com `scrollLeft > 99999` o `test:a11y` falha (1 falhado, 122 passados); com `> 0` passa. Mutação revertida, árvore limpa.
+- [x] Nota do relatório 1 tratada: `position: relative` em `.ds-table-container` (stylelint e teste CSS verdes).
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):**
+- O teste das setas vive no `test-runner.ts`, não na story; só corre em `pnpm test:a11y`.
+- Continua sem `className`/props para o contentor `ds-table-container` (sugestão ao planeador) e `stickyHeader` depende de `--ds-table-max-height`.
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte — Relatório 1 — 2026-10-19
+
+- **Commit testado:** fd42d21 (código) e 82b593f (registo), ambos no histórico de `develop`; sem alterações por guardar no início
+- **Resultado:** Aprovado
+
+Nota de método: o ambiente não permitiu criar um clone novo fora do repositório. Equivalente usado: `rm -rf packages/tokens/dist packages/icons/dist packages/ui/dist apps/docs/storybook-static` antes de cada comando (node_modules já instalado).
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Tipos (sem dist/) | `pnpm typecheck` | ✔ |
+| Unitários (sem dist/) | `pnpm test` (ui: 25 ficheiros, 466 testes) | ✔ |
+| Lint (sem dist/) | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Build docs (sem dist/ nem storybook-static) | `pnpm build:docs` | ✔ |
+| Acessibilidade (sem dist/ de icons/ui) | `pnpm test:a11y` (19 suites, 123 testes) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Inventário: tabela em `02-desenvolvimento.md` cobre ui→icons, ui→tokens (TS/CSS), docs→tokens, docs→ui (explicado: sem importação por nome) e icons indireto nas stories, com tipo e resolução.
+- [x] Sem `dist/`: typecheck, test e lint com código 0, cada um isolado, após remover `dist/` e `storybook-static/`.
+- [x] `pnpm build:docs` com código 0 sem `dist/`; o bundle contém o `CheckIcon` (path do ícone) e as stories Checkbox/Select passam no axe sem `dist/` de icons. Storybook interativo não aberto (sem browser): verificação visual manual não feita por mim, coberta indiretamente por build e test:a11y.
+- [x] `pnpm build` com código 0; ficheiros em `dist/` iguais aos listados pelo programador (tokens 5, icons 6, ui 7).
+- [x] `grep -nE "icons/src|packages/icons|src/index|IconBase|@ds/icons" packages/ui/dist/*.d.ts *.d.cts` sem resultados. `dist/index.js` e `index.cjs` importam `@ds/icons` pelo nome.
+- [x] `main`, `module`, `types`, `import`, `require`, `types` de `exports` mantêm-se em `dist/`; única entrada nova: `"source"` em `packages/icons/package.json`. `require.resolve('@ds/icons')` e `import.meta.resolve` (a partir de `packages/ui`, após build) dão `packages/icons/dist/index.{cjs,js}`. Variante a partir de `apps/docs` não aplicável (o docs não declara estes pacotes), como o programador justificou.
+- [x] `pnpm test:a11y` passa (123).
+- [x] Verificação de regressão registada em `02-desenvolvimento.md` com comandos e códigos.
+- [x] `.github/` intocado (`git diff --stat fd42d21~1 HEAD` só toca em configs, `packages/ui/test/global-setup.ts` e docs de workflow).
+- [x] G1 a G3: sem dependências novas (nenhum `package.json` de dependências nem lockfile alterado).
+
+**Testes exigidos:**
+- Sem testes novos exigidos; o `pnpm test` sem `dist/` prova a resolução (globalSetup gera os tokens).
+- Prova negativa (temporária, revertida, não commitada): `size?: number | string` para `size?: boolean` em `packages/icons/src/IconBase.tsx`; `pnpm --filter @ds/ui typecheck` falhou com TS2322 a apontar para `../icons/src/IconBase.tsx`. Revertido, `git status` só mostra os registos de workflow.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Notas (não são falhas):**
+- O `globalSetup` do Vitest corre o build dos tokens em cada `pnpm test` do ui (custo pequeno); `@ds/tokens` segue a solução (a) aceite.
+- O typecheck do `ui` passa a verificar também o código-fonte de `icons` (erros de icons aparecem em `ui`).
+- O João pode reverter a reordenação provisória do `ci.yml`, como o programador sugere.
+
+### DS-033 · Table: ordenação — Relatório 1 — 2026-10-20
+
+- **Commit testado:** 754b37b (código) e 1db3668 (registo), no histórico de `develop`; sem alterações por guardar no início. Teste acrescentado em 36069f2.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 27 ficheiros, 488 testes; 493 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (19 suites, 128 testes, axe no Chromium, inclui `DarkTheme`) + testes de teclado | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props `sortable`/`sortDirection`/`onSort`, `<button>` dentro do `<th>`, `aria-sort` — lido o diff de `Table.tsx`; `TableSort.test.tsx` verifica ascending/descending/none.
+- [x] Ícones ArrowUp/ArrowDown/ArrowUpDown, decorativos — `aria-hidden="true"` testado; teste do testador confirma que os três ícones são distintos; estado comunicado por `aria-sort`.
+- [x] Hook `useTableSort` exportado de `packages/ui` (`src/index.ts`, tipos incluídos), devolve `{ sortedData, sort, getSortProps }`, controlado e não controlado — lido o código e `useTableSort.test.tsx`; build gera `.d.ts` com o hook.
+- [x] Ciclo asc → desc → nenhum e uma coluna de cada vez — testes do hook e teste de DOM com o hook.
+- [x] Ordenação por omissão (números, strings com `Intl.Collator` numeric/base, datas, nulos no fim nas duas direções) e `compare` próprio — testes do hook; código lido.
+- [x] Estável (também em desc) e sem mutar `data` — testes do hook; código ordena uma cópia.
+- [x] G1 a G3, C1 a C5 — sem dependências novas, sem cores/espaços à mão no CSS (só tokens), testes e stories na pasta `Table`.
+
+**Testes exigidos:** todos existem e não são triviais. Hook: ciclo, mudar de coluna, números, acentos, datas, nulos, `compare`, estabilidade, não mutação, controlado. Componente: `onSort` por clique/Enter/Espaço, `aria-sort`, sem botão nos não ordenáveis. Acessibilidade: axe, Tab pela ordem das colunas, focus mantido, ordem das linhas no DOM. Stories `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`) e `DarkTheme` com tabela ordenável presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Table/TableSort.extra.test.tsx` (ícone distinto por direção, `aria-sort="none"` por omissão, sem botão com `sortDirection` sem `sortable`, clique sem `onSort`, ref e `className`).
+
+**Notas (não são falhas):**
+- O `play` de `SortKeyboardInteraction` usa `focus()` + `click()`; Enter e Espaço reais só estão nos testes unitários (limitação já indicada pelo programador).
+- Props do utilizador são espalhadas depois de `aria-sort`, por isso um `aria-sort` passado manualmente sobrepõe-se ao calculado.
+- Contraste do ícone e do focus nos dois temas coberto por axe nas stories; não foi feita inspeção visual (sem browser interativo).
+
+### DS-020 · Spinner e Skeleton — Relatório 1 — 2026-10-20
+
+- **Commit testado:** 5374d91 (código) e 9ae85cd (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em e34014a.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 30 ficheiros, 533 testes; 545 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (21 suites, 137 testes, axe no Chromium, inclui `DarkTheme` dos dois) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Spinner`: `size`, `label` (omissão "Loading"), `role="status"` com nome = `label`, SVG `aria-hidden`, `currentColor` — código lido; testes de nome por omissão, `label`, `data-size`, `aria-hidden`; teste do testador confirma só `currentcolor` no CSS.
+- [x] `Skeleton`: `variant` (omissão `text`), `width`/`height` por `--ds-skeleton-width`/`--ds-skeleton-height`, `lines` na variante `text`, `aria-hidden="true"` — código e testes lidos (números em px, strings tal como vêm, `lines` ignorado fora de `text`).
+- [x] `prefers-reduced-motion: reduce` — lido o CSS: o Spinner fica com `animation: none` e visível; o Skeleton esconde o brilho (`display: none`). A regra global de `motion.css` não interfere. jsdom não avalia media queries: testes de CSS do testador verificam as regras; sem emulação em browser.
+- [x] Cada componente na sua pasta com C1 — `Spinner/` e `Skeleton/` com `.tsx`, `.test.tsx`, `.stories.tsx`, `index.ts`; exportados em `index.ts` e `styles.css`.
+- [x] G1 a G3, C1 a C5 — sem dependências novas, só tokens no CSS (testado), `forwardRef`, `className`, `displayName`, JSDoc.
+
+**Testes exigidos:** todos existem e não são triviais: `role="status"` e nome por omissão, `label` personalizado, `data-size`, `lines={3}` com três linhas, custom properties, ref e `className` nos dois; `getByRole('status', { name })`; Skeleton fora da árvore de acessibilidade (`isInaccessible`); Tab sem focus; axe. Stories `Spinner/Sizes`, `CustomLabel`, `DarkTheme` e `Skeleton/Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme` presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `Spinner/Spinner.css.test.ts` (rotação por omissão, `animation: none` em reduced motion sem esconder, `currentColor`, tokens por tamanho) e `Skeleton/Skeleton.css.test.ts` (brilho removido em reduced motion, custom properties, sem cores à mão).
+
+**Notas (não são falhas):**
+- Reduced motion verificado por leitura e testes do CSS, não por emulação num browser; contraste e aspeto nos dois temas só por axe nas stories (sem inspeção visual).
+- `Spinner` com `aria-label` do consumidor: o `aria-labelledby` fica a ganhar na computação do nome, a menos que o consumidor também o sobreponha.
+- O `Skeleton` com `lines` limita o mínimo a 1 e arredonda para baixo (0 ou negativos dão uma linha).
+
+### DS-021 · Button: estado `loading` — Relatório 1 — 2026-10-21
+
+- **Commit testado:** f9ada3d (código) e 333c98a (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em 83967fe.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 32 ficheiros, 555 testes; 561 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (21 suites, 141 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props `loading` e `loadingLabel` (omissão "Loading"), herdadas pelo `IconButton` — `Button.tsx` lido; `IconButton` passa por `...props`; teste do `IconButton` com `loading`.
+- [x] `aria-busy`, `aria-disabled`, `data-loading`, sem `disabled` nem `tabindex="-1"`, na ordem de Tab — testes do bloco `loading` e teste de Tab.
+- [x] Diferença face a `disabled` no JSDoc de `loading` e `disabled` e na descrição de `Button/Loading` — lido no código e nas stories.
+- [x] Clique bloqueado na captura: `fireEvent.click` devolve `false`, `onClick` não dispara, submit bloqueado com rato, Enter e Espaço; teste do testador confirma que o `onClickCapture` do consumidor só corre sem `loading`.
+- [x] Spinner no span `aria-hidden` do `leadingIcon`, criado se não existir, `trailingIcon` intacto, `IconButton` continua quadrado — testes; CSS de `data-icon-only` usa largura e altura fixas por tokens.
+- [x] `asChild` + `loading`: atributos, foco, clique cancelado (`onClick` do `Button` e do `<a>`), Spinner antes do texto sem elemento extra — testes; o testador acrescentou `trailingIcon` mantido e `disabled` + `loading` com `asChild` (`tabindex="-1"`, Spinner visível, fora do Tab).
+- [x] Nome e descrição: nome continua "Save", descrição "Loading", `loadingLabel` próprio, `aria-describedby` acrescentado ("Hint Loading"). O testador verificou também com `asChild`, com `aria-describedby` passado ao `Button` e posto no próprio filho: ambos dão "Hint Loading" (a nota do programador sobre o filho se sobrepor não se confirma).
+- [x] Resultado da ação não anunciado pelo botão: dito no JSDoc de `loading` e na descrição de `Button/Loading`.
+- [x] Largura: Spinner `sm` = `--ds-space-4` (16px), igual aos ícones das stories; o `play` de `LoadingToggle` mede a largura antes e depois; sem `leadingIcon` só cresce o Spinner mais o espaçamento (por construção). Verificação por leitura de CSS e `play`, sem inspeção visual.
+- [x] `disabled` + `loading`: atributo `disabled` presente, Spinner visível, `cursor: progress` só em `:not([data-disabled])`.
+- [x] G1 a G3, C1 a C5 — testes, stories e JSDoc nos ficheiros existentes; só tokens no CSS novo; sem dependências novas.
+
+**Testes exigidos:** todos existem e testam o comportamento pedido (atributos, `defaultPrevented`, submit, Tab loading vs disabled no mesmo teste, descrição acessível, `asChild`, `IconButton`, axe incluindo `asChild`). Stories `Button/Loading`, `LoadingToggle` (com `play`), `AsLinkLoading`, `IconButton/Loading` e loading em `Button/DarkTheme` presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Button/Button.loading.test.tsx` (6: `asChild` com `trailingIcon`, `asChild` + `disabled` + `loading`, `aria-describedby` no `Button` e no filho com `asChild`, remoção dos atributos ao terminar o loading, `onClickCapture` do consumidor).
+
+**Notas (não são falhas):**
+- Contraste e aspeto nos dois temas só por axe nas stories (sem inspeção visual); o `play` de `LoadingToggle` usa `focus()` + `click()`, Enter e Espaço reais só nos testes unitários.
+- Com um `leadingIcon` de largura diferente de 16px o botão muda de largura ao entrar em loading; limitação já indicada pelo programador.
+
+### DS-022 · Alert — Relatório 1 — 2026-10-21
+
+- **Commit testado:** 1d99eb1 (código) e 28158cd (registo), no histórico de `develop`; sem alterações por guardar no início (só as minhas de registo depois). Testes acrescentados no commit `test(ui): DS-022 …`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 35 ficheiros, 594 testes; 600 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (22 suites, 149 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props `variant` (omissão `info`), `title`, `icon`, `onClose`, `closeLabel` (omissão "Close") — `Alert.tsx` lido; ícones `InfoIcon`, `CircleCheckIcon`, `TriangleAlertIcon`, `CircleXIcon` importados de `@ds/icons`; teste confirma 4 ícones diferentes.
+- [x] `role`: `alert` em `danger`/`warning`, `status` em `info`/`success`; `role` personalizado prevalece — testes por variante e com `role` personalizado.
+- [x] Botão de fechar só com `onClose`, é `IconButton` com `XIcon`; o Alert não se esconde — testes (sem botão, um clique = uma chamada, continua no DOM); teste do testador: `type="button"`, não submete formulário.
+- [x] Ícone num `span aria-hidden`; variante comunicada por forma do ícone e texto — testes e leitura do código.
+- [x] Contraste AA sobre `*-subtle` nos dois temas — `Alert.css.test.ts` (≥ 4,5:1 com os valores reais de `themes.css`); estado hover do botão (`bg-subtle`) lido: `*-text` sobre `bg-subtle` continua acima de 4,5:1 por inspeção dos valores; axe nas stories verde, incluindo `DarkTheme`.
+- [x] G1 a G3, C1 a C5 — pasta `Alert/` completa (tsx, test, stories, index), exportado em `index.ts` e `styles.css`, CSS só com tokens, `forwardRef`, `className`, JSDoc.
+
+**Testes exigidos:** todos existem e testam o comportamento (role, ícone, `icon={false}`, botão, `onClose`, `closeLabel`, Tab, Enter e Espaço com `userEvent`, axe nas 4 variantes). Stories `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent`, `DarkTheme` presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Alert/Alert.edge.test.tsx` (6: `ReactNode` em título e descrição, `icon={false}` sem conteúdo, botão `type="button"`, fechar dentro de `<form>` não submete, ordem de Tab antes/dentro/depois, `role` personalizado + palavra longa + axe).
+
+**Notas (não são falhas):**
+- Aspeto visual e contraste real nos dois temas só por cálculo sobre os tokens e axe nas stories (sem inspeção visual); quebra de palavras longas (`overflow-wrap: anywhere`) verificada por leitura do CSS.
+- Como `{...props}` vem depois de `data-variant`, um `data-variant` passado pelo consumidor sobrepõe-se ao interno; caso extremo fora da especificação.
+
+### DS-023 · Tooltip — Relatório 1 — 2026-10-22
+
+- **Commit testado:** 76a9b0a (código) e 00ce214 (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados no commit `test(ui): DS-023 …`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 38 ficheiros, 633 testes; 636 com os do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (23 suites, 155 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `TooltipProvider` e `Tooltip` com `content`, `children`, `side` (omissão `top`), `align`, `delayDuration` (omissão 400), `open`, `defaultOpen`, `onOpenChange` — `Tooltip.tsx` lido; exportados em `index.ts`; testes de omissões, controlado e atraso.
+- [x] `role="tooltip"`, portal, `z-index` por token, `aria-describedby` só enquanto aberto — teste de portal; `Tooltip.css` usa `var(--ds-z-tooltip)` e o token existe em `tokens/src/primitives/z-index.json`; teste do testador confirma que o atributo desaparece ao fechar.
+- [x] WCAG 1.4.13: hover com atraso (399/401 ms), focus por Tab, Esc fecha com focus mantido, Tab para fora fecha, sem fecho por tempo (60 s) — testes do programador; o testador acrescentou o ponteiro sobre o conteúdo (continua aberto 5 s depois de sair do gatilho). Comportamento hoverable depende do Radix e jsdom não faz layout: só verificado por simulação de eventos.
+- [x] `ref` e `className` no conteúdo; largura máxima por token e `overflow-wrap: anywhere` — teste de ref/className; CSS lido; testador: palavra de 300 caracteres sem quebra de renderização e sem violações axe no tema escuro.
+- [x] Animação só em `delayed-open`/`instant-open`; regra global de `prefers-reduced-motion` presente em `styles.css` (coberta por `styles.test.ts`) — por leitura de CSS, sem teste visual.
+- [x] G1 a G3 (dependência `@radix-ui/react-tooltip` em `package.json` e lockfile), C1 a C5 — pasta `Tooltip/` completa, exportada em `index.ts` e `styles.css`, CSS só com tokens (teste de tokens existentes e contraste nos dois temas).
+
+**Testes exigidos:** todos existem e testam o comportamento (fechado por omissão, `defaultOpen`, controlado, `data-side`, Tab abre e descrição igual ao `content`, Esc, Tab para fora, hover com timers falsos, axe aberto e fechado). Stories `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`) e `DarkTheme` (com `defaultOpen`) presentes e verdes no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Tooltip/Tooltip.edge.test.tsx` (3: ponteiro sobre o conteúdo mantém-no aberto, `aria-describedby` removido ao fechar com Esc e focus mantido, palavra longa + axe no tema escuro).
+
+**Notas (não são falhas):**
+- Reposicionamento por colisão, aspeto e contraste reais só por cálculo sobre os tokens, axe nas stories e leitura de CSS (sem inspeção visual).
+- `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código por exigência do Radix (já indicado pelo programador).
+- Tooltip em elementos desativados está fora de âmbito e não foi testado.
+
+### DS-024 · Popover — Relatório 1 — 2026-10-22
+
+- **Commit testado:** a09a0ff (código) e ff73d52 (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados no commit `test(ui): DS-024 …`.
+- **Resultado:** Reprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 41 ficheiros, 674 testes; 675 com o do testador) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (24 suites, 163 testes, axe no Chromium; o programador não o tinha corrido) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exports `Popover`, `PopoverTrigger` (`asChild`), `PopoverContent`, `PopoverClose` — `Popover.tsx` lido.
+- [ ] API: `open`, `defaultOpen`, `onOpenChange`, `side`, `align`, `showClose`, `closeLabel`, `ref`, `className` presentes e testados; **`sideOffset` por token não cumprido** (falha 1).
+- [x] `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `role="dialog"`, portal, `z-index` por `var(--ds-z-dropdown)`, nome acessível exigido por tipo — testes do programador e CSS lido.
+- [ ] Focus: ao abrir vai para o conteúdo e volta ao gatilho com Esc e `PopoverClose` (testado); **com clique fora não volta ao gatilho** (falha 2).
+- [x] Colisão do Radix ativa (`collisionPadding` 8), `max-width: min(..., 100vw - space-4)` e `max-height` pela altura disponível — só por leitura de CSS/código (jsdom não faz layout).
+- [x] Gatilho desativado (Button e IconButton): clique, Enter, Espaço não abrem, `onOpenChange` não chamado, Tab salta — testes do programador lidos e verdes.
+- [x] G1 a G3 (dependência `@radix-ui/react-popover` em `package.json` e lockfile), C1 a C5 — pasta completa, exportada, CSS só com tokens, stories `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction`, `DarkTheme` verdes no `test:a11y`.
+
+**Testes exigidos:** existem e são substantivos, exceto: nenhum teste cobre `sideOffset` nem o regresso do focus após clique fora (os testes só usam Esc e `PopoverClose`).
+
+**Falhas:**
+1. **`sideOffset` não vem de token.** Esperado: "`sideOffset` por token" (critério 2). Obtido: `sideOffset = 6` escrito em pixéis em `PopoverContent` (e `collisionPadding={8}`), sem ligação a `--ds-space-*`; não há teste. O programador sinalizou-o como nota, mas a especificação aprovada pede-o e a regra do CLAUDE.md ("sem espaçamentos escritos à mão") aplica-se. Ficheiro: `packages/ui/src/Popover/Popover.tsx` (linhas 86 e 98). Possíveis vias: ler o token em runtime (`getComputedStyle`) ou deslocar por CSS com o token; ou o planeador reformular o critério (decisão do João).
+2. **Clique fora não devolve o focus ao gatilho.** Passos: renderizar `<p>Texto</p>` e um `Popover` com `PopoverTrigger asChild` > `Button`; clicar no gatilho (abre); clicar no `<p>`. Esperado (critério 4): o popover fecha e `document.activeElement` é o gatilho. Obtido: fecha, mas o focus fica em `body`. Causa provável: o Radix Popover não restaura o focus quando o fecho vem de interação exterior; falta tratar `onCloseAutoFocus` em `PopoverContent`. Ficheiro: `packages/ui/src/Popover/Popover.tsx`. Reproduzido em jsdom; o teste falhado não foi guardado no repositório para não partir o CI.
+
+**Testes adicionados pelo testador:** `packages/ui/src/Popover/Popover.edge.test.tsx` (1: conteúdo com 300 caracteres seguidos e `showClose` sem violações axe no tema escuro).
+
+**Notas (não são falhas):**
+- Reposicionamento por colisão e limite ao viewport não foram verificados visualmente.
+- O nome acessível obrigatório é garantido só pelo tipo, não em runtime (já indicado pelo programador).
+
+### DS-024 · Popover — Relatório 2 — 2026-10-22
+
+- **Commit testado:** d2ca4f9 (código) e 3abc3e4 (registo), no histórico de `develop`; sem alterações por guardar no início. Nenhum teste acrescentado nesta ronda.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 43 ficheiros, 683 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (24 suites, 163 testes, axe no Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Verificação das falhas do relatório 1:**
+- Falha 1 (`sideOffset` por token): corrigida. `PopoverContent.sideOffset` é agora um passo do token (`SpaceStep`, omissão `'2'`) lido por `readSpaceToken` (`--ds-space-<passo>`, `rem` convertido pelo tamanho de letra da raiz); `collisionPadding` lê `--ds-space-2`. Os tokens `--ds-space-2` e `--ds-space-4` existem em `packages/tokens/dist/tokens.css`. Testes: `Popover.test.tsx` (lê `--ds-space-4` e `--ds-space-2`) e `spaceToken.test.ts` (rem, px, fallback).
+- Falha 2 (clique fora): corrigida. `onCloseAutoFocus` devolve o focus ao gatilho se estiver no `body`, respeita o `preventDefault` do utilizador e não rouba o focus de outro elemento focável clicado. Três testes de regressão em `Popover.test.tsx` (linhas 292, 307, 320) verdes.
+
+**Critérios de aceitação:**
+- [x] Exports `Popover`, `PopoverTrigger` (`asChild`), `PopoverContent`, `PopoverClose` — código lido e testes.
+- [x] API completa, incluindo `sideOffset` por token — código e testes acima. A mudança de API (número para passo de token; omissão 6 px para 8 px) cumpre o critério "por token".
+- [x] ARIA (`aria-haspopup`, `aria-expanded`, `aria-controls`, `role="dialog"`), portal, `z-index` `var(--ds-z-dropdown)`, nome acessível exigido por tipo — testes e CSS.
+- [x] Focus: abre para dentro do conteúdo; volta ao gatilho com Esc, `PopoverClose` e clique fora.
+- [x] Colisão ativa e largura limitada ao viewport — por leitura de código/CSS (jsdom não faz layout).
+- [x] Gatilho desativado (Button e IconButton): sem abrir, `onOpenChange` não chamado, Tab salta — testes lidos e verdes.
+- [x] G1 a G3, C1 a C5; as 8 stories passam no `test:a11y`.
+
+**Testes exigidos:** existem e são substantivos. Limitação: o teste do `sideOffset` verifica que os tokens são lidos, não o deslocamento em pixéis (jsdom não faz layout); a conversão está coberta por `spaceToken.test.ts`.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Reposicionamento por colisão e aspeto real não verificados visualmente.
+- Tooltip, DropdownMenu e Select mantêm offsets em pixéis (fora do âmbito desta tarefa); sugestão do programador para o planeador mantém-se.
+
+### DS-027 · Toast — Relatório 1 — 2026-10-23
+
+- **Commit testado:** 93c3cbb (código) e 21e1561 (registo), no histórico de `develop`; sem alterações por guardar no início. Nenhum teste acrescentado.
+- **Resultado:** Reprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 45 ficheiros, 719 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (25 suites, 171 testes; 1 falha: `Components/Toast › DarkTheme`) | ✘ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `ToastProvider` e `useToast()` (`toast`, `dismiss`) — testes lidos e verdes.
+- [x] Opções de `toast()`, `variant` por omissão `info`, `duration` 5000 e `Infinity`, `action`, devolve `id` — testes lidos e verdes.
+- [x] Props do `ToastProvider` (`position`, `max`, `label`, `closeLabel`) — testes lidos e verdes.
+- [x] Anúncio assertive/polite sem mover o focus — testes de `aria-live` e `document.activeElement`.
+- [x] Pausa com ponteiro e com focus na região — testes com timers falsos.
+- [x] Botão de fechar `IconButton`, `z-index-toast`, largura com `100vw` — testes de CSS e leitura; largura em ecrã estreito não verificada visualmente (jsdom).
+- [x] Erro fora do provider — teste.
+- [x] `prefers-reduced-motion` — pela regra global (leitura de CSS); não verificado no navegador.
+- [x] Story `AfterLoading` com `play` (loading, toast de sucesso, `aria-busy` removido, focus no botão) — lida; passa no `test:a11y`.
+- [ ] G1 a G3, C1 a C5: **C (acessibilidade das stories) não cumprido** — a story `DarkTheme` falha o axe (falha 1). Restantes stories (`Default`, `Variants`, `WithAction`, `Persistent`, `Stacked`, `Positions`, `AfterLoading`) passam.
+
+**Testes exigidos:** existem e são substantivos (fecho por tempo, `Infinity`, `dismiss`, `max`, ação, fechar, erro fora do provider, F8, Tab, Esc, pausa). Lacuna: o axe unitário corre só no tema claro, por isso a falha de contraste do tema escuro não foi apanhada.
+
+**Falhas:**
+1. **Contraste insuficiente na story `DarkTheme`.** Passos: `pnpm test:a11y` (ou abrir `Components/Toast/DarkTheme` com o addon-a11y). Esperado: zero violações axe (wcag2a/aa, wcag21a/aa). Obtido: `color-contrast` (serious) em 2 nós do toast `info`: `li[data-variant="info"] > .ds-toast__content > .ds-toast__title` ("Information") e `... > .ds-toast__description` ("Something to know."). Reproduzido em 3 execuções seguidas; os toasts `success`, `warning` e `danger` não são assinalados. Causa provável (não confirmada): o axe corre durante a animação de entrada (`ds-toast-in`, opacidade 0 a 1), em que o primeiro toast ainda está semitransparente; ou as cores do texto sobre `--ds-color-bg-surface` no tema escuro não cumprem 4.5:1. Em qualquer caso a story tem de passar o axe de forma estável (por exemplo, `play` que espere pelo fim da animação, ou corrigir as cores se for o contraste real). Ficheiros prováveis: `packages/ui/src/Toast/Toast.stories.tsx` (`DarkTheme`) e `packages/ui/src/Toast/Toast.css`.
+
+**Notas (não são falhas):**
+- Posição, largura em ecrãs estreitos, animação de saída e swipe não foram verificados visualmente (jsdom); `prefers-reduced-motion` só por leitura de CSS.
+- Sugestão do programador (offsets em pixéis no Tooltip, DropdownMenu e Select) mantém-se para o planeador.
+- `readSpaceToken` devolve 0 sem `styles.css` carregado; o componente já depende dele.
+
+### DS-027 · Toast — Relatório 2 — 2026-10-23
+
+- **Commit testado:** 0679d4b (correção) e 442dc0b (registo), no histórico de `develop`; sem alterações por guardar no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 45 ficheiros, 719 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` executado 5 vezes seguidas: 25 suites, 171 testes, 0 falhas em todas; `Toast.stories.tsx` PASS nas 5 | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Verificação da falha 1 do relatório 1:** o diff de 0679d4b só toca em `Toast.stories.tsx`. A story `DarkTheme` ganhou um `play` que espera pelos 4 toasts e pelo fim das animações (`getAnimations()`) antes do axe. A violação `color-contrast` no toast `info` já não aparece em nenhuma das 5 execuções (no relatório 1 reproduzia-se em 3 de 3). Isto confirma a causa provável: o axe media durante a animação de entrada. Cores e tokens não foram alterados.
+
+**Critérios de aceitação:** os verificados no relatório 1 mantêm-se (o código de produção do componente não mudou desde 93c3cbb; testes unitários verdes). O critério que falhava, G1 a G3 e C1 a C5 (acessibilidade das stories, incluindo `DarkTheme`), cumpre-se agora de forma estável.
+
+**Testes exigidos:** existem e são substantivos (ver relatório 1). A lacuna do axe unitário só no tema claro fica coberta pela story `DarkTheme` no `test:a11y`.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O `play` devolve assim que existem 4 toasts e nenhuma animação está em `running`; se o axe correr antes de a animação começar (antes do primeiro frame), a espera não bloquearia. Não se observou em 5 execuções; o programador pode considerar esperar também por uma frame.
+- `Variants` e `Stacked` também medem durante a animação de entrada; passam por folga de contraste no tema claro (sugestão já feita pelo programador).
+- Posição, largura em ecrãs estreitos, saída animada, swipe e `prefers-reduced-motion` continuam sem verificação visual (jsdom/leitura de CSS).
+
+### DS-028 · Stack e Grid — Relatório 1 — 2026-10-23
+
+- **Commit testado:** 03a4aa4 (implementação) e 3fc0094 (registo), no histórico de `develop`; sem alterações por guardar no início. Teste acrescentado em `packages/ui/src/Grid/Grid.test.tsx` (merge de `style` com `asChild` e `GridItem asChild`, `gap={0}`), commit `test(ui): DS-028 ...`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 49 ficheiros, 791 testes); Grid com os 2 testes novos: 27 verdes | ✔ |
+| Acessibilidade | `pnpm test:a11y` executado 2 vezes: 27 suites, 183 testes, 0 falhas | ✔ |
+| Build | `pnpm build` (ESM, CJS, d.ts) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Stack` com `direction` (omissão vertical), `gap` (omissão 4), `align`, `justify`, `wrap`, `asChild`: leitura de `Stack.tsx` e `Stack.css`, testes unitários.
+- [x] `Grid` com `columns` (1|2|3|4|6|12) ou `minColumnWidth` (`auto-fit` + `minmax`, sem `@media`), `gap`, `asChild`; `GridItem colSpan`: leitura de `Grid.tsx`/`Grid.css`, testes.
+- [x] `gap` resolvido para `var(--ds-space-*)` nas 11 chaves (teste de CSS); `gap={7}` não compila (`@ts-expect-error` com `pnpm typecheck` verde, o que confirma que a diretiva é necessária).
+- [x] Props em `data-*` e custom properties (`--ds-grid-min-column`, `--ds-grid-col-span`); exceção de `minColumnWidth` documentada no JSDoc e no CSS.
+- [x] `<div>` por omissão, sem `role`; `asChild` com `<ul>`/`<li>` filhos diretos: testes, incluindo o meu com `GridItem asChild` em `<li>`.
+- [x] Pastas `Stack/` e `Grid/` (`GridItem` na pasta `Grid`) com componente, teste, stories e `index.ts`; exportados em `index.ts` e `styles.css`.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (stories com axe a passar, incluindo `DarkTheme`).
+
+**Testes exigidos:** existem e são substantivos (omissões, cada prop, todas as chaves de `gap`, tipos, `asChild`, `colSpan`, className/ref, Tab, axe, CSS sem `order`/`row-reverse`/`@media`). Stories exigidas todas presentes (`Vertical`, `Horizontal`, `Gaps`, `AlignAndJustify`, `Wrap`, `DarkTheme`, `Columns`, `Responsive`, `Spans`, mais `AsList`). Lacuna que cobri: merge de `style` do filho com `asChild` e `gap={0}`.
+
+**Acessibilidade e casos limite:** nenhum é focável nem tem role; a ordem do DOM é a visual; as stories usam tokens e passam o axe nos dois temas. Props em falta usam as omissões; `colSpan` maior do que `columns` cria colunas implícitas (documentado).
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O layout real (colunas com `auto-fit`, `colSpan`, `wrap`) não é verificável em jsdom e não foi inspecionado visualmente; coberto por leitura de CSS e testes de atributos.
+- `colSpan` não é validado em runtime (0, negativo ou decimal gera CSS inválido, ignorado pelo navegador).
+
+### DS-029 · Card — Relatório 1 — 2026-10-26
+
+- **Commit testado:** 829c873 (implementação) e 89366b6 (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em `packages/ui/src/Card/Card.test.tsx` (todos os níveis de `as` com título longo; `asChild` com `<li>` dentro de `<ul>`), commit `test(ui): DS-029 ...`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 51 ficheiros, 813 testes); Card com os 2 testes novos: 14 verdes | ✔ |
+| Acessibilidade | `pnpm test:a11y`: 28 suites, 190 testes, 0 falhas; `Card.stories.tsx` PASS | ✔ |
+| Build | `pnpm build` (ESM, CJS, d.ts, Storybook) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta as seis partes: leitura de `Card.tsx`, `Card/index.ts` e `index.ts` (componentes e tipos); CSS importado em `styles.css`.
+- [x] `variant` (omissão `outlined`), `padding` (omissão `md`), `asChild` (`Slot`): `Card.tsx`, testes de omissões, `<article>` e o meu com `<li>`.
+- [x] `CardTitle as` h2 a h6, omissão h3: testes (`getByRole('heading', { level })`), todos os níveis no meu teste.
+- [x] Tokens `color-bg-surface`, `color-border-default`, `radius-lg`, `shadow-md`: existem em `tokens.css`/`themes.css`; `Card.css.test.ts` garante sem cores nem comprimentos fixos; borda `outlined` de 1px com o token nos dois temas (`DarkTheme` passa o axe no navegador).
+- [x] Sem `role` nem `tabIndex`; cartão clicável com `asChild` sobre `<a>`: teste de Tab e Enter, `:focus-visible` com `color-focus-ring` no CSS.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (stories com axe a passar nos dois temas).
+
+**Testes exigidos:** existem e são substantivos (partes, omissões em `data-*`, ausência de role/tabindex, `as`, `asChild`, className/ref/props em cada subparte, Tab+Enter, axe, CSS). Stories exigidas todas presentes: `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` (com `Grid`), `DarkTheme`.
+
+**Acessibilidade e casos limite:** o cartão não é focável nem tem role; o título mantém a hierarquia escolhida; texto longo permanece no título (sem truncagem). Props em falta usam as omissões.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Contraste de `text-muted` sobre `bg-surface` e borda visível medidos só pelo axe das stories; o aspeto real (sombra `elevated` no tema escuro, que o programador considera pouco visível) não foi avaliado visualmente.
+- O CSS não define `overflow-wrap`; uma palavra muito longa sem espaços pode transbordar o cartão (não testável em jsdom).
+- Em `AsLink`, `CardHeader`/`CardBody` (`div`) ficam dentro de `<a>`: válido em HTML5.
+
+### DS-030 · Tabs — Relatório 1 — 2026-10-26
+
+- **Commit testado:** 06f72e4 (implementação) e a0b210f (registo), no histórico de `develop`; sem alterações por guardar no início. Testes acrescentados em `packages/ui/src/Tabs/Tabs.test.tsx` (omissões de `orientation`/`activationMode`, volta/saltar desativados/Home/End em vertical, `aria-labelledby` na lista, `aria-label` obrigatório ao nível do tipo com `@ts-expect-error`), commit 6040f80 `test(ui): DS-030 ...`.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` (inclui o `@ts-expect-error` novo) | ✔ |
+| Unitários | `pnpm test` (ui: 53 ficheiros, 840 testes antes dos meus 4); Tabs com os testes novos: 21 verdes | ✔ |
+| Acessibilidade | `pnpm test:a11y`: 29 suites, 197 testes, 0 falhas (axe, Chromium) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta as quatro partes e tipos: `Tabs/index.ts`, `index.ts`; CSS importado em `styles.css`.
+- [x] Props: `Tabs` com `orientation` (omissão `horizontal`) e `activationMode` (omissão `automatic`) explícitos em `Tabs.tsx`, verificado também por teste meu; `value`/`defaultValue`/`onValueChange` do Radix; `value` obrigatório em `TabsTrigger`/`TabsContent` pelo tipo do Radix; `disabled` testado.
+- [x] Papéis e ARIA: teste de `tablist` (nome, `aria-orientation`), `tab` (`aria-selected`, `aria-controls`), `tabpanel` (`aria-labelledby`); `aria-label`/`aria-labelledby` exigidos no tipo (teste meu com `@ts-expect-error`; `aria-labelledby` aceite).
+- [x] Ordem de tabulação: teste Tab, separador ativo, Tab, painel (`tabindex=0`).
+- [x] Indicador: barra de 2px com `color-accent-default` no separador ativo (`border-bottom`; vertical `border-inline-end`), além da cor do texto; `forced-colors` usa `Highlight`. Contraste calculado por mim a partir dos tokens de `themes.css`: claro #2563eb vs canvas #f8fafc ≈ 4,96:1 e vs subtle (hover) #f1f5f9 ≈ 4,75:1; escuro #60a5fa vs canvas #0f172a ≈ 7,0:1, vs surface #1e293b ≈ 5,8:1, vs subtle #334155 ≈ 4,1:1. Todos ≥ 3:1 nos dois temas.
+- [x] Scroll: `.ds-tabs__list` com `overflow-x: auto`, `max-width: 100%`, gatilhos `flex-shrink: 0` e `nowrap`; story `ManyTabs` passa o axe (sem `scrollable-region-focusable`).
+- [x] Controlado e não controlado: testes (incluindo controlado sem atualização do valor).
+- [x] G1 a G3 (`@radix-ui/react-tabs` em `packages/ui/package.json` e lockfile), C1 a C5 (stories com axe nos dois temas, `DarkTheme`).
+
+**Testes exigidos:** existem e são substantivos: `defaultValue`, clique + `onValueChange`, controlado, desativado, Tab/painel, setas com volta e salto de desativados, Home/End, vertical, manual com Enter e Espaço, axe, CSS. Stories exigidas todas presentes: `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled`, `DarkTheme`.
+
+**Acessibilidade e casos limite:** focus visível (`:focus-visible` com `color-focus-ring`, em separadores e painel); separador desativado com `text-disabled`; teclas de outra orientação são ignoradas (testado); `value` com espaços gera ids inválidos (documentado no JSDoc).
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O axe não mede contraste de elementos não textuais; o do indicador foi calculado a partir dos valores dos tokens. O aspeto real (scroll de `ManyTabs`, indicador vertical) não foi inspecionado num navegador.
+- A espessura de 2px é fixa (não há token de largura de borda); sugestão do programador ao planeador.
+
+### DS-031 · Accordion — Relatório 1 — 2026-10-27
+
+- **Commit testado:** 9e7c233 (implementação) e 7eebbdc (registo), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 55 ficheiros, 883 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (30 suites, 204 testes, axe em Chromium) + testes de teclado em jsdom | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Exporta as quatro partes e tipos: `Accordion/index.ts` e `src/index.ts`; CSS em `styles.css`.
+- [x] Props: `type` obrigatório (união discriminada, `collapsible` só em `single`), `value`/`defaultValue`/`onValueChange` (string em single, array em multiple, testado), `disabled`, `headingLevel` (2 a 6, omissão 3, testado h3 e h2); `AccordionItem` com `value` e `disabled`.
+- [x] Botão dentro de título, `aria-expanded`, `aria-controls`, painel `region` com `aria-labelledby`: teste de semântica.
+- [x] Chevron `aria-hidden`, rotação 180 graus em `data-state="open"`, animação de altura; `prefers-reduced-motion` desliga ambas (`Accordion.css` e `Accordion.css.test.ts`).
+- [x] Conteúdo fechado não focável nem lido: o Radix desmonta-o (nem existe no DOM); teste de região/texto ausente e Tab não lá chega. Equivale ao pretendido.
+- [x] Controlado e não controlado: testes, incluindo controlado sem atualização do pai.
+- [x] G1 a G3 (`@radix-ui/react-accordion` em `package.json` e lockfile), C1 a C5 (stories com axe, `DarkTheme`).
+
+**Testes exigidos:** todos presentes e substantivos: single/collapsible/sem collapsible, multiple com array, `defaultValue`, controlado, item e acordeão desativados, `headingLevel`; teclado (Tab, Enter, Espaço, setas com volta, Home/End, salto de desativados, Tab para dentro do painel); axe aberto, fechado e desativado. Stories exigidas todas presentes: `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled`, `DarkTheme`.
+
+**Acessibilidade e casos limite:** focus visível (`:focus-visible` com `color-focus-ring`, offset negativo); gatilho desativado com `text-disabled`; só tokens no CSS (Stylelint verde).
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Com o item fechado, `aria-controls` aponta para um painel que não está no DOM (comportamento do Radix); o axe não reporta.
+- Rotação, animação e contraste do gatilho desativado não foram inspecionados num navegador.
+- Sem `overflow-wrap`, uma palavra muito longa sem espaços pode transbordar (não testável em jsdom).
+
+### DS-034 · Pagination — Relatório 1 — 2026-10-27
+
+- **Commit testado:** a00a754 (implementação) e 76df863 (registo), no histórico de `develop`; `git status` limpo no início. Teste acrescentado em 05e5ae1 (`test(ui): DS-034 ...`).
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 57 ficheiros, 925 testes; 926 com o teste acrescentado) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (31 suites, 213 testes, axe em Chromium) + testes de teclado em jsdom | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Props e valores por omissão (`page`, `defaultPage`=1, `onPageChange`, `pageCount`, `siblingCount`=1, `size`, `label`, `previousLabel`, `nextLabel`, `getPageLabel`): leitura de `Pagination.tsx` e testes de etiquetas personalizadas.
+- [x] `<nav aria-label>` com `<ul>/<li>`, `aria-current="page"`, ícones Chevron com nome acessível: teste de semântica.
+- [x] Limites com `aria-disabled="true"` e `data-disabled`, sem `disabled` nem `tabindex`; clique bloqueado: testes da primeira e da última página.
+- [x] Exceção face ao `disabled` do `Button` escrita no JSDoc e nas descrições de `FirstPage` e `LastPage`; a `Pagination` não usa `disabled`.
+- [x] Reticências: `1 … 4 5 6 … 20`, `siblingCount={2}`, `aria-hidden`, fora de botões. Teste acrescentado: com `siblingCount` 0, 1 e 2 e todas as páginas de 1 a 20, o número de entradas é constante (`2*sibling+5`), a primeira e a última aparecem e a página atual está sempre visível.
+- [x] Hook `usePagination`: devolve o conjunto pedido; 95 itens/10 por página (páginas 1 e 10: `endIndex` exclusivo, 90 a 95), página fora do intervalo corrigida, 0 itens dá `pageCount=1` e intervalo vazio, correção quando `totalItems` diminui (controlado e não controlado).
+- [x] `pageCount <= 1` (testado com 1 e 0): uma página e os dois botões desativados.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (stories com axe nos dois temas, `DarkTheme`, só tokens: Stylelint verde).
+
+**Testes exigidos:** existem e são substantivos (cliques, limites, reticências em 1/5/20, `siblingCount`, controlado e não controlado, hook, axe, Tab por ordem, Enter e Espaço com focus mantido, "anterior" focável e inerte na página 1, focus em "seguinte" ao chegar à última página). Stories exigidas todas presentes: `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+
+**Acessibilidade e casos limite:** focus visível herdado de `Button`/`IconButton`; aspeto desativado via `[data-disabled]` do `Button`; `pageCount` 0, fracionário ou não finito e `siblingCount` inválido são normalizados.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- A especificação pede que o `play` de `KeyboardInteraction` avance "só com Enter"; o `play` usa `click()` no botão focado (o que Enter faz num `<button>`), porque o `@storybook/test` não está instalado e G2 proíbe dependências não nomeadas. Enter e Espaço reais estão cobertos nos testes com `userEvent`. A migração dos `play` para `userEvent` está prevista noutra tarefa do plano, que deve incluir esta story.
+- `endIndex` do hook é exclusivo (a especificação não o fixa); documentado no JSDoc.
+- Aspeto visual (botão desativado, contraste, quebra de linha com muitas páginas) não foi inspecionado num navegador.
+
+### DS-035 · DataTable — Relatório 1 — 2026-10-28
+
+- **Commit testado:** 21f4e4f (implementação) e 3b5eccf (registo), no histórico de `develop`; `git status` limpo no início. Teste acrescentado em 38f9755 (`test(ui): DS-035 ...`).
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 59 ficheiros, 963 testes; 967 com os testes acrescentados) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 220 testes, axe em Chromium) + testes de teclado e axe em jsdom | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] API: `data`, `columns` (`id`, `header`, `accessor`, `cell`, `sortable`, `compare`, `align`, `numeric`), `getRowId`, `caption`, `captionHidden`, `pageSize` (omissão 10, 0 desliga), `defaultSort`, `sort`/`onSortChange`, `page`/`onPageChange`, `emptyMessage` (omissão "No results"), `size`, `striped`: leitura de `DataTable.tsx` e testes.
+- [x] Só composição de `Table`, `useTableSort`, `usePagination` e `Pagination`: leitura do código, sem lógica própria de ordenação nem de paginação.
+- [x] Ordenação antes da paginação (o 99 está na última linha da página 3 e sobe à primeira com `desc`); mudar a ordenação volta à página 1 (não controlado e controlado, que pede `onPageChange(1)`).
+- [x] Resumo "início–fim of total" em `<p aria-live="polite">`, `getRangeLabel` e `Pagination` por baixo.
+- [x] `data` vazio: uma linha com `colSpan` igual ao número de colunas, sem paginação (testado também com `pageSize={0}` e na transição dados para vazio).
+- [x] Genéricos: `@ts-expect-error` para accessor inexistente (o `typecheck` confirma que a diretiva é necessária); `cell` recebe a linha tipada.
+- [x] G1 a G3 (sem dependências novas), C1 a C5 (`DataTable.css` só com tokens, Stylelint verde; CSS em `styles.css`; exports em `index.ts`; stories com axe e `DarkTheme`).
+
+**Testes exigidos:** todos presentes e substantivos: 25 linhas com 10 por página (3 páginas), página 3 com 5 linhas, ordenar `desc`, ordenar na página 2, `pageSize={0}`, `data=[]`, `cell` personalizado, `sort` e `page` controlados (e ambos), tipos; axe com dados e vazia; nome da `caption`; resumo atualizado com focus mantido no botão da paginação; ordem de tabulação cabeçalhos, células, paginação; ordenar e paginar só com teclado. Stories exigidas todas presentes: `Default`, `WithCustomCells`, `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+
+**Testes acrescentados (casos limite):** dados que diminuem estando na página 3 (corrige para a última página válida); `pageSize={0}` com dados vazios e transições dados, vazio e dados; ordenar 26 linhas sem paginação com valor `undefined` (não aparece o texto "undefined"); texto de 500 caracteres.
+
+**Acessibilidade e casos limite:** tabela e região com o nome da `caption`; focus visível herdado de `Table`, `Button` e `IconButton`; modos controlado e não controlado cobertos; texto escuro/claro só via tokens.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Com `pageSize={0}` o resumo também desaparece (a especificação só exige a ausência da `Pagination`); decisão do programador, registada.
+- O `play` de `KeyboardInteraction` usa `focus()` e `click()` em vez de `userEvent` (sem `@storybook/test`); a migração está prevista na tarefa DS-054, e as teclas reais estão cobertas nos testes unitários.
+- O anúncio real da região `aria-live` num leitor de ecrã, o aspeto visual e o contraste no tema escuro não foram inspecionados num navegador (o axe das stories passa nos dois temas).
+- Texto muito longo sem espaços pode transbordar a célula (não testável em jsdom).

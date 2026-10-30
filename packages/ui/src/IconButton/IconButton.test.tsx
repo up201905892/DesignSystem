@@ -142,4 +142,15 @@ describe('IconButton', () => {
     );
     await expectNoA11yViolations(container);
   });
+
+  it('shows a Spinner instead of the icon when loading and keeps the aria-label name', async () => {
+    const { container } = render(<IconButton aria-label="Save" icon={<Icon />} loading />);
+    const button = screen.getByRole('button', { name: 'Save' });
+    expect(screen.queryByTestId('icon')).not.toBeInTheDocument();
+    expect(button.querySelector('.ds-spinner')).not.toBeNull();
+    expect(button).toHaveAttribute('data-icon-only');
+    expect(button).toHaveAttribute('aria-busy', 'true');
+    expect(button).not.toBeDisabled();
+    await expectNoA11yViolations(container);
+  });
 });

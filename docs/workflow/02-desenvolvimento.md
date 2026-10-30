@@ -370,3 +370,367 @@ Modelo de entrada:
   - Dentro de um `Field`, o `FieldLabel` usa `htmlFor`, que não nomeia um `div`; o nome do grupo vem de `aria-labelledby` (ver story `WithField`, que usa um `<span id>`). Sugestão para o planeador: tarefa para um `FieldLabel` com `id` ou um `Fieldset`/`legend` (já fora de âmbito).
   - Como no `Checkbox`, o `<label>` exterior de cada `Radio` não aceita `className`; o texto desativado usa `text-muted` (contraste AA no axe) e o estilo desativado usa `:has(:disabled)`.
   - `Radio` fora de um `RadioGroup` falha no Radix (contexto em falta).
+
+### DS-025 · Dialog (Modal)
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogBody`, `DialogFooter` e `DialogClose` sobre `@radix-ui/react-dialog`. `DialogContent` (classe `ds-dialog`) vem num portal com overlay (`ds-dialog__overlay`, `color-overlay`), ambos com `z-index-modal`; `size` (`sm`/`md` por omissão/`lg`) em `data-size`; `closeLabel` (omissão `"Close"`), `hideClose` e `closeOnOverlayClick` (via `onPointerDownOutside`). O botão de fechar é um `IconButton` ghost com `XIcon`. O corpo faz scroll (`overflow-y: auto`) com cabeçalho e rodapé fixos; largura `min(<tamanho>, 100vw - space-8)`. Animações `fade`/`slide` de entrada e saída, anuladas por `prefers-reduced-motion` em `styles/motion.css`.
+- **Ficheiros alterados:** `packages/ui/src/Dialog/{Dialog.tsx,Dialog.css,Dialog.test.tsx,Dialog.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** e1c2909 `feat(ui): DS-025 add Dialog with focus trap, sizes and overlay`
+- **Critérios de aceitação cobertos:** todos; testes em `Dialog.test.tsx`; stories `Default`, `Sizes`, `WithForm`, `LongContent`, `Confirmation`, `NoOverlayClose`, `DisabledTrigger`, `KeyboardInteraction` (play: focus preso com Tab/Shift+Tab, Esc e regresso do focus ao gatilho), `DarkTheme` (aberto).
+- **Testes escritos pelo programador:** `Dialog.test.tsx` (fechado por omissão, abrir, `defaultOpen`, controlado, `onOpenChange(false)` pelo botão, `DialogClose` e overlay, `closeOnOverlayClick={false}`, `hideClose`, `closeLabel`, `size`, ref/className/displayName, nome e descrição, ausência de `aria-describedby` e de aviso sem descrição, portal, conteúdo de fundo `aria-hidden`, scroll bloqueado, focus ao abrir, focus preso, Esc, Enter/Espaço no gatilho, gatilho `Button`/`IconButton` desativado (não abre, sem `onOpenChange`, Tab salta), axe com o diálogo aberto).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 393) · build ✔ · test:a11y ✔ (105) · `pnpm install --frozen-lockfile` ✔.
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-dialog` (nomeada na tarefa).
+  - O Radix Dialog não põe `aria-modal`; é acrescentado em `DialogContent`.
+  - Sem `DialogDescription` o Radix avisa na consola; para evitar ruído, `Dialog` regista a presença da descrição (contexto) e sem ela `DialogContent` passa `aria-describedby={undefined}`. Com descrição o Radix liga o id normalmente.
+  - Largura em tokens: `sm` = `space-16 * 6` (24rem), `md` = `space-16 * 8` (32rem), `lg` = `space-16 * 12` (48rem); margem em ecrãs estreitos = `space-8` no total.
+  - O axe em jsdom não mede `color-contrast`; a verificação real é o `test:a11y` (browser). Em `LongContent` o `DialogBody` tem `tabIndex={0}` para o scroll por teclado (regra `scrollable-region-focusable`).
+  - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos (como a do Select); o Radix FocusScope trata o Tab nos extremos.
+  - Com `hideClose`, o diálogo continua a fechar com Esc e com `DialogClose`.
+
+### DS-026 · DropdownMenu
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuGroup` e `DropdownMenuSeparator` sobre `@radix-ui/react-dropdown-menu`. `DropdownMenuContent` (classe `ds-dropdown-menu`) vai num portal com `z-index-dropdown`; `side` (omissão `bottom`), `align` (omissão `start`), `ref` e `className`. `DropdownMenuItem` tem `variant` (`default`/`danger`, em `data-variant`), `leadingIcon` (decorativo, `aria-hidden`), `onSelect` e `disabled` (Radix põe `aria-disabled="true"`). O realce é por `data-highlighted` (focus real no item). `danger` usa `danger-text` (e `danger-subtle` no realce); com ícone a distinção não depende só da cor.
+- **Ficheiros alterados:** `packages/ui/src/DropdownMenu/{DropdownMenu.tsx,DropdownMenu.css,DropdownMenu.css.test.ts,DropdownMenu.test.tsx,DropdownMenu.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d1f8738 `feat(ui): DS-026 add DropdownMenu with keyboard navigation and danger items`
+- **Critérios de aceitação cobertos:** todos; testes em `DropdownMenu.test.tsx`; stories `Default`, `WithIcons`, `WithGroupsAndLabels`, `DisabledItem`, `DangerItem`, `OnIconButton`, `DisabledTrigger`, `KeyboardInteraction` (play), `DarkTheme` (aberto).
+- **Testes escritos pelo programador:** `DropdownMenu.test.tsx` (fechado por omissão, `aria-haspopup`/`aria-expanded`, abrir, `defaultOpen`, `onSelect` + fecho + focus no gatilho, item desativado, controlado e `open={false}`, clicar fora, label/group/separator, portal e `side`/`align`, ref/className/variant/displayName, ícone decorativo, Enter/Espaço/Seta para baixo abrem com o primeiro item focado, setas com saltos de desativados, Home/End, pesquisa por letra, Enter/Espaço ativam, Esc, Tab fecha, gatilho `Button`/`IconButton` desativado (não abre, sem `onOpenChange`, Tab salta), axe com o menu aberto); `DropdownMenu.css.test.ts` (tokens existentes, `z-index-dropdown`, `data-highlighted`, `danger-text`, sem cores fixas).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 438) · build ✔ · test:a11y ✔ (114).
+- **Notas para o testador:**
+  - Dependência nova: `@radix-ui/react-dropdown-menu` (nomeada na tarefa).
+  - O menu é não modal (`modal={false}` no Radix). Em modo modal o Radix põe `aria-hidden` no `#storybook-root` com o gatilho focável lá dentro, e o `test:a11y` falhava com `aria-hidden-focus` em 7 stories abertas. Consequência: a página por trás não fica inerte nem com scroll bloqueado; clicar fora fecha na mesma.
+  - O Radix não fecha o menu com Tab (mantém o focus lá dentro). A tarefa exige que Tab feche; `DropdownMenu` guarda o estado aberto (suporta controlado e não controlado) e `DropdownMenuContent` chama `setOpen(false)` em Tab. O focus volta ao gatilho (o Radix impede o Tab nativo).
+  - O Radix só respeita o seu `disabled`; com `asChild` sobre um `Button disabled`, o `pointerdown` e as teclas chegavam ao gatilho no teste e o menu abria. `DropdownMenuTrigger` faz `preventDefault` em `onPointerDown`/`onKeyDown` quando o elemento tem `disabled` ou `aria-disabled="true"`.
+  - O axe unitário corre sobre o `role="menu"` (sobre o `body` dava a regra `region`, ruído de jsdom); o contraste real fica no `test:a11y`.
+  - `sideOffset` tem omissão de 4px (valor literal, passado ao Radix, não é CSS).
+  - A story `KeyboardInteraction` usa `KeyboardEvent` sintéticos (como as de Select e Dialog).
+
+### DS-032 · Table: estrutura base
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Table`, `TableCaption`, `TableHead`, `TableBody`, `TableRow`, `TableHeaderCell` e `TableCell` sobre elementos HTML nativos. `Table` renderiza `div.ds-table-container` (`role="region"`, `tabIndex=0`, `overflow: auto`, nome por `aria-label`/`aria-labelledby`, obrigatório no tipo) à volta de `<table class="ds-table">`; o nome também vai para a `<table>`. `size` (`sm`/`md`), `striped` e `stickyHeader` em `data-size`, `data-striped`, `data-sticky-header`. `TableHeaderCell`: `scope` (omissão `col`) e `align`; `TableCell`: `align` e `numeric` (alinha ao fim, `tabular-nums`). `TableCaption`: `visuallyHidden`. `TableRow`: `selected` (`aria-selected` e `data-selected`). Striped, hover e selecionado usam `bg-subtle` / `accent-subtle` com `text-default`.
+- **Ficheiros alterados:** `packages/ui/src/Table/{Table.tsx,Table.css,Table.css.test.ts,Table.test.tsx,Table.stories.tsx,index.ts}`, `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 6d8452a `feat(ui): DS-032 add Table base structure with sticky header and scroll region`
+- **Critérios de aceitação cobertos:** todos, exceto a verificação em browser das setas a fazer scroll (ver notas); testes em `Table.test.tsx`; stories `Default`, `Striped`, `Dense`, `WithCaption`, `NumericColumns`, `StickyHeader`, `HorizontalScroll`, `WithBadges`, `DarkTheme`.
+- **Testes escritos pelo programador:** `Table.test.tsx` (estrutura nativa, região focável e nomeada, `aria-labelledby`, `getByRole('table', { name })`, contagens de `columnheader`/`rowheader`/`row`, `scope`, `align`/`numeric`, `size`/`striped`/`stickyHeader`, `selected`, legenda escondida, `ref`/`className` em cada subparte, `displayName`, Tab foca o contentor, axe com `Badge` numa célula); `Table.css.test.ts` (tokens existentes, `overflow: auto`, `tabular-nums`, sem cores fixas).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 466) · build ✔ · test:a11y ✔ (123). Sem dependências novas.
+- **Notas para o testador:**
+  - O scroll com as setas é comportamento nativo do browser num elemento com scroll e focus; o jsdom não o simula, por isso o teste unitário só confirma `tabIndex=0`, `role="region"` e o nome. Verificar no Storybook (`HorizontalScroll`).
+  - `stickyHeader` só tem efeito visível com altura limitada: o consumidor define `--ds-table-max-height` num ancestral (a story `StickyHeader` mostra como). Sem props extra no contentor.
+  - O nome é aplicado ao contentor e à `<table>`; por isso `getByRole('table', { name })` funciona mesmo sem `TableCaption`.
+  - `aria-selected` só é emitido quando `selected` é definido (`true`/`false`); `data-selected` só com `true`.
+  - O `tabIndex` no contentor tem um `eslint-disable` justificado (`jsx-a11y/no-noninteractive-tabindex`), exigido pela regra axe `scrollable-region-focusable`.
+  - Sugestão para o planeador: `Table` não permite passar `className` nem props ao contentor (`ds-table-container`); se for preciso (ex.: DS-035), criar tarefa.
+  - O contraste de `accent-subtle`/`bg-subtle` com `text-default` passou no `test:a11y` (browser), mas a story `DarkTheme` só confirma o tema escuro se o toggle for aplicado; o testador deve rever.
+
+### DS-032 · Table: estrutura base (continuação)
+
+**Iteração 2 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** corrigida a falha 1 do relatório 1 (falta o teste do scroll horizontal com as setas). Em `apps/docs/.storybook/test-runner.ts`, o `postVisit` da story `components-table--horizontal-scroll` usa teclado real do Playwright: confirma que a tabela é mais larga do que o contentor, foca a região, `ArrowRight` leva `scrollLeft` a > 0 e `ArrowLeft` devolve-o a 0. Um `play` na story não serve, porque eventos sintéticos não provocam o scroll nativo. Nota não bloqueante tratada: `position: relative` em `.ds-table-container` para o caption `visuallyHidden` (absolute) não escapar ao scroll.
+- **Ficheiros alterados:** `apps/docs/.storybook/test-runner.ts`, `packages/ui/src/Table/Table.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** f83f5cf `fix(ui): DS-032 test arrow-key horizontal scroll of Table region`
+- **Critérios de aceitação cobertos:** o teste de acessibilidade do scroll por setas passa a existir e corre em `pnpm test:a11y`.
+- **Testes escritos pelo programador:** verificação no test runner (Chromium). Confirmei que é efetiva: com a condição `scrollLeft > 99999` a suite da Table falha; com `> 0` passa.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 466) · build ✔ · test:a11y ✔ (123).
+- **Notas para o testador:** o teste vive no `test-runner.ts` (corre depois da story, junto do axe), não na story. Afeta só a story `HorizontalScroll`.
+
+### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio)
+
+**Iteração 1 — 2026-10-19**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** mecanismo escolhido: condição de exportação própria `"source"` (a primeira entrada de `exports["."]` em `packages/icons/package.json`, a apontar para `./src/index.ts`), ativada com `customConditions: ["source"]` no `tsconfig.base.json` (TypeScript), `resolve.conditions: ['source']` no Vitest do `@ds/ui` e `viteFinal` com `resolve.conditions` no Storybook. Motivo: uma só fonte de verdade (o `package.json` do pacote), sem duplicar caminhos em `paths`/`alias` em cada configuração; `main`, `module`, `types`, `import`, `require` continuam a apontar para `dist/`, e o `tsup` e os consumidores normais não usam a condição `source`. Para `@ds/tokens` (solução a: geração automática como passo prévio): o `src/index.ts` está vazio e o CSS/objeto só existem depois do Style Dictionary; `apps/docs` (`storybook`, `build-storybook`, `typecheck`, `test:a11y`) e `@ds/tokens test` já corriam o build dos tokens; faltava o `@ds/ui`, cujos testes de CSS leem `tokens/dist/*.css` e cujo `styles.test.ts` resolve `@ds/tokens/*.css` para `dist/`. Acrescentei `packages/ui/test/global-setup.ts` (`globalSetup` do Vitest), que corre `node scripts/build.mjs` em `packages/tokens` antes dos testes (também em `test:watch`).
+- **Inventário das dependências `@ds/*`:**
+
+  | Origem | Destino | Tipo | Resolução em desenvolvimento |
+  | --- | --- | --- | --- |
+  | `ui` (`Checkbox`, `Select`, `Dialog`, `DropdownMenu.stories`) | `@ds/icons` | TS/JS | condição `source` → `icons/src/index.ts` (tsc, Vitest, Storybook/Vite) |
+  | `ui` (`src/styles.css`, `scripts/build-css.mjs`) | `@ds/tokens/tokens.css`, `@ds/tokens/themes.css` | CSS | `dist/` gerado pelo Style Dictionary; `pnpm --filter @ds/tokens build` automático (globalSetup do Vitest do `ui`; script do `docs`) |
+  | `ui` (`*.css.test.ts`) | `tokens/dist/*.css` (caminho relativo) | CSS (leitura de ficheiro) | idem, gerado pelo globalSetup |
+  | `docs` (`Scales.stories.tsx`, `Colors.stories.tsx`) | `@ds/tokens` (`tokens`, `themes`) | TS/JS | `dist/` gerado; os scripts `storybook`, `build-storybook`, `typecheck` e `test:a11y` do `docs` correm o build dos tokens antes |
+  | `docs` (`.storybook/preview.tsx`) | `packages/ui/src/styles.css` (caminho relativo), que importa `@ds/tokens/*.css` | CSS | `dist/` dos tokens (acima) |
+  | `docs` (stories do `ui`, em `packages/*/src/**/*.stories.tsx`) | `@ds/icons` (indireto, sem dependência declarada no `docs`) | TS/JS | condição `source` no `viteFinal` |
+  | `docs` | `@ds/ui` | n/a | não há importação por nome (as stories usam caminhos relativos) e o `@ds/ui` não tem `main`/`exports`; nada a resolver |
+
+- **Ficheiros alterados:** `tsconfig.base.json`, `packages/icons/package.json`, `packages/ui/vitest.config.ts`, `packages/ui/test/global-setup.ts` (novo), `apps/docs/.storybook/main.ts`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** fd42d21 `feat(ui): DS-050 resolve workspace packages from source in development`
+- **Critérios de aceitação cobertos:** todos (verificação abaixo). Sem testes novos: o próprio `pnpm test` num estado sem `dist/` é a prova (os testes do `ui` dependem de `@ds/icons` e de `tokens/dist`).
+- **Testes escritos pelo programador:** nenhum novo (ver acima); `test/global-setup.ts` é infraestrutura de testes.
+- **Verificação de regressão (sem clone novo; `dist/` e `storybook-static/` removidos com `rm -rf packages/tokens/dist packages/icons/dist packages/ui/dist apps/docs/storybook-static`, depois `pnpm install --frozen-lockfile`):**
+  - `pnpm typecheck` → 0 (isolado, sem `dist/`)
+  - `rm -rf packages/*/dist` + `pnpm test` → 0 (tokens 89, icons 10, ui 466)
+  - `rm -rf packages/*/dist` + `pnpm lint` → 0
+  - `pnpm build` → 0; ficheiros em `dist/` iguais aos de antes: tokens (`index.cjs`, `index.d.ts`, `index.js`, `themes.css`, `tokens.css`), icons (`index.{cjs,cjs.map,d.cts,d.ts,js,js.map}`), ui (`index.{cjs,cjs.map,d.cts,d.ts,js,js.map}`, `styles.css`)
+  - `grep -nE "icons/src|packages/icons|src/index|IconBase|@ds/icons" packages/ui/dist/*.d.ts packages/ui/dist/*.d.cts` → sem resultados (o `.d.ts` do `ui` não referencia o `@ds/icons` nem copia declarações)
+  - `cd packages/ui && node -e "console.log(require.resolve('@ds/icons'))"` → `packages/icons/dist/index.cjs`; `import.meta.resolve('@ds/icons')` (ESM) → `packages/icons/dist/index.js`
+  - sem `dist/` nem `storybook-static/`: `pnpm build:docs` → 0
+  - sem `dist/` nem `storybook-static/`: `pnpm test:a11y` → 0 (123 testes)
+  - prova negativa (temporária, revertida, não commitada): em `packages/icons/src/IconBase.tsx`, `size?: number | string` passou a `size?: boolean`; `pnpm --filter @ds/ui typecheck` falhou (TS2322 em `../icons/src/IconBase.tsx`), logo os tipos vêm do código-fonte.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ · build:docs ✔. Sem dependências novas; `.github/` intocado.
+- **Notas para o testador:**
+  - O critério "`require('@ds/ui')` a partir de `apps/docs`" não é aplicável: o `docs` não declara `@ds/ui` nem `@ds/icons` e o `@ds/ui` não tem `main`/`exports` (metadados na DS-036). Verifiquei a resolução de `@ds/icons` a partir de `packages/ui`.
+  - `pnpm storybook` interativo não foi aberto (ambiente sem browser); as stories do Checkbox e do Select correm no `test:a11y` e o `build:docs` bundla `@ds/icons` a partir do código-fonte sem `dist/`. A verificação visual dos ícones fica ao testador.
+  - O `typecheck` de `ui` agora também verifica o código-fonte de `icons` com as opções do `ui` (iguais, vêm do `tsconfig.base.json`).
+  - Pedido para o João (não feito, ficheiro dele): nenhum obrigatório; o CI já não precisa de `build` antes de `typecheck`/`test`/`lint`, por isso a reordenação provisória do `ci.yml` pode ser revertida se quiser.
+
+### DS-033 · Table: ordenação
+
+**Iteração 1 — 2026-10-20**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `TableHeaderCell` ganha `sortable`, `sortDirection` e `onSort`: quando `sortable`, o conteúdo fica num `<button type="button">` com `ArrowUpIcon`/`ArrowDownIcon`/`ArrowUpDownIcon` (decorativos, `aria-hidden` por omissão do `IconBase`) e o `<th>` recebe `aria-sort` (`ascending`/`descending`/`none`); sem `sortable` não há botão nem `aria-sort`. Hook `useTableSort<T>({ data, columns, sort?, defaultSort?, onSortChange? })` em `Table/useTableSort.ts`, exportado de `packages/ui/src/index.ts`, com tipos. Ciclo asc → desc → nenhum, uma coluna de cada vez; números por valor, datas por tempo, strings com `Intl.Collator` (`numeric`, `sensitivity: 'base'`, equivalente a `localeCompare` com essas opções), `null`/`undefined` sempre no fim nas duas direções; `compare` próprio por coluna (invertido em `desc`) e `accessor` opcional; ordenação estável sobre uma cópia. Modo controlado quando `sort !== undefined` (`null` é um valor controlado válido). CSS do botão e do ícone em `Table.css` só com tokens; o focus do botão desenha-se por dentro da célula para o contentor com scroll não o cortar. Âmbito: não toquei no contentor `ds-table-container` (a nota sobre `className`/props no contentor não é exigida pela especificação).
+- **Ficheiros alterados:** `packages/ui/src/Table/Table.tsx`, `Table.css`, `Table.stories.tsx`, `index.ts`, `useTableSort.ts` (novo), `useTableSort.test.tsx` (novo), `TableSort.test.tsx` (novo), `packages/ui/src/index.ts`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 754b37b `feat(ui): DS-033 add sortable Table headers and useTableSort hook`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5 (pasta `Table` já existente).
+- **Testes escritos pelo programador:** `useTableSort.test.tsx` (16: ciclo, mudar de coluna, números, strings com acentos/maiúsculas/numeração, datas, nulos nas duas direções, `compare`, `accessor`, estabilidade, não mutação, `defaultSort`, coluna desconhecida, `onSortChange` e modo controlado); `TableSort.test.tsx` (aria-sort, sem botão nos não ordenáveis, clique/Enter/Espaço, Tab pela ordem das colunas, ícone decorativo, axe, focus mantido e ordem das linhas no DOM). Stories: `Sortable`, `SortableControlled`, `DefaultSort`, `CustomCompare`, `SortKeyboardInteraction` (com `play`), e `DarkTheme` com tabela ordenável.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 488) · build ✔ · test:a11y ✔ (128).
+- **Notas para o testador:**
+  - O `play` de `SortKeyboardInteraction` usa DOM simples (`focus()` + `click()` e espera de um frame), porque `@storybook/test` não está instalado e a G2 não permite dependências novas. Enter e Espaço reais estão nos testes unitários (`userEvent`).
+  - Não acrescentei a `Table.test.tsx` para não o inflar: os testes de ordenação do componente estão em `TableSort.test.tsx`.
+  - Sugestão para o planeador: se se quiser `play` com teclado real nas stories, uma tarefa para adicionar `@storybook/test`, ou alargar o `test-runner.ts` como na DS-032.
+
+### DS-020 · Spinner e Skeleton
+
+**Iteração 1 — 2026-10-20**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** dois componentes, cada um na sua pasta (C1). `Spinner` (`size` sm/md/lg, `label` omissão "Loading"): `<span role="status">` com SVG decorativo (`aria-hidden`, `currentColor`) e o `label` em `VisuallyHidden`. O `role="status"` não tira o nome do conteúdo, por isso o root tem `aria-labelledby` (via `useId`) a apontar para o texto escondido; assim `getByRole('status', { name: 'Saving' })` funciona. Um `aria-label`/`aria-labelledby` do consumidor sobrepõe-se por vir depois no spread. `Skeleton` (`variant` text/rect/circle, `width`/`height`, `lines`): `<div aria-hidden="true">`; `width`/`height` vão para `--ds-skeleton-width`/`--ds-skeleton-height` (números em px) no atributo `style`, fundidos com o `style` do consumidor; `lines` só na variante `text` (mínimo 1; a última linha tem 70% de largura). Animações: o Spinner roda (800ms) e fica estático com `prefers-reduced-motion: reduce`; o brilho do Skeleton é escondido nesse caso. Tamanhos do Spinner por `--ds-space-4/6/8` (não há tokens de tamanho). Exportados em `packages/ui/src/index.ts`; CSS em `styles.css`.
+- **Ficheiros alterados:** `packages/ui/src/Spinner/{Spinner.tsx,Spinner.css,Spinner.test.tsx,Spinner.stories.tsx,index.ts}` (novos), `packages/ui/src/Skeleton/{Skeleton.tsx,Skeleton.css,Skeleton.test.tsx,Skeleton.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 5374d91 `feat(ui): DS-020 add Spinner and Skeleton`
+- **Critérios de aceitação cobertos:** todos; G1 a G3; C1 a C5 para os dois componentes.
+- **Testes escritos pelo programador:** `Spinner.test.tsx` (8: role e nome por omissão, `label`, `data-size`, gráfico `aria-hidden` e texto escondido, ref/className, displayName, Tab sem focus, axe); `Skeleton.test.tsx` (12: defaults e `aria-hidden`, variantes, `lines={3}`, `lines` ignorado fora de `text`, custom properties, sem propriedades por omissão, `style` do consumidor, ref/className, displayName, fora da árvore de acessibilidade, Tab sem focus, axe). Stories: Spinner `Default`, `Sizes`, `CustomLabel`, `DarkTheme`; Skeleton `Text`, `Rect`, `Circle`, `CardPlaceholder`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 533) · build ✔ · test:a11y ✔ (137).
+- **Notas para o testador:**
+  - A regra de `prefers-reduced-motion` está em CSS (nos dois `.css` e na regra global de `motion.css`); o jsdom não avalia media queries, por isso a verificação é visual/por leitura do CSS ou por emulação no browser (Playwright `reducedMotion: 'reduce'`).
+  - O Skeleton não tem contraste de texto (é decorativo, `aria-hidden`); a cor de fundo usa `--ds-color-bg-subtle`, com o brilho em `--ds-color-bg-surface`.
+  - Sugestão para o planeador: nenhuma obrigatória.
+
+### DS-021 · Button: estado `loading`
+
+**Iteração 1 — 2026-10-21**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Button` ganha `loading` e `loadingLabel` (omissão "Loading"); `IconButton` herda-as. Com `loading`, o root tem `aria-busy="true"`, `aria-disabled="true"` e `data-loading`, sem `disabled` nem `tabIndex={-1}` (continua na ordem de Tab), e o clique é bloqueado na captura (`blockClick`), incluindo com `asChild`. Um `Spinner` (`size="sm"`, `label={loadingLabel}`) substitui o `leadingIcon` no mesmo `<span aria-hidden>` (criado se não houver ícone); o `trailingIcon` não muda. O `id` do Spinner entra no `aria-describedby` do root, acrescentado ao que o consumidor passe, e o nome do botão não muda. Com `disabled` + `loading`, `disabled` prevalece (atributo `disabled` ou `tabIndex={-1}` no `asChild`) e o Spinner continua visível. JSDoc de `loading` e `disabled` documenta a diferença face a `disabled` e que o resultado é comunicado pelo consumidor (Toast ou outro feedback). CSS: `cursor: progress` em `[data-loading]:not([data-disabled])`.
+- **Ficheiros alterados:** `packages/ui/src/Button/{Button.tsx,Button.css,Button.test.tsx,Button.stories.tsx}`, `packages/ui/src/IconButton/{IconButton.test.tsx,IconButton.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** f9ada3d `feat(ui): DS-021 add loading state to Button and IconButton`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5 (pastas existentes). `IconButton.tsx` não precisou de alterações (a prop passa por `...props`).
+- **Testes escritos pelo programador:** `Button.test.tsx` (bloco `loading`, 13 testes: Spinner no lugar do ícone, span criado sem ícone, sem loading nada muda, descrição "Loading" e `loadingLabel` próprio, `aria-describedby` acrescentado, clique cancelado, submit bloqueado com rato/Enter/Espaço, `disabled` + `loading`, Tab loading vs disabled, focus mantido ao alternar, `asChild` (atributos, Spinner antes do texto, clique e Enter bloqueados, Tab), axe); `IconButton.test.tsx` (Spinner no lugar do ícone, nome pelo `aria-label`, axe). Stories: `Button/Loading`, `Button/LoadingToggle` (com `play`), `Button/AsLinkLoading`, `IconButton/Loading`, e loading em `Button/DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 555) · build ✔ · test:a11y ✔ (141).
+- **Notas para o testador:**
+  - Largura: o Spinner usa `size="sm"` (`--ds-space-4`, 16px), igual aos ícones de 16px das stories; com um `leadingIcon` de outra largura o botão muda de largura. Não há forma de medir o ícone do consumidor sem JS de layout. A verificação é visual (o `play` de `LoadingToggle` confirma largura igual com ícone de 16px).
+  - O `play` de `LoadingToggle` usa DOM simples (`focus()` + `click()`), como na DS-033, porque `@storybook/test` não está instalado.
+  - Com `asChild`, um `aria-describedby` do próprio filho sobrepõe-se ao calculado pelo `Slot` (comportamento do Radix), pelo que perderia a descrição de loading. Caso limite não coberto pela especificação.
+  - Sugestão para o planeador: nenhuma obrigatória.
+
+### DS-022 · Alert
+
+**Iteração 1 — 2026-10-21**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** componente `Alert` (`<div>` raiz) com `variant` (`info` por omissão, `success`, `warning`, `danger`), `title`, `icon` (`ReactNode | false`), `onClose` e `closeLabel` (omissão "Close"); `title` do HTML é omitido do tipo nativo para aceitar `ReactNode`. `role` por omissão `alert` para `danger`/`warning` e `status` para `info`/`success`, substituível pelo consumidor. Ícones por omissão `InfoIcon`, `CircleCheckIcon`, `TriangleAlertIcon`, `CircleXIcon` num `<span aria-hidden>`; ícone personalizado vai no mesmo span. O botão de fechar é um `IconButton` (`ghost`, `sm`, `XIcon`) e só existe com `onClose`; o Alert nunca se esconde. Os blocos de título e descrição só são renderizados quando existem. CSS só com tokens: fundo `*-subtle`, texto, ícone e borda `*-text` da variante (via `--ds-alert-bg`/`--ds-alert-fg`); `overflow-wrap: anywhere` para conteúdo longo.
+- **Ficheiros alterados:** `packages/ui/src/Alert/{Alert.tsx,Alert.css,Alert.css.test.ts,Alert.test.tsx,Alert.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 1d99eb1 `feat(ui): DS-022 add Alert with variants, icon and close button`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** `Alert.test.tsx` (role por variante e personalizado, ícone decorativo por variante e diferente em cada uma, ícone personalizado e `icon={false}`, sem botão sem `onClose`, clique chama `onClose` uma vez e o Alert não desaparece, `closeLabel`, sem título/descrição, ref/className/props, Tab + Enter + Espaço, axe nas quatro variantes); `Alert.css.test.ts` (contraste ≥ 4,5:1 de `*-text` sobre `*-subtle` nos dois temas). Stories: `Info`, `Success`, `Warning`, `Danger`, `WithoutTitle`, `Dismissible`, `LongContent`, `DarkTheme` (as quatro variantes com fecho).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 594) · build ✔ · test:a11y ✔ (149).
+- **Notas para o testador:**
+  - O botão de fechar é um `IconButton` `ghost` com `color: var(--ds-alert-fg)`; o contraste dele sobre `*-subtle` é o mesmo de `*-text` (coberto pelo teste de CSS), mas o jsdom não avalia o CSS real, por isso a verificação visual dos dois temas é no Storybook.
+  - A borda do alerta usa `*-text` (não está na especificação, é só um reforço visual).
+  - Sugestão para o planeador: nenhuma obrigatória.
+
+### DS-023 · Tooltip
+
+**Iteração 1 — 2026-10-22**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tooltip` e `TooltipProvider` sobre `@radix-ui/react-tooltip`. `Tooltip` aceita `content`, `children` (um elemento gatilho, usado com `asChild`), `side` (omissão `top`), `align`, `delayDuration` (omissão 400 ms), `open`, `defaultOpen`, `onOpenChange`; as restantes props, `ref` e `className` vão para o conteúdo (`.ds-tooltip`), renderizado num portal. Sem `TooltipProvider`, o `Tooltip` cria o seu próprio provider (um contexto interno deteta o provider do consumidor), por isso funciona isolado. O Radix dá `role="tooltip"` e o `aria-describedby` no gatilho enquanto aberto; Esc fecha sem mover o focus, o conteúdo aceita hover e não há fecho por tempo (WCAG 1.4.13). CSS só com tokens: `z-index: var(--ds-z-tooltip)`, fundo `bg-inverse` com texto `bg-canvas` (contraste verificado nos dois temas), `max-width` por `--ds-space-16` e `overflow-wrap: anywhere`; animação de entrada só em `delayed-open`/`instant-open`, anulada pela regra global de `prefers-reduced-motion`.
+- **Ficheiros alterados:** `packages/ui/src/Tooltip/{Tooltip.tsx,Tooltip.css,Tooltip.css.test.ts,Tooltip.test.tsx,Tooltip.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 76a9b0a `feat(ui): DS-023 add Tooltip with provider, sides and keyboard support`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova: `@radix-ui/react-tooltip`); C1 a C5.
+- **Testes escritos pelo programador:** `Tooltip.test.tsx` (fechado por omissão, `defaultOpen`, `data-side`, portal, modo controlado, `open={false}`, abre com Tab e descrição acessível igual ao `content`, Esc mantém o focus, Tab para fora fecha, hover com timers falsos (399/401 ms, `delayDuration` próprio, sem fecho por tempo, Esc após hover), ref/className/props, `displayName`, dentro de `TooltipProvider`, `ReactNode`, axe aberto e fechado); `Tooltip.css.test.ts` (tokens existentes, z-index, largura máxima, contraste nos dois temas). Stories: `Default`, `Sides`, `OnIconButton`, `LongContent`, `KeyboardInteraction` (com `play`), `DarkTheme` (com `defaultOpen`).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 633) · build ✔ · test:a11y ✔ (155).
+- **Notas para o testador:**
+  - O Radix cria um elemento visualmente oculto com `role="tooltip"` para leitores de ecrã, com o mesmo texto do elemento visível (`.ds-tooltip`, que recebe `ref`/`className`/`data-side`). `getByRole('tooltip')` devolve o oculto.
+  - jsdom não faz layout: o teste de `side` usa `avoidCollisions={false}`, senão o Radix inverte o lado. O reposicionamento real verifica-se no Storybook.
+  - O hover é simulado com `fireEvent.pointerMove` (`pointerType: 'mouse'`) e timers falsos.
+  - `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código, porque o Radix os recebe como números. Sugestão para o planeador: se se quiser que venham de tokens, definir uma tarefa para isso (vale também para outros overlays).
+
+### DS-024 · Popover
+
+**Iteração 1 — 2026-10-22**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Popover`, `PopoverTrigger`, `PopoverContent` e `PopoverClose` sobre `@radix-ui/react-popover`. `Popover` aceita `open`, `defaultOpen`, `onOpenChange` e não renderiza elemento. `PopoverTrigger` (com `asChild`) recebe `aria-haspopup="dialog"`, `aria-expanded` e `aria-controls` do Radix. `PopoverContent` (`role="dialog"`, portal) tem `side` (omissão `bottom`), `align` (omissão `center`), `sideOffset` (omissão 6), `showClose` e `closeLabel` (omissão "Close"), `ref` e `className`; o nome acessível é exigido pelo tipo (união: `aria-label` ou `aria-labelledby`). O botão de fechar é um `IconButton` `ghost` `sm` dentro de `Radix.Close`. Colisão do Radix ativa (`collisionPadding` 8). Gatilho desativado: um `Button`/`IconButton` `disabled` já tem o atributo nativo, por isso o Radix não abre nem o focus lá chega; não foi preciso código extra (ao contrário do DropdownMenu, que abre em `pointerdown`). CSS só com tokens: `z-index: var(--ds-z-dropdown)`, `max-width: min(..., 100vw - space-4)`, `max-height` pela altura disponível do Radix, `overflow-wrap: anywhere`, outline de focus visível no conteúdo, animação de entrada anulada pela regra global de `prefers-reduced-motion`.
+- **Ficheiros alterados:** `packages/ui/src/Popover/{Popover.tsx,Popover.css,Popover.css.test.ts,Popover.test.tsx,Popover.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** a09a0ff `feat(ui): DS-024 add Popover with trigger, content and close button`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova: `@radix-ui/react-popover`); C1 a C5.
+- **Testes escritos pelo programador:** `Popover.test.tsx` (fechado por omissão, abrir/fechar com o gatilho, `defaultOpen`, controlado e controlado que recusa abrir, clique fora, `PopoverClose`, `showClose` e `closeLabel`, `aria-labelledby`, `side`/`align` e omissões, ref/className/props, portal, `displayName`; gatilho desativado com `Button` e `IconButton` (clique, Enter, Espaço, `onOpenChange` não chamado, Tab salta); axe aberto e fechado; `aria-haspopup`/`aria-expanded`/`aria-controls`; Enter e Espaço abrem com o focus dentro; Tab dentro do conteúdo; Esc e `PopoverClose` devolvem o focus ao gatilho); `Popover.css.test.ts` (tokens existentes, z-index, largura máxima, sem cores fixas, animação só na entrada). Stories: `Default`, `Placement`, `WithForm`, `WithCloseButton`, `Controlled`, `DisabledTrigger`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 674) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright; o axe corre nos testes unitários).
+- **Notas para o testador:**
+  - jsdom não faz layout: o teste de `side` usa `avoidCollisions={false}`. O reposicionamento por colisão e o limite à largura do viewport verificam-se no Storybook (redimensionar a janela, story `Placement`).
+  - Com `showClose`, o conteúdo ganha `data-close` e padding extra à direita para o botão não tapar texto.
+  - O nome acessível obrigatório é garantido só pelo tipo (TypeScript), não em runtime.
+  - Sugestão para o planeador: `sideOffset` (6) e `collisionPadding` (8) estão em pixéis no código, porque o Radix os recebe como números; o mesmo já foi referido na DS-023. Se se quiser que venham de tokens, definir uma tarefa transversal.
+
+**Iteração 2 — 2026-10-22** (correção do relatório 1)
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:**
+  - Falha 1 (sideOffset por token): novo `packages/ui/src/utils/spaceToken.ts` (`readSpaceToken`, tipo `SpaceStep`) lê `--ds-space-<passo>` em runtime com `getComputedStyle` e converte `rem` para pixéis pelo tamanho de letra da raiz. `PopoverContent.sideOffset` passou de número para passo do token (`'0'`…`'16'`, omissão `'2'` = 0.5rem); `collisionPadding` usa `--ds-space-2`. Alteração de API: o valor omisso passa de 6 px para 8 px (o token mais próximo; não existe `space-1.5`), e o tipo deixa de aceitar números. Sem o CSS carregado o valor cai para 0 (o componente já depende de `styles.css`).
+  - Falha 2 (clique fora): `PopoverContent` trata `onCloseAutoFocus` (chama o do utilizador; se não houver `preventDefault` e o focus estiver no `body`, devolve-o ao gatilho). `Popover` guarda o gatilho num contexto e `PopoverTrigger` regista-o, mantendo o `ref` externo. Se o clique fora cair noutro elemento focável, o focus fica nesse elemento (comportamento esperado, evita roubar o focus).
+- **Ficheiros alterados:** `packages/ui/src/Popover/Popover.tsx`, `packages/ui/src/Popover/Popover.test.tsx`, `packages/ui/src/utils/spaceToken.ts`, `packages/ui/src/utils/spaceToken.test.ts` (novos testes), `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d2ca4f9 `fix(ui): DS-024 read Popover offsets from space tokens and restore focus after outside click`
+- **Critérios de aceitação cobertos:** os da iteração 1, mais `sideOffset` por token e regresso do focus após clique fora.
+- **Testes escritos pelo programador:** regressão em `Popover.test.tsx` (focus volta ao gatilho após clique fora num texto; fica no elemento focável clicado; `onCloseAutoFocus` próprio com `preventDefault` respeitado; `ref` do gatilho mantido; `--ds-space-4` e `--ds-space-2` lidos); `spaceToken.test.ts` (rem, px, fallback).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 683) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright).
+- **Notas para o testador:**
+  - jsdom não faz layout: o valor em pixéis do offset não é medido; o teste verifica que os tokens são lidos e `spaceToken.test.ts` a conversão.
+  - O Tooltip (DS-023, Concluído) tem o mesmo problema (`sideOffset ?? 6`, `collisionPadding={8}`) e NÃO foi alterado. Sugestão para o planeador: tarefa nova para aplicar `readSpaceToken` ao Tooltip, DropdownMenu (`sideOffset = 4`) e Select (`sideOffset={4}`).
+
+### DS-027 · Toast
+
+**Iteração 1 — 2026-10-23**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `ToastProvider` e `useToast()` sobre `@radix-ui/react-toast`. `ToastProvider` aceita `position` (omissão `bottom-right`), `max` (omissão 3), `label` (nome da região, omissão "Notifications") e `closeLabel` (omissão "Close"); renderiza os toasts e a região (`Viewport`, `role="region"`, F8 do Radix). `useToast()` devolve `toast(opções)` (devolve o `id`) e `dismiss(id?)`, estáveis entre renders; fora do provider lança `useToast must be used inside a <ToastProvider>.`. Opções: `title`, `description?`, `variant` (`info` por omissão), `duration` (5000 por omissão; `Infinity` não fecha) e `action { label, onClick, altText }`. `danger`/`warning` usam `type="foreground"` (assertive) e `info`/`success` `type="background"` (polite); o focus nunca é movido ao abrir. A pausa do temporizador com ponteiro ou focus na região é a do Radix. O botão de fechar é um `IconButton` (`ghost`, `sm`, `XIcon`) dentro de `Radix.Close`; o ícone da variante é decorativo. Ao exceder `max`, o toast aberto mais antigo é fechado; os fechados ficam 300 ms montados (animação de saída) e depois saem da lista. CSS só com tokens: região com `z-index: var(--ds-z-toast)`, largura `min(space-16 * 5, 100vw - space-8)` (ocupa a largura disponível em ecrãs estreitos), posição por `data-position`, animações de entrada e saída anuladas pela regra global de `prefers-reduced-motion`.
+- **Ficheiros alterados:** `packages/ui/src/Toast/{Toast.tsx,Toast.css,Toast.css.test.ts,Toast.test.tsx,Toast.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 93c3cbb `feat(ui): DS-027 add Toast with provider, useToast hook and pause on hover and focus`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova: `@radix-ui/react-toast`); C1 a C5.
+- **Testes escritos pelo programador:** `Toast.test.tsx` com timers falsos (título e descrição, ids distintos, `data-variant` e omissão `info`, fecho aos 5000 ms, `duration` própria, `Infinity`, `dismiss(id)`, `dismiss()`, `max` por omissão e personalizado com o mais antigo a sair, ação chama `onClick` e fecha, botão de fechar e `closeLabel`, erro fora do provider, nome da região e `position`, ícone decorativo); acessibilidade (axe com toast visível, `aria-live` assertive/polite por variante, `document.activeElement` inalterado, F8 leva o focus à região, Tab chega à ação e ao fechar e Esc fecha, pausa com focus na região e com ponteiro); `Toast.css.test.ts` (tokens existentes, `z-index-toast`, largura com `100vw`, sem cores fixas, keyframes). Stories: `Default`, `Variants`, `WithAction`, `Persistent`, `Stacked`, `Positions`, `AfterLoading` (com `play`), `DarkTheme` (quatro toasts abertos).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 719) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright; o axe corre nos testes unitários).
+- **Notas para o testador:**
+  - O Radix cria um elemento visualmente oculto (`role="status"`, `aria-live`) por toast para o anúncio; é ele que carrega assertive/polite, e não o `<li>`. Os toasts visíveis são os `listitem` da região. Esse anúncio aparece após dois frames e sai ao fim de 1 s.
+  - jsdom não faz layout nem animações: a posição, a largura em ecrãs estreitos, a saída animada e o swipe verificam-se no Storybook (stories `Positions` e `AfterLoading`, redimensionar a janela).
+  - O hover é simulado com `pointerMove` na região (o Radix pausa em `pointermove` e retoma em `pointerleave`).
+  - Nota de contexto sobre offsets: o Toast não usa `readSpaceToken` porque não usa posicionamento flutuante do Radix; todos os afastamentos (margem da região, intervalos) estão em CSS com `--ds-space-*`, sem pixéis à mão. Em `Tooltip` e `Select` (e `DropdownMenu`) os offsets continuam em pixéis (`readSpaceToken` só está aplicado ao `Popover`), contrariamente ao que o pedido de hoje assumia; não foram alterados por estarem fora do âmbito (já está sugerida tarefa nova na DS-024).
+  - Sugestão para o planeador: tarefa transversal para aplicar `readSpaceToken` ao Tooltip, DropdownMenu e Select.
+
+**Iteração 2 — 2026-10-23**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** corrigida a falha 1 do relatório 1 (contraste axe na story `DarkTheme`). A causa provável é o axe correr durante a animação de entrada (`ds-toast-in`, opacidade 0 a 1): o toast `info`, o primeiro a abrir, ainda estava semitransparente. Os tokens de cor não foram alterados. A story `DarkTheme` ganhou um `play` que espera que os quatro toasts existam e que nenhuma animação esteja a correr (`getAnimations()`) antes de o axe medir. Com isto `Components/Toast › DarkTheme` passa.
+- **Ficheiros alterados:** `packages/ui/src/Toast/Toast.stories.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 0679d4b `fix(ui): DS-027 wait for toast entry animation in DarkTheme story before axe`
+- **Critérios de aceitação cobertos:** os da iteração 1; G1 a G3 e C1 a C5 (acessibilidade das stories).
+- **Testes escritos pelo programador:** nenhum teste unitário novo: a causa (animação em curso num navegador real) não existe em jsdom, que não anima; a cobertura é a própria story com `play`, validada por `pnpm test:a11y`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔ · test:a11y ✔ (25 suites, 171 testes).
+- **Notas para o testador:**
+  - Executei `pnpm test:a11y` uma vez após a correção (passou); convém repetir algumas vezes para confirmar a estabilidade.
+  - Sugestão para o planeador (opcional): `Variants` e `Stacked` também medem o axe durante a animação de entrada; passam hoje porque o tema claro tem folga de contraste.
+
+### DS-028 · Stack e Grid
+
+**Iteração 1 — 2026-10-23**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Stack` (flexbox), `Grid` (CSS grid) e `GridItem`, cada um com a sua pasta (`GridItem` vive na pasta `Grid`). `Stack`: `direction` (omissão `vertical`), `gap` (omissão `4`), `align`, `justify`, `wrap`, `asChild`; as props saem como `data-direction`, `data-gap`, `data-align`, `data-justify` e `data-wrap` (os três últimos só existem se a prop for dada). `Grid`: `columns` (`1|2|3|4|6|12`, omissão 1) ou `minColumnWidth` (união de tipos: as duas são mutuamente exclusivas), `gap`, `asChild`; `columns` vai para `data-columns`; `minColumnWidth` para a custom property `--ds-grid-min-column` (em `style`, como o Skeleton) e `data-responsive`, com `repeat(auto-fit, minmax(min(var(--ds-grid-min-column), 100%), 1fr))`, sem media queries. `GridItem`: `colSpan` em `data-col-span` e `--ds-grid-col-span`. `SpaceKey` (`0|1|2|3|4|5|6|8|10|12|16`) é o tipo do `gap` e é exportado de `Stack`; `gap={7}` não compila. No CSS cada chave mapeia para `var(--ds-space-*)`. Sem `role`, sem `tabIndex`, sem `order` nem `row-reverse`.
+- **Ficheiros alterados:** `packages/ui/src/Stack/{Stack.tsx,Stack.css,Stack.css.test.ts,Stack.test.tsx,Stack.stories.tsx,index.ts}` e `packages/ui/src/Grid/{Grid.tsx,Grid.css,Grid.css.test.ts,Grid.test.tsx,Grid.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 03a4aa4 `feat(ui): DS-028 add Stack and Grid layout primitives`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (sem dependências novas); C1 a C5.
+- **Testes escritos pelo programador:** `Stack.test.tsx` (omissões, cada prop em `data-*`, todas as chaves de `gap`, `@ts-expect-error` para `gap={7}`, className/ref/props/displayName, `asChild` com `<ul>` e `<li>` filhos diretos, ordem de Tab, axe); `Grid.test.tsx` (omissões, colunas, gap, `minColumnWidth` na custom property e sem `data-columns`, `style` do consumidor preservado, `@ts-expect-error` para gap, colunas e uso conjunto, `asChild`, `GridItem colSpan={2}`, className/ref, Tab, axe); `Stack.css.test.ts` e `Grid.css.test.ts` (cada chave mapeia para um token existente, sem `order`/`row-reverse`, sem `@media`, sem cores nem comprimentos fixos). Stories: `Stack/{Vertical,Horizontal,Gaps,AlignAndJustify,Wrap,AsList,DarkTheme}`, `Grid/{Columns,Responsive,Spans,AsList,DarkTheme}`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 791) · build ✔ · test:a11y ✔ (27 suites, 183 testes).
+- **Notas para o testador:**
+  - O valor de `minColumnWidth` é a única exceção a "só tokens" (documentada no JSDoc e no CSS); o `style` só leva custom properties (`--ds-grid-min-column`, `--ds-grid-col-span`), como o Skeleton.
+  - jsdom não faz layout: o número real de colunas, o `auto-fit`, o `colSpan` e o `wrap` verificam-se no Storybook (`Grid/Responsive`, `Grid/Spans`, `Stack/Wrap`; redimensionar a janela).
+  - `colSpan` maior do que `columns` cria colunas implícitas (documentado no JSDoc); não há validação em runtime.
+  - Sem `align`/`justify`, o `Stack` usa o comportamento por omissão do flexbox (esticar / início); por isso não há `data-align`/`data-justify` nesse caso.
+  - Os `style` inline das stories são só de demonstração (caixas com tokens).
+
+### DS-029 · Card
+
+**Iteração 1 — 2026-10-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardBody` e `CardFooter` numa só pasta. `Card`: `variant` (`outlined` por omissão, `elevated`), `padding` (`none|sm|md|lg`, omissão `md`) em `data-variant` e `data-padding`, e `asChild` (via `Slot`). `CardTitle` aceita `as` (`h2` a `h6`, omissão `h3`). Sem `role` nem `tabIndex`; o focus visível (`:focus-visible` com o token de focus) serve o cartão clicável feito com `asChild` sobre `<a>`. CSS só com tokens: `color-bg-surface`, `color-border-default`, `radius-lg`, `shadow-md`; a variante `elevated` tem a borda transparente (a sombra faz o limite).
+- **Ficheiros alterados:** `packages/ui/src/Card/{Card.tsx,Card.css,Card.css.test.ts,Card.test.tsx,Card.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 829c873 `feat(ui): DS-029 add Card with header, title, description, body and footer`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (sem dependências novas); C1 a C5.
+- **Testes escritos pelo programador:** `Card.test.tsx` (partes, omissões nos `data-*`, sem role/tabindex, variant e padding, `CardTitle` h3 por omissão e `as="h2"`, `asChild` com `<article>`, Tab e Enter num `<a>`, className/ref/props em cada subparte, displayName, axe); `Card.css.test.ts` (tokens, `:focus-visible`, sem cores nem comprimentos fixos). Stories: `Outlined`, `Elevated`, `Paddings`, `WithHeaderAndFooter`, `AsLink`, `InGrid` (com `Grid`, DS-028 concluída), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 813) · build ✔ · test:a11y não executado (precisa do Storybook/Playwright; o axe corre nos testes unitários).
+- **Notas para o testador:**
+  - Convém correr `pnpm test:a11y`, sobretudo `AsLink` e `DarkTheme`: a borda `outlined` e o contraste do texto secundário (`text-muted` sobre `bg-surface`) nos dois temas só se medem num navegador.
+  - Na variante `elevated` a borda é transparente; no tema escuro a sombra é pouco visível (decisão visual a avaliar).
+  - O enchimento (`padding`) é do `Card`; as subpartes não têm padding próprio, o espaçamento entre elas é um `gap` de `space-3`.
+  - Em `AsLink`, a story coloca `CardHeader`/`CardBody` (`div`) dentro de um `<a>` (permitido em HTML5); o `CardTitle` fica dentro da ligação.
+
+### DS-030 · Tabs
+
+**Iteração 1 — 2026-10-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tabs`, `TabsList`, `TabsTrigger` e `TabsContent` sobre `@radix-ui/react-tabs` (dependência nova em `packages/ui`). `Tabs` com `orientation` (`horizontal` por omissão) e `activationMode` (`automatic` por omissão) explícitos; `TabsList` exige `aria-label` ou `aria-labelledby` no tipo e faz scroll horizontal (`overflow-x: auto`); o separador ativo tem uma barra de 2px com `color-accent-default` (inferior na horizontal, no lado final na vertical). Papéis, `aria-*`, roving tabindex, `tabIndex=0` no painel e teclado (setas, Home/End, volta nas pontas, saltar desativados) vêm do Radix.
+- **Ficheiros alterados:** `packages/ui/src/Tabs/{Tabs.tsx,Tabs.css,Tabs.css.test.ts,Tabs.test.tsx,Tabs.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 06f72e4 `feat(ui): DS-030 add Tabs with list, trigger and content`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova `@radix-ui/react-tabs`); C1 a C5.
+- **Testes escritos pelo programador:** `Tabs.test.tsx` (painel do `defaultValue`, semântica tablist/tab/tabpanel, clique + `onValueChange`, controlado, separador desativado, Tab para o separador ativo e depois para o painel, setas com volta e salto de desativados, Home/End, vertical, modo manual com Enter e Espaço, ref/className, axe); `Tabs.css.test.ts` (barra de acento, scroll, `:focus-visible`, sem cores nem comprimentos fixos). Stories: `Default`, `Vertical`, `ManualActivation`, `DisabledTab`, `ManyTabs`, `Controlled`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 840) · build ✔ · test:a11y ✔ (29 suites, 197 testes; correu `pnpm test:a11y:setup` antes).
+- **Notas para o testador:**
+  - O Stylelint do projeto proíbe `px` em `box-shadow`, e não há token de largura de borda; por isso o indicador é uma `border-bottom`/`border-inline-end` de `2px` (o mesmo valor de 2px permitido já usado no anel de focus). A tarefa não fixa a espessura. Convém medir o contraste ≥ 3:1 de `accent-default` contra `bg-canvas` nos dois temas.
+  - Os `value` dos separadores entram nos ids (`aria-controls`); com espaços o axe reporta `aria-valid-attr-value` (apanhado na story `ManyTabs`, já com valores sem espaços). Está documentado no JSDoc de `TabsTrigger`.
+  - Radix: o `tablist` tem `tabindex=0` até receber focus e encaminha-o para o separador ativo; com a lista a fazer scroll não há violação `scrollable-region-focusable`.
+  - Sugestão ao planeador: um token de largura de borda/indicador (`--ds-border-width-*`) evitaria o `2px` fixo em Tabs, Card e outros.
+
+### DS-031 · Accordion
+
+**Iteração 1 — 2026-10-27**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Accordion`, `AccordionItem`, `AccordionTrigger` e `AccordionContent` sobre `@radix-ui/react-accordion` (dependência nova em `packages/ui`). `Accordion` aceita `type` (obrigatório, união discriminada `single`/`multiple` com `collapsible` só em `single`), `value`/`defaultValue`/`onValueChange`, `disabled` e `headingLevel` (2 a 6, omissão 3; passa por contexto e o `AccordionTrigger` envolve o botão num `<hN>` via `Header asChild`). O gatilho mostra o `ChevronDownIcon` (`aria-hidden`), que roda 180 graus com `data-state="open"`; o painel anima a altura com `--radix-accordion-content-height`. Com `prefers-reduced-motion` a rotação e a animação de altura ficam desligadas. `dir` e `orientation` foram retirados do tipo.
+- **Ficheiros alterados:** `packages/ui/src/Accordion/{Accordion.tsx,Accordion.css,Accordion.css.test.ts,Accordion.test.tsx,Accordion.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `packages/ui/package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 9e7c233 `feat(ui): DS-031 add Accordion with items, triggers and content`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3 (dependência nova `@radix-ui/react-accordion`); C1 a C5.
+- **Testes escritos pelo programador:** `Accordion.test.tsx` (semântica botão/título/região, `aria-expanded`/`aria-controls`/`aria-labelledby`, `headingLevel`, single com e sem `collapsible`, multiple com array, string em single, `defaultValue`, controlado, item e acordeão `disabled`, Tab, Enter e Espaço, setas com volta, Home/End, salto de desativados, Tab para dentro do painel aberto, ref/className/displayName, axe aberto/fechado/desativado); `Accordion.css.test.ts` (rotação, altura, reduced motion, `:focus-visible`, sem cores nem comprimentos fixos). Stories: `Single`, `SingleCollapsible`, `Multiple`, `DisabledItem`, `LongContent`, `Controlled`, `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 883) · build ✔ · test:a11y ✔ (30 suites, 204 testes)
+- **Notas para o testador:**
+  - O Radix desmonta o conteúdo fechado (não só `hidden`): o texto do painel fechado nem existe no DOM, por isso não é focável nem lido. Só o painel aberto tem `role="region"`.
+  - Em `single` sem `collapsible` o item aberto mantém-se aberto ao clicar; `onValueChange` não é chamado nesse caso.
+  - A rotação e a animação de altura só se veem num navegador (`prefers-reduced-motion` verifica-se nas DevTools).
+  - Convém ver `DarkTheme` e `DisabledItem` no Storybook (aspeto e contraste do gatilho desativado).
+  - Sem sugestões novas para o planeador além do token de largura de borda já registado em DS-030 (o `2px` do anel de focus mantém-se).
+
+### DS-034 · Pagination
+
+**Iteração 1 — 2026-10-27**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Pagination` (`<nav aria-label>` com `<ul>`/`<li>` de botões) e o hook `usePagination`, exportados em `packages/ui/src/index.ts`. Os botões são `Button`/`IconButton` (`ghost`; a página atual `primary` com `aria-current="page"`), com `ChevronLeftIcon`/`ChevronRightIcon`. Anterior/seguinte nos limites usam `aria-disabled="true"` e `data-disabled`, sem `disabled` nem `tabIndex`, e o clique é ignorado; a exceção face ao `Button` está no JSDoc e nas descrições das stories `FirstPage` e `LastPage`. Reticências em `<li aria-hidden>` (não focáveis); com `pageCount` grande mostra sempre `2*siblingCount + 5` entradas (ex.: `1 … 4 5 6 … 20`). `pageCount <= 1` mostra a página 1 com os dois botões desativados. A `Pagination` usa o próprio `usePagination` (`totalItems = pageCount`, `pageSize = 1`) para o limite da página e o modo controlado/não controlado. Dependências novas: nenhuma.
+- **Ficheiros alterados:** `packages/ui/src/Pagination/{Pagination.tsx,usePagination.ts,Pagination.css,Pagination.css.test.ts,Pagination.test.tsx,Pagination.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** a00a754 `feat(ui): DS-034 add Pagination and usePagination`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** `Pagination.test.tsx` (semântica nav/lista/botões, `aria-current`, etiquetas personalizadas, clique/anterior/seguinte, limites com `aria-disabled` sem `disabled`, `pageCount` 1 e 0, página fora do intervalo, reticências para `pageCount=20` nas páginas 1, 5 e 20, `siblingCount={2}`, controlado e não controlado, Tab por ordem, Enter/Espaço com focus mantido, "anterior" focável e inerte na página 1, focus em "seguinte" ao chegar à última página, ref/className/size/displayName, axe; hook: 95 itens/10 por página nas páginas 1 e 10, página fora do intervalo, 0 itens, `setPage`/`next`/`previous`, correção quando `totalItems` diminui, controlado e não controlado); `Pagination.css.test.ts`. Stories: `Default`, `ManyPages`, `FirstPage`, `LastPage`, `SinglePage`, `Sizes`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 925) · build ✔ · test:a11y ✔ (31 suites, 213 testes)
+- **Notas para o testador:**
+  - `endIndex` do hook é exclusivo (`items.slice(startIndex, endIndex)`): 95 itens, 10 por página, página 10 dá `startIndex=90`, `endIndex=95`; com 0 itens ambos são 0. A especificação não fixa se é inclusivo ou exclusivo.
+  - Quando `totalItems` diminui, o hook não controlado corrige o estado durante o render (o lint `react-hooks/set-state-in-effect` proíbe fazê-lo num efeito) e não chama `onPageChange`; no modo controlado só limita o valor devolvido, porque o estado é do consumidor.
+  - O `@storybook/test` não está instalado (G2 só permite dependências nomeadas), por isso o `play` de `KeyboardInteraction` usa `click()` no botão focado (o que o Enter faz num `<button>`) e verifica que `document.activeElement` nunca sai de "seguinte". As teclas reais Enter/Espaço estão cobertas nos testes unitários com `userEvent`.
+  - O botão desativado usa o aspeto `[data-disabled]` do `Button` (texto `text-disabled` sobre `bg-subtle`); convém ver `FirstPage`, `LastPage` e `DarkTheme` no Storybook. Texto desativado está isento de contraste mínimo no WCAG.
+  - Sugestão ao planeador: a lógica de `aria-disabled` focável repete-se à mão em dois botões; se a DS-035 ou outro componente precisar do mesmo padrão, avaliar uma prop no `Button` (por exemplo `focusableWhenDisabled`).
+
+### DS-035 · DataTable: Table com ordenação e paginação integradas
+
+**Iteração 1 — 2026-10-28**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `DataTable<T>` genérico (`forwardRef` com cast para manter o genérico; `ref` aponta para o `div` raiz), implementado só por composição de `Table`, `useTableSort`, `usePagination` e `Pagination`. As colunas são `DataTableColumn<T>` (`accessor: keyof T | (row) => unknown`, `cell`, `sortable`, `compare`, `align`, `numeric`). A tabela é nomeada pela `caption` (`aria-labelledby` para o id da legenda, que `captionHidden` esconde só visualmente). `usePagination` corre sobre `data.length` e a ordenação sobre todos os dados antes de `slice(startIndex, endIndex)`; o `onSortChange` interno chama `setPage(1)` (no modo controlado pede `onPageChange(1)`) e depois o `onSortChange` do consumidor. O rodapé tem o resumo `<início>–<fim> of <total>` (`getRangeLabel`) num `<p aria-live="polite">` e a `Pagination`. Com `data` vazio mostra uma linha com `colSpan` e sem rodapé; `pageSize={0}` mostra todas as linhas sem rodapé. Dependências novas: nenhuma.
+- **Ficheiros alterados:** `packages/ui/src/DataTable/{DataTable.tsx,DataTable.css,DataTable.css.test.ts,DataTable.test.tsx,DataTable.stories.tsx,index.ts}` (novos), `packages/ui/src/index.ts`, `packages/ui/src/styles.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 21f4e4f `feat(ui): DS-035 add DataTable with sorting and pagination`
+- **Critérios de aceitação cobertos:** todos os da tarefa; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** `DataTable.test.tsx` (25 linhas com `pageSize=10`: 10 linhas e 3 páginas, 5 linhas na página 3, ordenar `desc` por coluna numérica põe o maior valor global na página 1, ordenar na página 2 volta à 1, `pageSize={0}`, `data=[]` com `colSpan` e sem paginação, mensagem vazia personalizada, `cell` personalizado, accessor em função, `compare`, `numeric`, só colunas `sortable` têm botão, `sort` controlado, `page` controlado (e pedido de página 1 ao ordenar), ambos controlados, `getRangeLabel`, ref/className/props nativas/displayName, `size`/`striped`, `data` não alterado, `@ts-expect-error` para accessor inexistente, axe com dados e vazia, região `aria-live` atualizada com focus mantido no botão da paginação, ordem de tabulação cabeçalhos → células → paginação, ordenar e mudar de página só com teclado); `DataTable.css.test.ts`. Stories: `Default` (50 linhas), `WithCustomCells` (Badge e IconButton), `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`), `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 963) · build ✔ · test:a11y ✔ (32 suites, 220 testes; correu `pnpm test:a11y:setup` antes)
+- **Notas para o testador:**
+  - Com `pageSize={0}` o rodapé inteiro (resumo e paginação) desaparece; a especificação só diz que não há `Pagination`, e optei por esconder também o resumo.
+  - O tipo de `DataTable` é uma função genérica com `ref`; nas stories usa-se `component: DataTable<Person>` (instantiation expression) para o Storybook tipar as props.
+  - Como na DS-034, o `play` de `KeyboardInteraction` usa `focus()` e `click()` (o que Enter faz num `<button>`), porque `@storybook/test` não está instalado; as teclas reais estão nos testes unitários com `userEvent`.
+  - `aria-live` está no `<p>` do resumo, que só existe com dados e paginação; o leitor de ecrã anuncia a alteração de texto ao mudar de página. Convém confirmar num leitor real.
+  - O `Table` exige `aria-label`/`aria-labelledby`; o `DataTable` usa `aria-labelledby` para a `caption`, por isso o `region` e a `table` têm o mesmo nome.
+  - Sem sugestões novas para o planeador.

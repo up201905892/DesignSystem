@@ -1,0 +1,48 @@
+.ds-pagination {
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-md);
+  color: var(--ds-color-text-default);
+}
+
+.ds-pagination[data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-pagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-pagination__item {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+/* Square buttons; two classes so they win over the padding of the Button sizes. */
+.ds-pagination .ds-pagination__button {
+  min-width: var(--ds-space-10);
+  padding-inline: var(--ds-space-2);
+}
+
+.ds-pagination[data-size='sm'] .ds-pagination__button {
+  min-width: var(--ds-space-8);
+}
+
+.ds-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--ds-space-10);
+  color: var(--ds-color-text-muted);
+  user-select: none;
+}
+
+.ds-pagination[data-size='sm'] .ds-pagination__ellipsis {
+  min-width: var(--ds-space-8);
+}
