@@ -12,6 +12,9 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | 2026-10-12 | Responder | DS-003 | Passo pnpm test:a11y:setup já acrescentado ao ci.yml e ao diario.yml em 2026-10-11, antes de pnpm test:a11y. Pedido resolvido; não repetir. |
 | 2026-10-16 | Aprovar | DS-021 a DS-035 | |
 | 2026-10-16 | Aprovar | DS-050 | |
+| 2026-11-04 | Aprovar | DS-036, DS-037, DS-039, DS-041 a DS-049 | |
+| 2026-11-04 | Aprovar | DS-051 a DS-057 | |
+| 2026-11-04 | Alterar | DS-038, DS-040 | Passam a depender também de DS-051 a DS-057, para a medição do bundle e a auditoria de acessibilidade correrem sobre o código final dos componentes. |
 
 Decisões possíveis:
 
