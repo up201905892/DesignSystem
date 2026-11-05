@@ -752,3 +752,20 @@ Modelo de entrada:
   - O `LICENSE` na raiz e nos pacotes são cópias do mesmo texto.
   - Não se verificou o tarball (`pnpm pack`): é a DS-039.
   - Sem sugestões novas para o planeador.
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select)
+
+**Iteração 1 — 2026-11-05**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tooltip` e `DropdownMenuContent` passam a ter `sideOffset?: SpaceStep` (tipo do Radix omitido, como no `Popover`), com omissões `'2'` e `'1'`, convertidas com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')` nos três overlays (`collisionPadding` do Radix também omitido nos tipos do `Tooltip` e do `DropdownMenuContent`). O `Select` usa `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}`, sem props novas. JSDoc de `sideOffset` indica que é um passo da escala `--ds-space-*`.
+- **Ficheiros alterados:** `packages/ui/src/Tooltip/{Tooltip.tsx,Tooltip.offset.test.tsx,Tooltip.stories.tsx}`, `packages/ui/src/DropdownMenu/{DropdownMenu.tsx,DropdownMenu.offset.test.tsx,DropdownMenu.stories.tsx}`, `packages/ui/src/Select/{Select.tsx,Select.offset.test.tsx,Select.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 1983c2a `feat(ui): DS-051 use spacing tokens for Tooltip, DropdownMenu and Select offsets`
+- **Critérios de aceitação cobertos:** todos; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** três ficheiros `*.offset.test.tsx` com `vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')` (leitura de `--ds-space-<passo>` e `--ds-space-2`; com `sideOffset="4"` lê `--ds-space-4` no `Tooltip` e no `DropdownMenuContent`; `@ts-expect-error` para `sideOffset={6}` nos dois). Os testes existentes não usavam `sideOffset` numérico e não foram alterados. Stories `Offset` no `Tooltip` (`bottom`, passo `4`), `DropdownMenu` (passo `3`) e `Select` (passo `1`), com `play` que mede o intervalo gatilho/conteúdo e falha se diferir mais de 1px. Não escrevi teste axe novo: os testes axe existentes com os overlays abertos e o `test:a11y` das stories cobrem-no.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991) · build ✔ · test:a11y ✔ (32 suites, 223 testes, inclui as três `Offset`)
+- **Notas para o testador:**
+  - O `grep` de `sideOffset|collisionPadding` com número literal em `.tsx` fora de testes e stories não devolve resultados (corrido após o commit).
+  - O `play` da story `Offset` usa um elemento sonda com `height: var(--ds-space-N)` para obter o valor em pixéis, em vez de `readSpaceToken` (não exportado pela biblioteca).
+  - No `Select`, o `play` abre a lista com `ArrowDown` despachado no gatilho, como a story `KeyboardInteraction`.
+  - Sem sugestões novas para o planeador.

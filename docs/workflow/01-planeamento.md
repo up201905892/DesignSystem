@@ -58,7 +58,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Planeado |
 | DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Planeado |
 | DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
-| DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Planeado |
+| DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Pronto para teste |
 | DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Planeado |
 | DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Planeado |
 | DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Planeado |
@@ -1947,6 +1947,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-024, DS-027; registo diário)
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-05 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-05 · programador · Em desenvolvimento → Pronto para teste · commit 1983c2a
 
 ### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px`
 
