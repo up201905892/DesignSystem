@@ -43,7 +43,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
-| DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Em desenvolvimento |
+| DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Pronto para teste |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Planeado |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Proposta |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
@@ -1436,6 +1436,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): scope npm `@up201905892` e licença MIT decididos; marcas de decisão pendente removidas e placeholder substituído
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 - 2026-11-05 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-05 · programador · Em desenvolvimento → Pronto para teste · commit 3abe004
 
 ### DS-037 · Changesets: versionamento e changelog
 
