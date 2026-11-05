@@ -177,6 +177,34 @@ export const KeyboardInteraction: Story = {
   },
 };
 
+export const Offset: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: '16rem' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const trigger = canvasElement.querySelector<HTMLElement>('[role="combobox"]');
+    if (!trigger) throw new Error('No trigger');
+    trigger.focus();
+    trigger.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }),
+    );
+    await wait(300);
+    const content = document.querySelector<HTMLElement>('.ds-select__content');
+    if (!content) throw new Error('Select did not open');
+    const probe = document.createElement('div');
+    probe.style.height = 'var(--ds-space-1)';
+    document.body.append(probe);
+    const expected = probe.getBoundingClientRect().height;
+    probe.remove();
+    const gap = content.getBoundingClientRect().top - trigger.getBoundingClientRect().bottom;
+    if (Math.abs(gap - expected) > 1) throw new Error(`Gap is ${gap}px, expected ${expected}px`);
+  },
+};
+
 export const DarkTheme: Story = {
   parameters: { theme: 'dark' },
   render: (args) => (

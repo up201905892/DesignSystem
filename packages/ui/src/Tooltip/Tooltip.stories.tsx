@@ -76,6 +76,23 @@ export const KeyboardInteraction: Story = {
   },
 };
 
+export const Offset: Story = {
+  args: { side: 'bottom', sideOffset: '4', defaultOpen: true },
+  play: async ({ canvasElement }) => {
+    await wait(300);
+    const trigger = canvasElement.querySelector<HTMLElement>('button');
+    const content = document.querySelector<HTMLElement>('[role="tooltip"]')?.parentElement;
+    if (!trigger || !content) throw new Error('Tooltip did not open');
+    const probe = document.createElement('div');
+    probe.style.height = 'var(--ds-space-4)';
+    document.body.append(probe);
+    const expected = probe.getBoundingClientRect().height;
+    probe.remove();
+    const gap = content.getBoundingClientRect().top - trigger.getBoundingClientRect().bottom;
+    if (Math.abs(gap - expected) > 1) throw new Error(`Gap is ${gap}px, expected ${expected}px`);
+  },
+};
+
 export const DarkTheme: Story = {
   args: { defaultOpen: true },
   parameters: { theme: 'dark' },

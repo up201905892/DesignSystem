@@ -8,6 +8,7 @@ import {
 import * as RadixSelect from '@radix-ui/react-select';
 import { CheckIcon, ChevronDownIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
+import { readSpaceToken } from '../utils/spaceToken';
 import { useFieldControl } from '../Field';
 
 export interface SelectProps extends Omit<
@@ -136,7 +137,12 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
         </RadixSelect.Icon>
       </RadixSelect.Trigger>
       <RadixSelect.Portal>
-        <RadixSelect.Content className="ds-select__content" position="popper" sideOffset={4}>
+        <RadixSelect.Content
+          className="ds-select__content"
+          position="popper"
+          sideOffset={readSpaceToken('1')}
+          collisionPadding={readSpaceToken('2')}
+        >
           <RadixSelect.Viewport className="ds-select__viewport">{children}</RadixSelect.Viewport>
         </RadixSelect.Content>
       </RadixSelect.Portal>

@@ -194,6 +194,34 @@ export const KeyboardInteraction: Story = {
   },
 };
 
+export const Offset: Story = {
+  args: { defaultOpen: true },
+  render: (args) => (
+    <DropdownMenu {...args}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary">Actions</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side="bottom" sideOffset="3">
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem>Duplicate</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvasElement }) => {
+    await wait(300);
+    const trigger = canvasElement.querySelector<HTMLElement>('button');
+    const menu = document.querySelector<HTMLElement>('[role="menu"]');
+    if (!trigger || !menu) throw new Error('Menu did not open');
+    const probe = document.createElement('div');
+    probe.style.height = 'var(--ds-space-3)';
+    document.body.append(probe);
+    const expected = probe.getBoundingClientRect().height;
+    probe.remove();
+    const gap = menu.getBoundingClientRect().top - trigger.getBoundingClientRect().bottom;
+    if (Math.abs(gap - expected) > 1) throw new Error(`Gap is ${gap}px, expected ${expected}px`);
+  },
+};
+
 export const DarkTheme: Story = {
   parameters: { theme: 'dark' },
   args: { defaultOpen: true },
