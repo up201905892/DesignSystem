@@ -36,5 +36,5 @@ export const DarkTheme: Story = {
 
 `src/foundations/*.stories.tsx` document colours, spacing, typography, radii and
 shadows. They are generated from the `tokens` and `themes` objects of
-`@ds/tokens`, so there are no hand-written token lists. `@ds/tokens` is built
+`@up201905892/tokens`, so there are no hand-written token lists. `@up201905892/tokens` is built
 automatically before `storybook`, `build-storybook`, `test:a11y` and `typecheck`.

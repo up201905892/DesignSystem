@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 
 /**
- * The CSS tests read the generated token files from `@ds/tokens/dist`, which only
+ * The CSS tests read the generated token files from `@up201905892/tokens/dist`, which only
  * exist after the Style Dictionary build. Run it first so `pnpm test` works on a
  * clean clone without a previous `pnpm build`.
  */

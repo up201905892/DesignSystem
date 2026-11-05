@@ -9,7 +9,13 @@ import {
   type ReactNode,
 } from 'react';
 import * as RadixToast from '@radix-ui/react-toast';
-import { CircleCheckIcon, CircleXIcon, InfoIcon, TriangleAlertIcon, XIcon } from '@ds/icons';
+import {
+  CircleCheckIcon,
+  CircleXIcon,
+  InfoIcon,
+  TriangleAlertIcon,
+  XIcon,
+} from '@up201905892/icons';
 import { IconButton } from '../IconButton';
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'danger';

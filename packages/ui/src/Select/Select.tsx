@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 import * as RadixSelect from '@radix-ui/react-select';
-import { CheckIcon, ChevronDownIcon } from '@ds/icons';
+import { CheckIcon, ChevronDownIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
 import { useFieldControl } from '../Field';
 

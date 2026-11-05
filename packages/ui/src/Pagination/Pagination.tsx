@@ -1,5 +1,5 @@
 import { forwardRef, type HTMLAttributes } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@ds/icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@up201905892/icons';
 import { Button } from '../Button';
 import { IconButton } from '../IconButton';
 import { cx } from '../utils/cx';

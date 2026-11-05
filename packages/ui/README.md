@@ -1,6 +1,21 @@
-# @ds/ui
+# @up201905892/ui
 
 React components of the design system.
+
+## Installation
+
+```
+pnpm add @up201905892/ui react react-dom
+```
+
+## Usage
+
+```tsx
+import '@up201905892/ui/styles.css';
+import { Button } from '@up201905892/ui';
+
+<Button>Save</Button>;
+```
 
 ## How to create a component
 

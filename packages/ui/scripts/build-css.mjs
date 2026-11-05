@@ -1,6 +1,6 @@
 // Bundles src/styles.css into a single dist/styles.css by inlining every
 // `@import '<specifier>';` (relative paths or package exports such as
-// '@ds/tokens/themes.css'). No transformation beyond inlining.
+// '@up201905892/tokens/themes.css'). No transformation beyond inlining.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

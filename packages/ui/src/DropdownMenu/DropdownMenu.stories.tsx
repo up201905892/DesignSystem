@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { EllipsisIcon, PencilIcon, SettingsIcon, Trash2Icon, UserIcon } from '@ds/icons';
+import { EllipsisIcon, PencilIcon, SettingsIcon, Trash2Icon, UserIcon } from '@up201905892/icons';
 import { Button } from '../Button';
 import { IconButton } from '../IconButton';
 import {

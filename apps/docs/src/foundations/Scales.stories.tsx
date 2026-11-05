@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { tokens } from '@ds/tokens';
+import { tokens } from '@up201905892/tokens';
 import type { CSSProperties } from 'react';
 import { asTree, codeStyle, flatten, Page, Section } from './utils';
 

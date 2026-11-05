@@ -12,7 +12,7 @@ const config: StorybookConfig = {
     options: {},
   },
   // Workspace packages resolve to their TypeScript source ("source" export condition),
-  // so Storybook does not need a previous build of @ds/icons.
+  // so Storybook does not need a previous build of @up201905892/icons.
   viteFinal: (viteConfig) => ({
     ...viteConfig,
     resolve: {
