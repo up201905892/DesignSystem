@@ -1299,3 +1299,37 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - O `play` de `KeyboardInteraction` usa `focus()` e `click()` em vez de `userEvent` (sem `@storybook/test`); a migração está prevista na tarefa DS-054, e as teclas reais estão cobertas nos testes unitários.
 - O anúncio real da região `aria-live` num leitor de ecrã, o aspeto visual e o contraste no tema escuro não foram inspecionados num navegador (o axe das stories passa nos dois temas).
 - Texto muito longo sem espaços pode transbordar a célula (não testável em jsdom).
+
+### DS-036 · Metadados dos pacotes — Relatório 1 — 2026-11-05
+
+- **Commit testado:** 3abe004 (implementação) e 66a8da1 (registo), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 60 ficheiros, 984 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 220 testes, axe em Chromium; Storybook arranca com os novos nomes) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Nomes `@up201905892/*`: `name` dos três `package.json`; `grep -r "@ds/"` fora de `docs/workflow/` só encontra o teste que verifica essa ausência; `pnpm-lock.yaml` sem `@ds/`.
+- [x] Metadados: `private` removido nos três; `version`, `description`, `license` MIT, `author`, `repository.directory`, `homepage`, `keywords`, `publishConfig.access=public` presentes; `apps/docs` mantém `"private": true`.
+- [x] `ui`: `type: module`, `exports` (`.` com `types`/`import` e `types`/`require` separados `index.d.ts`/`index.d.cts`, `./styles.css`, `./package.json`), `main`/`module`/`types`, `sideEffects: ["**/*.css"]`, `files: ["dist"]`; ficheiros existem após o build.
+- [x] `ui` dependências: `react`/`react-dom` em `peerDependencies`; Radix e `icons` (`workspace:^`) em `dependencies`; ferramentas e `tokens` em `devDependencies`; `dist/index.js` só importa `@radix-ui/*`, `@up201905892/icons`, `react` e `react/jsx-runtime` (externos).
+- [x] `icons`: `exports` com `.` e `./package.json`, `sideEffects: false`, `files: ["dist", "LICENSE-LUCIDE"]`.
+- [x] `tokens`: `exports` com `.`, `./tokens.css`, `./themes.css`, `./package.json`; `sideEffects` CSS; `files: ["dist"]`.
+- [x] `LICENSE` MIT na raiz e nos três pacotes (idênticos, `cmp`); `README.md` mínimo em cada pacote com nome, instalação e exemplo.
+- [x] A partir de `apps/docs`: `require('@up201905892/ui')` e `import('@up201905892/ui')` devolvem `Button`; `import.meta.resolve('@up201905892/ui/styles.css')` resolve para `packages/ui/dist/styles.css`; `apps/docs` importa `@up201905892/tokens` pelos `exports`.
+- [x] G1 a G3 (lint, tipos, testes e build verdes; sem componentes novos).
+
+**Testes exigidos:** `packages/ui/src/package-metadata.test.ts` existe e é substantivo (caminhos de `exports`/`main`/`module`/`types` existem, `files` sem `src`, chaves por pacote, ESM/CJS separados, peers, externos no `dist`, ausência de `@ds/`). Verificação manual no terminal repetida por mim com sucesso. Acessibilidade: não aplicável, `test:a11y` verde.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- `repository.url`, `homepage`, `author` e copyright assumem `up201905892` (derivado do `origin`); o João deve confirmar o nome próprio.
+- O `exports["."]` do `icons` mantém a condição `source` apontando para `src`, que não é publicado; só afeta quem configure essa condição personalizada. Convém reavaliar na DS-039 (tarball).
+- `tokens` e `icons` têm um só `types` (`index.d.ts`) para ESM e CJS, como a especificação pede.
+- Tarball (`pnpm pack`) não verificado: é a DS-039.
