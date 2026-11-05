@@ -2,6 +2,22 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-05
+
+- **Decisões para o João:**
+  1. **Dados de autor da DS-036:** `author`, `repository`, `homepage` e o copyright dos `LICENSE` estão como `up201905892` (tirado do `origin`). Queres o teu nome próprio? Se sim, linha "Responder" em `aprovacoes.md`.
+  2. **DS-038 e DS-040 (revistas) aguardam a tua aprovação.** Passaram a depender das DS-051 a DS-057. Enquanto estão `Proposta`, ficam bloqueadas DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049.
+  3. DS-044 e DS-045 (app de exemplo) não dependem das DS-051 a DS-057. Queres acrescentar essa dependência ("Alterar")?
+  4. DS-039 deve reavaliar a condição `source` do `exports` de `@up201905892/icons` (`src` não é publicado). Fica registado na DS-039.
+  5. Para a DS-037: a mudança de `sideOffset` do Tooltip (número → `SpaceStep`) é incompatível e deve constar do primeiro changelog.
+  6. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (`.github/` é só teu); DataTable no Storybook e `pageSize={0}` como no registo de 2026-10-28.
+- **Concluídas:** DS-036 (metadados dos pacotes, nomes `@up201905892/*`, licença MIT), DS-051 (afastamentos dos overlays por tokens). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-036, DS-051 (zero falhas).
+- **Desenvolvidas:** DS-036, DS-051 (limite de 2 por execução).
+- **Decisões aplicadas:** aprovação de DS-036, DS-037, DS-039, DS-041 a DS-049 e DS-051 a DS-057; alteração de DS-038 e DS-040 (continuam `Proposta`).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** na próxima execução, DS-037 (Alta), depois DS-052/DS-054/DS-056 (Média). Sem propostas novas: há 6 tarefas `Planeado` com dependências satisfeitas.
+
 ## 2026-11-04
 
 - **Decisões para o João:**
