@@ -350,6 +350,15 @@ Modelo de entrada:
 - **Documentação:** READMEs mínimos dos três pacotes (nome, instalação, exemplo); a versão completa é da DS-046. Sem alterações de interface, logo sem stories novas; as existentes continuam a passar no `test:a11y` (inclui tema escuro). Sem `TODO` na tarefa.
 - **Lições:** `author`, `repository`, `homepage` e copyright assumem `up201905892` (derivado do `origin`); o João deve confirmar o nome próprio. O `exports["."]` do `icons` mantém a condição `source` para `src` (não publicado): reavaliar na DS-039 (tarball). `pnpm pack` não foi verificado (DS-039).
 
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) — concluída a 2026-11-05
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-05), commit 1983c2a (implementação); sem commits de código de produção depois do commit testado (2ab813e e 872d44a são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Tooltip` (omissão `'2'`) e `DropdownMenuContent` (omissão `'1'`) com `sideOffset?: SpaceStep` convertido por `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')` nos três overlays; `Select` usa `readSpaceToken('1')` no `sideOffset`, sem props novas. Passar um número a `sideOffset` é erro de compilação.
+- **Changeset:** não aplicável por agora (os pacotes já são públicos desde a DS-036, mas a pasta `.changeset/` e a configuração só chegam com a DS-037, `Planeado`; um ficheiro agora seria inerte). A alteração de `sideOffset` (de número para `SpaceStep`) deve constar do changelog da primeira versão, na DS-037.
+- **Documentação:** JSDoc de `sideOffset` com a escala `--ds-space-*`; stories `Offset` (com `play` que mede o intervalo em browser) no Tooltip, DropdownMenu e Select, mais as `DarkTheme` existentes, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** nos testes unitários `--ds-space-2` serve de omissão e de `collisionPadding`, por isso não os distinguem; a medição real está nas stories `Offset`. Sugestão ao planeador: a mudança de tipo de `sideOffset` no Tooltip é incompatível para quem passava números; registar no changelog da DS-037.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
