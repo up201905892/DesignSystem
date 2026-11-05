@@ -43,7 +43,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
-| DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Aprovado |
+| DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Planeado |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Proposta |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
@@ -1439,6 +1439,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-05 · programador · Em desenvolvimento → Pronto para teste · commit 3abe004
 - 2026-11-05 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-05 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-11-05 · finalizador · Aprovado → Concluído · relatório 1 aprovado (3abe004, 0eaa8b4); changeset não aplicável (sem .changeset/, configuração na DS-037; pacotes em 0.0.0)
 
 ### DS-037 · Changesets: versionamento e changelog
 
