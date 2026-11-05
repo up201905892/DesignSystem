@@ -1333,3 +1333,34 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - O `exports["."]` do `icons` mantém a condição `source` apontando para `src`, que não é publicado; só afeta quem configure essa condição personalizada. Convém reavaliar na DS-039 (tarball).
 - `tokens` e `icons` têm um só `types` (`index.d.ts`) para ESM e CJS, como a especificação pede.
 - Tarball (`pnpm pack`) não verificado: é a DS-039.
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento — Relatório 1 — 2026-11-05
+
+- **Commit testado:** 1983c2a (implementação) e 2ab813e (registo), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 63 ficheiros, 991 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 223 testes, inclui as três `Offset` e as `DarkTheme`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Tooltip`: `sideOffset?: SpaceStep`, omissão `'2'`, `readSpaceToken(sideOffset)`; `collisionPadding={readSpaceToken('2')}` (diff do commit).
+- [x] `DropdownMenuContent`: `sideOffset?: SpaceStep`, omissão `'1'`, `readSpaceToken`; `collisionPadding` `readSpaceToken('2')`.
+- [x] `Select`: `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}`, sem props novas.
+- [x] Número em `sideOffset` é erro de compilação: `sideOffset` e `collisionPadding` omitidos do tipo do Radix; os `@ts-expect-error` estão em ficheiros incluídos no `tsc` e o typecheck passa (se o erro não existisse, falharia).
+- [x] `grep -nE "(sideOffset|collisionPadding)(=\{| \?\? | = )[0-9]"` em `.tsx` de `packages/ui/src` fora de testes e stories: sem resultados (corrido por mim).
+- [x] JSDoc de `sideOffset` no `Tooltip` e no `DropdownMenuContent` refere a escala `--ds-space-*`.
+- [x] Testes e stories existentes de DS-018, DS-023 e DS-026 continuam verdes sem alteração de conteúdo; nenhum outro uso de `sideOffset` numérico em `packages/ui` ou `apps`.
+- [x] G1 a G3 (sem dependências novas); C1 a C5 (ficheiros acrescentados às pastas existentes).
+
+**Testes exigidos:** três `*.offset.test.tsx` com `vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')`: leitura de `--ds-space-<passo>` e `--ds-space-2`, `sideOffset="4"` lê `--ds-space-4` no `Tooltip` e no `DropdownMenuContent`, `@ts-expect-error` para `sideOffset={6}` nos dois. Stories `Offset` (Tooltip, DropdownMenu, Select) com `play` que mede o intervalo em browser real com tolerância de 1px e passam no `test:a11y`. Axe com overlays abertos coberto pelos testes existentes e pelo `test:a11y`. Os testes são substantivos.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Nos testes unitários, `--ds-space-2` serve tanto de omissão do `Tooltip`/`Select` como de `collisionPadding`, por isso não distinguem os dois usos; a cobertura da medição real está nas stories `Offset`.
+- Casos limite (tema escuro, `disabled`, modo controlado) não são afetados: só mudam os valores numéricos dos afastamentos.
