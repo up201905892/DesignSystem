@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { themes, tokens } from '@ds/tokens';
+import { themes, tokens } from '@up201905892/tokens';
 import { asTree, codeStyle, flatten, Page, Section } from './utils';
 
 const meta = {

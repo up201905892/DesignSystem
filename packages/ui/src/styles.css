@@ -1,6 +1,6 @@
 /* Single CSS entry of the library; the build inlines everything. Order matters. */
-@import '@ds/tokens/tokens.css';
-@import '@ds/tokens/themes.css';
+@import '@up201905892/tokens/tokens.css';
+@import '@up201905892/tokens/themes.css';
 @import './styles/base.css';
 @import './styles/focus.css';
 @import './styles/motion.css';

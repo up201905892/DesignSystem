@@ -341,6 +341,24 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `WithCustomCells`, `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** com `pageSize={0}` o resumo também desaparece (decisão do programador). O `play` de `KeyboardInteraction` usa `focus()`/`click()`; migração para `@storybook/test` prevista na DS-054. Anúncio `aria-live` num leitor de ecrã, aspeto visual, contraste no tema escuro e transbordo de texto longo sem espaços só verificados por CSS e axe (não inspecionados num navegador).
 
+### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença — concluída a 2026-11-05
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-05), commit 3abe004 (implementação) e 66a8da1 (registo); sem commits de código de produção depois do commit testado (0eaa8b4 é só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** pacotes renomeados para `@up201905892/tokens`, `@up201905892/icons` e `@up201905892/ui` e deixam de ser privados (`apps/docs` continua privado); metadados de publicação (`license` MIT, `author`, `repository`, `homepage`, `keywords`, `publishConfig.access=public`); `exports`, `main`/`module`/`types`, `sideEffects` e `files` por pacote (o `ui` separa declarações ESM e CJS e exporta `./styles.css`); dependências do `ui` arrumadas (peers, Radix e `icons` em `dependencies`, `tokens` em `devDependencies`, tudo externo no `dist`); `LICENSE` na raiz e nos pacotes; `README.md` mínimo em cada pacote; teste `packages/ui/src/package-metadata.test.ts`.
+- **Changeset:** não aplicável (a tarefa só altera metadados e nomes, os pacotes continuam em 0.0.0 sem lançamento anterior e a pasta `.changeset/` ainda não existe; a configuração do Changesets e a primeira versão são da DS-037, sem a qual um ficheiro de changeset seria inerte)
+- **Documentação:** READMEs mínimos dos três pacotes (nome, instalação, exemplo); a versão completa é da DS-046. Sem alterações de interface, logo sem stories novas; as existentes continuam a passar no `test:a11y` (inclui tema escuro). Sem `TODO` na tarefa.
+- **Lições:** `author`, `repository`, `homepage` e copyright assumem `up201905892` (derivado do `origin`); o João deve confirmar o nome próprio. O `exports["."]` do `icons` mantém a condição `source` para `src` (não publicado): reavaliar na DS-039 (tarball). `pnpm pack` não foi verificado (DS-039).
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) — concluída a 2026-11-05
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-05), commit 1983c2a (implementação); sem commits de código de produção depois do commit testado (2ab813e e 872d44a são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Tooltip` (omissão `'2'`) e `DropdownMenuContent` (omissão `'1'`) com `sideOffset?: SpaceStep` convertido por `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')` nos três overlays; `Select` usa `readSpaceToken('1')` no `sideOffset`, sem props novas. Passar um número a `sideOffset` é erro de compilação.
+- **Changeset:** não aplicável por agora (os pacotes já são públicos desde a DS-036, mas a pasta `.changeset/` e a configuração só chegam com a DS-037, `Planeado`; um ficheiro agora seria inerte). A alteração de `sideOffset` (de número para `SpaceStep`) deve constar do changelog da primeira versão, na DS-037.
+- **Documentação:** JSDoc de `sideOffset` com a escala `--ds-space-*`; stories `Offset` (com `play` que mede o intervalo em browser) no Tooltip, DropdownMenu e Select, mais as `DarkTheme` existentes, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** nos testes unitários `--ds-space-2` serve de omissão e de `collisionPadding`, por isso não os distinguem; a medição real está nas stories `Offset`. Sugestão ao planeador: a mudança de tipo de `sideOffset` no Tooltip é incompatível para quem passava números; registar no changelog da DS-037.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

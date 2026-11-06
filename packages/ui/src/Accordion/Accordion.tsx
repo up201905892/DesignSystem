@@ -7,7 +7,7 @@ import {
   type ElementRef,
 } from 'react';
 import * as RadixAccordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from '@ds/icons';
+import { ChevronDownIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
 
 export type AccordionHeadingLevel = 2 | 3 | 4 | 5 | 6;

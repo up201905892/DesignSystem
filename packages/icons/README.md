@@ -1,9 +1,17 @@
-# @ds/icons
+# @up201905892/icons
 
 React icon components for the design system, generated from a subset of [Lucide](https://lucide.dev).
 
+## Installation
+
+```
+pnpm add @up201905892/icons
+```
+
+## Usage
+
 ```tsx
-import { CheckIcon } from '@ds/icons';
+import { CheckIcon } from '@up201905892/icons';
 
 <CheckIcon />                      {/* decorative: aria-hidden, size 1em */}
 <CheckIcon size={20} title="Done" /> {/* exposed as role="img" named "Done" */}
@@ -16,7 +24,7 @@ Every icon accepts `size` (number or string, default `"1em"`), `title`, `classNa
 The SVG files live in `svg/` and are copied from `lucide-static` (pinned version). The icon list is in `scripts/generate.mjs`.
 
 ```
-pnpm --filter @ds/icons generate
+pnpm --filter @up201905892/icons generate
 ```
 
 This copies the SVG files, rewrites `src/generated/*` and `src/index.ts` with SVGR, and is idempotent. Never edit the generated files by hand.

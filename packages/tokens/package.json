@@ -1,8 +1,28 @@
 {
-  "name": "@ds/tokens",
-  "private": true,
+  "name": "@up201905892/tokens",
   "version": "0.0.0",
+  "description": "Design tokens (CSS variables and typed object) for the design system, with light and dark themes.",
+  "license": "MIT",
+  "author": "up201905892",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/up201905892/DesignSystem.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/up201905892/DesignSystem#readme",
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "css-variables",
+    "theme"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,8 +33,12 @@
       "require": "./dist/index.cjs"
     },
     "./tokens.css": "./dist/tokens.css",
-    "./themes.css": "./dist/themes.css"
+    "./themes.css": "./dist/themes.css",
+    "./package.json": "./package.json"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node scripts/build.mjs && vitest run",

@@ -734,3 +734,38 @@ Modelo de entrada:
   - `aria-live` está no `<p>` do resumo, que só existe com dados e paginação; o leitor de ecrã anuncia a alteração de texto ao mudar de página. Convém confirmar num leitor real.
   - O `Table` exige `aria-label`/`aria-labelledby`; o `DataTable` usa `aria-labelledby` para a `caption`, por isso o `region` e a `table` têm o mesmo nome.
   - Sem sugestões novas para o planeador.
+
+### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
+
+**Iteração 1 — 2026-11-05**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** pacotes renomeados para `@up201905892/tokens`, `@up201905892/icons` e `@up201905892/ui` (todas as referências a `@ds/*` fora de `docs/workflow/` e `pnpm-lock.yaml` regenerado); `"private"` removido dos três; acrescentados `description`, `license`, `author`, `repository` (com `directory`), `homepage`, `keywords` e `publishConfig.access=public`; `exports`, `main`/`module`/`types`, `sideEffects` e `files` conforme a especificação. No `ui`, `exports["."]` tem `import.types=index.d.ts` e `require.types=index.d.cts` (o tsup já gera ambos), mais `./styles.css` e `./package.json`; `@up201905892/icons` passa a `workspace:^` e `@up201905892/tokens` passa a `devDependencies` (só alimenta o CSS inlinado em `dist/styles.css`). `apps/docs` ganhou `@up201905892/ui` (`workspace:*`) para resolver o pacote pelos `exports`. `LICENSE` (MIT) na raiz e nos três pacotes; `README.md` mínimo em cada um (novo no `tokens`). O Prettier reformatou imports longos em `Alert.tsx` e `Toast.tsx`.
+- **Ficheiros alterados:** `packages/{tokens,icons,ui}/package.json`, `packages/{tokens,icons,ui}/LICENSE`, `LICENSE`, `packages/{tokens,icons,ui}/README.md`, `packages/ui/src/package-metadata.test.ts` (novo), `pnpm-lock.yaml`, `apps/docs/package.json`, `apps/docs/README.md`, `apps/docs/.storybook/main.ts`, `apps/docs/scripts/test-a11y.mjs`, `apps/docs/src/foundations/{Colors,Scales}.stories.tsx`, `packages/ui/{vitest.config.ts,test/global-setup.ts,scripts/build-css.mjs,src/styles.css}`, imports de `@up201905892/icons` em `packages/ui/src/{Accordion,Alert,Checkbox,DataTable,Dialog,DropdownMenu,Pagination,Popover,Select,Table,Toast,Tooltip}/*`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 3abe004 `feat(ui): DS-036 add package metadata, exports, licences and final @up201905892 names`
+- **Critérios de aceitação cobertos:** todos; G1 a G3.
+- **Testes escritos pelo programador:** `packages/ui/src/package-metadata.test.ts` (nome final, público, MIT, `publishConfig`; todos os caminhos de `exports`/`main`/`module`/`types` existem; `files` sem `src`; `./package.json` exportado; LICENSE e README presentes; chaves de `exports` e `sideEffects`/`files` por pacote; declarações ESM/CJS separadas, peers e dependências do `ui`; dependências externas no `dist/index.js`). Se faltar `dist`, o teste corre o build dos três pacotes antes. Sem stories novas (sem alterações de interface).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 984) · build ✔ · test:a11y ✔ (32 suites, 220 testes). Manual a partir de `apps/docs`: `require('@up201905892/ui')`, `import('@up201905892/ui')` e `import.meta.resolve('@up201905892/ui/styles.css')` resolvem sem erro.
+- **Notas para o testador:**
+  - `repository.url`, `homepage` e `author` assumem `github.com/up201905892/DesignSystem` e o autor `up201905892` (derivado do `origin` e do scope); o copyright dos `LICENSE` usa o mesmo nome. Confirmar com o João se querem o nome próprio.
+  - Os `exports` do `icons` mantêm a condição `source` (usada pelo Storybook/Vitest); não é publicada por apontar para `src`, que não está em `files`. O teste ignora-a. `tokens` e `icons` usam um só `types` (`index.d.ts`), como a especificação pede; só o `ui` separa as declarações ESM e CJS.
+  - O `LICENSE` na raiz e nos pacotes são cópias do mesmo texto.
+  - Não se verificou o tarball (`pnpm pack`): é a DS-039.
+  - Sem sugestões novas para o planeador.
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select)
+
+**Iteração 1 — 2026-11-05**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tooltip` e `DropdownMenuContent` passam a ter `sideOffset?: SpaceStep` (tipo do Radix omitido, como no `Popover`), com omissões `'2'` e `'1'`, convertidas com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')` nos três overlays (`collisionPadding` do Radix também omitido nos tipos do `Tooltip` e do `DropdownMenuContent`). O `Select` usa `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}`, sem props novas. JSDoc de `sideOffset` indica que é um passo da escala `--ds-space-*`.
+- **Ficheiros alterados:** `packages/ui/src/Tooltip/{Tooltip.tsx,Tooltip.offset.test.tsx,Tooltip.stories.tsx}`, `packages/ui/src/DropdownMenu/{DropdownMenu.tsx,DropdownMenu.offset.test.tsx,DropdownMenu.stories.tsx}`, `packages/ui/src/Select/{Select.tsx,Select.offset.test.tsx,Select.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 1983c2a `feat(ui): DS-051 use spacing tokens for Tooltip, DropdownMenu and Select offsets`
+- **Critérios de aceitação cobertos:** todos; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** três ficheiros `*.offset.test.tsx` com `vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')` (leitura de `--ds-space-<passo>` e `--ds-space-2`; com `sideOffset="4"` lê `--ds-space-4` no `Tooltip` e no `DropdownMenuContent`; `@ts-expect-error` para `sideOffset={6}` nos dois). Os testes existentes não usavam `sideOffset` numérico e não foram alterados. Stories `Offset` no `Tooltip` (`bottom`, passo `4`), `DropdownMenu` (passo `3`) e `Select` (passo `1`), com `play` que mede o intervalo gatilho/conteúdo e falha se diferir mais de 1px. Não escrevi teste axe novo: os testes axe existentes com os overlays abertos e o `test:a11y` das stories cobrem-no.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991) · build ✔ · test:a11y ✔ (32 suites, 223 testes, inclui as três `Offset`)
+- **Notas para o testador:**
+  - O `grep` de `sideOffset|collisionPadding` com número literal em `.tsx` fora de testes e stories não devolve resultados (corrido após o commit).
+  - O `play` da story `Offset` usa um elemento sonda com `height: var(--ds-space-N)` para obter o valor em pixéis, em vez de `readSpaceToken` (não exportado pela biblioteca).
+  - No `Select`, o `play` abre a lista com `ArrowDown` despachado no gatilho, como a story `KeyboardInteraction`.
+  - Sem sugestões novas para o planeador.

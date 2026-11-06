@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import * as RadixPopover from '@radix-ui/react-popover';
-import { XIcon } from '@ds/icons';
+import { XIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
 import { readSpaceToken, type SpaceStep } from '../utils/spaceToken';
 import { IconButton } from '../IconButton';

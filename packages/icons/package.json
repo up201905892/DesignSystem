@@ -1,7 +1,25 @@
 {
-  "name": "@ds/icons",
-  "private": true,
+  "name": "@up201905892/icons",
   "version": "0.0.0",
+  "description": "React icon components for the design system, generated from a subset of Lucide.",
+  "license": "MIT",
+  "author": "up201905892",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/up201905892/DesignSystem.git",
+    "directory": "packages/icons"
+  },
+  "homepage": "https://github.com/up201905892/DesignSystem#readme",
+  "keywords": [
+    "design-system",
+    "icons",
+    "react",
+    "svg",
+    "lucide"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.cjs",
@@ -13,8 +31,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "LICENSE-LUCIDE"
+  ],
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "build": "tsup",

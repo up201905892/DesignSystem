@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { EllipsisIcon, PencilIcon, SettingsIcon, Trash2Icon, UserIcon } from '@ds/icons';
+import { EllipsisIcon, PencilIcon, SettingsIcon, Trash2Icon, UserIcon } from '@up201905892/icons';
 import { Button } from '../Button';
 import { IconButton } from '../IconButton';
 import {
@@ -191,6 +191,34 @@ export const KeyboardInteraction: Story = {
     await wait(300);
     if (document.querySelector('[role="menu"]')) throw new Error('Escape did not close the menu');
     if (document.activeElement !== trigger) throw new Error('Focus did not return to the trigger');
+  },
+};
+
+export const Offset: Story = {
+  args: { defaultOpen: true },
+  render: (args) => (
+    <DropdownMenu {...args}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary">Actions</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side="bottom" sideOffset="3">
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem>Duplicate</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvasElement }) => {
+    await wait(300);
+    const trigger = canvasElement.querySelector<HTMLElement>('button');
+    const menu = document.querySelector<HTMLElement>('[role="menu"]');
+    if (!trigger || !menu) throw new Error('Menu did not open');
+    const probe = document.createElement('div');
+    probe.style.height = 'var(--ds-space-3)';
+    document.body.append(probe);
+    const expected = probe.getBoundingClientRect().height;
+    probe.remove();
+    const gap = menu.getBoundingClientRect().top - trigger.getBoundingClientRect().bottom;
+    if (Math.abs(gap - expected) > 1) throw new Error(`Gap is ${gap}px, expected ${expected}px`);
   },
 };
 

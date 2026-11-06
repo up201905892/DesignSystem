@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { PencilIcon } from '@ds/icons';
+import { PencilIcon } from '@up201905892/icons';
 import { Badge } from '../Badge';
 import { IconButton } from '../IconButton';
 import type { TableSortState } from '../Table';
