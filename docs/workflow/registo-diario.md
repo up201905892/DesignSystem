@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-06
+
+- **Decisões para o João:**
+  1. **DS-037 parada em `Em desenvolvimento` com `pnpm test` vermelho.** Falha `packages/ui/test/a11y.test.tsx` › "fails for an img without alt": `expectNoA11yViolations` não rejeita um `<img>` sem `alt` (990/991 testes passam). O lockfile só mudou o peer `yaml` do vite, por isso a falha parece vir do ambiente (axe/jsdom) e não da DS-037, mas não consegui confirmar num HEAD limpo (o sandbox negou `git stash`/`worktree`). Podes correr `pnpm --filter @up201905892/ui test` em `develop` sem a DS-037 (commit `51a7049`)? Se falhar, é bug do helper de axe (DS-009) e proponho uma tarefa; se passar, a DS-037 investiga. Resposta por linha "Desbloquear"/"Responder" em `aprovacoes.md`.
+  2. Trabalho da DS-037 guardado no commit `wip(repo): DS-037 …` (`51a7049`): Changesets configurado (`fixed` nos 3 pacotes, `access: public`), changeset `minor` com aviso do `sideOffset`, regra C6 no README de `ui`. Falta o registo em `02-desenvolvimento.md` e passar a `Pronto para teste`.
+  3. DS-044 não foi iniciada: o `pnpm test` vermelho invalidaria o critério G1. Pendentes do dia 2026-11-05 (autor da DS-036, aprovar DS-038/DS-040, dependência da DS-044/045, `source` do icons na DS-039, `ci.yml`, DataTable, `pageSize={0}`) mantêm-se.
+- **Concluídas:** nenhuma
+- **Testadas:** nenhuma
+- **Desenvolvidas:** DS-037 (incompleta, bloqueada por teste vermelho)
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas)
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** com a tua resposta, retomar a DS-037; depois DS-044, DS-052, DS-054, DS-056. Sem propostas novas (há 7 tarefas `Planeado` com dependências satisfeitas).
+
 ## 2026-11-05
 
 - **Decisões para o João:**
