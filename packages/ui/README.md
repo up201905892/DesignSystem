@@ -26,3 +26,4 @@ Every component follows the same checklist. `src/VisuallyHidden/` is the referen
 - **C3 Styles.** Only `ds-*` classes and `var(--ds-*)` tokens; variants, sizes and states as `data-*` attributes; no hard-coded colors, spacing, radii or shadows, no inline styles, no CSS-in-JS.
 - **C4 Accessibility.** A unit test with `expectNoA11yViolations` from `test/a11y.ts`; every story passes `pnpm test:a11y`, including `DarkTheme`; contrast and focus visibility in both themes; keyboard patterns follow the WAI-ARIA APG.
 - **C5 Stories.** One story per variant and state, plus a `DarkTheme` story, with `tags: ['autodocs']` and prop descriptions in JSDoc.
+- **C6 Changeset.** Any task that changes the behaviour of a published package adds a file in `.changeset/` (run `pnpm changeset`). Use `patch` for fixes, `minor` for backwards-compatible additions and `major` for breaking changes. See `.changeset/README.md`.
