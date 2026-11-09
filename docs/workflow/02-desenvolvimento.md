@@ -769,3 +769,20 @@ Modelo de entrada:
   - O `play` da story `Offset` usa um elemento sonda com `height: var(--ds-space-N)` para obter o valor em pixéis, em vez de `readSpaceToken` (não exportado pela biblioteca).
   - No `Select`, o `play` abre a lista com `ArrowDown` despachado no gatilho, como a story `KeyboardInteraction`.
   - Sem sugestões novas para o planeador.
+
+### DS-037 · Changesets: versionamento e changelog
+
+**Iteração 1 — 2026-11-09**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `@changesets/cli` instalado na raiz; `.changeset/config.json` com `access: public`, `baseBranch: main`, os três pacotes `@up201905892/*` num grupo `fixed` e `apps/docs` (nome de pacote `docs`) em `ignore`; scripts `changeset` e `version-packages` (`changeset version`) na raiz, sem nenhum script de publicação; `.changeset/README.md` com a regra e os tipos patch/minor/major; primeiro changeset `minor` (`first-release-components.md`) com os componentes entregues e a nota de quebra do `sideOffset` (DS-051); regra C6 na secção "How to create a component" de `packages/ui/README.md`. Não se correu `pnpm version-packages`.
+- **Ficheiros alterados:** `.changeset/README.md`, `.changeset/config.json`, `.changeset/first-release-components.md`, `package.json`, `pnpm-lock.yaml`, `packages/ui/README.md`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 51a7049 `wip(repo): DS-037 add Changesets config and first-release changeset` (trabalho de 2026-11-06, feito com a suite reportada vermelha, ver incidente); commit de fecho desta iteração com o registo e a passagem de estado (`git log --grep DS-037`).
+- **Critérios de aceitação cobertos:** todos verificados no terminal em 2026-11-09: config conforme o pedido; scripts presentes; `grep -rE "(changeset|pnpm|npm) publish" package.json packages/*/package.json` sem resultados; README do `.changeset` presente; `pnpm changeset status` sai com 0 e lista tokens, icons e ui em `minor`; regra C6 no README do `ui`. G1 a G3 (dependência nova `@changesets/cli`): sem alterações de código nos pacotes.
+- **Testes escritos pelo programador:** nenhum (não aplicável, conforme a especificação).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 63 ficheiros, 991 testes) · build ✔
+- **Incidente do teste intermitente:** no commit wip de 2026-11-06 o registo diário reportava `pnpm test` vermelho em `packages/ui/test/a11y.test.tsx` ("fails for an img without alt"). Em 2026-11-09, sem alterações de código entre os dois momentos, a suite completa (lint, typecheck, test, build) passou à primeira, incluindo esse ficheiro (991/991). Tratou-se como falhanço intermitente ou de ambiente; a causa não foi identificada. Se voltar a surgir, o testador deve registá-lo.
+- **Notas para o testador:**
+  - `ignore` usa `docs` (nome do pacote de `apps/docs`), pois o Changesets ignora por nome de pacote e não por glob de pasta.
+  - O primeiro changeset menciona a quebra do `sideOffset` porque a DS-051 (Concluído) não criou changeset.
+  - Sem sugestões novas para o planeador.
