@@ -2,6 +2,20 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-09
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Aprovar em `aprovacoes.md`.
+  2. **Teste intermitente (2026-11-06):** `packages/ui/test/a11y.test.tsx` › "fails for an img without alt" falhou uma vez e não voltou a falhar (991/991 em três execuções hoje). Causa por identificar (provavelmente ambiente axe/jsdom). Se voltar a aparecer, proponho uma tarefa para o helper de axe (DS-009).
+  3. DS-045 (formulário e tabela) é a seguinte na app de exemplo; o `pnpm test` da app precisa do `dist` do `ui` já construído (o `exports` do `ui` não tem a condição `source`). O CI já faz build antes dos testes.
+  4. Pendentes antigos mantêm-se: autor das DS-036 (`up201905892` ou nome próprio), dependência da DS-045 face às DS-051 a DS-057, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-037 (Changesets), DS-044 (app de exemplo: estrutura, layout e tema). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-037, DS-044 (zero falhas; DS-044 verificada também em Chromium a 320 px e nos dois temas).
+- **Desenvolvidas:** DS-037 (retomada), DS-044 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-045 (Alta), depois DS-052, DS-054, DS-056 (Média). Sem propostas novas (há 6 tarefas `Planeado` com dependências satisfeitas).
+
 ## 2026-11-06
 
 - **Decisões para o João:**
