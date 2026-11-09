@@ -359,6 +359,15 @@ Modelo de entrada:
 - **Documentação:** JSDoc de `sideOffset` com a escala `--ds-space-*`; stories `Offset` (com `play` que mede o intervalo em browser) no Tooltip, DropdownMenu e Select, mais as `DarkTheme` existentes, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** nos testes unitários `--ds-space-2` serve de omissão e de `collisionPadding`, por isso não os distinguem; a medição real está nas stories `Offset`. Sugestão ao planeador: a mudança de tipo de `sideOffset` no Tooltip é incompatível para quem passava números; registar no changelog da DS-037.
 
+### DS-037 · Changesets: versionamento e changelog — concluída a 2026-11-09
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-09), commits 51a7049 (implementação) e 1af600f (registo); sem commits de código de produção depois do commit testado (bc06c81 é só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `@changesets/cli` na raiz; `.changeset/config.json` (`access: public`, `baseBranch: main`, grupo `fixed` com os três pacotes `@up201905892/*`, `ignore: ["docs"]`); scripts `changeset` e `version-packages` sem nenhum script de publicação; `.changeset/README.md`; primeiro changeset `minor` (`first-release-components.md`) com os componentes entregues e a nota de quebra do `sideOffset` (DS-051); regra C6 em `packages/ui/README.md`.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; o `first-release-components.md` já existente faz parte da entrega, não se criou outro)
+- **Documentação:** `.changeset/README.md` e secção "How to create a component" do README do `ui`. Sem alterações de interface, logo sem stories. Sem `TODO` na tarefa.
+- **Lições:** o teste intermitente `a11y.test.tsx` ("fails for an img without alt") de 2026-11-06 não foi reproduzido; causa por identificar, em observação. O commit 51a7049 foi um `wip` com a suite reportada vermelha; o estado final está verde. A versão dos pacotes só muda na DS-041 (`pnpm version-packages` não foi corrido).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

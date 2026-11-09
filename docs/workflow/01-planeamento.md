@@ -44,7 +44,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
-| DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Aprovado |
+| DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Proposta |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Proposta |
@@ -1475,6 +1475,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-09 · programador · Em desenvolvimento → Pronto para teste · commit de fecho `git log --grep DS-037`; suite completa verde (incidente intermitente de 2026-11-06 não reproduzido, ver 02-desenvolvimento.md)
 - 2026-11-09 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-09 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-11-09 · finalizador · Aprovado → Concluído · relatório 1 aprovado; sem commits de código de produção depois do testado; changeset não aplicável (tarefa de infraestrutura, o seu resultado é o primeiro changeset)
 
 ### DS-038 · Limite de tamanho de bundle (< 5 kB gzip por componente)
 
