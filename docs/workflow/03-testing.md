@@ -1364,3 +1364,35 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Nos testes unitários, `--ds-space-2` serve tanto de omissão do `Tooltip`/`Select` como de `collisionPadding`, por isso não distinguem os dois usos; a cobertura da medição real está nas stories `Offset`.
 - Casos limite (tema escuro, `disabled`, modo controlado) não são afetados: só mudam os valores numéricos dos afastamentos.
+
+### DS-037 · Changesets: versionamento e changelog — Relatório 1 — 2026-11-09
+
+- **Commit testado:** 51a7049 (implementação) e 1af600f (registo e passagem de estado), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 63 ficheiros, 991 testes; incluindo `a11y.test.tsx`) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 223 testes) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `@changesets/cli` nas devDependencies da raiz (`^3.0.3`, instalado); `.changeset/config.json` com `access: public`, `baseBranch: main`, grupo `fixed` com `tokens`, `icons` e `ui`, e `ignore: ["docs"]` (nome do pacote de `apps/docs`, confirmado em `apps/docs/package.json`; o Changesets ignora por nome e não por glob, equivale a `apps/*` porque só existe esse pacote).
+- [x] Scripts `changeset` e `version-packages` (`changeset version`) no `package.json` da raiz (lidos). `pnpm version-packages` não foi corrido.
+- [x] `grep -rnE "(changeset|pnpm|npm) publish" package.json packages/*/package.json` sem resultados (corrido por mim). Só existe `publishConfig` nos pacotes, que não é um script.
+- [x] `.changeset/README.md` explica quando criar um changeset e patch/minor/major.
+- [x] `.changeset/first-release-components.md` é `minor` para os três pacotes; os 27 componentes listados coincidem com as pastas de `packages/ui/src`. `pnpm changeset status` sai com 0 e lista `icons`, `tokens` e `ui` em `minor`.
+- [x] Regra C6 na secção "How to create a component" de `packages/ui/README.md`.
+- [x] G1 a G3: dependência nova só `@changesets/cli`; sem alterações de código nos pacotes.
+
+**Testes exigidos:** unitários, acessibilidade e visual não aplicáveis; verificação manual no terminal repetida por mim com sucesso.
+
+**Incidente intermitente (2026-11-06, `a11y.test.tsx` "fails for an img without alt"):** não reproduzido; `pnpm test` correu 991/991 e `test:a11y` 223/223 neste teste. Causa por identificar; fica em observação.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- A nota de quebra do `sideOffset` (DS-051) no changeset é adequada, pois a DS-051 não criou changeset.
+- O commit 51a7049 foi feito com a suite reportada vermelha (`wip`); o estado final está verde.
