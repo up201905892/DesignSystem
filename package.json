@@ -9,7 +9,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "lint": "eslint . && stylelint \"packages/ui/src/**/*.css\" && prettier --check .",
+    "lint": "eslint . && stylelint \"packages/ui/src/**/*.css\" \"apps/example/src/**/*.css\" && prettier --check .",
+    "example": "pnpm --filter example dev",
     "format": "prettier --write .",
     "changeset": "changeset",
     "version-packages": "changeset version",
