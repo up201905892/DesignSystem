@@ -51,7 +51,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
 | DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036, DS-040 | Planeado |
 | DS-043 | Guias de temas e de personalização de estilos | Documentação | Média | DS-042 | Planeado |
-| DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Aprovado |
+| DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Concluído |
 | DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Planeado |
 | DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Planeado |
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Planeado |
@@ -1699,6 +1699,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-09 · programador · Em desenvolvimento → Pronto para teste · commit bc714d0
 - 2026-11-09 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-09 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados (incl. 320px e dois temas em Chromium)
+- 2026-11-09 · finalizador · Aprovado → Concluído · registo em 04-concluded.md; changeset não aplicável (app privada)
 
 ### DS-045 · App de exemplo: formulário e tabela de dados
 

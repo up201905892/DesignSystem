@@ -368,6 +368,15 @@ Modelo de entrada:
 - **Documentação:** `.changeset/README.md` e secção "How to create a component" do README do `ui`. Sem alterações de interface, logo sem stories. Sem `TODO` na tarefa.
 - **Lições:** o teste intermitente `a11y.test.tsx` ("fails for an img without alt") de 2026-11-06 não foi reproduzido; causa por identificar, em observação. O commit 51a7049 foi um `wip` com a suite reportada vermelha; o estado final está verde. A versão dos pacotes só muda na DS-041 (`pnpm version-packages` não foi corrido).
 
+### DS-044 · App de exemplo: estrutura, layout e tema — concluída a 2026-11-09
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-09), commit bc714d0 (implementação); sem commits de código de produção depois do commit testado (825f172 e 71734b2 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** workspace privado `apps/example` (Vite + React + TypeScript `strict`) que consome `@up201905892/ui` e `@up201905892/icons` por `workspace:*`; link "Skip to content", cabeçalho, `Tabs` (Overview / Tasks), alternância de tema (`data-theme`, `localStorage`, `prefers-color-scheme`) e menu de utilizador; vista Overview com `Alert`, `Skeleton`/`Spinner`, `Grid` de `Card` com `Badge` e `Accordion`; Tasks é um marcador até à DS-045; regra `no-restricted-syntax` no ESLint e Stylelint sobre `apps/example/src/**/*.css`; script `pnpm example`; 12 testes em `App.test.tsx`.
+- **Changeset:** não aplicável (a app é `private: true` e não é um pacote publicado; a tarefa não altera `tokens`, `icons` nem `ui`)
+- **Documentação:** a app não tem stories (previsto na tarefa); o comportamento e as notas de acessibilidade (marcos, um `h1` por vista, ordem de Tab) estão cobertos pelos testes e pela verificação manual do relatório 1. Sem `TODO` na tarefa.
+- **Lições:** o `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes, como o CI). A regra do ESLint proíbe qualquer atributo `style` em `apps/example/src`, mais estrita que o critério. Os itens "Profile" e "Sign out" do menu não fazem nada (sem backend).
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
