@@ -786,3 +786,23 @@ Modelo de entrada:
   - `ignore` usa `docs` (nome do pacote de `apps/docs`), pois o Changesets ignora por nome de pacote e não por glob de pasta.
   - O primeiro changeset menciona a quebra do `sideOffset` porque a DS-051 (Concluído) não criou changeset.
   - Sem sugestões novas para o planeador.
+
+### DS-044 · App de exemplo: estrutura, layout e tema
+
+**Iteração 1 — 2026-11-09**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** novo workspace `apps/example` (Vite + React + TypeScript `strict`, `private`), com `@up201905892/ui` e `@up201905892/icons` por `workspace:*` e `@up201905892/ui/styles.css` importado pelo `exports`. Estrutura: link "Skip to content" (primeiro focável), cabeçalho (`banner`) com o nome, `nav` com `Tabs` (Overview / Tasks), `IconButton` de tema (`SunIcon`/`MoonIcon`, muda `data-theme` em `<html>`, grava em `localStorage` na chave `example-theme`, usa `prefers-color-scheme` na primeira visita) e `DropdownMenu` de utilizador; `main` com as duas vistas. Overview: `Alert`, carregamento simulado (600 ms) com `Spinner` e `Skeleton`, `Grid` de `Card` com `Badge` e `Accordion` de perguntas frequentes. Tasks é um marcador (`Alert`) até à DS-045. Dados em `src/data.ts`. Um único ficheiro de CSS (`src/layout.css`, só tokens, classes `ds-example-*`). Raiz: script `pnpm example`, Stylelint passa a abranger `apps/example/src/**/*.css`, regra `no-restricted-syntax` em `eslint.config.js` para `apps/example/src`.
+- **Ficheiros alterados:** `apps/example/{package.json,tsconfig.json,vite.config.ts,index.html}`, `apps/example/src/{main.tsx,App.tsx,Overview.tsx,Tasks.tsx,data.ts,theme.ts,layout.css,vite-env.d.ts,vitest-env.d.ts,App.test.tsx}`, `eslint.config.js`, `package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** bc714d0 `feat(ui): DS-044 add example app with layout, tabs navigation and theme toggle`
+- **Critérios de aceitação cobertos:** todos, exceto a verificação visual a 320px e nos dois temas, que fica para o testador (`pnpm example`). G1 a G3.
+- **Testes escritos pelo programador:** `apps/example/src/App.test.tsx` (12 testes): vista Overview inicial; mudança para Tasks; carregamento simulado; abrir pergunta do `Accordion`; alternância de tema com `data-theme` e `localStorage`; tema guardado aplicado ao recarregar; `prefers-color-scheme` na primeira visita; menu de utilizador; axe sem violações nas duas vistas (helper da DS-009); marcos `banner`/`navigation`/`main` e um só `h1` por vista; ordem de Tab (skip link, navegação, tema, menu).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991, example: 12) · build ✔ (a app constrói e sai com 0). Verificação manual: um `<button>` temporário em `apps/example/src` faz o ESLint falhar (`no-restricted-syntax`); removido, não commitado.
+- **Notas para o testador:**
+  - A regra do ESLint proíbe também qualquer atributo `style` em `apps/example/src` (mais estrita que "sem cores ou espaçamentos").
+  - A app resolve `@up201905892/ui` pelo `dist` (sem condição `source`), por isso o `pnpm test` da app precisa do `pnpm build` do `ui` feito antes (como o CI, que faz build antes dos testes).
+  - O `Skeleton` usa `height={96}` (prop da biblioteca, não é `style` escrito na app) e o `Grid` usa `minColumnWidth="14rem"`.
+  - O tema só é gravado quando o utilizador clica; a primeira visita não grava nada.
+  - Os itens "Profile" e "Sign out" do menu de utilizador não fazem nada (sem backend).
+  - Não verifiquei visualmente a 320px nem os dois temas num navegador.
+  - Sem sugestões novas para o planeador.
