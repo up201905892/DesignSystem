@@ -1396,3 +1396,39 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - A nota de quebra do `sideOffset` (DS-051) no changeset é adequada, pois a DS-051 não criou changeset.
 - O commit 51a7049 foi feito com a suite reportada vermelha (`wip`); o estado final está verde.
+
+### DS-044 · App de exemplo: estrutura, layout e tema — Relatório 1 — 2026-11-09
+
+- **Commit testado:** bc714d0 (presente no histórico de `develop`; `git status` sem alterações de código antes de começar; só a alteração de estado em `01-planeamento.md`)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint com `apps/example/src/**/*.css` + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos, inclui `apps/example`) | ✔ |
+| Unitários | `pnpm test` (ui: 991, example: 12), após `pnpm build` | ✔ |
+| Acessibilidade | `pnpm test:a11y` (223 testes) + axe e teclado nos testes da app + percurso de Tab em Chromium real | ✔ |
+| Build | `pnpm build` (inclui `apps/example`, sai com 0) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Workspace `apps/example` — `private: true`, dependências `workspace:*` para `@up201905892/ui` e `@up201905892/icons`, `tsconfig` estende a base com `strict: true`, `main.tsx` importa `@up201905892/ui/styles.css` (pelo `exports`, sem aliases).
+- [x] Scripts — `pnpm example` existe na raiz; `build`, `typecheck` e `test` da app correm via `pnpm -r`; `pnpm build` sai com 0 e constrói a app.
+- [x] "Só com a biblioteca" — verificação manual: ficheiro temporário com `<button>`, `<input>`, `<table>` e `style={{...}}` faz o ESLint falhar com `no-restricted-syntax` (4 erros); ficheiro removido, não commitado. `grep` por `style=`, `fetch(`, `axios`, etc. sem resultados. Único CSS: `src/layout.css`, só `var(--ds-*)`, passa o Stylelint.
+- [x] Estrutura — verificado em Chromium (Playwright, `vite preview` da build): cabeçalho, `Tabs` Overview/Tasks, `IconButton` de tema, menu de utilizador. A alternância muda `data-theme` e grava `example-theme` em `localStorage`; após recarregar mantém o tema. Sem preferência guardada, `prefers-color-scheme` light/dark determina o tema inicial (verificado nos dois esquemas). Testes unitários também cobrem.
+- [x] Vista Overview — capturas visuais a 320px (claro e escuro): `Alert` informativo, `Card` com indicadores e `Badge` em coluna única, FAQ com `Accordion`; carregamento simulado coberto por teste unitário (`Skeleton`/`Spinner`).
+- [x] Dados locais — `src/data.ts`; sem chamadas de rede nem eventos `requestfailed`; dependências só React, Vite e pacotes da biblioteca (mais ferramentas de teste em devDependencies).
+- [x] 320px sem scroll horizontal — medido no Chromium em ambas as vistas e ambos os temas: `scrollWidth` = `clientWidth` = 320 (e 1280 a 1280). "Skip to content" é o primeiro focável: Tab percorre "Skip to content", "Overview", "Switch to … theme", "User menu", por esta ordem, nos dois temas.
+- [x] G1 a G3 — sem pacotes novos fora do âmbito, `pnpm lint`, `typecheck` e `test` verdes, sem alterações a ficheiros protegidos.
+
+**Verificação manual nos dois temas (feita neste relatório):** capturas a 320px de Overview em claro e escuro inspecionadas: texto legível, bordas e `Badge` visíveis, fundo `rgb(248,250,252)` (claro) e `rgb(15,23,42)` (escuro) a partir de tokens, sem corte de conteúdo. Vista Tasks (marcador) medida sem overflow nos dois temas. Contraste: axe sem violações nos testes (jsdom não calcula contraste de cor de forma fiável; a avaliação visual não mostrou problemas).
+
+**Testes exigidos:** existem e não são triviais (12 em `apps/example/src/App.test.tsx`): vista inicial, mudança de separador, tema com `data-theme`/`localStorage`, tema guardado, `prefers-color-scheme`, axe nas duas vistas, marcos e um `h1` por vista, ordem de Tab.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Ficheiros temporários de verificação (script Playwright, capturas, ficheiro com elementos proibidos) foram removidos; nada ficou no repositório.
+- Após o skip link, "Overview" e os restantes passos de Tab seguem a ordem exigida; o quinto Tab entra no painel (`tabpanel`), o que é o comportamento esperado do `Tabs`.
+- O `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes), como o CI.
