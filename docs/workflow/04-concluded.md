@@ -386,6 +386,15 @@ Modelo de entrada:
 - **Documentação:** a app não tem stories (previsto na tarefa); comportamento e acessibilidade documentados nos testes (axe, fluxo só com teclado) e na verificação visual do relatório 1 (320 e 1280 px, tema claro e escuro). Sem `TODO` na tarefa.
 - **Lições:** o `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes). O diálogo do formulário não fecha ao clicar fora (decisão deliberada). A data limite aparece em ISO (sem i18n). Sem sugestões novas para o planeador.
 
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` — concluída a 2026-11-10
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-10), commit d00a7dc (implementação); sem commits de código de produção depois do commit testado (843a764 e e923502 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `packages/tokens/src/primitives/border.json` com `--ds-border-width-1`, `--ds-border-width-2`, `--ds-focus-ring-width` e `--ds-focus-ring-offset`; todos os `border*` e `outline*` dos `.css` de `packages/ui/src` (e `apps/example/src/layout.css`) passam a usar os tokens, sem mudança visual; o Stylelint rejeita comprimentos literais em `border*` e `outline*`; `css-tokens.test.ts` repete a verificação em Vitest; `play` em `FocusRing` e `Tabs/Default` mede 2px em browser real.
+- **Changeset:** não aplicável como ficheiro novo. Confirmado: os pacotes continuam em `0.0.0`, sem `CHANGELOG.md`, e o `first-release-components.md` (`minor`, grupo `fixed`) ainda não foi consumido, logo cobre os tokens novos; nenhum valor resolvido muda. Acrescentei-lhe uma frase a mencionar os tokens de borda e de anel de focus.
+- **Documentação:** story `Borders` em `Foundations/Scales` (gerada a partir do objeto `tokens`), comentário de `stylelint.config.js` e regra C3 do README de `packages/ui` sem a exceção `1px`/`2px`. As stories existentes (incluindo `FocusRing/DarkTheme`) passam no `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** a especificação dizia `Foundations/Borders`; a story ficou em `Foundations/Scales`, ao lado de `Radii` e `Shadows` (aceite pelo testador). Não houve capturas visuais nos dois temas; a cobertura é `getComputedStyle` em browser real. O aviso do programador sobre `.qa045-tmp/` no ESLint não se reproduziu no ambiente do testador. A DS-053 (também altera `Card.css`) pode avançar sem conflito.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
