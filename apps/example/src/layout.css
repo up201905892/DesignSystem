@@ -90,6 +90,19 @@ body {
   gap: var(--ds-space-3);
 }
 
+.ds-example-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+}
+
+.ds-example-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .ds-example-value {
   margin: var(--ds-space-0) var(--ds-space-0) var(--ds-space-2);
   font-size: var(--ds-font-size-3xl);
