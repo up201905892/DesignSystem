@@ -1472,3 +1472,43 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Ficheiros temporários (script e capturas) foram removidos; nada ficou no repositório além dos registos.
 - O diálogo do formulário não fecha ao clicar fora (decisão documentada pelo programador); Esc e "Cancel" fecham.
+
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` — Relatório 1 — 2026-11-10
+
+- **Commit testado:** d00a7dc (registo 843a764; presente no histórico de `develop`, árvore limpa antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 90, icons 10, ui 1023, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 224 testes, Chromium + axe, incluindo `play`) | ✔ |
+| Build | `pnpm build` (corrido antes dos testes) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `border.json` com `border.width.1/2`, `focus.ring.width` (referência a `border.width.2`) e `focus.ring.offset` — lido o ficheiro; `dist/tokens.css` contém `--ds-border-width-1: 1px`, `--ds-border-width-2: 2px`, `--ds-focus-ring-width: 2px`, `--ds-focus-ring-offset: 2px`; chaves no objeto `tokens` cobertas por `tokens.test.ts`.
+- [x] Testes de tokens da DS-004 continuam a passar — `pnpm test` em `packages/tokens` (90 testes).
+- [x] CSS de `packages/ui/src` usa os tokens em border/outline — `grep` de `1px`/`2px` em `*.css` só devolve o `clip` de `VisuallyHidden` e da legenda da `Table`; Tabs: indicador `--ds-border-width-2`, offset `calc(-1 * var(--ds-focus-ring-offset))`, `forced-colors` com `--ds-border-width-2`.
+- [x] Separadores de `DropdownMenu` e `Select` com `height: var(--ds-border-width-1)`; `clip` intacto.
+- [x] Stylelint rejeita literais em `border*` (exceto o que já era `border-radius`, também coberto), `outline`, `outline-width`, `outline-offset`; comentário de `stylelint.config.js` e README (C3) sem a exceção `1px`/`2px`.
+- [x] Verificação negativa — CSS passado por stdin ao Stylelint (sem ficheiros no repositório): `border: 1px ...`, `outline-offset: 2px`, `outline-width: 0.125rem` e `border-radius: 4px` falham com "Use a var(--ds-*) token"; `border-bottom: var(--ds-border-width-1) ...` não falha.
+- [x] Nada muda visualmente — valores resolvidos iguais aos anteriores (tokens com 1px/2px/2px); `play` em browser real confirma 2px no anel e no indicador; Card/Switch tests ajustados e a passar.
+- [x] Story `Borders` gerada a partir do objeto `tokens` (`tokensOf(t.border)`, `tokensOf(t.focus)`) em `Foundations/Scales`; passa no axe. A especificação diz "secção ou story `Borders`", cumprido.
+- [x] Sobreposição com outras tarefas — DS-053 `Planeado`, sem trabalho em simultâneo.
+- [x] G1 a G3 — sem dependências novas (`package.json` e `pnpm-lock.yaml` não alterados no commit).
+
+**Testes exigidos:**
+- [x] Tokens: `tokens.test.ts` confirma os quatro tokens em `dist/tokens.css`.
+- [x] `css-tokens.test.ts` percorre todos os `.css` e falha em `border*` (exceto `border-radius`) e `outline*` com `px/rem/em`; não é trivial (a regra do Stylelint foi confirmada em separado).
+- [x] A11y/play: `FocusRing` passou em Chromium com `button.focus()` (`outlineWidth === '2px'`), incluindo `FocusRing/DarkTheme` sem violações; `Tabs/Default` passou com `border-bottom-width` de `2px`. O `button.focus()` não falhou.
+
+**Verificação visual (dois temas):** não foram feitas capturas (não foi possível escrever ficheiros temporários fora do repositório). A cobertura é indireta: `play` com `getComputedStyle` em browser real, axe nas stories `DarkTheme` e tokens independentes do tema.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O programador referiu que o `pnpm lint` global falhava por `.qa045-tmp/`; neste ambiente não existe e o lint passa.
+- Ficheiros temporários: nenhum criado no repositório nem em `/tmp`.
