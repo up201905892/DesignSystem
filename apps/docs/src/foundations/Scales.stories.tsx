@@ -145,6 +145,40 @@ export const Radii: Story = {
   ),
 };
 
+export const Borders: Story = {
+  render: () => (
+    <Page title="Borders">
+      <ul style={list}>
+        {[...tokensOf(t.border, 'border'), ...tokensOf(t.focus, 'focus')].map((b) => (
+          <li key={b.cssVar} style={row}>
+            <Label cssVar={b.cssVar} value={b.value} />
+            <div
+              aria-hidden="true"
+              style={{
+                width: 'var(--ds-space-16)',
+                height: 'var(--ds-space-12)',
+                margin: 'var(--ds-space-2)',
+                background: 'var(--ds-color-bg-surface)',
+                borderRadius: 'var(--ds-radius-md)',
+                ...(b.path.startsWith('focus')
+                  ? {
+                      outline: `${
+                        b.path.endsWith('width') ? `var(${b.cssVar})` : 'var(--ds-focus-ring-width)'
+                      } solid var(--ds-color-focus-ring)`,
+                      outlineOffset: b.path.endsWith('offset')
+                        ? `var(${b.cssVar})`
+                        : 'var(--ds-focus-ring-offset)',
+                    }
+                  : { border: `var(${b.cssVar}) solid var(--ds-color-border-strong)` }),
+              }}
+            />
+          </li>
+        ))}
+      </ul>
+    </Page>
+  ),
+};
+
 export const Shadows: Story = {
   render: () => (
     <Page title="Shadows">

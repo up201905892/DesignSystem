@@ -4,7 +4,7 @@
   box-sizing: border-box;
   gap: var(--ds-space-3);
   padding: var(--ds-space-4);
-  border: 1px solid var(--ds-color-border-default);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-lg);
   background-color: var(--ds-color-bg-surface);
   color: var(--ds-color-text-default);
@@ -33,8 +33,8 @@
 }
 
 .ds-card:focus-visible {
-  outline: 2px solid var(--ds-color-focus-ring);
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 .ds-card-header {

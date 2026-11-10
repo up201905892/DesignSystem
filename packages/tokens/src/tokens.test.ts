@@ -97,6 +97,17 @@ describe('generated output', () => {
 
   it('has one JSON source per category', () => {
     const files = readdirSync(new URL('src/primitives/', root)).filter((f) => f.endsWith('.json'));
-    expect(files.length).toBe(7);
+    expect(files.length).toBe(8);
+  });
+
+  it('exposes border widths and the focus ring tokens', () => {
+    expect(cssVars).toContainEqual(['--ds-border-width-1', '1px']);
+    expect(cssVars).toContainEqual(['--ds-border-width-2', '2px']);
+    expect(cssVars).toContainEqual(['--ds-focus-ring-width', '2px']);
+    expect(cssVars).toContainEqual(['--ds-focus-ring-offset', '2px']);
+    const border = tokens.border as { width: Record<string, string> };
+    const ring = (tokens.focus as { ring: Record<string, string> }).ring;
+    expect(border.width).toEqual({ '1': '1px', '2': '2px' });
+    expect(ring).toEqual({ width: '2px', offset: '2px' });
   });
 });

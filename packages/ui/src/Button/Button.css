@@ -7,7 +7,7 @@
   min-height: var(--ds-space-10);
   padding-block: var(--ds-space-2);
   padding-inline: var(--ds-space-4);
-  border: 1px solid transparent;
+  border: var(--ds-border-width-1) solid transparent;
   border-radius: var(--ds-radius-md);
   background-color: transparent;
   color: var(--ds-color-text-default);
@@ -24,8 +24,8 @@
 }
 
 .ds-button:focus-visible {
-  outline: 2px solid var(--ds-color-focus-ring);
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 .ds-button[data-size='sm'] {

@@ -5,7 +5,7 @@
   max-height: var(--radix-dropdown-menu-content-available-height);
   overflow-y: auto;
   padding: var(--ds-space-1);
-  border: 1px solid var(--ds-color-border-default);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-md);
   background-color: var(--ds-color-bg-surface);
   box-shadow: var(--ds-shadow-md);
@@ -59,7 +59,7 @@
 }
 
 .ds-dropdown-menu__separator {
-  height: 1px;
+  height: var(--ds-border-width-1);
   margin-block: var(--ds-space-1);
   background-color: var(--ds-color-border-default);
 }

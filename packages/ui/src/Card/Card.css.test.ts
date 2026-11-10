@@ -7,7 +7,7 @@ const css = readFileSync(resolve(__dirname, 'Card.css'), 'utf8');
 describe('Card.css', () => {
   it('uses the surface, border, radius and shadow tokens', () => {
     expect(css).toContain('var(--ds-color-bg-surface)');
-    expect(css).toContain('1px solid var(--ds-color-border-default)');
+    expect(css).toContain('var(--ds-border-width-1) solid var(--ds-color-border-default)');
     expect(css).toContain('var(--ds-radius-lg)');
     expect(css).toContain('var(--ds-shadow-md)');
   });

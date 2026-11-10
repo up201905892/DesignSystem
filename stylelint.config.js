@@ -1,8 +1,9 @@
 // Applies to packages/ui/src/**/*.css (see the "lint" script). Values must come from
-// tokens: var(--ds-*). Documented exceptions: 0, 1px/2px in border and outline,
-// currentColor, transparent, inherit and percentages.
+// tokens: var(--ds-*). Documented exceptions: 0, currentColor, transparent, inherit
+// and percentages. Border and outline widths and offsets use --ds-border-width-*
+// and --ds-focus-ring-*, with no literal exception.
 const LENGTH_PROPERTIES =
-  /^(margin|padding|gap|row-gap|column-gap|border-radius|font-size|box-shadow)/;
+  /^(margin|padding|gap|row-gap|column-gap|border|outline|font-size|box-shadow)/;
 
 export default {
   rules: {
@@ -20,7 +21,7 @@ export default {
       'oklch',
       'color',
     ],
-    // margin/padding/gap/border-radius/font-size/box-shadow: no px, rem or em literals.
+    // margin/padding/gap/border*/outline*/font-size/box-shadow: no px, rem or em literals.
     'declaration-property-value-disallowed-list': [
       { [LENGTH_PROPERTIES.toString()]: [/(^|[^\w-])-?\d*\.?\d+(px|rem|em)\b/] },
       { message: 'Use a var(--ds-*) token instead of a hand-written length.' },

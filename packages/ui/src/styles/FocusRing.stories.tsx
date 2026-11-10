@@ -28,7 +28,16 @@ function Controls() {
   );
 }
 
-export const FocusRing: Story = { render: () => <Controls /> };
+export const FocusRing: Story = {
+  render: () => <Controls />,
+  play: ({ canvasElement }) => {
+    const button = canvasElement.querySelector<HTMLElement>('button');
+    if (!button) throw new Error('No button');
+    button.focus();
+    const width = getComputedStyle(button).outlineWidth;
+    if (width !== '2px') throw new Error(`Focus ring width is ${width}, expected 2px`);
+  },
+};
 
 export const DarkTheme: Story = {
   name: 'FocusRing/DarkTheme',
