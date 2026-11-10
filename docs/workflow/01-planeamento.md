@@ -52,7 +52,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036, DS-040 | Planeado |
 | DS-043 | Guias de temas e de personalização de estilos | Documentação | Média | DS-042 | Planeado |
 | DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Concluído |
-| DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Planeado |
+| DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Pronto para teste |
 | DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Planeado |
 | DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Planeado |
 | DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Planeado |
@@ -1732,6 +1732,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-10 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-10 · programador · Em desenvolvimento → Pronto para teste · commit c7ad0b7
 
 ### DS-046 · README do repositório e dos pacotes
 

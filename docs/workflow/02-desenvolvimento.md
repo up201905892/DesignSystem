@@ -806,3 +806,24 @@ Modelo de entrada:
   - Os itens "Profile" e "Sign out" do menu de utilizador não fazem nada (sem backend).
   - Não verifiquei visualmente a 320px nem os dois temas num navegador.
   - Sem sugestões novas para o planeador.
+
+### DS-045 · App de exemplo: formulário e tabela de dados
+
+**Iteração 1 — 2026-11-10**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** vista "Tasks" completa em `apps/example`. `DataTable` com 34 tarefas fictícias (`src/data.ts`), colunas ordenáveis (título, responsável, prioridade com `compare` próprio, data limite), estado e prioridade em `Badge`, paginação de 10 em 10 (página controlada, volta à 1 ao ordenar ou filtrar), e `DropdownMenu` por linha ("Edit", "Delete") aberto por um `IconButton` com `Tooltip`. `Popover` de filtros por estado (`RadioGroup`, com `PopoverClose` "Clear filter"). Botão "New task" abre um `Dialog` com o `TaskForm` (`Field`, `Input`, `Textarea`, `Select`, `Input type="date"`, `RadioGroup`, `Checkbox`, `Switch`); "Edit" abre o mesmo formulário preenchido. Validação ao submeter: título vazio mostra o `FieldError`, `aria-invalid`, focus no campo e o diálogo mantém-se aberto. Submeter com sucesso mostra o botão em `loading` durante 400 ms simulados, fecha, atualiza a tabela, mostra `Toast` de sucesso e devolve o focus a quem abriu (`onCloseAutoFocus` com um `opener` explícito: botão "New task" ou botão de ações da linha). "Delete" abre `Dialog` de confirmação com `Button variant="danger"`; confirmar remove a linha e mostra `Toast` com "Undo", que repõe a tarefa na posição original. `TooltipProvider` e `ToastProvider` passam a envolver a app em `App.tsx`, e os botões só com ícone do cabeçalho ganham `Tooltip`.
+- **Ficheiros alterados:** `apps/example/src/{Tasks.tsx,TaskForm.tsx,App.tsx,data.ts,layout.css,Tasks.test.tsx,coverage.test.ts}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** c7ad0b7 `feat(ui): DS-045 add task form, data table, filters and delete with undo to the example app`
+- **Critérios de aceitação cobertos:** todos, exceto a verificação visual a 320px e nos dois temas (para o testador, `pnpm example`). A regra "só com a biblioteca" (ESLint) e o Stylelint passam; o CSS acrescentou apenas `.ds-example-toolbar` e `.ds-example-table`, com tokens. G1 a G3.
+- **Testes escritos pelo programador:** `Tasks.test.tsx` (13 testes): 30+ tarefas e página de 10; mudar de página; ordenar por data limite (asc/desc, `aria-sort`); filtro por estado; criar tarefa válida (loading, toast, focus em "New task"); título vazio (erro, `aria-invalid`, focus, diálogo aberto); editar (focus volta ao botão da linha); apagar e "Undo"; Esc sem guardar; fluxo completo só com teclado (Tab até "New task", Enter, título, `Select` com setas e Enter, prioridade com setas, Espaço na checkbox, Enter para submeter, focus de volta); axe na vista, com o diálogo aberto e com o formulário em erro. `coverage.test.ts` (3 testes): percorre as exportações de `@up201905892/ui` e falha se alguma não for importada em `apps/example/src`, com lista `EXCEPTIONS` justificada.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991, example: 28) · build ✔
+- **Notas para o testador:**
+  - O `pnpm test` da app precisa do `dist` do `ui` já construído (`pnpm build` antes).
+  - `EXCEPTIONS` (15 nomes) cobre as peças de `Table`, `Pagination`/`usePagination`/`useTableSort` (compostas pelo `DataTable`), `useFieldControl`, `GridItem`, `DropdownMenuGroup`, `SelectGroup`, `SelectSeparator`, `CardDescription` e `CardFooter`. O teste também falha se uma exceção passar a ser usada.
+  - No `RadioGroup`, o Radix só seleciona ao focar com a seta enquanto a tecla está premida; no teste de teclado a seta é mantida (`{ArrowRight>}` e `{/ArrowRight}`), como nos testes do `ui`.
+  - Fecho do diálogo de apagar: o focus vai para "New task" (a linha deixa de existir); ao cancelar volta ao botão de ações da linha.
+  - O diálogo do formulário não fecha ao clicar fora (`closeOnOverlayClick={false}`), para não perder dados por engano; Esc e "Cancel" fecham.
+  - A data limite aparece em formato ISO (`AAAA-MM-DD`), sem formatação por locale (internacionalização está fora de âmbito).
+  - Não verifiquei visualmente a 320px nem os dois temas num navegador.
+  - Sem sugestões novas para o planeador.
