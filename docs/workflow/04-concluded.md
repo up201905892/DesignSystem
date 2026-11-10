@@ -377,6 +377,15 @@ Modelo de entrada:
 - **Documentação:** a app não tem stories (previsto na tarefa); o comportamento e as notas de acessibilidade (marcos, um `h1` por vista, ordem de Tab) estão cobertos pelos testes e pela verificação manual do relatório 1. Sem `TODO` na tarefa.
 - **Lições:** o `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes, como o CI). A regra do ESLint proíbe qualquer atributo `style` em `apps/example/src`, mais estrita que o critério. Os itens "Profile" e "Sign out" do menu não fazem nada (sem backend).
 
+### DS-045 · App de exemplo: formulário e tabela de dados — concluída a 2026-11-10
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-10), commit 6fab12e (inclui a implementação c7ad0b7); sem commits de código de produção depois do commit testado (d1009c0 é só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** vista "Tasks" em `apps/example`: `DataTable` com 34 tarefas, ordenação, paginação de 10, `DropdownMenu` por linha, `Popover` de filtros por estado, `Dialog` com formulário (`Field`, `Input`, `Textarea`, `Select`, `RadioGroup`, `Checkbox`, `Switch`) para criar e editar com validação e `loading`, `Dialog` de confirmação com `Undo` via `Toast`, `Tooltip` nos botões só com ícone; `coverage.test.ts` que falha se uma exportação de `@up201905892/ui` não for usada na app; 13 testes em `Tasks.test.tsx`.
+- **Changeset:** não aplicável (a app é `private: true`; a tarefa não altera `tokens`, `icons` nem `ui`)
+- **Documentação:** a app não tem stories (previsto na tarefa); comportamento e acessibilidade documentados nos testes (axe, fluxo só com teclado) e na verificação visual do relatório 1 (320 e 1280 px, tema claro e escuro). Sem `TODO` na tarefa.
+- **Lições:** o `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes). O diálogo do formulário não fecha ao clicar fora (decisão deliberada). A data limite aparece em ISO (sem i18n). Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
