@@ -1432,3 +1432,43 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Ficheiros temporários de verificação (script Playwright, capturas, ficheiro com elementos proibidos) foram removidos; nada ficou no repositório.
 - Após o skip link, "Overview" e os restantes passos de Tab seguem a ordem exigida; o quinto Tab entra no painel (`tabpanel`), o que é o comportamento esperado do `Tabs`.
 - O `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes), como o CI.
+
+### DS-045 · App de exemplo: formulário e tabela de dados — Relatório 1 — 2026-11-10
+
+- **Commit testado:** 6fab12e (inclui c7ad0b7; `git log` confirma ambos no branch `develop`)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Build | `pnpm build` (antes dos testes da app; inclui `apps/example`) | ✔ |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` (inclui `apps/example`) | ✔ |
+| Unitários | `pnpm test` (ui: 991, example: 28 em 3 ficheiros) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (223 testes, 32 suites) + axe e teclado nos testes da app + Chromium real | ✔ |
+
+**Critérios de aceitação:**
+- [x] Vista "Tasks" — 34 tarefas, páginas de 10, colunas ordenáveis (título, responsável, prioridade com `compare` próprio, data limite) com `aria-sort`, estado em `Badge`, `DropdownMenu` por linha ("Edit", "Delete") aberto por `IconButton`. Verificado no código (`Tasks.tsx`), nos testes e em Chromium (menu da linha aberto a 320px).
+- [x] "New task" abre `Dialog` com `Field`, `Input`, `Textarea`, `Select`, `RadioGroup`, `Checkbox`, `Switch` (mais `Input type="date"`); "Edit" abre o mesmo formulário preenchido. Verificado em `TaskForm.tsx`, nos testes e em capturas.
+- [x] Validação — título vazio: `FieldError` visível, `aria-invalid="true"`, focus no input e diálogo aberto (testes e Chromium, nos dois temas e larguras).
+- [x] Submissão válida — botão com `loading` (400 ms), diálogo fecha, linha na tabela, `Toast` de sucesso, focus de volta ao botão que abriu (teste de criação e de edição). Em Chromium, Esc devolve o focus a "New task".
+- [x] "Delete" — `Dialog` de confirmação com `Button variant="danger"`; confirmar remove a linha e mostra `Toast` com "Undo", que repõe a tarefa na posição original (teste).
+- [x] `Popover` de filtros por estado (teste: filtro reduz as linhas e volta à página 1); `Tooltip` no `IconButton` de ações e nos botões só com ícone do cabeçalho.
+- [x] Cobertura da biblioteca — `coverage.test.ts` falha se uma exportação de `@up201905892/ui` não for importada; 15 exceções justificadas, e o teste também falha se uma exceção passar a ser usada. Lógica de extração das importações lida e não é trivial.
+- [x] Regra "só com a biblioteca" — `pnpm lint` passa (inclui `no-restricted-syntax` de `apps/example/src`); CSS novo só com tokens (Stylelint passa).
+- [x] G1 a G3 — sem pacotes novos, lint/typecheck/test verdes, sem alterações a ficheiros protegidos.
+
+**Testes exigidos:** existem e não são triviais. `Tasks.test.tsx` (13): criar válida, título vazio (erro, `aria-invalid`, focus, diálogo aberto), editar, apagar e Undo, ordenar por data limite, mudar de página, filtro, Esc sem guardar, fluxo completo só com teclado (Tab, Enter, título, `Select` com setas e Enter, prioridade com setas, Espaço na checkbox, Enter, focus de volta a "New task"), axe na vista, com diálogo aberto e com o formulário em erro. `coverage.test.ts` (3).
+
+**Verificação visual (Chromium/Playwright, build de produção servida localmente; feita neste relatório):**
+- 320 e 1280 px, tema claro e escuro (via `prefers-color-scheme`): `scrollWidth` = `clientWidth` em todas as combinações (320/320 e 1280/1280) nas vistas Tasks, diálogo, diálogo com erro, popover de filtros e menu da linha. Fundo `rgb(248,250,252)` (claro) e `rgb(15,23,42)` (escuro), a partir de tokens.
+- A 320 px o diálogo ocupa 16 a 304 px, sem corte; a tabela rola dentro do seu contentor (`role="region"`, `tabIndex=0`, focável por teclado), sem scroll da página; o menu da linha e o popover ficam dentro do ecrã.
+- Capturas inspecionadas (tabela em claro e escuro, diálogo com erro em escuro, menu da linha em claro): texto legível, borda vermelha e mensagem de erro visíveis, focus visível, sem sobreposições. Sem erros na consola nem `pageerror`.
+- Limitação: o contraste foi avaliado visualmente e pelo axe nos testes (jsdom não calcula contraste de forma fiável); o `pnpm test:a11y` (axe em Chromium) cobre as stories da biblioteca, não esta app.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Ficheiros temporários (script e capturas) foram removidos; nada ficou no repositório além dos registos.
+- O diálogo do formulário não fecha ao clicar fora (decisão documentada pelo programador); Esc e "Cancel" fecham.
