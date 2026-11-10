@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-10
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Sem elas, o ciclo só tem tarefas pequenas por fazer (DS-053 a DS-057). Aprovar em `aprovacoes.md`.
+  2. **Story `Borders` (DS-052)** ficou em `Foundations/Scales` e não em `Foundations/Borders`. Aceitas, ou queres uma story à parte?
+  3. A DS-052 não foi verificada com capturas de ecrã nos dois temas (o testador não conseguiu escrever em `/tmp`); ficou coberta por `getComputedStyle` em browser real e pelo axe nas stories `DarkTheme`.
+  4. Resíduo do testador da DS-045 (`.qa045-tmp/`, capturas e um script) tinha ficado no repositório sem commit e fez o `pnpm lint` falhar; o orquestrador apagou-o. Os agentes devem pôr ficheiros temporários fora do repositório.
+  5. Pendentes antigos mantêm-se: teste intermitente do axe (DS-009) se voltar a aparecer, autor das DS-036, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-045 (app de exemplo: formulário e tabela), DS-052 (tokens de borda e de anel de focus, Stylelint sem exceção). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-045 (também em Chromium a 320 e 1280 px, nos dois temas), DS-052 (inclui `pnpm test:a11y` e stories com `play`). Zero falhas.
+- **Desenvolvidas:** DS-045, DS-052 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-053 (Média, depende da DS-052, agora desbloqueada), DS-054, DS-056; depois DS-055 e DS-057 (Baixa). Sem propostas novas (há 6 tarefas `Planeado` com dependências satisfeitas).
+
 ## 2026-11-09
 
 - **Decisões para o João:**
