@@ -1512,3 +1512,39 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - O programador referiu que o `pnpm lint` global falhava por `.qa045-tmp/`; neste ambiente não existe e o lint passa.
 - Ficheiros temporários: nenhum criado no repositório nem em `/tmp`.
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas — Relatório 1 — 2026-11-11
+
+- **Commit testado:** 9de2315 (registo 2b34889; presentes no histórico de `develop`, árvore limpa antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1025, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 225 testes, Chromium + axe, incluindo `play` de `Card/LongWord`, `Card/InGrid`, `Card/DarkTheme` e `DarkTheme` dos overlays) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `shadow.strong.md|lg` — lido `shadow.json` e `dist/tokens.css` (`--ds-shadow-strong-md|lg`): mesma geometria de `md`/`lg`, preto a 0,5.
+- [x] Tokens semânticos `shadow-raised|floating|modal` nos dois temas — lidos `light.json`/`dark.json` e `dist/themes.css`: claro `md, md, lg` (valores iguais aos atuais); escuro `strong.md, strong.md, strong.lg`; também no bloco `prefers-color-scheme`.
+- [x] `color-border-raised` — claro `{color.white}` (igual a `color-bg-surface`), escuro `{color.neutral.700}` (igual a `color-border-default`); só referências a primitivos.
+- [x] Card elevated e overlays — `Card.css` usa `--ds-shadow-raised` e `--ds-color-border-raised`; Tooltip, Popover, DropdownMenu e Select usam `floating`; Dialog e Toast usam `modal`; `grep -rnE "shadow-(sm|md|lg)" packages/ui/src --include=*.css` sem resultados.
+- [x] `overflow-wrap: anywhere` e `min-width: 0` no `.ds-card` e nas cinco subpartes — lido `Card.css`; `Card/LongWord` e `Card/InGrid` (palavra de 200 caracteres dentro de `Grid`) passam em Chromium.
+- [x] Testes de temas da DS-005 e pares de contraste — `pnpm test` em `packages/tokens` (92 testes) sem regressões.
+- [x] G1 a G3 — sem alterações a `package.json` nem ao lockfile no commit.
+
+**Testes exigidos:**
+- [x] Tokens: `themes.test.ts` cobre existência nos dois temas, opacidade >= 0,5 no escuro, igualdade do claro a `md`/`lg` e `border-raised`; `tokens.test.ts` cobre `strong.md|lg`.
+- [x] `shadow-tokens.css.test.ts` percorre todos os `.css` e falha com `--ds-shadow-sm|md|lg`; não trivial (afirma que há ficheiros e verifica cada um).
+- [x] Stories `Card/LongWord`, `Card/InGrid` e `Card/DarkTheme` com `play` conforme a especificação; passam no `pnpm test:a11y` (225 testes, mais um que antes). Axe sem violações.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- `Theme.stories.tsx` (apps/docs) ainda usa `--ds-shadow-sm` diretamente; fora de `packages/ui`, portanto fora do critério (já assinalado pelo programador).
+- Não foram feitas capturas visuais dos dois temas; a cobertura é `getComputedStyle` em browser real (`Card/DarkTheme`), valores gerados em `themes.css` e axe nas stories `DarkTheme`. Não foi feita prova negativa dos `play` (exigiria alterar código de produção).
+- Ficheiros temporários: nenhum criado.
