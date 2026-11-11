@@ -60,7 +60,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
 | DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Concluído |
 | DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Concluído |
-| DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Aprovado |
+| DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Concluído |
 | DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Planeado |
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Planeado |
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Planeado |
@@ -2041,6 +2041,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-11 · programador · Em desenvolvimento → Pronto para teste · commit 9de2315
 - 2026-11-11 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-11 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-11-11 · finalizador · Aprovado → Concluído · changeset acrescentado a first-release-components.md; registo em 04-concluded.md
 
 ### DS-054 · `@storybook/test` nos `play` de interação das stories
 
