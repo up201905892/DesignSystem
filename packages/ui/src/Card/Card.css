@@ -12,11 +12,13 @@
   font-size: var(--ds-font-size-md);
   line-height: var(--ds-font-line-height-normal);
   text-decoration: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .ds-card[data-variant='elevated'] {
-  border-color: transparent;
-  box-shadow: var(--ds-shadow-md);
+  border-color: var(--ds-color-border-raised);
+  box-shadow: var(--ds-shadow-raised);
 }
 
 .ds-card[data-padding='none'] {
@@ -35,6 +37,15 @@
 .ds-card:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
   outline-offset: var(--ds-focus-ring-offset);
+}
+
+.ds-card-header,
+.ds-card-title,
+.ds-card-description,
+.ds-card-body,
+.ds-card-footer {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .ds-card-header {

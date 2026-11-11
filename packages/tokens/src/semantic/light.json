@@ -14,7 +14,8 @@
     },
     "border": {
       "default": { "value": "{color.neutral.300}", "type": "color" },
-      "strong": { "value": "{color.neutral.500}", "type": "color" }
+      "strong": { "value": "{color.neutral.500}", "type": "color" },
+      "raised": { "value": "{color.white}", "type": "color" }
     },
     "accent": {
       "default": { "value": "{color.primary.600}", "type": "color" },
@@ -46,5 +47,10 @@
       "ring": { "value": "{color.primary.600}", "type": "color" }
     },
     "overlay": { "value": "{color.neutral.900}", "type": "color", "alpha": 0.5 }
+  },
+  "shadow": {
+    "raised": { "value": "{shadow.md}", "type": "shadow" },
+    "floating": { "value": "{shadow.md}", "type": "shadow" },
+    "modal": { "value": "{shadow.lg}", "type": "shadow" }
   }
 }

@@ -52,7 +52,11 @@ describe('primitive tokens', () => {
     expect(Object.keys(font.weight ?? {})).toEqual(['regular', 'medium', 'semibold', 'bold']);
     expect(Object.keys(font.lineHeight ?? {})).toEqual(['tight', 'normal', 'relaxed']);
     expect(Object.keys(tokens.radius as object)).toEqual(['none', 'sm', 'md', 'lg', 'full']);
-    expect(Object.keys(tokens.shadow as object)).toEqual(['sm', 'md', 'lg']);
+    expect(Object.keys(tokens.shadow as object)).toEqual(['sm', 'md', 'lg', 'strong']);
+    expect(Object.keys((tokens.shadow as Record<string, object>).strong ?? {})).toEqual([
+      'md',
+      'lg',
+    ]);
     expect(Object.keys(tokens.duration as object)).toEqual(['fast', 'normal']);
     expect(Object.keys(tokens.z as object)).toEqual([
       'dropdown',

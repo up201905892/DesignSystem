@@ -9,7 +9,13 @@ describe('Card.css', () => {
     expect(css).toContain('var(--ds-color-bg-surface)');
     expect(css).toContain('var(--ds-border-width-1) solid var(--ds-color-border-default)');
     expect(css).toContain('var(--ds-radius-lg)');
-    expect(css).toContain('var(--ds-shadow-md)');
+    expect(css).toContain('var(--ds-shadow-raised)');
+    expect(css).toContain('var(--ds-color-border-raised)');
+  });
+
+  it('breaks long words inside the card', () => {
+    expect(css).toMatch(/\.ds-card \{[^}]*min-width: 0;[^}]*overflow-wrap: anywhere;/);
+    expect(css).toMatch(/\.ds-card-title,[^{]*\{[^}]*overflow-wrap: anywhere;/);
   });
 
   it('has a focus-visible style for link cards', () => {

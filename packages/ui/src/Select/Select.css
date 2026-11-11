@@ -91,7 +91,7 @@
   color: var(--ds-color-text-default);
   font-family: var(--ds-font-family-sans);
   font-size: var(--ds-font-size-md);
-  box-shadow: var(--ds-shadow-md);
+  box-shadow: var(--ds-shadow-floating);
 }
 
 .ds-select__viewport {

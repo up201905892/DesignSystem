@@ -48,7 +48,7 @@
   border: var(--ds-border-width-1) solid var(--ds-toast-fg);
   border-radius: var(--ds-radius-md);
   background-color: var(--ds-color-bg-surface);
-  box-shadow: var(--ds-shadow-lg);
+  box-shadow: var(--ds-shadow-modal);
   color: var(--ds-color-text-default);
   font-family: var(--ds-font-family-sans);
   font-size: var(--ds-font-size-md);
