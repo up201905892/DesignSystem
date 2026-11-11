@@ -1548,3 +1548,42 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - `Theme.stories.tsx` (apps/docs) ainda usa `--ds-shadow-sm` diretamente; fora de `packages/ui`, portanto fora do critério (já assinalado pelo programador).
 - Não foram feitas capturas visuais dos dois temas; a cobertura é `getComputedStyle` em browser real (`Card/DarkTheme`), valores gerados em `themes.css` e axe nas stories `DarkTheme`. Não foi feita prova negativa dos `play` (exigiria alterar código de produção).
 - Ficheiros temporários: nenhum criado.
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories — Relatório 1 — 2026-11-11
+
+- **Commits testados:** 05286f5 (implementação) e 89a0c98 (registo); presentes no histórico de `develop`, árvore limpa antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1025, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 225 testes, Chromium + axe, `play` migrados incluídos) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Grep | `grep -rnE "new KeyboardEvent\|dispatchEvent\(\|\.click\(\)" packages/ui/src --include=*.stories.tsx` | sem resultados |
+
+**Critérios de aceitação:**
+- [x] `@storybook/test` ^8.6.18 (mesma menor do Storybook) em devDependencies de `packages/ui` e `apps/docs` — lido o diff dos `package.json` e do lockfile.
+- [x] Grep sem resultados; pesquisa mais larga (`dispatchEvent`, `.click(`, `setTimeout`) só encontra `wait`/`setTimeout` nos `play` de medição `Offset` (Tooltip, DropdownMenu, Select) e em `waitForToastsSettled`, e `userEvent.click` em `Button`.
+- [x] `Table/SortKeyboardInteraction` — lido o `play`: `userEvent.tab()` até ao botão, `{Enter}` (asc), espaço (desc), `expect` de `aria-sort`, primeira célula ("Ada Lovelace") e focus no botão.
+- [x] Stories de `Select`, `Tooltip`, `Popover`, `DropdownMenu`, `Dialog`, `Button/LoadingToggle`, `Toast/AfterLoading` — lido o diff do `Dialog` (Tab, Shift+Tab, Escape, regresso do focus ao trigger, mesmas verificações de antes, com `findByRole`/`waitFor`); as restantes passam no `test:a11y`; sem `setTimeout` de duração fixa nos `play` de interação.
+- [x] `Pagination/KeyboardInteraction` — lido: `tab()` em ciclo (sem `focus()`), `{Enter}` até à página 5 com `aria-current` e `document.activeElement` verificados a cada passo; na última página `aria-disabled="true"`, sem `disabled`, mais um Enter não muda a página; passo extra Shift+Tab/Tab confirma que o botão continua na ordem de tabulação.
+- [x] `DataTable/KeyboardInteraction` migrada (DS-035 `Concluído`).
+- [x] `play` de medição mantidos; `Table/HorizontalScroll` continua no `postVisit` (não tocado).
+- [x] `apps/docs/README.md` — secção "Interaction stories (`play`)" com a convenção e a divisão com o `postVisit`.
+- [x] `pnpm test:a11y` passa (225 testes, código 0). O painel "Interactions" é alimentado pelo `userEvent`/`expect` instrumentados do `@storybook/test`, que as stories migradas importam; não foi aberto o Storybook interativamente.
+- [x] G1 a G3 — única dependência nova é `@storybook/test`; nenhum componente alterado (só `*.stories.tsx`, `package.json`, lockfile e docs).
+
+**Testes exigidos:**
+- [x] Unitários Vitest inalterados e verdes (1025 em `ui`).
+- [x] Prova negativa 1 executada pelo testador: com o `aria-sort` esperado trocado para `descending` em `Table/SortKeyboardInteraction`, `pnpm test:a11y` falhou (1 falhado, 224 passados) identificando `Components/Table › SortKeyboardInteraction`; revertido, árvore limpa. As provas 2 e 3 (alteram código de produção) não foram repetidas por regra do testador; ficam com o registo do programador.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- `Dialog/KeyboardInteraction` ainda usa `last.focus()` para posicionar o focus no último elemento antes de testar o wrap do Tab; já existia antes, não entra no grep e as teclas testadas são reais.
+- `Table/SortKeyboardInteraction` tem uma asserção redundante de linhas, já assinalada pelo programador.
+- Ficheiros temporários: nenhum criado.
