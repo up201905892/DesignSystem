@@ -845,3 +845,20 @@ Modelo de entrada:
   - Sobreposição com DS-053 (também altera `Card.css`): a DS-053 está `Planeado`, não houve trabalho em simultâneo.
   - Não foi acrescentado changeset: a primeira versão (`first-release-components.md`) ainda não saiu e já cobre tokens e componentes; nenhum valor resolvido muda.
   - Sugestão para o planeador: uma tarefa para corrigir o ESLint global, que hoje analisa diretórios não rastreados como `.qa045-tmp/` (ou apagar esse diretório).
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas
+
+**Iteração 1 — 2026-11-11**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** novas sombras primitivas `shadow.strong.md` e `shadow.strong.lg` (mesma geometria de `md`/`lg`, preto a 0,5). Novos tokens semânticos nos dois temas: `shadow-raised`, `shadow-floating`, `shadow-modal` (claro: `md`, `md`, `lg`, sem mudança visual; escuro: `strong.md`, `strong.md`, `strong.lg`) e `color-border-raised` (claro: `color.white`, o mesmo primitivo de `color-bg-surface`; escuro: `color.neutral.700`, o mesmo de `color-border-default`). `Card elevated` usa `--ds-shadow-raised` e `--ds-color-border-raised`; Tooltip, Popover, DropdownMenu e Select usam `--ds-shadow-floating`; Dialog e Toast usam `--ds-shadow-modal`. `Card` e as subpartes com `min-width: 0` e `overflow-wrap: anywhere`.
+- **Ficheiros alterados:** `packages/tokens/src/primitives/shadow.json`, `packages/tokens/src/semantic/{light,dark}.json`, `packages/tokens/src/{themes,tokens}.test.ts`, `packages/ui/src/Card/{Card.css,Card.css.test.ts,Card.stories.tsx}`, `packages/ui/src/{Dialog,DropdownMenu,Popover,Select,Toast,Tooltip}/*.css`, `packages/ui/src/shadow-tokens.css.test.ts` (novo), `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 9de2315 `feat(ui): DS-053 add semantic shadow tokens per theme and break long words in Card`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 (sem dependências novas).
+- **Testes escritos pelo programador:** `themes.test.ts` (chaves novas nos dois temas, `color-border-raised` igual ao primitivo esperado, opacidade das sombras escuras >= 0,5, sombras do tema claro iguais a `md`/`lg`; o teste das fontes semânticas passa a aceitar referências `{shadow.*}` e o dos valores resolvidos aceita sombras); `tokens.test.ts` (chaves de `shadow` incluem `strong.md|lg`); `shadow-tokens.css.test.ts` (percorre `packages/ui/src/**/*.css` e falha com `--ds-shadow-sm|md|lg`); `Card.css.test.ts` (tokens novos e `overflow-wrap`). Stories: `Card/LongWord` (240px, palavra de 200 caracteres, `play` com `scrollWidth <= clientWidth`), `Card/InGrid` (agora com um cartão de palavra longa e `play` equivalente), `Card/DarkTheme` (`play` com `border-top-color` e `box-shadow`).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1025, example: 28) · build ✔
+- **Notas para o testador:**
+  - Os `play` não foram corridos em browser (`pnpm test:a11y` não executado aqui). Confirmar `Card/DarkTheme`, `Card/LongWord` e `Card/InGrid` e as stories `DarkTheme` dos overlays.
+  - A especificação pedia o caso da `Grid` na story `InGrid`; acrescentei um terceiro cartão com a palavra longa (substitui "Cobalt") em vez de uma story nova.
+  - `Theme.stories.tsx` (apps/docs) ainda usa `--ds-shadow-sm` diretamente; está fora de `packages/ui` e, por isso, fora do critério.
+  - Sem sugestões novas para o planeador.
