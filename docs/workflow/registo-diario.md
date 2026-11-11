@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-11
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Depois de DS-055 a DS-057 (as últimas `Planeado`), o ciclo fica sem trabalho até aprovares. Aprovar em `aprovacoes.md`.
+  2. `apps/docs/src/foundations/Theme.stories.tsx` ainda usa `--ds-shadow-sm` diretamente (fora do critério da DS-053, que só cobre `packages/ui`). Queres uma tarefa para o migrar para os tokens semânticos?
+  3. Pendentes anteriores mantêm-se: story `Borders` (DS-052) em `Foundations/Scales`, autor das DS-036, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-053 (sombras semânticas por tema, Card com palavras longas), DS-054 (`@storybook/test` nos `play`). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-053, DS-054, com `pnpm test:a11y` (225 testes) e zero falhas.
+- **Desenvolvidas:** DS-053, DS-054 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-056 (Média), depois DS-055 e DS-057 (Baixa). Sem propostas novas (há 3 tarefas `Planeado` com dependências satisfeitas).
+
 ## 2026-11-10
 
 - **Decisões para o João:**
