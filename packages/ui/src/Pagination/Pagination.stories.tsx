@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Pagination } from './Pagination';
 
 const meta = {
@@ -11,8 +12,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const Default: Story = { args: { pageCount: 5, defaultPage: 2 } };
 
@@ -70,22 +69,29 @@ export const KeyboardInteraction: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const next = canvasElement.querySelector<HTMLButtonElement>('button[aria-label="Next page"]');
-    if (!next) throw new Error('No next button');
-    next.focus();
-    // `click()` is what Enter does on a focused button.
-    for (let i = 0; i < 4; i += 1) {
-      next.click();
-      await wait(20);
-      if (document.activeElement !== next) throw new Error('Focus left the next button');
+    const next = within(canvasElement).getByRole('button', { name: 'Next page' });
+    // Reach "next" with Tab, as a keyboard user would (previous and page buttons come first).
+    for (let i = 0; i < 10 && document.activeElement !== next; i += 1) {
+      await userEvent.tab();
     }
-    const current = canvasElement.querySelector('[aria-current="page"]');
-    if (current?.textContent !== '5') throw new Error('Did not reach the last page');
-    if (next.getAttribute('aria-disabled') !== 'true') throw new Error('Next is not disabled');
-    if (next.hasAttribute('disabled')) throw new Error('Next must not use the disabled attribute');
-    next.click();
-    await wait(20);
-    if (document.activeElement !== next) throw new Error('Focus left the next button');
+    await expect(next).toHaveFocus();
+    for (let page = 2; page <= 5; page += 1) {
+      await userEvent.keyboard('{Enter}');
+      await waitFor(() =>
+        expect(canvasElement.querySelector('[aria-current="page"]')).toHaveTextContent(`${page}`),
+      );
+      await expect(document.activeElement).toBe(next);
+    }
+    await expect(next).toHaveAttribute('aria-disabled', 'true');
+    await expect(next).not.toHaveAttribute('disabled');
+    await userEvent.keyboard('{Enter}');
+    await expect(canvasElement.querySelector('[aria-current="page"]')).toHaveTextContent('5');
+    await expect(document.activeElement).toBe(next);
+    // The disabled "next" stays in the tab order: leave it and come back with the keyboard.
+    await userEvent.tab({ shift: true });
+    await expect(next).not.toHaveFocus();
+    await userEvent.tab();
+    await expect(next).toHaveFocus();
   },
 };
 

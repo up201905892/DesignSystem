@@ -61,7 +61,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Concluído |
 | DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Concluído |
 | DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Concluído |
-| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Planeado |
+| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Em desenvolvimento |
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Planeado |
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Planeado |
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Planeado |
@@ -2077,6 +2077,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-010, DS-018, DS-021, DS-033; registo diário)
 - 2026-10-27 · planeador · Proposta (sem mudança de estado) · especificação revista: absorve a migração de `Pagination/KeyboardInteraction` sugerida na conclusão da DS-034 (critério, prova negativa e dependência DS-034); a DS-035 fica abrangida se já estiver concluída
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-11 · programador · Planeado → Em desenvolvimento · início da implementação
 
 ### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
 

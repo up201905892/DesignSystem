@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Button } from './Button';
 
 const meta = {
@@ -132,16 +133,15 @@ export const LoadingToggle: Story = {
     );
   },
   play: async ({ canvasElement }) => {
-    const button = canvasElement.querySelector<HTMLButtonElement>('button');
-    if (!button) throw new Error('No button');
-    button.focus();
+    const button = within(canvasElement).getByRole('button');
+    await userEvent.tab();
+    await expect(button).toHaveFocus();
     const before = button.getBoundingClientRect().width;
-    button.click();
-    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
-    if (!button.hasAttribute('data-loading')) throw new Error('Button is not loading');
-    if (document.activeElement !== button) throw new Error('Focus left the button');
+    await userEvent.click(button);
+    await waitFor(() => expect(button).toHaveAttribute('data-loading'));
+    await expect(button).toHaveFocus();
     const after = button.getBoundingClientRect().width;
-    if (Math.abs(after - before) > 0.5) throw new Error(`Width changed: ${before} -> ${after}`);
+    await expect(Math.abs(after - before)).toBeLessThanOrEqual(0.5);
   },
 };
 

@@ -862,3 +862,21 @@ Modelo de entrada:
   - A especificação pedia o caso da `Grid` na story `InGrid`; acrescentei um terceiro cartão com a palavra longa (substitui "Cobalt") em vez de uma story nova.
   - `Theme.stories.tsx` (apps/docs) ainda usa `--ds-shadow-sm` diretamente; está fora de `packages/ui` e, por isso, fora do critério.
   - Sem sugestões novas para o planeador.
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories
+
+**Iteração 1 — 2026-11-11**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `@storybook/test@^8.6.18` instalado como devDependency de `packages/ui` e de `apps/docs`. Os `play` de `Button/LoadingToggle`, `Toast/AfterLoading`, `Tooltip/KeyboardInteraction`, `Popover/KeyboardInteraction`, `DropdownMenu/KeyboardInteraction`, `Select/KeyboardInteraction` e `Select/Offset` (também usava `dispatchEvent`), `Dialog/KeyboardInteraction`, `Table/SortKeyboardInteraction`, `Pagination/KeyboardInteraction` e `DataTable/KeyboardInteraction` (DS-035 já `Concluído`) usam `userEvent` (`tab`, `keyboard`, `click`) e `expect`/`waitFor`/`findBy*` com `within(canvasElement)` ou `within(document.body)` (portais). Os `setTimeout` de duração fixa e os helpers `press`/`wait` deixaram de existir nas stories migradas (ficam só nos `play` de medição `Offset` de Tooltip, DropdownMenu e Select, e em `waitForToastsSettled`). `apps/docs/README.md` ganhou a secção "Interaction stories (`play`)" com a convenção e a divisão com o `postVisit` do `test-runner.ts` (`Table/HorizontalScroll` fica com teclas reais do Playwright, inalterado).
+- **Ficheiros alterados:** `packages/ui/package.json`, `apps/docs/package.json`, `pnpm-lock.yaml`, `packages/ui/src/{Button,Toast,Tooltip,Popover,DropdownMenu,Select,Dialog,Table,Pagination,DataTable}/*.stories.tsx`, `apps/docs/README.md`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`. Nenhum componente alterado.
+- **Commit(s):** ver histórico da tarefa no Planeamento.
+- **Critérios de aceitação cobertos:** todos. `grep -nE "new KeyboardEvent|dispatchEvent\(|\.click\(\)"` em `packages/ui/src/**/*.stories.tsx` não devolve nada. G1 a G3 (dependência `@storybook/test`, mesma versão do Storybook).
+- **Testes escritos pelo programador:** os próprios `play` migrados (os testes Vitest não mudam). Em `Pagination/KeyboardInteraction` acrescentei, no fim, sair do botão "seguinte" desativado com Shift+Tab e voltar com Tab: sem isto a terceira prova negativa não falhava (o focus fica retido num botão que passa a `tabIndex=-1` depois de focado).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1025, example: 28) · build ✔ · `pnpm test:a11y` ✔ (225 testes, `play` corridos em Chromium).
+- **Provas negativas (temporárias, revertidas, não commitadas):** (1) `aria-sort` esperado errado em `Table/SortKeyboardInteraction` faz o test:a11y falhar nessa story; (2) `onKeyDown={(e) => e.preventDefault()}` no botão de ordenação faz falhar a mesma story no passo do Enter; (3) `tabIndex={-1}` no "seguinte" desativado da `Pagination` faz falhar `Pagination/KeyboardInteraction`.
+- **Notas para o testador:**
+  - `Table/SortKeyboardInteraction`: a região de scroll (`tabIndex=0`) apanha o primeiro Tab, por isso o `play` repete `tab()` até chegar ao botão (máx. 3). O mesmo padrão (`tab()` em ciclo até ao alvo) é usado em `Pagination` e `DataTable`.
+  - `Toast/AfterLoading` espera agora com `waitForToastsSettled` antes de terminar, para o axe não medir o toast a meio da animação (sem isso o test:a11y falhava por contraste).
+  - `Table/SortKeyboardInteraction` inclui uma asserção redundante de linhas (`getAllByRole('row')`) que pode ser retirada sem perda.
+  - Sem sugestões novas para o planeador.

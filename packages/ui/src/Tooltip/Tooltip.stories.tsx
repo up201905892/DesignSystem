@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { SettingsIcon } from '@up201905892/icons';
 import { Button } from '../Button';
 import { IconButton } from '../IconButton';
@@ -63,16 +64,13 @@ export const KeyboardInteraction: Story = {
     </Tooltip>
   ),
   play: async ({ canvasElement }) => {
-    const trigger = canvasElement.querySelector('button') as HTMLButtonElement;
-    trigger.focus();
-    await wait(100);
-    const open = document.querySelector('[role="tooltip"]');
-    if (!open) throw new Error('Tooltip did not open on focus');
-    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-    await wait(100);
-    if (document.querySelector('[role="tooltip"]'))
-      throw new Error('Esc did not close the tooltip');
-    if (document.activeElement !== trigger) throw new Error('Focus moved away from the trigger');
+    const trigger = within(canvasElement).getByRole('button');
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await expect(await within(document.body).findByRole('tooltip')).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(within(document.body).queryByRole('tooltip')).toBeNull());
+    await expect(trigger).toHaveFocus();
   },
 };
 

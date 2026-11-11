@@ -38,3 +38,18 @@ export const DarkTheme: Story = {
 shadows. They are generated from the `tokens` and `themes` objects of
 `@up201905892/tokens`, so there are no hand-written token lists. `@up201905892/tokens` is built
 automatically before `storybook`, `build-storybook`, `test:a11y` and `typecheck`.
+
+## Interaction stories (`play`)
+
+`play` functions use `@storybook/test`: `userEvent` for the keyboard and mouse
+(`tab`, `keyboard('{Enter}')`, `click`, `hover`), `within(canvasElement)` or
+`within(document.body)` (portals) to find elements, and `expect` / `waitFor` /
+`findBy*` to verify. Do not dispatch `KeyboardEvent`, call `.click()` or wait
+with a fixed `setTimeout` in a `play`. The Interactions panel shows each step.
+New `play` functions (for example in new components) follow this convention.
+
+Division of work: `userEvent` covers what a simulation can reproduce (focus
+order, Enter, Space, Escape, arrows). Native browser behaviour it cannot
+reproduce, such as horizontal scrolling with the arrow keys in
+`Table/HorizontalScroll`, stays in `postVisit` of `.storybook/test-runner.ts`,
+with real Playwright key presses.

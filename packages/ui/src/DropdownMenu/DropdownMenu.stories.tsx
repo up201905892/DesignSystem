@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { EllipsisIcon, PencilIcon, SettingsIcon, Trash2Icon, UserIcon } from '@up201905892/icons';
 import { Button } from '../Button';
 import { IconButton } from '../IconButton';
@@ -41,8 +42,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-const press = (target: Element, key: string) =>
-  target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
 
 export const Default: Story = { args: { defaultOpen: true } };
 
@@ -165,32 +164,25 @@ export const KeyboardInteraction: Story = {
     </DropdownMenu>
   ),
   play: async ({ canvasElement }) => {
-    const trigger = canvasElement.querySelector<HTMLElement>('button');
-    if (!trigger) throw new Error('No trigger');
-    trigger.focus();
-    press(trigger, 'ArrowDown');
-    await wait(300);
-    const menu = document.querySelector<HTMLElement>('[role="menu"]');
-    if (!menu) throw new Error('Menu did not open');
-    const items = [...menu.querySelectorAll<HTMLElement>('[role="menuitem"]')];
+    const trigger = within(canvasElement).getByRole('button', { name: 'Actions' });
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    const menu = await within(document.body).findByRole('menu');
+    const items = within(menu).getAllByRole('menuitem');
     const [first, , last] = items;
     if (!first || !last) throw new Error('Items missing');
-    if (document.activeElement !== first) throw new Error('First item was not focused');
+    await waitFor(() => expect(first).toHaveFocus());
 
-    press(first, 'ArrowDown');
-    await wait(50);
-    if (document.activeElement !== last)
-      throw new Error('Arrow Down did not skip the disabled item');
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(last).toHaveFocus();
 
-    press(last, 'ArrowUp');
-    await wait(50);
-    if (document.activeElement !== first)
-      throw new Error('Arrow Up did not skip the disabled item');
+    await userEvent.keyboard('{ArrowUp}');
+    await expect(first).toHaveFocus();
 
-    press(first, 'Escape');
-    await wait(300);
-    if (document.querySelector('[role="menu"]')) throw new Error('Escape did not close the menu');
-    if (document.activeElement !== trigger) throw new Error('Focus did not return to the trigger');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(within(document.body).queryByRole('menu')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 
