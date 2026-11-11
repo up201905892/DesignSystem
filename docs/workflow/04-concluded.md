@@ -404,6 +404,15 @@ Modelo de entrada:
 - **Documentação:** stories `Card/LongWord`, `Card/InGrid` e `Card/DarkTheme` (com `play` em browser real) e stories `DarkTheme` dos overlays; props do `Card` inalteradas. Sem `TODO` na tarefa.
 - **Lições:** `Theme.stories.tsx` em `apps/docs` ainda usa `--ds-shadow-sm` diretamente (fora de `packages/ui`, fora do critério); observação para o planeador, sem tarefa criada. Sem capturas visuais dos dois temas nem prova negativa dos `play` (registado pelo testador).
 
+### DS-054 · `@storybook/test` nos `play` de interação das stories — concluída a 2026-11-11
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-11), commit 05286f5 (implementação); sem commits de código de produção depois do commit testado (89a0c98 e 75a5b9d são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `@storybook/test@^8.6.18` como devDependency de `packages/ui` e `apps/docs`; os `play` de interação de `Button`, `Toast`, `Tooltip`, `Popover`, `DropdownMenu`, `Select`, `Dialog`, `Table`, `Pagination` e `DataTable` usam `userEvent` e `expect`/`waitFor`/`findBy*`, sem `KeyboardEvent` despachados, `dispatchEvent` nem `.click()` (grep vazio); `Pagination/KeyboardInteraction` valida `aria-current`, focus e `aria-disabled` no limite; `apps/docs/README.md` com a secção "Interaction stories (`play`)" e a divisão com o `postVisit`.
+- **Changeset:** não aplicável (só stories, `devDependencies` e documentação; nenhum código publicado de `tokens`, `icons` nem `ui` muda)
+- **Documentação:** convenção dos `play` em `apps/docs/README.md`; as stories migradas já existiam, incluindo as variantes de tema escuro. Sem `TODO` na tarefa.
+- **Lições:** `Dialog/KeyboardInteraction` ainda usa `last.focus()` para posicionar o focus antes de testar o wrap do Tab (preexistente, as teclas testadas são reais). `Table/SortKeyboardInteraction` tem uma asserção redundante de linhas. Só a prova negativa 1 foi repetida pelo testador; as provas 2 e 3 ficam com o registo do programador. O painel "Interactions" não foi aberto interativamente. Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
