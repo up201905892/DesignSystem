@@ -1587,3 +1587,42 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - `Dialog/KeyboardInteraction` ainda usa `last.focus()` para posicionar o focus no último elemento antes de testar o wrap do Tab; já existia antes, não entra no grep e as teclas testadas são reais.
 - `Table/SortKeyboardInteraction` tem uma asserção redundante de linhas, já assinalada pelo programador.
 - Ficheiros temporários: nenhum criado.
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la — Relatório 1 — 2026-11-12
+
+- **Commit testado:** dd8c6ce (implementação; ef5e546 e 14bf3a8 são registo); presente no histórico de `develop`, sem alterações por guardar antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Build | `pnpm build` (antes do typecheck) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1036, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 227 testes, axe e `play`, chromium) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `focusableWhenDisabled?: boolean` (omissão `false`), sem efeito sem `disabled` — leitura de `Button.tsx` (`keepFocusable = disabled && focusableWhenDisabled`) e teste "has no effect without disabled" (sem `aria-disabled` nem `data-disabled`)
+- [x] `<button>` nativo: sem `disabled`, com `aria-disabled="true"` e `data-disabled`, sem `tabindex`; `onClick` não chamado; sem envio por clique nem por Enter num `Input` do mesmo formulário — testes em `Button.focusable.test.tsx` (`blockClick` em captura)
+- [x] `asChild` com `<a href>`: `aria-disabled`, `data-disabled`, sem `tabindex`, `fireEvent.click` devolve `false` (`defaultPrevented`) — teste e código
+- [x] `loading` + `disabled` + prop continua focável (`disabled: nativeDisabled` é `false`); JSDoc de `loading` atualizado — teste e diff
+- [x] Aspeto desativado inalterado: `Button.css` fora do diff do commit (`git show --stat`)
+- [x] `IconButton` aceita e passa a prop (`ButtonProps` herdado; só JSDoc mudou); nome acessível obrigatório mantém-se (typecheck verde) — `IconButton.focusable.test.tsx`
+- [x] JSDoc de `focusableWhenDisabled` explica quando usar (controlo que se desativa ao ser ativado, ex.: "seguinte" na última página) e que por omissão `disabled` tira o botão do Tab — leitura do diff
+- [x] `Pagination.tsx` usa `disabled={!canPrevious}`/`disabled={!canNext}` + `focusableWhenDisabled`, sem `aria-disabled`, `data-disabled` nem bloqueio manuais; JSDoc refere a prop; HTML nos limites igual — diff e testes da DS-034 inalterados e verdes (stories da Pagination não alteradas)
+- [x] Testes da DS-010, DS-011, DS-021 e DS-034 passam sem alteração (1036 testes verdes; o commit só acrescenta ficheiros de teste novos)
+- [x] G1 a G3 e C1 a C5: sem dependências novas (nenhum `package.json` no diff); testes e stories nas pastas `Button` e `IconButton`
+
+**Testes exigidos:**
+- [x] Unitários e teclado (Tab chega ao botão, Enter e Espaço não chamam `onClick`, focus mantido ao passar a `disabled` com a prop, sem a prop o botão sai da ordem de Tab) — existem e verificam o comportamento pedido; não são triviais. O comportamento sem a prop é verificado pela ordem de Tab porque o jsdom não larga o `activeElement` (documentado no teste)
+- [x] axe nos testes unitários e `pnpm test:a11y` sem violações
+- [x] Stories `Button/FocusableWhenDisabled` (com descrição de quando usar) e `IconButton/FocusableWhenDisabled`; `DarkTheme` de ambos com exemplo da prop; `Pagination/FirstPage`, `LastPage` e `KeyboardInteraction` passam em `pnpm test:a11y`
+
+**Casos limite verificados:** `disabled` sem a prop (comportamento antigo intacto), `loading` combinado, `asChild`, `type="submit"` em formulário, tema escuro (story `DarkTheme` com axe). O aspeto desativado reutiliza `[data-disabled]` sem CSS novo, logo o contraste é o já aprovado.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.

@@ -63,7 +63,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Concluído |
 | DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Concluído |
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Planeado |
-| DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Pronto para teste |
+| DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Aprovado |
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Planeado |
 
 ## Decisões aplicadas
@@ -2147,6 +2147,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 - 2026-11-12 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-12 · programador · Em desenvolvimento → Pronto para teste · commit dd8c6ce
+- 2026-11-12 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-12 · testador · Em teste → Aprovado · relatório 1, todas as verificações e critérios verdes
 
 ### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`)
 
