@@ -1,7 +1,7 @@
 import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { expectNoA11yViolations } from '../../test/a11y';
 import { Grid, GridItem } from './Grid';
 
@@ -164,5 +164,81 @@ describe('Grid and GridItem (QA edge cases)', () => {
   it('keeps gap 0 as a data attribute', () => {
     render(<Grid gap={0} data-testid="g" />);
     expect(screen.getByTestId('g')).toHaveAttribute('data-gap', '0');
+  });
+});
+
+describe('GridItem colSpan validation', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
+  });
+
+  it.each([0, -1, 1.5, Number.NaN, Infinity])('ignores colSpan %s and warns once', (value) => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const { rerender } = render(<GridItem colSpan={value} data-testid="i" />);
+    const el = screen.getByTestId('i');
+    expect(el).not.toHaveAttribute('data-col-span');
+    expect(el.style.getPropertyValue('--ds-grid-col-span')).toBe('');
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      `GridItem: colSpan must be a whole number ≥ 1, received ${String(value)}`,
+    );
+    rerender(<GridItem colSpan={value} data-testid="i" className="x" />);
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not warn in production', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<GridItem colSpan={0} data-testid="i" />);
+    expect(screen.getByTestId('i')).not.toHaveAttribute('data-col-span');
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('does not warn with valid or missing values', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(
+      <>
+        <GridItem colSpan={2} data-testid="a" />
+        <GridItem data-testid="b" />
+      </>,
+    );
+    expect(screen.getByTestId('a')).toHaveAttribute('data-col-span', '2');
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('limits colSpan to the number of columns of the Grid', () => {
+    render(
+      <Grid columns={3}>
+        <GridItem colSpan={5} data-testid="i" />
+        <GridItem colSpan={2} data-testid="j" />
+      </Grid>,
+    );
+    const el = screen.getByTestId('i');
+    expect(el).toHaveAttribute('data-col-span', '3');
+    expect(el.style.getPropertyValue('--ds-grid-col-span')).toBe('3');
+    expect(screen.getByTestId('j')).toHaveAttribute('data-col-span', '2');
+  });
+
+  it('keeps colSpan with minColumnWidth and outside a Grid', () => {
+    render(
+      <>
+        <Grid minColumnWidth="10rem">
+          <GridItem colSpan={5} data-testid="i" />
+        </Grid>
+        <GridItem colSpan={7} data-testid="o" />
+      </>,
+    );
+    expect(screen.getByTestId('i')).toHaveAttribute('data-col-span', '5');
+    expect(screen.getByTestId('o')).toHaveAttribute('data-col-span', '7');
+  });
+
+  it('has no axe violations', async () => {
+    const { container } = render(
+      <Grid columns={3}>
+        <GridItem colSpan={5}>a</GridItem>
+      </Grid>,
+    );
+    await expectNoA11yViolations(container);
   });
 });
