@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-12
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Depois da DS-057 (a única `Planeado`), o ciclo fica sem trabalho até aprovares. Aprovar em `aprovacoes.md`.
+  2. **DS-058 proposta** (stories de fundações: `Theme.stories.tsx` com sombras semânticas, página das sombras semânticas, `1px`/`2px` escritos à mão nas stories). Aprovas?
+  3. Pendentes anteriores mantêm-se: story `Borders` (DS-052) em `Foundations/Scales`, autor das DS-036, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-056 (`focusableWhenDisabled` no Button/IconButton e na Pagination), DS-055 (validação e limite de `colSpan` no GridItem). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-056 e DS-055, com `pnpm test:a11y` (227 e 228 testes) e zero falhas.
+- **Desenvolvidas:** DS-056, DS-055 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma. Nota de processo: o finalizador da DS-056 e o programador da DS-055 correram em paralelo e um commit apanhou a linha de estado da DS-055 em `01-planeamento.md`; o histórico ficou coerente. Não se repete (uma tarefa de cada vez).
+- **Próximo passo:** DS-057 (Baixa). Proposta nova: DS-058.
+
 ## 2026-11-11
 
 - **Decisões para o João:**
