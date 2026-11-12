@@ -1626,3 +1626,38 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 
 **Notas (não são falhas):**
 - Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas — Relatório 1 — 2026-11-12
+
+- **Commit testado:** b0e40b7 (implementação; 22272fb é registo); presente no histórico de `develop`; sem alterações por guardar antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Build | `pnpm build` (antes do typecheck) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1046, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 228 testes, axe e `play`, chromium) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Só inteiros ≥ 1: `Number.isInteger(colSpan) && colSpan >= 1`; `it.each` com `0`, `-1`, `1.5`, `NaN`, `Infinity` confirma ausência de `data-col-span` e de `--ds-grid-col-span` — código e testes
+- [x] `console.warn` único por elemento com o valor (mensagem exata do plano), sem repetição em re-render; nada em produção (`vi.stubEnv`) nem com valores válidos. Mecanismo (`try { process.env.NODE_ENV === 'production' } catch`, só em `useEffect`) registado em `02-desenvolvimento.md`; `dist/index.js` e `dist/index.cjs` mantêm o literal `process.env.NODE_ENV` (substituível por bundlers), build ESM/CJS verde, sem acesso no render (SSR seguro) — leitura do diff e do `dist`
+- [x] Contexto com `columns` numérico (`undefined` com `minColumnWidth`); `colSpan={5}` em `columns={3}` → `data-col-span="3"`; com `minColumnWidth` e fora do `Grid` mantém `5` — testes e código
+- [x] JSDoc de `colSpan` descreve valores aceites e limite; nota sobre colunas implícitas removida — diff
+- [x] G1 a G3 e C1 a C5: nenhum `package.json` no diff (sem dependências novas); testes e stories só na pasta `Grid`
+
+**Testes exigidos:**
+- [x] Unitários: todos os casos pedidos existem e verificam o comportamento (não triviais: atributo, custom property, contagem e texto do aviso, re-render); testes anteriores da DS-028 passam sem alteração
+- [x] Acessibilidade: axe nos testes unitários e em `pnpm test:a11y` sem violações; a árvore de acessibilidade não muda (só atributos `data-*` e custom property)
+- [x] Story `Grid/SpanClamped` (`columns={3}`, item `colSpan={5}`) com `play` que compara a largura do item com a largura de conteúdo do `Grid` e exige 3 valores em `gridTemplateColumns`; passa em `pnpm test:a11y` em Chromium
+
+**Casos limite verificados:** `colSpan` ausente, `Infinity`, StrictMode/re-render sem aviso repetido, `asChild` (testes existentes), `Grid` aninhado (contexto do `Grid` mais próximo; `minColumnWidth` repõe `undefined`). Sem CSS novo, logo contraste e tema escuro inalterados.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Consistência do histórico da DS-055: o commit 139d6f1 (finalizador, DS-056) apanhou a linha `Em desenvolvimento` da DS-055; o histórico da tarefa em `01-planeamento.md` está coerente (Planeado → Em desenvolvimento → Pronto para teste → Em teste) e a tabela-índice mostrava `Pronto para teste` antes do teste.
+- Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
