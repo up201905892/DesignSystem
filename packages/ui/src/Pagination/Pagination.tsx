@@ -58,11 +58,10 @@ function getEntries(page: number, count: number, siblings: number): Entry[] {
  * @example
  * <Pagination pageCount={20} defaultPage={5} onPageChange={setPage} />
  *
- * Accessibility: the current page has `aria-current="page"`. Intentional exception to the
- * `disabled` of `Button` (which takes the element out of the Tab order): on the first page
- * "previous" and on the last page "next" use `aria-disabled="true"` and `data-disabled`,
- * without the `disabled` attribute and without `tabIndex={-1}`. The button stays focusable and
- * the click is blocked. Someone using the keyboard presses "next" until the last page and the
+ * Accessibility: the current page has `aria-current="page"`. On the first page "previous"
+ * and on the last page "next" are disabled with `focusableWhenDisabled`, so they have
+ * `aria-disabled="true"` and `data-disabled`, without the `disabled` attribute and without
+ * `tabIndex={-1}`. The button stays focusable and the click is blocked. Someone using the keyboard presses "next" until the last page and the
  * focused button becomes disabled; if it left the Tab order the focus would be lost.
  * The ellipses are `aria-hidden` and not focusable.
  */
@@ -110,12 +109,10 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
             variant="ghost"
             size={size}
             aria-label={previousLabel}
-            aria-disabled={canPrevious ? undefined : true}
-            data-disabled={canPrevious ? undefined : ''}
+            disabled={!canPrevious}
+            focusableWhenDisabled
             icon={<ChevronLeftIcon />}
-            onClick={() => {
-              if (canPrevious) previous();
-            }}
+            onClick={previous}
           />
         </li>
         {entries.map((entry) =>
@@ -144,12 +141,10 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
             variant="ghost"
             size={size}
             aria-label={nextLabel}
-            aria-disabled={canNext ? undefined : true}
-            data-disabled={canNext ? undefined : ''}
+            disabled={!canNext}
+            focusableWhenDisabled
             icon={<ChevronRightIcon />}
-            onClick={() => {
-              if (canNext) next();
-            }}
+            onClick={next}
           />
         </li>
       </ul>

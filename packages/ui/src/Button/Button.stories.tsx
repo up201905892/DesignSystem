@@ -83,6 +83,23 @@ export const Disabled: Story = {
   ),
 };
 
+/**
+ * Use `focusableWhenDisabled` when the focused control can become disabled because it was
+ * activated (for example "next" on the last page), so the focus is not lost. The button keeps
+ * `aria-disabled="true"` and stays in the Tab order; clicks are blocked. Without it, `disabled`
+ * takes the button out of the Tab order.
+ */
+export const FocusableWhenDisabled: Story = {
+  render: () => (
+    <div style={row}>
+      <Button disabled focusableWhenDisabled>
+        Focusable
+      </Button>
+      <Button disabled>Not focusable</Button>
+    </div>
+  ),
+};
+
 export const Loading: Story = {
   parameters: {
     docs: {
@@ -178,6 +195,9 @@ export const DarkTheme: Story = {
       <Button variant="ghost">Ghost</Button>
       <Button variant="danger">Danger</Button>
       <Button disabled>Disabled</Button>
+      <Button disabled focusableWhenDisabled>
+        Focusable
+      </Button>
       <Button loading>Loading</Button>
       <Button asChild>
         <a href="#docs">Link</a>
