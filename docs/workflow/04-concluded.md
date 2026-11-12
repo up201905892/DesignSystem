@@ -422,6 +422,15 @@ Modelo de entrada:
 - **Documentação:** JSDoc de `focusableWhenDisabled` (quando usar e comportamento por omissão), stories `Button/FocusableWhenDisabled` e `IconButton/FocusableWhenDisabled`, e exemplo com a prop nas `DarkTheme` de ambos. Sem `TODO` na tarefa.
 - **Lições:** o `typecheck` de `apps/example` exige o `build` do `ui` antes. O teste "sem a prop" verifica a ordem de Tab porque o jsdom não larga o `activeElement`. A página de conformidade deve refletir a prop (já prevista noutra tarefa planeada). Sem sugestões novas para o planeador.
 
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas — concluída a 2026-11-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-12), commit b0e40b7 (implementação); sem commits de código de produção depois do commit testado (22272fb e 07ee1fe são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `GridItem` só aceita `colSpan` inteiro ≥ 1; valores inválidos (`0`, negativos, decimais, `NaN`, `Infinity`) são ignorados (sem `data-col-span` nem `--ds-grid-col-span`) com um único `console.warn` por elemento fora de produção; `Grid` partilha `columns` numérico por contexto e `colSpan` acima de `columns` é limitado a `columns` (com `minColumnWidth` ou fora de um `Grid` o valor mantém-se).
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido (pacotes em `0.0.0`), mesmo critério da DS-052 a DS-056
+- **Documentação:** JSDoc de `colSpan` com valores aceites e limite; story `Grid/SpanClamped` (com `play` em browser real) e `Grid/DarkTheme` existente. Sem `TODO` na tarefa.
+- **Lições:** o aviso só corre em `useEffect` (SSR seguro) e deteta produção por `process.env.NODE_ENV` com `try/catch`, com `process` declarado localmente por não haver `@types/node`. Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
