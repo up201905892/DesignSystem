@@ -880,3 +880,20 @@ Modelo de entrada:
   - `Toast/AfterLoading` espera agora com `waitForToastsSettled` antes de terminar, para o axe não medir o toast a meio da animação (sem isso o test:a11y falhava por contraste).
   - `Table/SortKeyboardInteraction` inclui uma asserção redundante de linhas (`getAllByRole('row')`) que pode ser retirada sem perda.
   - Sem sugestões novas para o planeador.
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la
+
+**Iteração 1 — 2026-11-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `ButtonProps.focusableWhenDisabled` (omissão `false`). Com `disabled` num `<button>`: sem atributo `disabled`, com `aria-disabled="true"` e `data-disabled`, clique bloqueado em captura (`blockClick`, como no `loading`). Com `asChild`: sem `tabIndex={-1}`, `aria-disabled` e clique bloqueado. Sem `disabled` a prop não tem efeito. Com `loading` + `disabled` + a prop, o botão continua focável; o JSDoc de `loading` foi atualizado. `IconButton` herda a prop (só JSDoc alterado). `Pagination` usa `disabled={!canPrevious}`/`disabled={!canNext}` com `focusableWhenDisabled` e deixou de escrever `aria-disabled`, `data-disabled` e o bloqueio do clique; o JSDoc refere a prop. `Button.css` não mudou.
+- **Ficheiros alterados:** `packages/ui/src/Button/{Button.tsx,Button.stories.tsx,Button.focusable.test.tsx}`, `packages/ui/src/IconButton/{IconButton.tsx,IconButton.stories.tsx,IconButton.focusable.test.tsx}`, `packages/ui/src/Pagination/Pagination.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** dd8c6ce `feat(ui): DS-056 add focusableWhenDisabled to Button and IconButton and use it in Pagination`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 (sem dependências novas). Testes e stories da DS-010, DS-011, DS-021 e DS-034 inalterados e verdes; stories da `Pagination` não alteradas.
+- **Testes escritos pelo programador:** `Button.focusable.test.tsx` (sem `disabled` sem efeito; atributos e clique bloqueado; `type="submit"` sem envio por clique nem por Enter num `Input`; `asChild` com `<a href>` e `defaultPrevented`; `loading` + `disabled` focável; Tab, Enter e Espaço; focus mantido ao passar a `disabled` com a prop; axe) e `IconButton.focusable.test.tsx` (atributos, clique e Enter bloqueados, focável, axe, `asChild`). Stories: `Button/FocusableWhenDisabled`, `IconButton/FocusableWhenDisabled`, e um exemplo com a prop em ambas as `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1036, example: 28) · build ✔ · `pnpm test:a11y` não executado.
+- **Notas para o testador:**
+  - O `typecheck` de `apps/example` falha se o `build` do `ui` ainda não existir (dist em falta); corre-se depois do `pnpm build`.
+  - No teste "sem a prop", o jsdom mantém `document.activeElement` no botão que passou a `disabled` (os browsers largam o focus), por isso o teste verifica que o botão deixa de estar na ordem de Tab (Tab para o botão seguinte, Shift+Tab não volta a ele) em vez de `activeElement`.
+  - `pnpm test:a11y` (stories `FocusableWhenDisabled`, `DarkTheme`, `Pagination/FirstPage`, `LastPage`, `KeyboardInteraction`) deve ser corrido em browser pelo testador.
+  - Sem sugestões novas para o planeador.
