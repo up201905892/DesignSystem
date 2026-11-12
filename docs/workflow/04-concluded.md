@@ -413,6 +413,15 @@ Modelo de entrada:
 - **Documentação:** convenção dos `play` em `apps/docs/README.md`; as stories migradas já existiam, incluindo as variantes de tema escuro. Sem `TODO` na tarefa.
 - **Lições:** `Dialog/KeyboardInteraction` ainda usa `last.focus()` para posicionar o focus antes de testar o wrap do Tab (preexistente, as teclas testadas são reais). `Table/SortKeyboardInteraction` tem uma asserção redundante de linhas. Só a prova negativa 1 foi repetida pelo testador; as provas 2 e 3 ficam com o registo do programador. O painel "Interactions" não foi aberto interativamente. Sem sugestões novas para o planeador.
 
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la — concluída a 2026-11-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-12), commit dd8c6ce (implementação); sem commits de código de produção depois do commit testado (14bf3a8, ef5e546 e 1dbf0de são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `ButtonProps.focusableWhenDisabled` (omissão `false`, sem efeito sem `disabled`): `<button>` sem atributo `disabled`, com `aria-disabled` e `data-disabled`, clique e envio de formulário bloqueados; com `asChild` sem `tabIndex={-1}` e sem navegação; `loading` + `disabled` + a prop continua focável. `IconButton` herda a prop. `Pagination` usa `disabled` + `focusableWhenDisabled` nos botões anterior e seguinte, sem atributos nem bloqueio escritos à mão. `Button.css` inalterado.
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido (pacotes em `0.0.0`), mesmo critério da DS-052 e DS-053
+- **Documentação:** JSDoc de `focusableWhenDisabled` (quando usar e comportamento por omissão), stories `Button/FocusableWhenDisabled` e `IconButton/FocusableWhenDisabled`, e exemplo com a prop nas `DarkTheme` de ambos. Sem `TODO` na tarefa.
+- **Lições:** o `typecheck` de `apps/example` exige o `build` do `ui` antes. O teste "sem a prop" verifica a ordem de Tab porque o jsdom não larga o `activeElement`. A página de conformidade deve refletir a prop (já prevista noutra tarefa planeada). Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

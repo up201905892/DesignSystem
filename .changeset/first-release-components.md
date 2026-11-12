@@ -11,3 +11,5 @@ Border widths (`--ds-border-width-1`, `--ds-border-width-2`) and the focus ring 
 Semantic shadow tokens per theme (`--ds-shadow-raised`, `--ds-shadow-floating`, `--ds-shadow-modal`) and `--ds-color-border-raised` make elevation visible in the dark theme (new `shadow.strong.*` primitives); the light theme is unchanged. `Card` and its parts break long words instead of overflowing.
 
 Breaking change for early adopters: the `sideOffset` prop of `Tooltip` (and `DropdownMenuContent`) is now a spacing scale step (`SpaceStep`, for example `"2"`) instead of a number of pixels. The overlay offsets and collision padding of `Tooltip`, `DropdownMenu` and `Select` are read from the `--ds-space-*` tokens.
+
+`Button` and `IconButton` accept `focusableWhenDisabled`: together with `disabled` the control stays in the Tab order (`aria-disabled`, click and form submission blocked) so focus is not lost when activating it disables it. `Pagination` uses it for the previous and next buttons.
