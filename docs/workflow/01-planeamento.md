@@ -65,6 +65,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Concluído |
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Concluído |
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Planeado |
+| DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Proposta |
 
 ## Decisões aplicadas
 
@@ -2185,3 +2186,33 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-27 · planeador · — → Proposta · sugestão do testador e do finalizador (DS-031)
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+
+### DS-058 · Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Baixa
+- **Depende de:** DS-006, DS-052, DS-053 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** alinhar as páginas de fundações do Storybook (`apps/docs/src/foundations`) com as regras que os componentes já seguem: a superfície de exemplo usa a sombra semântica do tema (e não a primitiva, quase invisível no tema escuro), as sombras semânticas `raised`, `floating` e `modal` ficam documentadas nos dois temas, e as larguras de borda deixam de estar escritas à mão.
+
+**Contexto (verificado no código em 2026-11-12):** `apps/docs/src/foundations/Theme.stories.tsx` (linhas 21 e 23) usa `border: '1px solid …'` e `boxShadow: 'var(--ds-shadow-sm)'`; a DS-053 só proibiu `--ds-shadow-sm|md|lg` em `packages/ui/src/**/*.css` (teste `shadow-tokens.css.test.ts`), e a DS-052 só tratou os `.css`. A story `Foundations/Scales › Shadows` lista apenas `tokens.shadow` (primitivas `sm`, `md`, `lg`, `strong.md`, `strong.lg`); os tokens semânticos `shadow-raised|floating|modal` (exportados em `themes.light.shadow` e `themes.dark.shadow` de `@up201905892/tokens`) não aparecem em nenhuma página. Há ainda larguras literais em `Colors.stories.tsx` (linhas 30 e 98: `1px`) e em `Scales.stories.tsx` (linha 137: `2px`, story `Radii`). Apontado pelo programador, pelo testador e pelo finalizador da DS-053 e perguntado ao João no registo diário de 2026-11-11.
+
+**Critérios de aceitação:**
+- [ ] `Theme.stories.tsx`: a superfície usa `boxShadow: 'var(--ds-shadow-raised)'` e `border: 'var(--ds-border-width-1) solid var(--ds-color-border-default)'`.
+- [ ] `Colors.stories.tsx` e `Scales.stories.tsx`: os `1px` e `2px` das bordas passam a `var(--ds-border-width-1)` e `var(--ds-border-width-2)`, sem mudança visual (os valores resolvidos são os mesmos).
+- [ ] `grep -rnE "\-\-ds-shadow-(sm|md|lg)\b|'[0-9]+px solid|\"[0-9]+px solid" apps/docs/src` não devolve resultados (a story `Shadows` continua a mostrar as primitivas, mas lê os nomes a partir do objeto `tokens`, por isso não os escreve à mão).
+- [ ] A story `Foundations/Scales › Shadows` ganha uma secção "Semantic shadows" com os tokens de `themes.light.shadow` e `themes.dark.shadow`, um painel por tema com o respetivo `data-theme` (mesmo padrão da secção de tokens semânticos de `Colors.stories.tsx`), cada linha com o nome da CSS variable, o valor e uma amostra com `box-shadow: var(<token>)` sobre `--ds-color-bg-surface`. A lista é gerada a partir do objeto `themes` (um token semântico novo aparece sem editar a story).
+- [ ] A secção existente das primitivas indica, num parágrafo curto em inglês, que os componentes usam as sombras semânticas e que as primitivas não devem ser usadas diretamente.
+- [ ] Nenhuma alteração em `packages/` nem nos tokens; nenhum componente muda.
+- [ ] G1 a G3 (sem dependências novas).
+
+**Testes exigidos:**
+- Unitários: não aplicável (`apps/docs` não tem Vitest; os testes existentes continuam a passar).
+- Acessibilidade: `pnpm test:a11y` passa em todas as stories de `Foundations/*`, incluindo `Foundations/Theme/DarkTheme` e a story `Shadows` com os dois painéis de tema (contraste do texto dos rótulos ≥ 4,5:1 em cada painel).
+- Visual/Storybook: `Foundations/Theme/DarkTheme` ganha `play` que, em browser real, confirma que o `box-shadow` calculado da superfície é diferente de `none` e igual ao valor de `--ds-shadow-raised` lido com `getComputedStyle(document.documentElement)` no tema escuro (e, portanto, diferente do `--ds-shadow-sm`); `Foundations/Scales › Shadows` ganha `play` que confirma que existem 3 amostras semânticas por painel de tema e que, no painel `dark`, o `box-shadow` calculado da amostra `raised` é diferente do da mesma amostra no painel `light`. Prova negativa (não commitada): repor `var(--ds-shadow-sm)` na `Theme.stories.tsx` faz o `play` de `DarkTheme` falhar.
+
+**Fora de âmbito:** mudar valores ou nomes de tokens; mover a story `Borders` para `Foundations/Borders` (pergunta ainda aberta ao João no registo diário); regra de ESLint ou teste automático para estilos inline em `apps/docs`; estilos inline de `apps/example` (a DS-052 já tratou o `layout.css`); páginas de "Getting started" e guias de temas (DS-042, DS-043).
+
+**Histórico:**
+- 2026-11-12 · planeador · — → Proposta · observação do programador, do testador e do finalizador da DS-053; pergunta ao João no registo diário de 2026-11-11
