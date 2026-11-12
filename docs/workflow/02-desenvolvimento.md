@@ -897,3 +897,20 @@ Modelo de entrada:
   - No teste "sem a prop", o jsdom mantém `document.activeElement` no botão que passou a `disabled` (os browsers largam o focus), por isso o teste verifica que o botão deixa de estar na ordem de Tab (Tab para o botão seguinte, Shift+Tab não volta a ele) em vez de `activeElement`.
   - `pnpm test:a11y` (stories `FocusableWhenDisabled`, `DarkTheme`, `Pagination/FirstPage`, `LastPage`, `KeyboardInteraction`) deve ser corrido em browser pelo testador.
   - Sem sugestões novas para o planeador.
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
+
+**Iteração 1 — 2026-11-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `GridItem` só aceita inteiros ≥ 1 em `colSpan`; `0`, negativos, decimais, `NaN` e `Infinity` são ignorados (sem `data-col-span` nem `--ds-grid-col-span`, ocupa uma coluna). `Grid` partilha o `columns` numérico por um contexto (`undefined` com `minColumnWidth`); dentro dele, `colSpan` acima de `columns` é limitado a `columns` (também em `data-col-span`). Fora de produção, um valor inválido emite um único `console.warn` por elemento (`GridItem: colSpan must be a whole number ≥ 1, received <valor>`), num `useEffect` com `ref` que evita repetir o mesmo valor em re-renders e no StrictMode. JSDoc de `colSpan` reescrito. Story `Grid/SpanClamped` com `play`.
+- **Mecanismo de produção:** `try { return process.env.NODE_ENV === 'production' } catch { return false }`. Os bundlers substituem o literal `process.env.NODE_ENV`; sem `process` (browser sem bundler) o acesso lança e conta como desenvolvimento. O `process` é declarado localmente no módulo (`declare const process`) porque o pacote não tem `@types/node` (G1: sem dependências novas). Não corre no servidor durante o render (só em `useEffect`), logo não afeta SSR; build ESM/CJS e `.d.ts` verificados.
+- **Ficheiros alterados:** `packages/ui/src/Grid/{Grid.tsx,Grid.test.tsx,Grid.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** b0e40b7 `feat(ui): DS-055 validate GridItem colSpan and clamp it to the Grid columns`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 e C1 a C5.
+- **Testes escritos pelo programador:** em `Grid.test.tsx`, `colSpan` `0`, `-1`, `1.5`, `NaN`, `Infinity` (sem atributo, sem custom property, um só aviso, sem repetição em re-render); sem aviso em produção (`vi.stubEnv`); sem aviso com valores válidos; `colSpan={5}` em `columns={3}` → `3`; `minColumnWidth` e fora do `Grid` mantêm o valor; axe. Story `Grid/SpanClamped` (largura do item igual à largura de conteúdo do `Grid`, 3 valores em `gridTemplateColumns`).
+- **Verificações locais:** lint ✔ · typecheck ✔ (depois do `build`) · test ✔ (tokens: 92, icons: 10, ui: 1046, example: 28) · build ✔ · `pnpm test:a11y` ✔ (228 testes, `play` corridos em Chromium).
+- **Notas para o testador:**
+  - O `pnpm test` do `ui` corre o `build` (`package-metadata.test.ts`), por isso falhava antes de eu declarar o `process` localmente.
+  - O commit `139d6f1` (finalizador, DS-056) apanhou a linha de estado `Em desenvolvimento` da DS-055 no `01-planeamento.md`; o commit de código é `b0e40b7`.
+  - Sem sugestões novas para o planeador.
