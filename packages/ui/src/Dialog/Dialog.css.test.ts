@@ -53,6 +53,15 @@ describe('Dialog.css', () => {
     for (const m of css.matchAll(/^\.(ds-[a-z_-]+)/gm)) expect(m[1]).toMatch(/^ds-/);
   });
 
+  it('breaks long words in the title, description and body', () => {
+    for (const cls of ['title', 'description', 'body']) {
+      expect(css, cls).toMatch(
+        new RegExp(`\\.ds-dialog__${cls}\\s*\\{[^}]*overflow-wrap:\\s*anywhere`),
+      );
+    }
+    expect(css).toMatch(/\.ds-dialog__title\s*\{[^}]*min-width:\s*0/);
+  });
+
   it('shows a focus ring on the content', () => {
     expect(css).toMatch(/\.ds-dialog:focus-visible\s*{[^}]*--ds-color-focus-ring/);
   });

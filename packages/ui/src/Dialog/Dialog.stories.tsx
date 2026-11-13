@@ -135,6 +135,39 @@ export const LongContent: Story = {
   ),
 };
 
+const longWord = 'Supercalifragilistic'.repeat(10);
+
+export const LongWord: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogTrigger asChild>
+        <Button>Open dialog</Button>
+      </DialogTrigger>
+      <DialogContent size="sm">
+        <DialogHeader>
+          <DialogTitle>{longWord}</DialogTitle>
+          <DialogDescription>{longWord}</DialogDescription>
+        </DialogHeader>
+        <DialogBody>{longWord}</DialogBody>
+      </DialogContent>
+    </Dialog>
+  ),
+  play: async () => {
+    const dialog = await within(document.body).findByRole('dialog');
+    const body = dialog.querySelector<HTMLElement>('.ds-dialog__body');
+    const close = dialog.querySelector<HTMLElement>('.ds-dialog__close');
+    if (!body || !close) throw new Error('Dialog parts not found');
+    if (dialog.scrollWidth > dialog.clientWidth)
+      throw new Error('The Dialog overflows horizontally');
+    if (body.scrollWidth > body.clientWidth)
+      throw new Error('The Dialog body overflows horizontally');
+    const box = dialog.getBoundingClientRect();
+    const btn = close.getBoundingClientRect();
+    if (btn.left < box.left || btn.right > box.right)
+      throw new Error('The close button is outside the Dialog');
+  },
+};
+
 export const Confirmation: Story = {
   render: () => (
     <Dialog defaultOpen>
