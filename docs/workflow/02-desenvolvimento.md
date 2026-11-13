@@ -931,3 +931,17 @@ Modelo de entrada:
   - O test runner do Storybook ignora páginas só de docs, por isso o axe não cobre a página; o contraste dos blocos de código e a hierarquia de títulos devem ser verificados no browser nos dois temas.
   - O `typecheck` de `apps/docs` precisa do `build` do `ui` (os snippets importam `@up201905892/ui` por `dist`).
   - Sugestão para o planeador: tarefa para acrescentar a ligação à página de acessibilidade depois da DS-040.
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`)
+
+**Iteração 1 — 2026-11-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Accordion.css`: `.ds-accordion__trigger-label` com `flex: 1 1 auto`, `min-width: 0` e `overflow-wrap: anywhere`; `.ds-accordion__content-inner` com `overflow-wrap: anywhere`; o `.ds-accordion__icon` mantém `flex-shrink: 0`. `Dialog.css`: `.ds-dialog__title` (também com `min-width: 0`), `.ds-dialog__description` e `.ds-dialog__body` com `overflow-wrap: anywhere`. Sem alterações aos `.tsx` nem à API.
+- **Sobreposição com a DS-052:** a DS-052 não estava `Em desenvolvimento`; sem conflito.
+- **Ficheiros alterados:** `packages/ui/src/Accordion/{Accordion.css,Accordion.css.test.ts,Accordion.stories.tsx}`, `packages/ui/src/Dialog/{Dialog.css,Dialog.css.test.ts,Dialog.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 07b77fd `feat(ui): DS-057 break long words in Accordion and Dialog`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 e C1 a C5.
+- **Testes escritos pelo programador:** um teste novo em cada `*.css.test.ts` (regras de `overflow-wrap` e `min-width`); stories `Accordion/LongWord` e `Dialog/LongWord` com `play` (sem overflow horizontal no gatilho, painel, diálogo e corpo; chevron e botão de fechar dentro dos retângulos respetivos).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 1048) · build ✔ · `pnpm test:a11y` ✔ (230 testes).
+- **Notas para o testador:** texto com espaços não muda (a regra só quebra palavras que não cabem sozinhas). Sem sugestões para o planeador.

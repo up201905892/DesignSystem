@@ -64,7 +64,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Concluído |
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Concluído |
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Concluído |
-| DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Planeado |
+| DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Pronto para teste |
 | DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Planeado |
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Proposta |
 
@@ -2211,6 +2211,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-27 · planeador · — → Proposta · sugestão do testador e do finalizador (DS-031)
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-13 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-13 · programador · Em desenvolvimento → Pronto para teste · commit 07b77fd
 
 ### DS-058 · Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token
 
