@@ -2,6 +2,20 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-13
+
+- **Decisões para o João:**
+  1. **DS-042 ficou parada em `Em teste`.** O testador não conseguiu escrever em `/tmp` (precisa de aprovação) para correr o Playwright (axe, contraste dos blocos de código, títulos, nos dois temas) sobre a página MDX, que o `pnpm test:a11y` não cobre. Comando bloqueado: `mkdir`/escrita em `/tmp`. Em alternativa, autorizar um diretório temporário fora do repositório em `.claude/settings.json` (é só teu) ou dizer-me como queres que se teste. O G1 completo (incluindo `test:a11y`) já passou.
+  2. **DS-059 proposta** (estabilizar o teste intermitente "fails for an img without alt" no helper de axe). Aprovas?
+  3. Sugestão do programador: depois da DS-040, uma tarefa pequena para a página "Getting started" ligar a `accessibility.mdx`. Propor então?
+  4. Pendentes anteriores sem resposta: `ci.yml` sem `pnpm build` prévio e `source` do icons na DS-039 (`.github/` é só teu).
+- **Concluídas:** DS-057 (`overflow-wrap` no Accordion e no Dialog). Ciclo completo hoje, relatório 1 Aprovado.
+- **Testadas:** DS-057 (Aprovado; `test:a11y` 230 testes, zero falhas). DS-042: G1 verde, verificação em browser por fazer.
+- **Desenvolvidas:** DS-042 (Pronto para teste → Em teste), DS-057 (limite de 2 por execução).
+- **Decisões aplicadas:** 8 linhas de 2026-11-13. Aprovadas DS-038, DS-040 e DS-058 (agora `Planeado`); DS-042 passa a depender só de DS-036 e DS-047 só de DS-042; respostas DS-009, DS-035, DS-036, DS-044/045 registadas. DS-040 ganhou o critério de revisão visual do DataTable.
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** testar DS-042 (se o bloqueio for resolvido); depois DS-038 e DS-040 (Alta, já desbloqueadas pela DS-057) e DS-058 (Baixa). Sem propostas novas além da DS-059.
+
 ## 2026-11-12
 
 - **Decisões para o João:**
