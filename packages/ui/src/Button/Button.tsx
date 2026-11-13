@@ -28,9 +28,22 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Disable the button. A native `<button>` uses the `disabled` attribute and leaves the
    * Tab order. With `asChild`, the child gets `aria-disabled`, `tabIndex={-1}` and clicks
-   * are blocked. Unlike `loading`, a disabled button is taken out of the Tab order.
+   * are blocked. Unlike `loading`, a disabled button is taken out of the Tab order, unless
+   * `focusableWhenDisabled` is set.
    */
   disabled?: boolean;
+  /**
+   * Keep a disabled button in the Tab order. With `disabled`, the button gets
+   * `aria-disabled="true"` and `data-disabled` instead of the `disabled` attribute (or
+   * `tabIndex={-1}` with `asChild`), and clicks are blocked in the capture phase like in
+   * `loading`: no `onClick`, no form submit, no navigation. Without `disabled` it has no effect.
+   *
+   * Use it when the focused control itself can become disabled as a result of being activated
+   * (for example "next" on the last page), so the focus is not lost. By default, `disabled`
+   * still takes the button out of the Tab order.
+   * @default false
+   */
+  focusableWhenDisabled?: boolean;
   /**
    * Show that an action is in progress. A `Spinner` replaces the `leadingIcon` (a span is
    * created if there is none), the root gets `aria-busy`, `aria-disabled` and `data-loading`,
@@ -39,7 +52,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * Intentional difference from `disabled`: a loading button stays focusable and in the Tab
    * order, so keyboard and screen reader users do not lose their place while the action runs
    * and can carry on from the same point when it ends. If `disabled` is also set, `disabled`
-   * wins and the button leaves the Tab order.
+   * wins and the button leaves the Tab order, unless `focusableWhenDisabled` is set too,
+   * which keeps it focusable.
    *
    * The button does not announce the outcome. The consumer must communicate success or
    * error with a `Toast` or another visible, announced feedback.
@@ -68,7 +82,8 @@ function blockClick(event: MouseEvent<HTMLElement>) {
  * Accessibility: works with the keyboard alone (Tab to focus, Enter and Space to activate)
  * and shows a visible focus ring. The accessible name comes from the text only, because
  * icons are `aria-hidden`. `type` defaults to `"button"`, so it does not submit forms
- * unless `type="submit"` is passed. A disabled button leaves the Tab order; a loading one stays focusable.
+ * unless `type="submit"` is passed. A disabled button leaves the Tab order (unless `focusableWhenDisabled`);
+ * a loading one stays focusable.
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
@@ -79,6 +94,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     trailingIcon,
     asChild = false,
     disabled = false,
+    focusableWhenDisabled = false,
     loading = false,
     loadingLabel = 'Loading',
     className,
@@ -93,18 +109,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const Comp = asChild ? Slot : 'button';
   const spinnerId = useId();
 
+  const keepFocusable = disabled && focusableWhenDisabled;
+  const nativeDisabled = disabled && !focusableWhenDisabled;
   const ariaDisabled = disabled || loading ? { 'aria-disabled': true as const } : {};
   const rootProps = asChild
     ? {
         ...ariaDisabled,
-        ...(disabled ? { tabIndex: -1 } : {}),
+        ...(nativeDisabled ? { tabIndex: -1 } : {}),
         onClickCapture: disabled || loading ? blockClick : onClickCapture,
       }
     : {
-        ...(loading ? ariaDisabled : {}),
+        ...(loading || keepFocusable ? { 'aria-disabled': true as const } : {}),
         type: type ?? 'button',
-        disabled,
-        onClickCapture: loading ? blockClick : onClickCapture,
+        disabled: nativeDisabled,
+        onClickCapture: loading || keepFocusable ? blockClick : onClickCapture,
       };
   const loadingProps = loading
     ? {

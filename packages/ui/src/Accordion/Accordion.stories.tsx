@@ -94,6 +94,35 @@ export const LongContent: Story = {
   ),
 };
 
+const longWord = 'Supercalifragilistic'.repeat(10);
+
+export const LongWord: Story = {
+  render: () => (
+    <div style={{ maxWidth: '240px' }}>
+      <Accordion type="single" collapsible defaultValue="long">
+        <AccordionItem value="long">
+          <AccordionTrigger>{longWord}</AccordionTrigger>
+          <AccordionContent>{longWord}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  ),
+  play: ({ canvasElement }) => {
+    const trigger = canvasElement.querySelector<HTMLElement>('.ds-accordion__trigger');
+    const content = canvasElement.querySelector<HTMLElement>('.ds-accordion__content');
+    const icon = canvasElement.querySelector<Element>('.ds-accordion__icon');
+    if (!trigger || !content || !icon) throw new Error('Accordion parts not found');
+    if (trigger.scrollWidth > trigger.clientWidth)
+      throw new Error('The Accordion trigger overflows horizontally');
+    if (content.scrollWidth > content.clientWidth)
+      throw new Error('The Accordion panel overflows horizontally');
+    const box = trigger.getBoundingClientRect();
+    const chevron = icon.getBoundingClientRect();
+    if (chevron.left < box.left || chevron.right > box.right)
+      throw new Error('The chevron is outside the trigger');
+  },
+};
+
 export const Controlled: Story = {
   render: function Render() {
     const [value, setValue] = useState('returns');

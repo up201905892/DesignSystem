@@ -1299,3 +1299,402 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - O `play` de `KeyboardInteraction` usa `focus()` e `click()` em vez de `userEvent` (sem `@storybook/test`); a migração está prevista na tarefa DS-054, e as teclas reais estão cobertas nos testes unitários.
 - O anúncio real da região `aria-live` num leitor de ecrã, o aspeto visual e o contraste no tema escuro não foram inspecionados num navegador (o axe das stories passa nos dois temas).
 - Texto muito longo sem espaços pode transbordar a célula (não testável em jsdom).
+
+### DS-036 · Metadados dos pacotes — Relatório 1 — 2026-11-05
+
+- **Commit testado:** 3abe004 (implementação) e 66a8da1 (registo), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 60 ficheiros, 984 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 220 testes, axe em Chromium; Storybook arranca com os novos nomes) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] Nomes `@up201905892/*`: `name` dos três `package.json`; `grep -r "@ds/"` fora de `docs/workflow/` só encontra o teste que verifica essa ausência; `pnpm-lock.yaml` sem `@ds/`.
+- [x] Metadados: `private` removido nos três; `version`, `description`, `license` MIT, `author`, `repository.directory`, `homepage`, `keywords`, `publishConfig.access=public` presentes; `apps/docs` mantém `"private": true`.
+- [x] `ui`: `type: module`, `exports` (`.` com `types`/`import` e `types`/`require` separados `index.d.ts`/`index.d.cts`, `./styles.css`, `./package.json`), `main`/`module`/`types`, `sideEffects: ["**/*.css"]`, `files: ["dist"]`; ficheiros existem após o build.
+- [x] `ui` dependências: `react`/`react-dom` em `peerDependencies`; Radix e `icons` (`workspace:^`) em `dependencies`; ferramentas e `tokens` em `devDependencies`; `dist/index.js` só importa `@radix-ui/*`, `@up201905892/icons`, `react` e `react/jsx-runtime` (externos).
+- [x] `icons`: `exports` com `.` e `./package.json`, `sideEffects: false`, `files: ["dist", "LICENSE-LUCIDE"]`.
+- [x] `tokens`: `exports` com `.`, `./tokens.css`, `./themes.css`, `./package.json`; `sideEffects` CSS; `files: ["dist"]`.
+- [x] `LICENSE` MIT na raiz e nos três pacotes (idênticos, `cmp`); `README.md` mínimo em cada pacote com nome, instalação e exemplo.
+- [x] A partir de `apps/docs`: `require('@up201905892/ui')` e `import('@up201905892/ui')` devolvem `Button`; `import.meta.resolve('@up201905892/ui/styles.css')` resolve para `packages/ui/dist/styles.css`; `apps/docs` importa `@up201905892/tokens` pelos `exports`.
+- [x] G1 a G3 (lint, tipos, testes e build verdes; sem componentes novos).
+
+**Testes exigidos:** `packages/ui/src/package-metadata.test.ts` existe e é substantivo (caminhos de `exports`/`main`/`module`/`types` existem, `files` sem `src`, chaves por pacote, ESM/CJS separados, peers, externos no `dist`, ausência de `@ds/`). Verificação manual no terminal repetida por mim com sucesso. Acessibilidade: não aplicável, `test:a11y` verde.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- `repository.url`, `homepage`, `author` e copyright assumem `up201905892` (derivado do `origin`); o João deve confirmar o nome próprio.
+- O `exports["."]` do `icons` mantém a condição `source` apontando para `src`, que não é publicado; só afeta quem configure essa condição personalizada. Convém reavaliar na DS-039 (tarball).
+- `tokens` e `icons` têm um só `types` (`index.d.ts`) para ESM e CJS, como a especificação pede.
+- Tarball (`pnpm pack`) não verificado: é a DS-039.
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento — Relatório 1 — 2026-11-05
+
+- **Commit testado:** 1983c2a (implementação) e 2ab813e (registo), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 63 ficheiros, 991 testes) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 223 testes, inclui as três `Offset` e as `DarkTheme`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Tooltip`: `sideOffset?: SpaceStep`, omissão `'2'`, `readSpaceToken(sideOffset)`; `collisionPadding={readSpaceToken('2')}` (diff do commit).
+- [x] `DropdownMenuContent`: `sideOffset?: SpaceStep`, omissão `'1'`, `readSpaceToken`; `collisionPadding` `readSpaceToken('2')`.
+- [x] `Select`: `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}`, sem props novas.
+- [x] Número em `sideOffset` é erro de compilação: `sideOffset` e `collisionPadding` omitidos do tipo do Radix; os `@ts-expect-error` estão em ficheiros incluídos no `tsc` e o typecheck passa (se o erro não existisse, falharia).
+- [x] `grep -nE "(sideOffset|collisionPadding)(=\{| \?\? | = )[0-9]"` em `.tsx` de `packages/ui/src` fora de testes e stories: sem resultados (corrido por mim).
+- [x] JSDoc de `sideOffset` no `Tooltip` e no `DropdownMenuContent` refere a escala `--ds-space-*`.
+- [x] Testes e stories existentes de DS-018, DS-023 e DS-026 continuam verdes sem alteração de conteúdo; nenhum outro uso de `sideOffset` numérico em `packages/ui` ou `apps`.
+- [x] G1 a G3 (sem dependências novas); C1 a C5 (ficheiros acrescentados às pastas existentes).
+
+**Testes exigidos:** três `*.offset.test.tsx` com `vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')`: leitura de `--ds-space-<passo>` e `--ds-space-2`, `sideOffset="4"` lê `--ds-space-4` no `Tooltip` e no `DropdownMenuContent`, `@ts-expect-error` para `sideOffset={6}` nos dois. Stories `Offset` (Tooltip, DropdownMenu, Select) com `play` que mede o intervalo em browser real com tolerância de 1px e passam no `test:a11y`. Axe com overlays abertos coberto pelos testes existentes e pelo `test:a11y`. Os testes são substantivos.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Nos testes unitários, `--ds-space-2` serve tanto de omissão do `Tooltip`/`Select` como de `collisionPadding`, por isso não distinguem os dois usos; a cobertura da medição real está nas stories `Offset`.
+- Casos limite (tema escuro, `disabled`, modo controlado) não são afetados: só mudam os valores numéricos dos afastamentos.
+
+### DS-037 · Changesets: versionamento e changelog — Relatório 1 — 2026-11-09
+
+- **Commit testado:** 51a7049 (implementação) e 1af600f (registo e passagem de estado), no histórico de `develop`; `git status` limpo no início. Nenhum teste acrescentado.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui: 63 ficheiros, 991 testes; incluindo `a11y.test.tsx`) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 223 testes) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `@changesets/cli` nas devDependencies da raiz (`^3.0.3`, instalado); `.changeset/config.json` com `access: public`, `baseBranch: main`, grupo `fixed` com `tokens`, `icons` e `ui`, e `ignore: ["docs"]` (nome do pacote de `apps/docs`, confirmado em `apps/docs/package.json`; o Changesets ignora por nome e não por glob, equivale a `apps/*` porque só existe esse pacote).
+- [x] Scripts `changeset` e `version-packages` (`changeset version`) no `package.json` da raiz (lidos). `pnpm version-packages` não foi corrido.
+- [x] `grep -rnE "(changeset|pnpm|npm) publish" package.json packages/*/package.json` sem resultados (corrido por mim). Só existe `publishConfig` nos pacotes, que não é um script.
+- [x] `.changeset/README.md` explica quando criar um changeset e patch/minor/major.
+- [x] `.changeset/first-release-components.md` é `minor` para os três pacotes; os 27 componentes listados coincidem com as pastas de `packages/ui/src`. `pnpm changeset status` sai com 0 e lista `icons`, `tokens` e `ui` em `minor`.
+- [x] Regra C6 na secção "How to create a component" de `packages/ui/README.md`.
+- [x] G1 a G3: dependência nova só `@changesets/cli`; sem alterações de código nos pacotes.
+
+**Testes exigidos:** unitários, acessibilidade e visual não aplicáveis; verificação manual no terminal repetida por mim com sucesso.
+
+**Incidente intermitente (2026-11-06, `a11y.test.tsx` "fails for an img without alt"):** não reproduzido; `pnpm test` correu 991/991 e `test:a11y` 223/223 neste teste. Causa por identificar; fica em observação.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- A nota de quebra do `sideOffset` (DS-051) no changeset é adequada, pois a DS-051 não criou changeset.
+- O commit 51a7049 foi feito com a suite reportada vermelha (`wip`); o estado final está verde.
+
+### DS-044 · App de exemplo: estrutura, layout e tema — Relatório 1 — 2026-11-09
+
+- **Commit testado:** bc714d0 (presente no histórico de `develop`; `git status` sem alterações de código antes de começar; só a alteração de estado em `01-planeamento.md`)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint + Stylelint com `apps/example/src/**/*.css` + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos, inclui `apps/example`) | ✔ |
+| Unitários | `pnpm test` (ui: 991, example: 12), após `pnpm build` | ✔ |
+| Acessibilidade | `pnpm test:a11y` (223 testes) + axe e teclado nos testes da app + percurso de Tab em Chromium real | ✔ |
+| Build | `pnpm build` (inclui `apps/example`, sai com 0) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Workspace `apps/example` — `private: true`, dependências `workspace:*` para `@up201905892/ui` e `@up201905892/icons`, `tsconfig` estende a base com `strict: true`, `main.tsx` importa `@up201905892/ui/styles.css` (pelo `exports`, sem aliases).
+- [x] Scripts — `pnpm example` existe na raiz; `build`, `typecheck` e `test` da app correm via `pnpm -r`; `pnpm build` sai com 0 e constrói a app.
+- [x] "Só com a biblioteca" — verificação manual: ficheiro temporário com `<button>`, `<input>`, `<table>` e `style={{...}}` faz o ESLint falhar com `no-restricted-syntax` (4 erros); ficheiro removido, não commitado. `grep` por `style=`, `fetch(`, `axios`, etc. sem resultados. Único CSS: `src/layout.css`, só `var(--ds-*)`, passa o Stylelint.
+- [x] Estrutura — verificado em Chromium (Playwright, `vite preview` da build): cabeçalho, `Tabs` Overview/Tasks, `IconButton` de tema, menu de utilizador. A alternância muda `data-theme` e grava `example-theme` em `localStorage`; após recarregar mantém o tema. Sem preferência guardada, `prefers-color-scheme` light/dark determina o tema inicial (verificado nos dois esquemas). Testes unitários também cobrem.
+- [x] Vista Overview — capturas visuais a 320px (claro e escuro): `Alert` informativo, `Card` com indicadores e `Badge` em coluna única, FAQ com `Accordion`; carregamento simulado coberto por teste unitário (`Skeleton`/`Spinner`).
+- [x] Dados locais — `src/data.ts`; sem chamadas de rede nem eventos `requestfailed`; dependências só React, Vite e pacotes da biblioteca (mais ferramentas de teste em devDependencies).
+- [x] 320px sem scroll horizontal — medido no Chromium em ambas as vistas e ambos os temas: `scrollWidth` = `clientWidth` = 320 (e 1280 a 1280). "Skip to content" é o primeiro focável: Tab percorre "Skip to content", "Overview", "Switch to … theme", "User menu", por esta ordem, nos dois temas.
+- [x] G1 a G3 — sem pacotes novos fora do âmbito, `pnpm lint`, `typecheck` e `test` verdes, sem alterações a ficheiros protegidos.
+
+**Verificação manual nos dois temas (feita neste relatório):** capturas a 320px de Overview em claro e escuro inspecionadas: texto legível, bordas e `Badge` visíveis, fundo `rgb(248,250,252)` (claro) e `rgb(15,23,42)` (escuro) a partir de tokens, sem corte de conteúdo. Vista Tasks (marcador) medida sem overflow nos dois temas. Contraste: axe sem violações nos testes (jsdom não calcula contraste de cor de forma fiável; a avaliação visual não mostrou problemas).
+
+**Testes exigidos:** existem e não são triviais (12 em `apps/example/src/App.test.tsx`): vista inicial, mudança de separador, tema com `data-theme`/`localStorage`, tema guardado, `prefers-color-scheme`, axe nas duas vistas, marcos e um `h1` por vista, ordem de Tab.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Ficheiros temporários de verificação (script Playwright, capturas, ficheiro com elementos proibidos) foram removidos; nada ficou no repositório.
+- Após o skip link, "Overview" e os restantes passos de Tab seguem a ordem exigida; o quinto Tab entra no painel (`tabpanel`), o que é o comportamento esperado do `Tabs`.
+- O `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes), como o CI.
+
+### DS-045 · App de exemplo: formulário e tabela de dados — Relatório 1 — 2026-11-10
+
+- **Commit testado:** 6fab12e (inclui c7ad0b7; `git log` confirma ambos no branch `develop`)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Build | `pnpm build` (antes dos testes da app; inclui `apps/example`) | ✔ |
+| Lint | `pnpm lint` (ESLint + Stylelint + Prettier) | ✔ |
+| Tipos | `pnpm typecheck` (inclui `apps/example`) | ✔ |
+| Unitários | `pnpm test` (ui: 991, example: 28 em 3 ficheiros) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (223 testes, 32 suites) + axe e teclado nos testes da app + Chromium real | ✔ |
+
+**Critérios de aceitação:**
+- [x] Vista "Tasks" — 34 tarefas, páginas de 10, colunas ordenáveis (título, responsável, prioridade com `compare` próprio, data limite) com `aria-sort`, estado em `Badge`, `DropdownMenu` por linha ("Edit", "Delete") aberto por `IconButton`. Verificado no código (`Tasks.tsx`), nos testes e em Chromium (menu da linha aberto a 320px).
+- [x] "New task" abre `Dialog` com `Field`, `Input`, `Textarea`, `Select`, `RadioGroup`, `Checkbox`, `Switch` (mais `Input type="date"`); "Edit" abre o mesmo formulário preenchido. Verificado em `TaskForm.tsx`, nos testes e em capturas.
+- [x] Validação — título vazio: `FieldError` visível, `aria-invalid="true"`, focus no input e diálogo aberto (testes e Chromium, nos dois temas e larguras).
+- [x] Submissão válida — botão com `loading` (400 ms), diálogo fecha, linha na tabela, `Toast` de sucesso, focus de volta ao botão que abriu (teste de criação e de edição). Em Chromium, Esc devolve o focus a "New task".
+- [x] "Delete" — `Dialog` de confirmação com `Button variant="danger"`; confirmar remove a linha e mostra `Toast` com "Undo", que repõe a tarefa na posição original (teste).
+- [x] `Popover` de filtros por estado (teste: filtro reduz as linhas e volta à página 1); `Tooltip` no `IconButton` de ações e nos botões só com ícone do cabeçalho.
+- [x] Cobertura da biblioteca — `coverage.test.ts` falha se uma exportação de `@up201905892/ui` não for importada; 15 exceções justificadas, e o teste também falha se uma exceção passar a ser usada. Lógica de extração das importações lida e não é trivial.
+- [x] Regra "só com a biblioteca" — `pnpm lint` passa (inclui `no-restricted-syntax` de `apps/example/src`); CSS novo só com tokens (Stylelint passa).
+- [x] G1 a G3 — sem pacotes novos, lint/typecheck/test verdes, sem alterações a ficheiros protegidos.
+
+**Testes exigidos:** existem e não são triviais. `Tasks.test.tsx` (13): criar válida, título vazio (erro, `aria-invalid`, focus, diálogo aberto), editar, apagar e Undo, ordenar por data limite, mudar de página, filtro, Esc sem guardar, fluxo completo só com teclado (Tab, Enter, título, `Select` com setas e Enter, prioridade com setas, Espaço na checkbox, Enter, focus de volta a "New task"), axe na vista, com diálogo aberto e com o formulário em erro. `coverage.test.ts` (3).
+
+**Verificação visual (Chromium/Playwright, build de produção servida localmente; feita neste relatório):**
+- 320 e 1280 px, tema claro e escuro (via `prefers-color-scheme`): `scrollWidth` = `clientWidth` em todas as combinações (320/320 e 1280/1280) nas vistas Tasks, diálogo, diálogo com erro, popover de filtros e menu da linha. Fundo `rgb(248,250,252)` (claro) e `rgb(15,23,42)` (escuro), a partir de tokens.
+- A 320 px o diálogo ocupa 16 a 304 px, sem corte; a tabela rola dentro do seu contentor (`role="region"`, `tabIndex=0`, focável por teclado), sem scroll da página; o menu da linha e o popover ficam dentro do ecrã.
+- Capturas inspecionadas (tabela em claro e escuro, diálogo com erro em escuro, menu da linha em claro): texto legível, borda vermelha e mensagem de erro visíveis, focus visível, sem sobreposições. Sem erros na consola nem `pageerror`.
+- Limitação: o contraste foi avaliado visualmente e pelo axe nos testes (jsdom não calcula contraste de forma fiável); o `pnpm test:a11y` (axe em Chromium) cobre as stories da biblioteca, não esta app.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Ficheiros temporários (script e capturas) foram removidos; nada ficou no repositório além dos registos.
+- O diálogo do formulário não fecha ao clicar fora (decisão documentada pelo programador); Esc e "Cancel" fecham.
+
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` — Relatório 1 — 2026-11-10
+
+- **Commit testado:** d00a7dc (registo 843a764; presente no histórico de `develop`, árvore limpa antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 90, icons 10, ui 1023, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 224 testes, Chromium + axe, incluindo `play`) | ✔ |
+| Build | `pnpm build` (corrido antes dos testes) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `border.json` com `border.width.1/2`, `focus.ring.width` (referência a `border.width.2`) e `focus.ring.offset` — lido o ficheiro; `dist/tokens.css` contém `--ds-border-width-1: 1px`, `--ds-border-width-2: 2px`, `--ds-focus-ring-width: 2px`, `--ds-focus-ring-offset: 2px`; chaves no objeto `tokens` cobertas por `tokens.test.ts`.
+- [x] Testes de tokens da DS-004 continuam a passar — `pnpm test` em `packages/tokens` (90 testes).
+- [x] CSS de `packages/ui/src` usa os tokens em border/outline — `grep` de `1px`/`2px` em `*.css` só devolve o `clip` de `VisuallyHidden` e da legenda da `Table`; Tabs: indicador `--ds-border-width-2`, offset `calc(-1 * var(--ds-focus-ring-offset))`, `forced-colors` com `--ds-border-width-2`.
+- [x] Separadores de `DropdownMenu` e `Select` com `height: var(--ds-border-width-1)`; `clip` intacto.
+- [x] Stylelint rejeita literais em `border*` (exceto o que já era `border-radius`, também coberto), `outline`, `outline-width`, `outline-offset`; comentário de `stylelint.config.js` e README (C3) sem a exceção `1px`/`2px`.
+- [x] Verificação negativa — CSS passado por stdin ao Stylelint (sem ficheiros no repositório): `border: 1px ...`, `outline-offset: 2px`, `outline-width: 0.125rem` e `border-radius: 4px` falham com "Use a var(--ds-*) token"; `border-bottom: var(--ds-border-width-1) ...` não falha.
+- [x] Nada muda visualmente — valores resolvidos iguais aos anteriores (tokens com 1px/2px/2px); `play` em browser real confirma 2px no anel e no indicador; Card/Switch tests ajustados e a passar.
+- [x] Story `Borders` gerada a partir do objeto `tokens` (`tokensOf(t.border)`, `tokensOf(t.focus)`) em `Foundations/Scales`; passa no axe. A especificação diz "secção ou story `Borders`", cumprido.
+- [x] Sobreposição com outras tarefas — DS-053 `Planeado`, sem trabalho em simultâneo.
+- [x] G1 a G3 — sem dependências novas (`package.json` e `pnpm-lock.yaml` não alterados no commit).
+
+**Testes exigidos:**
+- [x] Tokens: `tokens.test.ts` confirma os quatro tokens em `dist/tokens.css`.
+- [x] `css-tokens.test.ts` percorre todos os `.css` e falha em `border*` (exceto `border-radius`) e `outline*` com `px/rem/em`; não é trivial (a regra do Stylelint foi confirmada em separado).
+- [x] A11y/play: `FocusRing` passou em Chromium com `button.focus()` (`outlineWidth === '2px'`), incluindo `FocusRing/DarkTheme` sem violações; `Tabs/Default` passou com `border-bottom-width` de `2px`. O `button.focus()` não falhou.
+
+**Verificação visual (dois temas):** não foram feitas capturas (não foi possível escrever ficheiros temporários fora do repositório). A cobertura é indireta: `play` com `getComputedStyle` em browser real, axe nas stories `DarkTheme` e tokens independentes do tema.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- O programador referiu que o `pnpm lint` global falhava por `.qa045-tmp/`; neste ambiente não existe e o lint passa.
+- Ficheiros temporários: nenhum criado no repositório nem em `/tmp`.
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas — Relatório 1 — 2026-11-11
+
+- **Commit testado:** 9de2315 (registo 2b34889; presentes no histórico de `develop`, árvore limpa antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1025, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 225 testes, Chromium + axe, incluindo `play` de `Card/LongWord`, `Card/InGrid`, `Card/DarkTheme` e `DarkTheme` dos overlays) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `shadow.strong.md|lg` — lido `shadow.json` e `dist/tokens.css` (`--ds-shadow-strong-md|lg`): mesma geometria de `md`/`lg`, preto a 0,5.
+- [x] Tokens semânticos `shadow-raised|floating|modal` nos dois temas — lidos `light.json`/`dark.json` e `dist/themes.css`: claro `md, md, lg` (valores iguais aos atuais); escuro `strong.md, strong.md, strong.lg`; também no bloco `prefers-color-scheme`.
+- [x] `color-border-raised` — claro `{color.white}` (igual a `color-bg-surface`), escuro `{color.neutral.700}` (igual a `color-border-default`); só referências a primitivos.
+- [x] Card elevated e overlays — `Card.css` usa `--ds-shadow-raised` e `--ds-color-border-raised`; Tooltip, Popover, DropdownMenu e Select usam `floating`; Dialog e Toast usam `modal`; `grep -rnE "shadow-(sm|md|lg)" packages/ui/src --include=*.css` sem resultados.
+- [x] `overflow-wrap: anywhere` e `min-width: 0` no `.ds-card` e nas cinco subpartes — lido `Card.css`; `Card/LongWord` e `Card/InGrid` (palavra de 200 caracteres dentro de `Grid`) passam em Chromium.
+- [x] Testes de temas da DS-005 e pares de contraste — `pnpm test` em `packages/tokens` (92 testes) sem regressões.
+- [x] G1 a G3 — sem alterações a `package.json` nem ao lockfile no commit.
+
+**Testes exigidos:**
+- [x] Tokens: `themes.test.ts` cobre existência nos dois temas, opacidade >= 0,5 no escuro, igualdade do claro a `md`/`lg` e `border-raised`; `tokens.test.ts` cobre `strong.md|lg`.
+- [x] `shadow-tokens.css.test.ts` percorre todos os `.css` e falha com `--ds-shadow-sm|md|lg`; não trivial (afirma que há ficheiros e verifica cada um).
+- [x] Stories `Card/LongWord`, `Card/InGrid` e `Card/DarkTheme` com `play` conforme a especificação; passam no `pnpm test:a11y` (225 testes, mais um que antes). Axe sem violações.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- `Theme.stories.tsx` (apps/docs) ainda usa `--ds-shadow-sm` diretamente; fora de `packages/ui`, portanto fora do critério (já assinalado pelo programador).
+- Não foram feitas capturas visuais dos dois temas; a cobertura é `getComputedStyle` em browser real (`Card/DarkTheme`), valores gerados em `themes.css` e axe nas stories `DarkTheme`. Não foi feita prova negativa dos `play` (exigiria alterar código de produção).
+- Ficheiros temporários: nenhum criado.
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories — Relatório 1 — 2026-11-11
+
+- **Commits testados:** 05286f5 (implementação) e 89a0c98 (registo); presentes no histórico de `develop`, árvore limpa antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1025, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 225 testes, Chromium + axe, `play` migrados incluídos) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Grep | `grep -rnE "new KeyboardEvent\|dispatchEvent\(\|\.click\(\)" packages/ui/src --include=*.stories.tsx` | sem resultados |
+
+**Critérios de aceitação:**
+- [x] `@storybook/test` ^8.6.18 (mesma menor do Storybook) em devDependencies de `packages/ui` e `apps/docs` — lido o diff dos `package.json` e do lockfile.
+- [x] Grep sem resultados; pesquisa mais larga (`dispatchEvent`, `.click(`, `setTimeout`) só encontra `wait`/`setTimeout` nos `play` de medição `Offset` (Tooltip, DropdownMenu, Select) e em `waitForToastsSettled`, e `userEvent.click` em `Button`.
+- [x] `Table/SortKeyboardInteraction` — lido o `play`: `userEvent.tab()` até ao botão, `{Enter}` (asc), espaço (desc), `expect` de `aria-sort`, primeira célula ("Ada Lovelace") e focus no botão.
+- [x] Stories de `Select`, `Tooltip`, `Popover`, `DropdownMenu`, `Dialog`, `Button/LoadingToggle`, `Toast/AfterLoading` — lido o diff do `Dialog` (Tab, Shift+Tab, Escape, regresso do focus ao trigger, mesmas verificações de antes, com `findByRole`/`waitFor`); as restantes passam no `test:a11y`; sem `setTimeout` de duração fixa nos `play` de interação.
+- [x] `Pagination/KeyboardInteraction` — lido: `tab()` em ciclo (sem `focus()`), `{Enter}` até à página 5 com `aria-current` e `document.activeElement` verificados a cada passo; na última página `aria-disabled="true"`, sem `disabled`, mais um Enter não muda a página; passo extra Shift+Tab/Tab confirma que o botão continua na ordem de tabulação.
+- [x] `DataTable/KeyboardInteraction` migrada (DS-035 `Concluído`).
+- [x] `play` de medição mantidos; `Table/HorizontalScroll` continua no `postVisit` (não tocado).
+- [x] `apps/docs/README.md` — secção "Interaction stories (`play`)" com a convenção e a divisão com o `postVisit`.
+- [x] `pnpm test:a11y` passa (225 testes, código 0). O painel "Interactions" é alimentado pelo `userEvent`/`expect` instrumentados do `@storybook/test`, que as stories migradas importam; não foi aberto o Storybook interativamente.
+- [x] G1 a G3 — única dependência nova é `@storybook/test`; nenhum componente alterado (só `*.stories.tsx`, `package.json`, lockfile e docs).
+
+**Testes exigidos:**
+- [x] Unitários Vitest inalterados e verdes (1025 em `ui`).
+- [x] Prova negativa 1 executada pelo testador: com o `aria-sort` esperado trocado para `descending` em `Table/SortKeyboardInteraction`, `pnpm test:a11y` falhou (1 falhado, 224 passados) identificando `Components/Table › SortKeyboardInteraction`; revertido, árvore limpa. As provas 2 e 3 (alteram código de produção) não foram repetidas por regra do testador; ficam com o registo do programador.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- `Dialog/KeyboardInteraction` ainda usa `last.focus()` para posicionar o focus no último elemento antes de testar o wrap do Tab; já existia antes, não entra no grep e as teclas testadas são reais.
+- `Table/SortKeyboardInteraction` tem uma asserção redundante de linhas, já assinalada pelo programador.
+- Ficheiros temporários: nenhum criado.
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la — Relatório 1 — 2026-11-12
+
+- **Commit testado:** dd8c6ce (implementação; ef5e546 e 14bf3a8 são registo); presente no histórico de `develop`, sem alterações por guardar antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Build | `pnpm build` (antes do typecheck) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1036, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 227 testes, axe e `play`, chromium) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `focusableWhenDisabled?: boolean` (omissão `false`), sem efeito sem `disabled` — leitura de `Button.tsx` (`keepFocusable = disabled && focusableWhenDisabled`) e teste "has no effect without disabled" (sem `aria-disabled` nem `data-disabled`)
+- [x] `<button>` nativo: sem `disabled`, com `aria-disabled="true"` e `data-disabled`, sem `tabindex`; `onClick` não chamado; sem envio por clique nem por Enter num `Input` do mesmo formulário — testes em `Button.focusable.test.tsx` (`blockClick` em captura)
+- [x] `asChild` com `<a href>`: `aria-disabled`, `data-disabled`, sem `tabindex`, `fireEvent.click` devolve `false` (`defaultPrevented`) — teste e código
+- [x] `loading` + `disabled` + prop continua focável (`disabled: nativeDisabled` é `false`); JSDoc de `loading` atualizado — teste e diff
+- [x] Aspeto desativado inalterado: `Button.css` fora do diff do commit (`git show --stat`)
+- [x] `IconButton` aceita e passa a prop (`ButtonProps` herdado; só JSDoc mudou); nome acessível obrigatório mantém-se (typecheck verde) — `IconButton.focusable.test.tsx`
+- [x] JSDoc de `focusableWhenDisabled` explica quando usar (controlo que se desativa ao ser ativado, ex.: "seguinte" na última página) e que por omissão `disabled` tira o botão do Tab — leitura do diff
+- [x] `Pagination.tsx` usa `disabled={!canPrevious}`/`disabled={!canNext}` + `focusableWhenDisabled`, sem `aria-disabled`, `data-disabled` nem bloqueio manuais; JSDoc refere a prop; HTML nos limites igual — diff e testes da DS-034 inalterados e verdes (stories da Pagination não alteradas)
+- [x] Testes da DS-010, DS-011, DS-021 e DS-034 passam sem alteração (1036 testes verdes; o commit só acrescenta ficheiros de teste novos)
+- [x] G1 a G3 e C1 a C5: sem dependências novas (nenhum `package.json` no diff); testes e stories nas pastas `Button` e `IconButton`
+
+**Testes exigidos:**
+- [x] Unitários e teclado (Tab chega ao botão, Enter e Espaço não chamam `onClick`, focus mantido ao passar a `disabled` com a prop, sem a prop o botão sai da ordem de Tab) — existem e verificam o comportamento pedido; não são triviais. O comportamento sem a prop é verificado pela ordem de Tab porque o jsdom não larga o `activeElement` (documentado no teste)
+- [x] axe nos testes unitários e `pnpm test:a11y` sem violações
+- [x] Stories `Button/FocusableWhenDisabled` (com descrição de quando usar) e `IconButton/FocusableWhenDisabled`; `DarkTheme` de ambos com exemplo da prop; `Pagination/FirstPage`, `LastPage` e `KeyboardInteraction` passam em `pnpm test:a11y`
+
+**Casos limite verificados:** `disabled` sem a prop (comportamento antigo intacto), `loading` combinado, `asChild`, `type="submit"` em formulário, tema escuro (story `DarkTheme` com axe). O aspeto desativado reutiliza `[data-disabled]` sem CSS novo, logo o contraste é o já aprovado.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas — Relatório 1 — 2026-11-12
+
+- **Commit testado:** b0e40b7 (implementação; 22272fb é registo); presente no histórico de `develop`; sem alterações por guardar antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Build | `pnpm build` (antes do typecheck) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1046, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 228 testes, axe e `play`, chromium) | ✔ |
+
+**Critérios de aceitação:**
+- [x] Só inteiros ≥ 1: `Number.isInteger(colSpan) && colSpan >= 1`; `it.each` com `0`, `-1`, `1.5`, `NaN`, `Infinity` confirma ausência de `data-col-span` e de `--ds-grid-col-span` — código e testes
+- [x] `console.warn` único por elemento com o valor (mensagem exata do plano), sem repetição em re-render; nada em produção (`vi.stubEnv`) nem com valores válidos. Mecanismo (`try { process.env.NODE_ENV === 'production' } catch`, só em `useEffect`) registado em `02-desenvolvimento.md`; `dist/index.js` e `dist/index.cjs` mantêm o literal `process.env.NODE_ENV` (substituível por bundlers), build ESM/CJS verde, sem acesso no render (SSR seguro) — leitura do diff e do `dist`
+- [x] Contexto com `columns` numérico (`undefined` com `minColumnWidth`); `colSpan={5}` em `columns={3}` → `data-col-span="3"`; com `minColumnWidth` e fora do `Grid` mantém `5` — testes e código
+- [x] JSDoc de `colSpan` descreve valores aceites e limite; nota sobre colunas implícitas removida — diff
+- [x] G1 a G3 e C1 a C5: nenhum `package.json` no diff (sem dependências novas); testes e stories só na pasta `Grid`
+
+**Testes exigidos:**
+- [x] Unitários: todos os casos pedidos existem e verificam o comportamento (não triviais: atributo, custom property, contagem e texto do aviso, re-render); testes anteriores da DS-028 passam sem alteração
+- [x] Acessibilidade: axe nos testes unitários e em `pnpm test:a11y` sem violações; a árvore de acessibilidade não muda (só atributos `data-*` e custom property)
+- [x] Story `Grid/SpanClamped` (`columns={3}`, item `colSpan={5}`) com `play` que compara a largura do item com a largura de conteúdo do `Grid` e exige 3 valores em `gridTemplateColumns`; passa em `pnpm test:a11y` em Chromium
+
+**Casos limite verificados:** `colSpan` ausente, `Infinity`, StrictMode/re-render sem aviso repetido, `asChild` (testes existentes), `Grid` aninhado (contexto do `Grid` mais próximo; `minColumnWidth` repõe `undefined`). Sem CSS novo, logo contraste e tema escuro inalterados.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Consistência do histórico da DS-055: o commit 139d6f1 (finalizador, DS-056) apanhou a linha `Em desenvolvimento` da DS-055; o histórico da tarefa em `01-planeamento.md` está coerente (Planeado → Em desenvolvimento → Pronto para teste → Em teste) e a tabela-índice mostrava `Pronto para teste` antes do teste.
+- Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`) — Relatório 1 — 2026-11-13
+
+- **Commit testado:** 07b77fd (implementação; beb1f36 é registo); presente no histórico de `develop`; sem alterações por guardar antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1048, docs 9, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 230 testes, axe e `play`, chromium) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Accordion.css`: `.ds-accordion__trigger-label` com `flex: 1 1 auto`, `min-width: 0`, `overflow-wrap: anywhere`; `.ds-accordion__content-inner` com `overflow-wrap: anywhere`; `.ds-accordion__icon` mantém `flex-shrink: 0` — diff e teste CSS
+- [x] `Dialog.css`: título, descrição e corpo com `overflow-wrap: anywhere`; título com `min-width: 0` (o cabeçalho é `flex` em coluna) — diff e teste CSS
+- [x] Texto normal inalterado: `overflow-wrap: anywhere` só quebra palavras que não cabem sozinhas; o diff só acrescenta linhas (12 no CSS), sem alterar outras propriedades
+- [x] Stylelint verde (`pnpm lint`); o commit não toca em `.tsx` de componente nem em `package.json` (só `.css`, testes e stories)
+- [x] Sobreposição com a DS-052: registada em `02-desenvolvimento.md` como inexistente
+- [x] G1 a G3 e C1 a C5: sem dependências novas, commit Conventional com ID, nenhum ficheiro do João alterado; testes e stories só nas pastas `Accordion` e `Dialog`
+
+**Testes exigidos:**
+- [x] Unitários: um teste novo em `Accordion.css.test.ts` e outro em `Dialog.css.test.ts`, com regex ligada ao seletor correto (não triviais); os existentes passam
+- [x] Acessibilidade: axe sem violações em `pnpm test:a11y`; teclado e árvore de acessibilidade inalterados (testes da DS-025 e da DS-031 verdes)
+- [x] Stories `Accordion/LongWord` (240px, palavra de 200 caracteres) e `Dialog/LongWord` (`size="sm"`) com `play` que falha com overflow horizontal e com chevron/botão de fechar fora do retângulo; passam em Chromium; `DarkTheme` de ambos continua a passar
+
+**Casos limite verificados:** `defaultOpen` do Dialog e painel aberto por omissão no Accordion; tema escuro (stories `DarkTheme`); sem props novas, logo modo controlado e `disabled` não mudam; sem cores novas, logo contraste inalterado.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Prova negativa dos `play` (remover o CSS e ver a story falhar) não executada: exigiria alterar código de produção, o que o testador não faz.
+- A `maxWidth: '240px'` da story `Accordion/LongWord` é um estilo inline de demonstração pedido pela especificação, fora do CSS do componente.
+- Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.

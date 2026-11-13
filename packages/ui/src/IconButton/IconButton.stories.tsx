@@ -73,6 +73,19 @@ export const Disabled: Story = {
   ),
 };
 
+/**
+ * With `focusableWhenDisabled` the icon button stays in the Tab order while disabled
+ * (`aria-disabled="true"`), so the focus is not lost when it disables itself.
+ */
+export const FocusableWhenDisabled: Story = {
+  render: () => (
+    <div style={row}>
+      <IconButton aria-label="Focusable" icon={<Icon />} disabled focusableWhenDisabled />
+      <IconButton aria-label="Not focusable" icon={<Icon />} disabled />
+    </div>
+  ),
+};
+
 export const Loading: Story = {
   render: () => (
     <div style={row}>
@@ -126,6 +139,7 @@ export const DarkTheme: Story = {
       <IconButton aria-label="Ghost" icon={<Icon />} variant="ghost" />
       <IconButton aria-label="Danger" icon={<Icon />} variant="danger" />
       <IconButton aria-label="Disabled" icon={<Icon />} disabled />
+      <IconButton aria-label="Focusable" icon={<Icon />} disabled focusableWhenDisabled />
     </div>
   ),
 };

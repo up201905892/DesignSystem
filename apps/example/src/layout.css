@@ -1,0 +1,110 @@
+/* The only CSS of the example app: layout, with design tokens only. */
+html,
+body {
+  margin: var(--ds-space-0);
+  background: var(--ds-color-bg-canvas);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-sans);
+}
+
+.ds-example-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 100%;
+}
+
+.ds-example-skip {
+  position: absolute;
+  top: var(--ds-space-2);
+  left: var(--ds-space-2);
+  z-index: var(--ds-z-overlay);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-inverse);
+  color: var(--ds-color-text-on-accent);
+  transform: translateY(-200%);
+}
+
+.ds-example-skip:focus {
+  transform: translateY(0);
+}
+
+.ds-example-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-2) var(--ds-space-4);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border-bottom: var(--ds-border-width-1) solid var(--ds-color-border-default);
+  background: var(--ds-color-bg-surface);
+}
+
+.ds-example-brand {
+  margin: var(--ds-space-0);
+  font-size: var(--ds-font-size-lg);
+  font-weight: 700;
+}
+
+.ds-example-nav {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ds-example-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  margin-left: auto;
+}
+
+.ds-example-main {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 72rem;
+  margin: var(--ds-space-0) auto;
+  padding: var(--ds-space-6) var(--ds-space-4);
+}
+
+.ds-example-main:focus {
+  outline: none;
+}
+
+.ds-example-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+  min-width: 0;
+}
+
+.ds-example-section h1,
+.ds-example-section h2 {
+  margin: var(--ds-space-0);
+}
+
+.ds-example-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-space-3);
+}
+
+.ds-example-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+}
+
+.ds-example-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ds-example-value {
+  margin: var(--ds-space-0) var(--ds-space-0) var(--ds-space-2);
+  font-size: var(--ds-font-size-3xl);
+  font-weight: 700;
+}

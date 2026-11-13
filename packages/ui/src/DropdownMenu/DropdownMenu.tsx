@@ -10,6 +10,7 @@ import {
 } from 'react';
 import * as RadixMenu from '@radix-ui/react-dropdown-menu';
 import { cx } from '../utils/cx';
+import { readSpaceToken, type SpaceStep } from '../utils/spaceToken';
 
 const DropdownMenuContext = createContext<{ setOpen: (open: boolean) => void }>({
   setOpen: () => {},
@@ -95,18 +96,20 @@ DropdownMenuTrigger.displayName = 'DropdownMenuTrigger';
 
 export interface DropdownMenuContentProps extends Omit<
   ComponentPropsWithoutRef<typeof RadixMenu.Content>,
-  'asChild'
+  'asChild' | 'sideOffset' | 'collisionPadding'
 > {
   /** Side of the trigger where the menu appears. */
   side?: 'top' | 'right' | 'bottom' | 'left';
   /** Alignment relative to the trigger. */
   align?: 'start' | 'center' | 'end';
+  /** Gap between trigger and menu, as a step of the `--ds-space-*` scale. Defaults to `'1'`. */
+  sideOffset?: SpaceStep;
 }
 
 /** The menu panel, rendered in a portal. `ref` and `className` go to it. */
 export const DropdownMenuContent = forwardRef<HTMLDivElement, DropdownMenuContentProps>(
   function DropdownMenuContent(
-    { side = 'bottom', align = 'start', sideOffset = 4, className, onKeyDown, ...props },
+    { side = 'bottom', align = 'start', sideOffset = '1', className, onKeyDown, ...props },
     ref,
   ) {
     const { setOpen } = useContext(DropdownMenuContext);
@@ -116,7 +119,8 @@ export const DropdownMenuContent = forwardRef<HTMLDivElement, DropdownMenuConten
           ref={ref}
           side={side}
           align={align}
-          sideOffset={sideOffset}
+          sideOffset={readSpaceToken(sideOffset)}
+          collisionPadding={readSpaceToken('2')}
           className={cx('ds-dropdown-menu', className)}
           onKeyDown={(event) => {
             onKeyDown?.(event);

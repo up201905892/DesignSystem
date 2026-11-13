@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Button } from './Button';
 
 const meta = {
@@ -82,6 +83,23 @@ export const Disabled: Story = {
   ),
 };
 
+/**
+ * Use `focusableWhenDisabled` when the focused control can become disabled because it was
+ * activated (for example "next" on the last page), so the focus is not lost. The button keeps
+ * `aria-disabled="true"` and stays in the Tab order; clicks are blocked. Without it, `disabled`
+ * takes the button out of the Tab order.
+ */
+export const FocusableWhenDisabled: Story = {
+  render: () => (
+    <div style={row}>
+      <Button disabled focusableWhenDisabled>
+        Focusable
+      </Button>
+      <Button disabled>Not focusable</Button>
+    </div>
+  ),
+};
+
 export const Loading: Story = {
   parameters: {
     docs: {
@@ -132,16 +150,15 @@ export const LoadingToggle: Story = {
     );
   },
   play: async ({ canvasElement }) => {
-    const button = canvasElement.querySelector<HTMLButtonElement>('button');
-    if (!button) throw new Error('No button');
-    button.focus();
+    const button = within(canvasElement).getByRole('button');
+    await userEvent.tab();
+    await expect(button).toHaveFocus();
     const before = button.getBoundingClientRect().width;
-    button.click();
-    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
-    if (!button.hasAttribute('data-loading')) throw new Error('Button is not loading');
-    if (document.activeElement !== button) throw new Error('Focus left the button');
+    await userEvent.click(button);
+    await waitFor(() => expect(button).toHaveAttribute('data-loading'));
+    await expect(button).toHaveFocus();
     const after = button.getBoundingClientRect().width;
-    if (Math.abs(after - before) > 0.5) throw new Error(`Width changed: ${before} -> ${after}`);
+    await expect(Math.abs(after - before)).toBeLessThanOrEqual(0.5);
   },
 };
 
@@ -178,6 +195,9 @@ export const DarkTheme: Story = {
       <Button variant="ghost">Ghost</Button>
       <Button variant="danger">Danger</Button>
       <Button disabled>Disabled</Button>
+      <Button disabled focusableWhenDisabled>
+        Focusable
+      </Button>
       <Button loading>Loading</Button>
       <Button asChild>
         <a href="#docs">Link</a>

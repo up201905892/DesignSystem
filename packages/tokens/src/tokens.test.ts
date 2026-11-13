@@ -52,7 +52,11 @@ describe('primitive tokens', () => {
     expect(Object.keys(font.weight ?? {})).toEqual(['regular', 'medium', 'semibold', 'bold']);
     expect(Object.keys(font.lineHeight ?? {})).toEqual(['tight', 'normal', 'relaxed']);
     expect(Object.keys(tokens.radius as object)).toEqual(['none', 'sm', 'md', 'lg', 'full']);
-    expect(Object.keys(tokens.shadow as object)).toEqual(['sm', 'md', 'lg']);
+    expect(Object.keys(tokens.shadow as object)).toEqual(['sm', 'md', 'lg', 'strong']);
+    expect(Object.keys((tokens.shadow as Record<string, object>).strong ?? {})).toEqual([
+      'md',
+      'lg',
+    ]);
     expect(Object.keys(tokens.duration as object)).toEqual(['fast', 'normal']);
     expect(Object.keys(tokens.z as object)).toEqual([
       'dropdown',
@@ -97,6 +101,17 @@ describe('generated output', () => {
 
   it('has one JSON source per category', () => {
     const files = readdirSync(new URL('src/primitives/', root)).filter((f) => f.endsWith('.json'));
-    expect(files.length).toBe(7);
+    expect(files.length).toBe(8);
+  });
+
+  it('exposes border widths and the focus ring tokens', () => {
+    expect(cssVars).toContainEqual(['--ds-border-width-1', '1px']);
+    expect(cssVars).toContainEqual(['--ds-border-width-2', '2px']);
+    expect(cssVars).toContainEqual(['--ds-focus-ring-width', '2px']);
+    expect(cssVars).toContainEqual(['--ds-focus-ring-offset', '2px']);
+    const border = tokens.border as { width: Record<string, string> };
+    const ring = (tokens.focus as { ring: Record<string, string> }).ring;
+    expect(border.width).toEqual({ '1': '1px', '2': '2px' });
+    expect(ring).toEqual({ width: '2px', offset: '2px' });
   });
 });

@@ -51,6 +51,9 @@ const preview: Preview = {
   initialGlobals: { theme: 'light' },
   parameters: {
     layout: 'padded',
+    options: {
+      storySort: { order: ['Getting started', 'Foundations', 'Components', 'Utilities', 'Icons'] },
+    },
     a11y: {
       options: {
         runOnly: {

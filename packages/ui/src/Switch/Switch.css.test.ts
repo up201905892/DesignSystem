@@ -85,7 +85,7 @@ describe('Switch.css state and motion', () => {
 
   it('has a visible focus ring', () => {
     expect(css).toMatch(
-      /\.ds-switch__control:focus-visible \{[^}]*outline: 2px solid var\(--ds-color-focus-ring\)/,
+      /\.ds-switch__control:focus-visible \{[^}]*outline: var\(--ds-focus-ring-width\) solid var\(--ds-color-focus-ring\)/,
     );
   });
 });

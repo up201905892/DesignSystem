@@ -29,6 +29,10 @@ const required = [
   'color-text-on-accent',
   'color-border-default',
   'color-border-strong',
+  'color-border-raised',
+  'shadow-raised',
+  'shadow-floating',
+  'shadow-modal',
   'color-accent-default',
   'color-accent-hover',
   'color-accent-active',
@@ -56,7 +60,7 @@ describe('semantic sources', () => {
     const json = JSON.parse(readFileSync(new URL(`${name}.json`, dir), 'utf8')) as unknown;
     const values = JSON.stringify(json).match(/"value":\s*"([^"]*)"/g) ?? [];
     expect(values.length).toBeGreaterThan(0);
-    for (const v of values) expect(v).toMatch(/"\{color\.[\w.-]+\}"$/);
+    for (const v of values) expect(v).toMatch(/"\{(color|shadow)\.[\w.-]+\}"$/);
     expect(JSON.stringify(json)).not.toMatch(/#[0-9a-fA-F]{3,8}\b|rgb|hsl/);
   });
 
@@ -80,9 +84,40 @@ describe('theme tokens', () => {
   it('has no empty values or unresolved references', () => {
     for (const set of [light, dark]) {
       for (const [name, value] of Object.entries(set)) {
-        expect(String(value), name).toMatch(/^#[0-9a-f]{6}([0-9a-f]{2})?$/);
+        if (name.startsWith('shadow-')) {
+          expect(String(value), name).toMatch(/^0 [^{}]+rgb\(0 0 0 \/ [\d.]+\)/);
+        } else {
+          expect(String(value), name).toMatch(/^#[0-9a-f]{6}([0-9a-f]{2})?$/);
+        }
       }
     }
+  });
+
+  it('defines the semantic shadows and the raised border in both themes', () => {
+    for (const set of [light, dark]) {
+      for (const name of [
+        'shadow-raised',
+        'shadow-floating',
+        'shadow-modal',
+        'color-border-raised',
+      ])
+        expect(set, name).toHaveProperty([name]);
+    }
+    expect(light['color-border-raised']).toBe(light['color-bg-surface']);
+    expect(dark['color-border-raised']).toBe(dark['color-border-default']);
+    expect(light['shadow-raised']).toBe(light['shadow-floating']);
+  });
+
+  it('dark shadows have an opacity of at least 0.5 and light ones are unchanged', () => {
+    for (const name of ['shadow-raised', 'shadow-floating', 'shadow-modal']) {
+      const alphas = [...String(dark[name]).matchAll(/\/ ([\d.]+)\)/g)].map((m) => Number(m[1]));
+      expect(alphas.length, name).toBeGreaterThan(0);
+      for (const a of alphas) expect(a, name).toBeGreaterThanOrEqual(0.5);
+    }
+    const prim = tokens.shadow as Record<string, string>;
+    expect(light['shadow-raised']).toBe(prim.md);
+    expect(light['shadow-floating']).toBe(prim.md);
+    expect(light['shadow-modal']).toBe(prim.lg);
   });
 
   it('does not change the primitive tokens', () => {

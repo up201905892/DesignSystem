@@ -65,9 +65,16 @@ export const AsLink: Story = {
 };
 
 export const InGrid: Story = {
+  play: ({ canvasElement }) => {
+    const cards = canvasElement.querySelectorAll<HTMLElement>('.ds-card');
+    if (cards.length === 0) throw new Error('Cards not found');
+    cards.forEach((card) => {
+      assertNoOverflow(card);
+    });
+  },
   render: () => (
     <Grid columns={3} gap={4}>
-      {['Atlas', 'Borealis', 'Cobalt'].map((name) => (
+      {['Atlas', 'Borealis', longWord].map((name) => (
         <Card key={name} asChild>
           <article>
             <CardHeader>
@@ -82,8 +89,40 @@ export const InGrid: Story = {
   ),
 };
 
+const longWord = 'Supercalifragilistic'.repeat(10);
+
+function assertNoOverflow(card: HTMLElement | null) {
+  if (!card) throw new Error('Card not found');
+  if (card.scrollWidth > card.clientWidth) throw new Error('Card content overflows horizontally');
+}
+
+export const LongWord: Story = {
+  render: () => (
+    <div style={{ maxWidth: '240px' }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>{longWord}</CardTitle>
+          <CardDescription>{longWord}</CardDescription>
+        </CardHeader>
+        <CardBody>{longWord}</CardBody>
+      </Card>
+    </div>
+  ),
+  play: ({ canvasElement }) => {
+    assertNoOverflow(canvasElement.querySelector<HTMLElement>('.ds-card'));
+  },
+};
+
 export const DarkTheme: Story = {
   parameters: { theme: 'dark' },
+  play: ({ canvasElement }) => {
+    const card = canvasElement.querySelector<HTMLElement>('.ds-card[data-variant="elevated"]');
+    if (!card) throw new Error('Elevated card not found');
+    const style = getComputedStyle(card);
+    if (style.borderTopColor === 'rgba(0, 0, 0, 0)')
+      throw new Error('The elevated card border is transparent in the dark theme');
+    if (style.boxShadow === 'none') throw new Error('The elevated card has no shadow');
+  },
   render: () => (
     <Grid columns={2} gap={4}>
       <Card variant="outlined">{content}</Card>

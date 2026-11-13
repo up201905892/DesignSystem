@@ -1,5 +1,11 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { CircleCheckIcon, CircleXIcon, InfoIcon, TriangleAlertIcon, XIcon } from '@ds/icons';
+import {
+  CircleCheckIcon,
+  CircleXIcon,
+  InfoIcon,
+  TriangleAlertIcon,
+  XIcon,
+} from '@up201905892/icons';
 import { IconButton } from '../IconButton';
 import { cx } from '../utils/cx';
 

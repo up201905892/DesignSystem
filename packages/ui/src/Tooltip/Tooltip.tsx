@@ -9,6 +9,7 @@ import {
 } from 'react';
 import * as RadixTooltip from '@radix-ui/react-tooltip';
 import { cx } from '../utils/cx';
+import { readSpaceToken, type SpaceStep } from '../utils/spaceToken';
 
 const DEFAULT_DELAY = 400;
 
@@ -43,7 +44,7 @@ export function TooltipProvider({
 
 export interface TooltipProps extends Omit<
   ComponentPropsWithoutRef<typeof RadixTooltip.Content>,
-  'content' | 'children'
+  'content' | 'children' | 'sideOffset' | 'collisionPadding'
 > {
   /** Text or short content of the tooltip. It must not contain interactive elements. */
   content: ReactNode;
@@ -53,6 +54,8 @@ export interface TooltipProps extends Omit<
   side?: 'top' | 'right' | 'bottom' | 'left';
   /** Alignment relative to the trigger. */
   align?: 'start' | 'center' | 'end';
+  /** Gap between trigger and tooltip, as a step of the `--ds-space-*` scale. Defaults to `'2'`. */
+  sideOffset?: SpaceStep;
   /** Delay in milliseconds before opening on hover. Defaults to 400. */
   delayDuration?: number;
   /** Whether the tooltip is open (controlled). */
@@ -90,7 +93,7 @@ export const Tooltip = forwardRef<ElementRef<typeof RadixTooltip.Content>, Toolt
       defaultOpen,
       onOpenChange,
       className,
-      sideOffset,
+      sideOffset = '2',
       ...props
     },
     ref,
@@ -110,8 +113,8 @@ export const Tooltip = forwardRef<ElementRef<typeof RadixTooltip.Content>, Toolt
             ref={ref}
             side={side}
             align={align}
-            sideOffset={sideOffset ?? 6}
-            collisionPadding={8}
+            sideOffset={readSpaceToken(sideOffset)}
+            collisionPadding={readSpaceToken('2')}
             className={cx('ds-tooltip', className)}
           >
             {content}

@@ -1,4 +1,12 @@
-import { forwardRef, type CSSProperties, type HTMLAttributes } from 'react';
+import {
+  createContext,
+  forwardRef,
+  useContext,
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type HTMLAttributes,
+} from 'react';
 import { Slot } from '../utils/Slot';
 import { cx } from '../utils/cx';
 import type { SpaceKey } from '../Stack/Stack';
@@ -27,6 +35,24 @@ interface GridResponsiveColumns extends GridBaseProps {
   columns?: never;
 }
 
+/** Number of columns of the closest Grid, or `undefined` when it is unknown (`minColumnWidth`). */
+const GridColumnsContext = createContext<number | undefined>(undefined);
+
+/**
+ * True in production builds. Bundlers replace `process.env.NODE_ENV` with a literal; where
+ * `process` does not exist (browser without a bundler) the access throws and we treat it as
+ * development. The try/catch keeps server rendering and the ESM/CJS builds safe.
+ */
+declare const process: { env: { NODE_ENV?: string } };
+
+function isProduction(): boolean {
+  try {
+    return process.env.NODE_ENV === 'production';
+  } catch {
+    return false;
+  }
+}
+
 export type GridProps = GridFixedColumns | GridResponsiveColumns;
 
 /**
@@ -52,15 +78,17 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(function Grid(
       ? ({ '--ds-grid-min-column': minColumnWidth } as CSSProperties)
       : undefined;
   return (
-    <Comp
-      ref={ref}
-      className={cx('ds-grid', className)}
-      data-gap={gap}
-      data-columns={minColumnWidth !== undefined ? undefined : (columns ?? 1)}
-      data-responsive={minColumnWidth !== undefined ? 'true' : undefined}
-      style={vars || style ? { ...vars, ...style } : undefined}
-      {...props}
-    />
+    <GridColumnsContext.Provider value={minColumnWidth !== undefined ? undefined : (columns ?? 1)}>
+      <Comp
+        ref={ref}
+        className={cx('ds-grid', className)}
+        data-gap={gap}
+        data-columns={minColumnWidth !== undefined ? undefined : (columns ?? 1)}
+        data-responsive={minColumnWidth !== undefined ? 'true' : undefined}
+        style={vars || style ? { ...vars, ...style } : undefined}
+        {...props}
+      />
+    </GridColumnsContext.Provider>
   );
 });
 
@@ -68,8 +96,11 @@ Grid.displayName = 'Grid';
 
 export interface GridItemProps extends HTMLAttributes<HTMLDivElement> {
   /**
-   * Number of columns the item spans (a positive whole number). A span larger than the
-   * number of columns creates extra implicit columns, so keep it within `columns`.
+   * Number of columns the item spans. Only whole numbers of 1 or more are accepted; any
+   * other value (`0`, negative, decimal, `NaN`, `Infinity`) is ignored, the item takes one
+   * column and, outside production, a warning is logged. Inside a `Grid` with a numeric
+   * `columns`, a larger span is limited to `columns`; with `minColumnWidth` or outside a
+   * `Grid` the valid value is kept as it is.
    */
   colSpan?: number;
   /** Render the child element (for example an `<li>`) instead of a `<div>`. */
@@ -82,13 +113,28 @@ export const GridItem = forwardRef<HTMLDivElement, GridItemProps>(function GridI
   ref,
 ) {
   const Comp = asChild ? Slot : 'div';
-  const vars =
-    colSpan !== undefined ? ({ '--ds-grid-col-span': colSpan } as CSSProperties) : undefined;
+  const columns = useContext(GridColumnsContext);
+  const valid = colSpan !== undefined && Number.isInteger(colSpan) && colSpan >= 1;
+  const invalid = colSpan !== undefined && !valid;
+  const span = valid ? (columns !== undefined ? Math.min(colSpan, columns) : colSpan) : undefined;
+
+  const warned = useRef<unknown>(undefined);
+  useEffect(() => {
+    if (!invalid) {
+      warned.current = undefined;
+      return;
+    }
+    if (isProduction() || Object.is(warned.current, colSpan)) return;
+    warned.current = colSpan;
+    console.warn(`GridItem: colSpan must be a whole number ≥ 1, received ${String(colSpan)}`);
+  }, [invalid, colSpan]);
+
+  const vars = span !== undefined ? ({ '--ds-grid-col-span': span } as CSSProperties) : undefined;
   return (
     <Comp
       ref={ref}
       className={cx('ds-grid-item', className)}
-      data-col-span={colSpan}
+      data-col-span={span}
       style={vars || style ? { ...vars, ...style } : undefined}
       {...props}
     />

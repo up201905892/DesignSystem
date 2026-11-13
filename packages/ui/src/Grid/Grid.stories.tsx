@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect } from '@storybook/test';
 import { Grid, GridItem } from './Grid';
 
 const meta = {
@@ -63,6 +64,26 @@ export const Spans: Story = {
       </GridItem>
     </Grid>
   ),
+};
+
+export const SpanClamped: Story = {
+  render: () => (
+    <Grid columns={3} gap={3} data-testid="grid">
+      <GridItem colSpan={5} style={box} data-testid="item">
+        colSpan 5, limited to 3 columns
+      </GridItem>
+      <div style={box}>1</div>
+      <div style={box}>2</div>
+    </Grid>
+  ),
+  play: async ({ canvasElement }) => {
+    const grid = canvasElement.querySelector<HTMLElement>('[data-testid="grid"]')!;
+    const item = canvasElement.querySelector<HTMLElement>('[data-testid="item"]')!;
+    const cs = getComputedStyle(grid);
+    const content = grid.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    await expect(item.getBoundingClientRect().width).toBeCloseTo(content, 0);
+    await expect(cs.gridTemplateColumns.split(' ')).toHaveLength(3);
+  },
 };
 
 export const AsList: Story = {

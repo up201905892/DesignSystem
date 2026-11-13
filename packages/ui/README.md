@@ -1,6 +1,21 @@
-# @ds/ui
+# @up201905892/ui
 
 React components of the design system.
+
+## Installation
+
+```
+pnpm add @up201905892/ui react react-dom
+```
+
+## Usage
+
+```tsx
+import '@up201905892/ui/styles.css';
+import { Button } from '@up201905892/ui';
+
+<Button>Save</Button>;
+```
 
 ## How to create a component
 
@@ -8,6 +23,7 @@ Every component follows the same checklist. `src/VisuallyHidden/` is the referen
 
 - **C1 Structure.** Folder `src/<Component>/` with `<Component>.tsx`, `<Component>.test.tsx`, `<Component>.stories.tsx`, `<Component>.css` and `index.ts`. Export the component and its props type in `src/index.ts` and import the `.css` in `src/styles.css`. `src/conventions.test.ts` checks this.
 - **C2 Base API.** `forwardRef` to the root DOM element, a `displayName`, the consumer `className` appended to the base class (never replacing it), and native props passed to the root. Use `cx` from `src/utils/cx.ts` and `Slot` from `src/utils/Slot.ts` for `asChild`.
-- **C3 Styles.** Only `ds-*` classes and `var(--ds-*)` tokens; variants, sizes and states as `data-*` attributes; no hard-coded colors, spacing, radii or shadows, no inline styles, no CSS-in-JS.
+- **C3 Styles.** Only `ds-*` classes and `var(--ds-*)` tokens; variants, sizes and states as `data-*` attributes; no hard-coded colors, spacing, radii, shadows, border widths or focus ring widths and offsets (use `--ds-border-width-*` and `--ds-focus-ring-*`; Stylelint rejects literal lengths in `border*` and `outline*`), no inline styles, no CSS-in-JS.
 - **C4 Accessibility.** A unit test with `expectNoA11yViolations` from `test/a11y.ts`; every story passes `pnpm test:a11y`, including `DarkTheme`; contrast and focus visibility in both themes; keyboard patterns follow the WAI-ARIA APG.
 - **C5 Stories.** One story per variant and state, plus a `DarkTheme` story, with `tags: ['autodocs']` and prop descriptions in JSDoc.
+- **C6 Changeset.** Any task that changes the behaviour of a published package adds a file in `.changeset/` (run `pnpm changeset`). Use `patch` for fixes, `minor` for backwards-compatible additions and `major` for breaking changes. See `.changeset/README.md`.

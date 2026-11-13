@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Button } from '../Button';
 import { Field, FieldLabel } from '../Field';
 import { Input } from '../Input';
@@ -30,10 +31,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-const press = (target: Element, key: string) =>
-  target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
 
 export const Default: Story = { args: { defaultOpen: true } };
 
@@ -142,22 +139,17 @@ export const KeyboardInteraction: Story = {
     </Popover>
   ),
   play: async ({ canvasElement }) => {
-    const trigger = canvasElement.querySelector<HTMLElement>('button');
-    if (!trigger) throw new Error('No trigger');
-    trigger.focus();
-    trigger.click();
-    await wait(300);
-    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
-    if (!dialog) throw new Error('Popover did not open');
-    if (!dialog.contains(document.activeElement))
-      throw new Error('Focus did not enter the popover');
-    if (trigger.getAttribute('aria-expanded') !== 'true')
-      throw new Error('aria-expanded is not true');
+    const trigger = within(canvasElement).getByRole('button', { name: 'Open popover' });
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    const dialog = await within(document.body).findByRole('dialog');
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
 
-    press(dialog, 'Escape');
-    await wait(300);
-    if (document.querySelector('[role="dialog"]')) throw new Error('Escape did not close');
-    if (document.activeElement !== trigger) throw new Error('Focus did not return to the trigger');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 

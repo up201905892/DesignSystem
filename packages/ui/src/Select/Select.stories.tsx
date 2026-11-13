@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Field, FieldDescription, FieldError, FieldLabel } from '../Field';
 import { Input } from '../Input';
 import { Select, SelectGroup, SelectItem, SelectSeparator } from './Select';
@@ -147,33 +148,51 @@ export const KeyboardInteraction: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const trigger = canvasElement.querySelector<HTMLElement>('[role="combobox"]');
-    if (!trigger) throw new Error('No trigger');
-    const press = (target: Element, key: string) =>
-      target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
-    const option = (name: string) =>
-      [...document.querySelectorAll<HTMLElement>('[role="option"]')].find(
-        (el) => el.textContent?.trim() === name,
-      );
+    const body = within(document.body);
+    const trigger = within(canvasElement).getByRole('combobox');
+    const option = (name: string) => body.getByRole('option', { name });
 
-    trigger.focus();
-    press(trigger, 'ArrowDown');
-    await wait(100);
-    if (!document.querySelector('[role="listbox"]')) throw new Error('List did not open');
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(await body.findByRole('listbox')).toBeInTheDocument();
 
-    press(document.activeElement ?? trigger, 'ArrowDown');
-    await wait(50);
-    if (document.activeElement !== option('Cherry')) throw new Error('Disabled item not skipped');
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(option('Cherry')).toHaveFocus());
 
-    press(document.activeElement ?? trigger, 'End');
-    await wait(50);
-    if (document.activeElement !== option('Date')) throw new Error('End did not reach last item');
+    await userEvent.keyboard('{End}');
+    await waitFor(() => expect(option('Date')).toHaveFocus());
 
-    press(document.activeElement ?? trigger, 'Escape');
-    await wait(100);
-    if (document.querySelector('[role="listbox"]')) throw new Error('Escape did not close');
-    if (document.activeElement !== trigger) throw new Error('Focus did not return to trigger');
-    if (trigger.textContent?.includes('Date')) throw new Error('Escape changed the value');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(body.queryByRole('listbox')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await expect(trigger).not.toHaveTextContent('Date');
+  },
+};
+
+export const Offset: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: '16rem' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole('combobox');
+    await userEvent.tab();
+    await userEvent.keyboard('{ArrowDown}');
+    await within(document.body).findByRole('listbox');
+    await wait(300);
+    const content = document.querySelector<HTMLElement>('.ds-select__content');
+    if (!content) throw new Error('Select did not open');
+    const probe = document.createElement('div');
+    probe.style.height = 'var(--ds-space-1)';
+    document.body.append(probe);
+    const expected = probe.getBoundingClientRect().height;
+    probe.remove();
+    const gap = content.getBoundingClientRect().top - trigger.getBoundingClientRect().bottom;
+    if (Math.abs(gap - expected) > 1) throw new Error(`Gap is ${gap}px, expected ${expected}px`);
   },
 };
 

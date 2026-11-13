@@ -2,6 +2,104 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-13
+
+- **Decisões para o João:**
+  1. **DS-042 ficou parada em `Em teste`.** O testador não conseguiu escrever em `/tmp` (precisa de aprovação) para correr o Playwright (axe, contraste dos blocos de código, títulos, nos dois temas) sobre a página MDX, que o `pnpm test:a11y` não cobre. Comando bloqueado: `mkdir`/escrita em `/tmp`. Em alternativa, autorizar um diretório temporário fora do repositório em `.claude/settings.json` (é só teu) ou dizer-me como queres que se teste. O G1 completo (incluindo `test:a11y`) já passou.
+  2. **DS-059 proposta** (estabilizar o teste intermitente "fails for an img without alt" no helper de axe). Aprovas?
+  3. Sugestão do programador: depois da DS-040, uma tarefa pequena para a página "Getting started" ligar a `accessibility.mdx`. Propor então?
+  4. Pendentes anteriores sem resposta: `ci.yml` sem `pnpm build` prévio e `source` do icons na DS-039 (`.github/` é só teu).
+- **Concluídas:** DS-057 (`overflow-wrap` no Accordion e no Dialog). Ciclo completo hoje, relatório 1 Aprovado.
+- **Testadas:** DS-057 (Aprovado; `test:a11y` 230 testes, zero falhas). DS-042: G1 verde, verificação em browser por fazer.
+- **Desenvolvidas:** DS-042 (Pronto para teste → Em teste), DS-057 (limite de 2 por execução).
+- **Decisões aplicadas:** 8 linhas de 2026-11-13. Aprovadas DS-038, DS-040 e DS-058 (agora `Planeado`); DS-042 passa a depender só de DS-036 e DS-047 só de DS-042; respostas DS-009, DS-035, DS-036, DS-044/045 registadas. DS-040 ganhou o critério de revisão visual do DataTable.
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** testar DS-042 (se o bloqueio for resolvido); depois DS-038 e DS-040 (Alta, já desbloqueadas pela DS-057) e DS-058 (Baixa). Sem propostas novas além da DS-059.
+
+## 2026-11-12
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Depois da DS-057 (a única `Planeado`), o ciclo fica sem trabalho até aprovares. Aprovar em `aprovacoes.md`.
+  2. **DS-058 proposta** (stories de fundações: `Theme.stories.tsx` com sombras semânticas, página das sombras semânticas, `1px`/`2px` escritos à mão nas stories). Aprovas?
+  3. Pendentes anteriores mantêm-se: story `Borders` (DS-052) em `Foundations/Scales`, autor das DS-036, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-056 (`focusableWhenDisabled` no Button/IconButton e na Pagination), DS-055 (validação e limite de `colSpan` no GridItem). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-056 e DS-055, com `pnpm test:a11y` (227 e 228 testes) e zero falhas.
+- **Desenvolvidas:** DS-056, DS-055 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma. Nota de processo: o finalizador da DS-056 e o programador da DS-055 correram em paralelo e um commit apanhou a linha de estado da DS-055 em `01-planeamento.md`; o histórico ficou coerente. Não se repete (uma tarefa de cada vez).
+- **Próximo passo:** DS-057 (Baixa). Proposta nova: DS-058.
+
+## 2026-11-11
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Depois de DS-055 a DS-057 (as últimas `Planeado`), o ciclo fica sem trabalho até aprovares. Aprovar em `aprovacoes.md`.
+  2. `apps/docs/src/foundations/Theme.stories.tsx` ainda usa `--ds-shadow-sm` diretamente (fora do critério da DS-053, que só cobre `packages/ui`). Queres uma tarefa para o migrar para os tokens semânticos?
+  3. Pendentes anteriores mantêm-se: story `Borders` (DS-052) em `Foundations/Scales`, autor das DS-036, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-053 (sombras semânticas por tema, Card com palavras longas), DS-054 (`@storybook/test` nos `play`). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-053, DS-054, com `pnpm test:a11y` (225 testes) e zero falhas.
+- **Desenvolvidas:** DS-053, DS-054 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-056 (Média), depois DS-055 e DS-057 (Baixa). Sem propostas novas (há 3 tarefas `Planeado` com dependências satisfeitas).
+
+## 2026-11-10
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Sem elas, o ciclo só tem tarefas pequenas por fazer (DS-053 a DS-057). Aprovar em `aprovacoes.md`.
+  2. **Story `Borders` (DS-052)** ficou em `Foundations/Scales` e não em `Foundations/Borders`. Aceitas, ou queres uma story à parte?
+  3. A DS-052 não foi verificada com capturas de ecrã nos dois temas (o testador não conseguiu escrever em `/tmp`); ficou coberta por `getComputedStyle` em browser real e pelo axe nas stories `DarkTheme`.
+  4. Resíduo do testador da DS-045 (`.qa045-tmp/`, capturas e um script) tinha ficado no repositório sem commit e fez o `pnpm lint` falhar; o orquestrador apagou-o. Os agentes devem pôr ficheiros temporários fora do repositório.
+  5. Pendentes antigos mantêm-se: teste intermitente do axe (DS-009) se voltar a aparecer, autor das DS-036, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-045 (app de exemplo: formulário e tabela), DS-052 (tokens de borda e de anel de focus, Stylelint sem exceção). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-045 (também em Chromium a 320 e 1280 px, nos dois temas), DS-052 (inclui `pnpm test:a11y` e stories com `play`). Zero falhas.
+- **Desenvolvidas:** DS-045, DS-052 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-053 (Média, depende da DS-052, agora desbloqueada), DS-054, DS-056; depois DS-055 e DS-057 (Baixa). Sem propostas novas (há 6 tarefas `Planeado` com dependências satisfeitas).
+
+## 2026-11-09
+
+- **Decisões para o João:**
+  1. **DS-038 e DS-040 continuam `Proposta` e aguardam a tua aprovação.** Bloqueiam DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049. Aprovar em `aprovacoes.md`.
+  2. **Teste intermitente (2026-11-06):** `packages/ui/test/a11y.test.tsx` › "fails for an img without alt" falhou uma vez e não voltou a falhar (991/991 em três execuções hoje). Causa por identificar (provavelmente ambiente axe/jsdom). Se voltar a aparecer, proponho uma tarefa para o helper de axe (DS-009).
+  3. DS-045 (formulário e tabela) é a seguinte na app de exemplo; o `pnpm test` da app precisa do `dist` do `ui` já construído (o `exports` do `ui` não tem a condição `source`). O CI já faz build antes dos testes.
+  4. Pendentes antigos mantêm-se: autor das DS-036 (`up201905892` ou nome próprio), dependência da DS-045 face às DS-051 a DS-057, `source` do icons na DS-039, `ci.yml` sem `pnpm build` prévio (`.github/` é só teu), DataTable no Storybook e `pageSize={0}`.
+- **Concluídas:** DS-037 (Changesets), DS-044 (app de exemplo: estrutura, layout e tema). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-037, DS-044 (zero falhas; DS-044 verificada também em Chromium a 320 px e nos dois temas).
+- **Desenvolvidas:** DS-037 (retomada), DS-044 (limite de 2 por execução).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-045 (Alta), depois DS-052, DS-054, DS-056 (Média). Sem propostas novas (há 6 tarefas `Planeado` com dependências satisfeitas).
+
+## 2026-11-06
+
+- **Decisões para o João:**
+  1. **DS-037 parada em `Em desenvolvimento` com `pnpm test` vermelho.** Falha `packages/ui/test/a11y.test.tsx` › "fails for an img without alt": `expectNoA11yViolations` não rejeita um `<img>` sem `alt` (990/991 testes passam). O lockfile só mudou o peer `yaml` do vite, por isso a falha parece vir do ambiente (axe/jsdom) e não da DS-037, mas não consegui confirmar num HEAD limpo (o sandbox negou `git stash`/`worktree`). Podes correr `pnpm --filter @up201905892/ui test` em `develop` sem a DS-037 (commit `51a7049`)? Se falhar, é bug do helper de axe (DS-009) e proponho uma tarefa; se passar, a DS-037 investiga. Resposta por linha "Desbloquear"/"Responder" em `aprovacoes.md`.
+  2. Trabalho da DS-037 guardado no commit `wip(repo): DS-037 …` (`51a7049`): Changesets configurado (`fixed` nos 3 pacotes, `access: public`), changeset `minor` com aviso do `sideOffset`, regra C6 no README de `ui`. Falta o registo em `02-desenvolvimento.md` e passar a `Pronto para teste`.
+  3. DS-044 não foi iniciada: o `pnpm test` vermelho invalidaria o critério G1. Pendentes do dia 2026-11-05 (autor da DS-036, aprovar DS-038/DS-040, dependência da DS-044/045, `source` do icons na DS-039, `ci.yml`, DataTable, `pageSize={0}`) mantêm-se.
+- **Concluídas:** nenhuma
+- **Testadas:** nenhuma
+- **Desenvolvidas:** DS-037 (incompleta, bloqueada por teste vermelho)
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas)
+- **Violações de regras encontradas:** nenhuma
+- **Próximo passo:** com a tua resposta, retomar a DS-037; depois DS-044, DS-052, DS-054, DS-056. Sem propostas novas (há 7 tarefas `Planeado` com dependências satisfeitas).
+
+## 2026-11-05
+
+- **Decisões para o João:**
+  1. **Dados de autor da DS-036:** `author`, `repository`, `homepage` e o copyright dos `LICENSE` estão como `up201905892` (tirado do `origin`). Queres o teu nome próprio? Se sim, linha "Responder" em `aprovacoes.md`.
+  2. **DS-038 e DS-040 (revistas) aguardam a tua aprovação.** Passaram a depender das DS-051 a DS-057. Enquanto estão `Proposta`, ficam bloqueadas DS-039, DS-041, DS-042 e a cadeia DS-043, DS-046 a DS-049.
+  3. DS-044 e DS-045 (app de exemplo) não dependem das DS-051 a DS-057. Queres acrescentar essa dependência ("Alterar")?
+  4. DS-039 deve reavaliar a condição `source` do `exports` de `@up201905892/icons` (`src` não é publicado). Fica registado na DS-039.
+  5. Para a DS-037: a mudança de `sideOffset` do Tooltip (número → `SpaceStep`) é incompatível e deve constar do primeiro changelog.
+  6. Pendentes antigos: `ci.yml` já não precisa do `pnpm build` antes de `typecheck`/`test`/`lint` (`.github/` é só teu); DataTable no Storybook e `pageSize={0}` como no registo de 2026-10-28.
+- **Concluídas:** DS-036 (metadados dos pacotes, nomes `@up201905892/*`, licença MIT), DS-051 (afastamentos dos overlays por tokens). Ambas percorreram o ciclo completo hoje; relatórios 1 Aprovado.
+- **Testadas:** DS-036, DS-051 (zero falhas).
+- **Desenvolvidas:** DS-036, DS-051 (limite de 2 por execução).
+- **Decisões aplicadas:** aprovação de DS-036, DS-037, DS-039, DS-041 a DS-049 e DS-051 a DS-057; alteração de DS-038 e DS-040 (continuam `Proposta`).
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** na próxima execução, DS-037 (Alta), depois DS-052/DS-054/DS-056 (Média). Sem propostas novas: há 6 tarefas `Planeado` com dependências satisfeitas.
+
 ## 2026-11-04
 
 - **Decisões para o João:**

@@ -20,7 +20,7 @@ export type IconButtonProps = Omit<ButtonProps, 'leadingIcon' | 'trailingIcon' |
  *
  * Accessibility: `aria-label` is required (or `aria-labelledby`), so the button is never
  * unnamed. Works with Tab, Enter and Space and shows a visible focus ring. Behaviour of
- * `disabled` and `asChild` is the same as in `Button`.
+ * `disabled`, `focusableWhenDisabled` and `asChild` is the same as in `Button`.
  */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
   { icon, ...props },

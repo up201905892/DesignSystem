@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Button } from '../Button';
 import { Field, FieldLabel } from '../Field';
 import { Input } from '../Input';
@@ -46,12 +47,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-const press = (target: Element, key: string, shiftKey = false) =>
-  target.dispatchEvent(
-    new KeyboardEvent('keydown', { key, shiftKey, bubbles: true, cancelable: true }),
-  );
 
 export const Default: Story = { args: { defaultOpen: true } };
 
@@ -140,6 +135,39 @@ export const LongContent: Story = {
   ),
 };
 
+const longWord = 'Supercalifragilistic'.repeat(10);
+
+export const LongWord: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogTrigger asChild>
+        <Button>Open dialog</Button>
+      </DialogTrigger>
+      <DialogContent size="sm">
+        <DialogHeader>
+          <DialogTitle>{longWord}</DialogTitle>
+          <DialogDescription>{longWord}</DialogDescription>
+        </DialogHeader>
+        <DialogBody>{longWord}</DialogBody>
+      </DialogContent>
+    </Dialog>
+  ),
+  play: async () => {
+    const dialog = await within(document.body).findByRole('dialog');
+    const body = dialog.querySelector<HTMLElement>('.ds-dialog__body');
+    const close = dialog.querySelector<HTMLElement>('.ds-dialog__close');
+    if (!body || !close) throw new Error('Dialog parts not found');
+    if (dialog.scrollWidth > dialog.clientWidth)
+      throw new Error('The Dialog overflows horizontally');
+    if (body.scrollWidth > body.clientWidth)
+      throw new Error('The Dialog body overflows horizontally');
+    const box = dialog.getBoundingClientRect();
+    const btn = close.getBoundingClientRect();
+    if (btn.left < box.left || btn.right > box.right)
+      throw new Error('The close button is outside the Dialog');
+  },
+};
+
 export const Confirmation: Story = {
   render: () => (
     <Dialog defaultOpen>
@@ -223,33 +251,27 @@ export const KeyboardInteraction: Story = {
     </Dialog>
   ),
   play: async ({ canvasElement }) => {
-    const trigger = canvasElement.querySelector<HTMLElement>('button');
-    if (!trigger) throw new Error('No trigger');
-    trigger.focus();
-    trigger.click();
-    await wait(300);
-    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
-    if (!dialog) throw new Error('Dialog did not open');
+    const trigger = within(canvasElement).getByRole('button', { name: 'Open dialog' });
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    const dialog = await within(document.body).findByRole('dialog');
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
     const focusable = [...dialog.querySelectorAll<HTMLElement>('button, input')];
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (!first || !last) throw new Error('No focusable elements');
-    if (!dialog.contains(document.activeElement)) throw new Error('Focus did not enter the dialog');
 
     last.focus();
-    press(last, 'Tab');
-    await wait(50);
-    if (document.activeElement !== first) throw new Error('Tab did not wrap to the first element');
+    await userEvent.tab();
+    await expect(first).toHaveFocus();
 
-    press(first, 'Tab', true);
-    await wait(50);
-    if (document.activeElement !== last)
-      throw new Error('Shift+Tab did not wrap to the last element');
+    await userEvent.tab({ shift: true });
+    await expect(last).toHaveFocus();
 
-    press(dialog, 'Escape');
-    await wait(300);
-    if (document.querySelector('[role="dialog"]')) throw new Error('Escape did not close');
-    if (document.activeElement !== trigger) throw new Error('Focus did not return to the trigger');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 

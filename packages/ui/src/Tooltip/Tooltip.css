@@ -6,7 +6,7 @@
   padding-inline: var(--ds-space-2);
   border-radius: var(--ds-radius-sm);
   background-color: var(--ds-color-bg-inverse);
-  box-shadow: var(--ds-shadow-md);
+  box-shadow: var(--ds-shadow-floating);
   color: var(--ds-color-bg-canvas);
   font-family: var(--ds-font-family-sans);
   font-size: var(--ds-font-size-sm);

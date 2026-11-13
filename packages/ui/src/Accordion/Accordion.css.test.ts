@@ -23,6 +23,14 @@ describe('Accordion.css', () => {
     expect(css).toContain('.ds-accordion__trigger:focus-visible');
   });
 
+  it('breaks long words in the trigger label and the panel without squeezing the chevron', () => {
+    expect(css).toMatch(
+      /\.ds-accordion__trigger-label\s*\{[^}]*flex:\s*1 1 auto;[^}]*min-width:\s*0;[^}]*overflow-wrap:\s*anywhere/,
+    );
+    expect(css).toMatch(/\.ds-accordion__content-inner\s*\{[^}]*overflow-wrap:\s*anywhere/);
+    expect(css).toMatch(/\.ds-accordion__icon\s*\{[^}]*flex-shrink:\s*0/);
+  });
+
   it('has no fixed colours or lengths other than 1px and 2px', () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
     const lengths = css.match(/\b\d+(px|rem|em)\b/g) ?? [];

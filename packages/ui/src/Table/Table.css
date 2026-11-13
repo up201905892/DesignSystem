@@ -4,14 +4,14 @@
   max-width: 100%;
   max-height: var(--ds-table-max-height, none);
   overflow: auto;
-  border: 1px solid var(--ds-color-border-default);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-md);
   background-color: var(--ds-color-bg-surface);
 }
 
 .ds-table-container:focus-visible {
-  outline: 2px solid var(--ds-color-focus-ring);
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 .ds-table {
@@ -55,7 +55,7 @@
 
 .ds-table__header-cell {
   padding: var(--ds-table-cell-py) var(--ds-table-cell-px);
-  border-bottom: 1px solid var(--ds-color-border-strong);
+  border-bottom: var(--ds-border-width-1) solid var(--ds-color-border-strong);
   background-color: var(--ds-color-bg-subtle);
   color: var(--ds-color-text-default);
   font-weight: var(--ds-font-weight-semibold);
@@ -70,7 +70,7 @@
 
 .ds-table__cell {
   padding: var(--ds-table-cell-py) var(--ds-table-cell-px);
-  border-bottom: 1px solid var(--ds-color-border-default);
+  border-bottom: var(--ds-border-width-1) solid var(--ds-color-border-default);
   text-align: start;
 }
 
@@ -119,7 +119,7 @@
 }
 
 .ds-table__sort-button:focus-visible {
-  outline: 2px solid var(--ds-color-focus-ring);
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
   /* Drawn inside the cell, so the scroll container does not clip the ring. */
   outline-offset: calc(var(--ds-space-1) * -1);
   border-radius: var(--ds-radius-sm);

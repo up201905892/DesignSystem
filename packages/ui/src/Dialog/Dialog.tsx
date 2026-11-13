@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { XIcon } from '@ds/icons';
+import { XIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
 import { IconButton } from '../IconButton';
 

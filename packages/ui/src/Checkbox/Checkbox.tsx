@@ -1,6 +1,6 @@
 import { forwardRef, type ComponentPropsWithoutRef, type ElementRef, type ReactNode } from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { CheckIcon, MinusIcon } from '@ds/icons';
+import { CheckIcon, MinusIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
 import { useFieldControl } from '../Field';
 

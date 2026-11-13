@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Button } from '../Button';
 import { ToastProvider, useToast, type ToastOptions, type ToastProviderProps } from './Toast';
 
@@ -212,17 +213,18 @@ export const AfterLoading: Story = {
     </ToastProvider>
   ),
   play: async ({ canvasElement }) => {
-    const button = canvasElement.querySelector<HTMLButtonElement>('button');
-    if (!button) throw new Error('No button');
-    button.focus();
-    button.click();
-    await wait(100);
-    if (button.getAttribute('aria-busy') !== 'true') throw new Error('Button is not loading');
-    await wait(1300);
-    const region = document.querySelector('[role="region"]');
-    if (!region?.textContent?.includes('Saved')) throw new Error('Success toast did not appear');
-    if (button.getAttribute('aria-busy') === 'true') throw new Error('Button is still busy');
-    if (document.activeElement !== button) throw new Error('Focus left the button');
+    const button = within(canvasElement).getByRole('button');
+    await userEvent.tab();
+    await expect(button).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(button).toHaveAttribute('aria-busy', 'true'));
+    await waitFor(
+      () => expect(within(document.body).getByRole('region')).toHaveTextContent('Saved'),
+      { timeout: 3000 },
+    );
+    await waitForToastsSettled(canvasElement, 1);
+    await expect(button).not.toHaveAttribute('aria-busy', 'true');
+    await expect(button).toHaveFocus();
   },
 };
 

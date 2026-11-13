@@ -341,6 +341,105 @@ Modelo de entrada:
 - **Documentação:** props e notas de acessibilidade em JSDoc (autodocs); stories `Default`, `WithCustomCells`, `Empty`, `NoPagination`, `Controlled`, `KeyboardInteraction` (com `play`) e `DarkTheme`, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
 - **Lições:** com `pageSize={0}` o resumo também desaparece (decisão do programador). O `play` de `KeyboardInteraction` usa `focus()`/`click()`; migração para `@storybook/test` prevista na DS-054. Anúncio `aria-live` num leitor de ecrã, aspeto visual, contraste no tema escuro e transbordo de texto longo sem espaços só verificados por CSS e axe (não inspecionados num navegador).
 
+### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença — concluída a 2026-11-05
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-05), commit 3abe004 (implementação) e 66a8da1 (registo); sem commits de código de produção depois do commit testado (0eaa8b4 é só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** pacotes renomeados para `@up201905892/tokens`, `@up201905892/icons` e `@up201905892/ui` e deixam de ser privados (`apps/docs` continua privado); metadados de publicação (`license` MIT, `author`, `repository`, `homepage`, `keywords`, `publishConfig.access=public`); `exports`, `main`/`module`/`types`, `sideEffects` e `files` por pacote (o `ui` separa declarações ESM e CJS e exporta `./styles.css`); dependências do `ui` arrumadas (peers, Radix e `icons` em `dependencies`, `tokens` em `devDependencies`, tudo externo no `dist`); `LICENSE` na raiz e nos pacotes; `README.md` mínimo em cada pacote; teste `packages/ui/src/package-metadata.test.ts`.
+- **Changeset:** não aplicável (a tarefa só altera metadados e nomes, os pacotes continuam em 0.0.0 sem lançamento anterior e a pasta `.changeset/` ainda não existe; a configuração do Changesets e a primeira versão são da DS-037, sem a qual um ficheiro de changeset seria inerte)
+- **Documentação:** READMEs mínimos dos três pacotes (nome, instalação, exemplo); a versão completa é da DS-046. Sem alterações de interface, logo sem stories novas; as existentes continuam a passar no `test:a11y` (inclui tema escuro). Sem `TODO` na tarefa.
+- **Lições:** `author`, `repository`, `homepage` e copyright assumem `up201905892` (derivado do `origin`); o João deve confirmar o nome próprio. O `exports["."]` do `icons` mantém a condição `source` para `src` (não publicado): reavaliar na DS-039 (tarball). `pnpm pack` não foi verificado (DS-039).
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) — concluída a 2026-11-05
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-05), commit 1983c2a (implementação); sem commits de código de produção depois do commit testado (2ab813e e 872d44a são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Tooltip` (omissão `'2'`) e `DropdownMenuContent` (omissão `'1'`) com `sideOffset?: SpaceStep` convertido por `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')` nos três overlays; `Select` usa `readSpaceToken('1')` no `sideOffset`, sem props novas. Passar um número a `sideOffset` é erro de compilação.
+- **Changeset:** não aplicável por agora (os pacotes já são públicos desde a DS-036, mas a pasta `.changeset/` e a configuração só chegam com a DS-037, `Planeado`; um ficheiro agora seria inerte). A alteração de `sideOffset` (de número para `SpaceStep`) deve constar do changelog da primeira versão, na DS-037.
+- **Documentação:** JSDoc de `sideOffset` com a escala `--ds-space-*`; stories `Offset` (com `play` que mede o intervalo em browser) no Tooltip, DropdownMenu e Select, mais as `DarkTheme` existentes, cobertas pelo `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** nos testes unitários `--ds-space-2` serve de omissão e de `collisionPadding`, por isso não os distinguem; a medição real está nas stories `Offset`. Sugestão ao planeador: a mudança de tipo de `sideOffset` no Tooltip é incompatível para quem passava números; registar no changelog da DS-037.
+
+### DS-037 · Changesets: versionamento e changelog — concluída a 2026-11-09
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-09), commits 51a7049 (implementação) e 1af600f (registo); sem commits de código de produção depois do commit testado (bc06c81 é só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `@changesets/cli` na raiz; `.changeset/config.json` (`access: public`, `baseBranch: main`, grupo `fixed` com os três pacotes `@up201905892/*`, `ignore: ["docs"]`); scripts `changeset` e `version-packages` sem nenhum script de publicação; `.changeset/README.md`; primeiro changeset `minor` (`first-release-components.md`) com os componentes entregues e a nota de quebra do `sideOffset` (DS-051); regra C6 em `packages/ui/README.md`.
+- **Changeset:** não aplicável (tarefa só de infraestrutura; o `first-release-components.md` já existente faz parte da entrega, não se criou outro)
+- **Documentação:** `.changeset/README.md` e secção "How to create a component" do README do `ui`. Sem alterações de interface, logo sem stories. Sem `TODO` na tarefa.
+- **Lições:** o teste intermitente `a11y.test.tsx` ("fails for an img without alt") de 2026-11-06 não foi reproduzido; causa por identificar, em observação. O commit 51a7049 foi um `wip` com a suite reportada vermelha; o estado final está verde. A versão dos pacotes só muda na DS-041 (`pnpm version-packages` não foi corrido).
+
+### DS-044 · App de exemplo: estrutura, layout e tema — concluída a 2026-11-09
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-09), commit bc714d0 (implementação); sem commits de código de produção depois do commit testado (825f172 e 71734b2 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** workspace privado `apps/example` (Vite + React + TypeScript `strict`) que consome `@up201905892/ui` e `@up201905892/icons` por `workspace:*`; link "Skip to content", cabeçalho, `Tabs` (Overview / Tasks), alternância de tema (`data-theme`, `localStorage`, `prefers-color-scheme`) e menu de utilizador; vista Overview com `Alert`, `Skeleton`/`Spinner`, `Grid` de `Card` com `Badge` e `Accordion`; Tasks é um marcador até à DS-045; regra `no-restricted-syntax` no ESLint e Stylelint sobre `apps/example/src/**/*.css`; script `pnpm example`; 12 testes em `App.test.tsx`.
+- **Changeset:** não aplicável (a app é `private: true` e não é um pacote publicado; a tarefa não altera `tokens`, `icons` nem `ui`)
+- **Documentação:** a app não tem stories (previsto na tarefa); o comportamento e as notas de acessibilidade (marcos, um `h1` por vista, ordem de Tab) estão cobertos pelos testes e pela verificação manual do relatório 1. Sem `TODO` na tarefa.
+- **Lições:** o `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes, como o CI). A regra do ESLint proíbe qualquer atributo `style` em `apps/example/src`, mais estrita que o critério. Os itens "Profile" e "Sign out" do menu não fazem nada (sem backend).
+
+### DS-045 · App de exemplo: formulário e tabela de dados — concluída a 2026-11-10
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-10), commit 6fab12e (inclui a implementação c7ad0b7); sem commits de código de produção depois do commit testado (d1009c0 é só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** vista "Tasks" em `apps/example`: `DataTable` com 34 tarefas, ordenação, paginação de 10, `DropdownMenu` por linha, `Popover` de filtros por estado, `Dialog` com formulário (`Field`, `Input`, `Textarea`, `Select`, `RadioGroup`, `Checkbox`, `Switch`) para criar e editar com validação e `loading`, `Dialog` de confirmação com `Undo` via `Toast`, `Tooltip` nos botões só com ícone; `coverage.test.ts` que falha se uma exportação de `@up201905892/ui` não for usada na app; 13 testes em `Tasks.test.tsx`.
+- **Changeset:** não aplicável (a app é `private: true`; a tarefa não altera `tokens`, `icons` nem `ui`)
+- **Documentação:** a app não tem stories (previsto na tarefa); comportamento e acessibilidade documentados nos testes (axe, fluxo só com teclado) e na verificação visual do relatório 1 (320 e 1280 px, tema claro e escuro). Sem `TODO` na tarefa.
+- **Lições:** o `pnpm test` da app depende do `dist` do `ui` (`pnpm build` antes). O diálogo do formulário não fecha ao clicar fora (decisão deliberada). A data limite aparece em ISO (sem i18n). Sem sugestões novas para o planeador.
+
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` — concluída a 2026-11-10
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-10), commit d00a7dc (implementação); sem commits de código de produção depois do commit testado (843a764 e e923502 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `packages/tokens/src/primitives/border.json` com `--ds-border-width-1`, `--ds-border-width-2`, `--ds-focus-ring-width` e `--ds-focus-ring-offset`; todos os `border*` e `outline*` dos `.css` de `packages/ui/src` (e `apps/example/src/layout.css`) passam a usar os tokens, sem mudança visual; o Stylelint rejeita comprimentos literais em `border*` e `outline*`; `css-tokens.test.ts` repete a verificação em Vitest; `play` em `FocusRing` e `Tabs/Default` mede 2px em browser real.
+- **Changeset:** não aplicável como ficheiro novo. Confirmado: os pacotes continuam em `0.0.0`, sem `CHANGELOG.md`, e o `first-release-components.md` (`minor`, grupo `fixed`) ainda não foi consumido, logo cobre os tokens novos; nenhum valor resolvido muda. Acrescentei-lhe uma frase a mencionar os tokens de borda e de anel de focus.
+- **Documentação:** story `Borders` em `Foundations/Scales` (gerada a partir do objeto `tokens`), comentário de `stylelint.config.js` e regra C3 do README de `packages/ui` sem a exceção `1px`/`2px`. As stories existentes (incluindo `FocusRing/DarkTheme`) passam no `test:a11y`. Sem `TODO` na tarefa.
+- **Lições:** a especificação dizia `Foundations/Borders`; a story ficou em `Foundations/Scales`, ao lado de `Radii` e `Shadows` (aceite pelo testador). Não houve capturas visuais nos dois temas; a cobertura é `getComputedStyle` em browser real. O aviso do programador sobre `.qa045-tmp/` no ESLint não se reproduziu no ambiente do testador. A DS-053 (também altera `Card.css`) pode avançar sem conflito.
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas — concluída a 2026-11-11
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-11), commit 9de2315 (implementação); sem commits de código de produção depois do commit testado (2b34889 e bfd47c8 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** primitivas `shadow.strong.md|lg`; tokens semânticos `shadow-raised|floating|modal` e `color-border-raised` nos dois temas (claro sem mudança visual; escuro com sombras a 0,5); `Card elevated` e os seis overlays (Tooltip, Popover, DropdownMenu, Select, Dialog, Toast) usam os tokens semânticos; `Card` e subpartes com `overflow-wrap: anywhere` e `min-width: 0`; `shadow-tokens.css.test.ts` falha com `--ds-shadow-sm|md|lg` em `packages/ui/src`.
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido (pacotes em `0.0.0`), a mencionar os tokens e o `Card` (mesmo critério da DS-052)
+- **Documentação:** stories `Card/LongWord`, `Card/InGrid` e `Card/DarkTheme` (com `play` em browser real) e stories `DarkTheme` dos overlays; props do `Card` inalteradas. Sem `TODO` na tarefa.
+- **Lições:** `Theme.stories.tsx` em `apps/docs` ainda usa `--ds-shadow-sm` diretamente (fora de `packages/ui`, fora do critério); observação para o planeador, sem tarefa criada. Sem capturas visuais dos dois temas nem prova negativa dos `play` (registado pelo testador).
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories — concluída a 2026-11-11
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-11), commit 05286f5 (implementação); sem commits de código de produção depois do commit testado (89a0c98 e 75a5b9d são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `@storybook/test@^8.6.18` como devDependency de `packages/ui` e `apps/docs`; os `play` de interação de `Button`, `Toast`, `Tooltip`, `Popover`, `DropdownMenu`, `Select`, `Dialog`, `Table`, `Pagination` e `DataTable` usam `userEvent` e `expect`/`waitFor`/`findBy*`, sem `KeyboardEvent` despachados, `dispatchEvent` nem `.click()` (grep vazio); `Pagination/KeyboardInteraction` valida `aria-current`, focus e `aria-disabled` no limite; `apps/docs/README.md` com a secção "Interaction stories (`play`)" e a divisão com o `postVisit`.
+- **Changeset:** não aplicável (só stories, `devDependencies` e documentação; nenhum código publicado de `tokens`, `icons` nem `ui` muda)
+- **Documentação:** convenção dos `play` em `apps/docs/README.md`; as stories migradas já existiam, incluindo as variantes de tema escuro. Sem `TODO` na tarefa.
+- **Lições:** `Dialog/KeyboardInteraction` ainda usa `last.focus()` para posicionar o focus antes de testar o wrap do Tab (preexistente, as teclas testadas são reais). `Table/SortKeyboardInteraction` tem uma asserção redundante de linhas. Só a prova negativa 1 foi repetida pelo testador; as provas 2 e 3 ficam com o registo do programador. O painel "Interactions" não foi aberto interativamente. Sem sugestões novas para o planeador.
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la — concluída a 2026-11-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-12), commit dd8c6ce (implementação); sem commits de código de produção depois do commit testado (14bf3a8, ef5e546 e 1dbf0de são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `ButtonProps.focusableWhenDisabled` (omissão `false`, sem efeito sem `disabled`): `<button>` sem atributo `disabled`, com `aria-disabled` e `data-disabled`, clique e envio de formulário bloqueados; com `asChild` sem `tabIndex={-1}` e sem navegação; `loading` + `disabled` + a prop continua focável. `IconButton` herda a prop. `Pagination` usa `disabled` + `focusableWhenDisabled` nos botões anterior e seguinte, sem atributos nem bloqueio escritos à mão. `Button.css` inalterado.
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido (pacotes em `0.0.0`), mesmo critério da DS-052 e DS-053
+- **Documentação:** JSDoc de `focusableWhenDisabled` (quando usar e comportamento por omissão), stories `Button/FocusableWhenDisabled` e `IconButton/FocusableWhenDisabled`, e exemplo com a prop nas `DarkTheme` de ambos. Sem `TODO` na tarefa.
+- **Lições:** o `typecheck` de `apps/example` exige o `build` do `ui` antes. O teste "sem a prop" verifica a ordem de Tab porque o jsdom não larga o `activeElement`. A página de conformidade deve refletir a prop (já prevista noutra tarefa planeada). Sem sugestões novas para o planeador.
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas — concluída a 2026-11-12
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-12), commit b0e40b7 (implementação); sem commits de código de produção depois do commit testado (22272fb e 07ee1fe são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `GridItem` só aceita `colSpan` inteiro ≥ 1; valores inválidos (`0`, negativos, decimais, `NaN`, `Infinity`) são ignorados (sem `data-col-span` nem `--ds-grid-col-span`) com um único `console.warn` por elemento fora de produção; `Grid` partilha `columns` numérico por contexto e `colSpan` acima de `columns` é limitado a `columns` (com `minColumnWidth` ou fora de um `Grid` o valor mantém-se).
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido (pacotes em `0.0.0`), mesmo critério da DS-052 a DS-056
+- **Documentação:** JSDoc de `colSpan` com valores aceites e limite; story `Grid/SpanClamped` (com `play` em browser real) e `Grid/DarkTheme` existente. Sem `TODO` na tarefa.
+- **Lições:** o aviso só corre em `useEffect` (SSR seguro) e deteta produção por `process.env.NODE_ENV` com `try/catch`, com `process` declarado localmente por não haver `@types/node`. Sem sugestões novas para o planeador.
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`) — concluída a 2026-11-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-13), commit 07b77fd (implementação); sem commits de código de produção depois do commit testado (beb1f36 e 61c8aed são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Accordion.css` com `overflow-wrap: anywhere` no texto do gatilho (também `flex: 1 1 auto` e `min-width: 0`) e no painel, com o ícone a manter `flex-shrink: 0`; `Dialog.css` com `overflow-wrap: anywhere` no título (também `min-width: 0`), na descrição e no corpo. Sem alterações aos `.tsx` nem à API.
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido, mesmo critério da DS-052 a DS-056
+- **Documentação:** stories `Accordion/LongWord` e `Dialog/LongWord` (com `play` em browser real) e `DarkTheme` existentes de ambos; props inalteradas. Sem `TODO` na tarefa.
+- **Lições:** prova negativa dos `play` não executada pelo testador (exigiria alterar código de produção). Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)

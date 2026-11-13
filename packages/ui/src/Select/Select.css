@@ -8,7 +8,7 @@
   min-height: var(--ds-space-10);
   padding-block: var(--ds-space-2);
   padding-inline: var(--ds-space-3);
-  border: 1px solid var(--ds-color-border-strong);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-strong);
   border-radius: var(--ds-radius-md);
   background-color: var(--ds-color-bg-surface);
   color: var(--ds-color-text-default);
@@ -42,8 +42,8 @@
 }
 
 .ds-select:focus-visible {
-  outline: 2px solid var(--ds-color-focus-ring);
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 .ds-select[data-invalid] {
@@ -85,13 +85,13 @@
   min-width: var(--radix-select-trigger-width);
   max-height: var(--radix-select-content-available-height);
   overflow: hidden;
-  border: 1px solid var(--ds-color-border-default);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-md);
   background-color: var(--ds-color-bg-surface);
   color: var(--ds-color-text-default);
   font-family: var(--ds-font-family-sans);
   font-size: var(--ds-font-size-md);
-  box-shadow: var(--ds-shadow-md);
+  box-shadow: var(--ds-shadow-floating);
 }
 
 .ds-select__viewport {
@@ -142,7 +142,7 @@
 }
 
 .ds-select__separator {
-  height: 1px;
+  height: var(--ds-border-width-1);
   margin-block: var(--ds-space-1);
   background-color: var(--ds-color-border-default);
 }

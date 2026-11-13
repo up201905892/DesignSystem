@@ -734,3 +734,214 @@ Modelo de entrada:
   - `aria-live` está no `<p>` do resumo, que só existe com dados e paginação; o leitor de ecrã anuncia a alteração de texto ao mudar de página. Convém confirmar num leitor real.
   - O `Table` exige `aria-label`/`aria-labelledby`; o `DataTable` usa `aria-labelledby` para a `caption`, por isso o `region` e a `table` têm o mesmo nome.
   - Sem sugestões novas para o planeador.
+
+### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
+
+**Iteração 1 — 2026-11-05**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** pacotes renomeados para `@up201905892/tokens`, `@up201905892/icons` e `@up201905892/ui` (todas as referências a `@ds/*` fora de `docs/workflow/` e `pnpm-lock.yaml` regenerado); `"private"` removido dos três; acrescentados `description`, `license`, `author`, `repository` (com `directory`), `homepage`, `keywords` e `publishConfig.access=public`; `exports`, `main`/`module`/`types`, `sideEffects` e `files` conforme a especificação. No `ui`, `exports["."]` tem `import.types=index.d.ts` e `require.types=index.d.cts` (o tsup já gera ambos), mais `./styles.css` e `./package.json`; `@up201905892/icons` passa a `workspace:^` e `@up201905892/tokens` passa a `devDependencies` (só alimenta o CSS inlinado em `dist/styles.css`). `apps/docs` ganhou `@up201905892/ui` (`workspace:*`) para resolver o pacote pelos `exports`. `LICENSE` (MIT) na raiz e nos três pacotes; `README.md` mínimo em cada um (novo no `tokens`). O Prettier reformatou imports longos em `Alert.tsx` e `Toast.tsx`.
+- **Ficheiros alterados:** `packages/{tokens,icons,ui}/package.json`, `packages/{tokens,icons,ui}/LICENSE`, `LICENSE`, `packages/{tokens,icons,ui}/README.md`, `packages/ui/src/package-metadata.test.ts` (novo), `pnpm-lock.yaml`, `apps/docs/package.json`, `apps/docs/README.md`, `apps/docs/.storybook/main.ts`, `apps/docs/scripts/test-a11y.mjs`, `apps/docs/src/foundations/{Colors,Scales}.stories.tsx`, `packages/ui/{vitest.config.ts,test/global-setup.ts,scripts/build-css.mjs,src/styles.css}`, imports de `@up201905892/icons` em `packages/ui/src/{Accordion,Alert,Checkbox,DataTable,Dialog,DropdownMenu,Pagination,Popover,Select,Table,Toast,Tooltip}/*`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 3abe004 `feat(ui): DS-036 add package metadata, exports, licences and final @up201905892 names`
+- **Critérios de aceitação cobertos:** todos; G1 a G3.
+- **Testes escritos pelo programador:** `packages/ui/src/package-metadata.test.ts` (nome final, público, MIT, `publishConfig`; todos os caminhos de `exports`/`main`/`module`/`types` existem; `files` sem `src`; `./package.json` exportado; LICENSE e README presentes; chaves de `exports` e `sideEffects`/`files` por pacote; declarações ESM/CJS separadas, peers e dependências do `ui`; dependências externas no `dist/index.js`). Se faltar `dist`, o teste corre o build dos três pacotes antes. Sem stories novas (sem alterações de interface).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 984) · build ✔ · test:a11y ✔ (32 suites, 220 testes). Manual a partir de `apps/docs`: `require('@up201905892/ui')`, `import('@up201905892/ui')` e `import.meta.resolve('@up201905892/ui/styles.css')` resolvem sem erro.
+- **Notas para o testador:**
+  - `repository.url`, `homepage` e `author` assumem `github.com/up201905892/DesignSystem` e o autor `up201905892` (derivado do `origin` e do scope); o copyright dos `LICENSE` usa o mesmo nome. Confirmar com o João se querem o nome próprio.
+  - Os `exports` do `icons` mantêm a condição `source` (usada pelo Storybook/Vitest); não é publicada por apontar para `src`, que não está em `files`. O teste ignora-a. `tokens` e `icons` usam um só `types` (`index.d.ts`), como a especificação pede; só o `ui` separa as declarações ESM e CJS.
+  - O `LICENSE` na raiz e nos pacotes são cópias do mesmo texto.
+  - Não se verificou o tarball (`pnpm pack`): é a DS-039.
+  - Sem sugestões novas para o planeador.
+
+### DS-051 · Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select)
+
+**Iteração 1 — 2026-11-05**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Tooltip` e `DropdownMenuContent` passam a ter `sideOffset?: SpaceStep` (tipo do Radix omitido, como no `Popover`), com omissões `'2'` e `'1'`, convertidas com `readSpaceToken`; `collisionPadding` é `readSpaceToken('2')` nos três overlays (`collisionPadding` do Radix também omitido nos tipos do `Tooltip` e do `DropdownMenuContent`). O `Select` usa `sideOffset={readSpaceToken('1')}` e `collisionPadding={readSpaceToken('2')}`, sem props novas. JSDoc de `sideOffset` indica que é um passo da escala `--ds-space-*`.
+- **Ficheiros alterados:** `packages/ui/src/Tooltip/{Tooltip.tsx,Tooltip.offset.test.tsx,Tooltip.stories.tsx}`, `packages/ui/src/DropdownMenu/{DropdownMenu.tsx,DropdownMenu.offset.test.tsx,DropdownMenu.stories.tsx}`, `packages/ui/src/Select/{Select.tsx,Select.offset.test.tsx,Select.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 1983c2a `feat(ui): DS-051 use spacing tokens for Tooltip, DropdownMenu and Select offsets`
+- **Critérios de aceitação cobertos:** todos; G1 a G3; C1 a C5.
+- **Testes escritos pelo programador:** três ficheiros `*.offset.test.tsx` com `vi.spyOn(CSSStyleDeclaration.prototype, 'getPropertyValue')` (leitura de `--ds-space-<passo>` e `--ds-space-2`; com `sideOffset="4"` lê `--ds-space-4` no `Tooltip` e no `DropdownMenuContent`; `@ts-expect-error` para `sideOffset={6}` nos dois). Os testes existentes não usavam `sideOffset` numérico e não foram alterados. Stories `Offset` no `Tooltip` (`bottom`, passo `4`), `DropdownMenu` (passo `3`) e `Select` (passo `1`), com `play` que mede o intervalo gatilho/conteúdo e falha se diferir mais de 1px. Não escrevi teste axe novo: os testes axe existentes com os overlays abertos e o `test:a11y` das stories cobrem-no.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991) · build ✔ · test:a11y ✔ (32 suites, 223 testes, inclui as três `Offset`)
+- **Notas para o testador:**
+  - O `grep` de `sideOffset|collisionPadding` com número literal em `.tsx` fora de testes e stories não devolve resultados (corrido após o commit).
+  - O `play` da story `Offset` usa um elemento sonda com `height: var(--ds-space-N)` para obter o valor em pixéis, em vez de `readSpaceToken` (não exportado pela biblioteca).
+  - No `Select`, o `play` abre a lista com `ArrowDown` despachado no gatilho, como a story `KeyboardInteraction`.
+  - Sem sugestões novas para o planeador.
+
+### DS-037 · Changesets: versionamento e changelog
+
+**Iteração 1 — 2026-11-09**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `@changesets/cli` instalado na raiz; `.changeset/config.json` com `access: public`, `baseBranch: main`, os três pacotes `@up201905892/*` num grupo `fixed` e `apps/docs` (nome de pacote `docs`) em `ignore`; scripts `changeset` e `version-packages` (`changeset version`) na raiz, sem nenhum script de publicação; `.changeset/README.md` com a regra e os tipos patch/minor/major; primeiro changeset `minor` (`first-release-components.md`) com os componentes entregues e a nota de quebra do `sideOffset` (DS-051); regra C6 na secção "How to create a component" de `packages/ui/README.md`. Não se correu `pnpm version-packages`.
+- **Ficheiros alterados:** `.changeset/README.md`, `.changeset/config.json`, `.changeset/first-release-components.md`, `package.json`, `pnpm-lock.yaml`, `packages/ui/README.md`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 51a7049 `wip(repo): DS-037 add Changesets config and first-release changeset` (trabalho de 2026-11-06, feito com a suite reportada vermelha, ver incidente); commit de fecho desta iteração com o registo e a passagem de estado (`git log --grep DS-037`).
+- **Critérios de aceitação cobertos:** todos verificados no terminal em 2026-11-09: config conforme o pedido; scripts presentes; `grep -rE "(changeset|pnpm|npm) publish" package.json packages/*/package.json` sem resultados; README do `.changeset` presente; `pnpm changeset status` sai com 0 e lista tokens, icons e ui em `minor`; regra C6 no README do `ui`. G1 a G3 (dependência nova `@changesets/cli`): sem alterações de código nos pacotes.
+- **Testes escritos pelo programador:** nenhum (não aplicável, conforme a especificação).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 63 ficheiros, 991 testes) · build ✔
+- **Incidente do teste intermitente:** no commit wip de 2026-11-06 o registo diário reportava `pnpm test` vermelho em `packages/ui/test/a11y.test.tsx` ("fails for an img without alt"). Em 2026-11-09, sem alterações de código entre os dois momentos, a suite completa (lint, typecheck, test, build) passou à primeira, incluindo esse ficheiro (991/991). Tratou-se como falhanço intermitente ou de ambiente; a causa não foi identificada. Se voltar a surgir, o testador deve registá-lo.
+- **Notas para o testador:**
+  - `ignore` usa `docs` (nome do pacote de `apps/docs`), pois o Changesets ignora por nome de pacote e não por glob de pasta.
+  - O primeiro changeset menciona a quebra do `sideOffset` porque a DS-051 (Concluído) não criou changeset.
+  - Sem sugestões novas para o planeador.
+
+### DS-044 · App de exemplo: estrutura, layout e tema
+
+**Iteração 1 — 2026-11-09**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** novo workspace `apps/example` (Vite + React + TypeScript `strict`, `private`), com `@up201905892/ui` e `@up201905892/icons` por `workspace:*` e `@up201905892/ui/styles.css` importado pelo `exports`. Estrutura: link "Skip to content" (primeiro focável), cabeçalho (`banner`) com o nome, `nav` com `Tabs` (Overview / Tasks), `IconButton` de tema (`SunIcon`/`MoonIcon`, muda `data-theme` em `<html>`, grava em `localStorage` na chave `example-theme`, usa `prefers-color-scheme` na primeira visita) e `DropdownMenu` de utilizador; `main` com as duas vistas. Overview: `Alert`, carregamento simulado (600 ms) com `Spinner` e `Skeleton`, `Grid` de `Card` com `Badge` e `Accordion` de perguntas frequentes. Tasks é um marcador (`Alert`) até à DS-045. Dados em `src/data.ts`. Um único ficheiro de CSS (`src/layout.css`, só tokens, classes `ds-example-*`). Raiz: script `pnpm example`, Stylelint passa a abranger `apps/example/src/**/*.css`, regra `no-restricted-syntax` em `eslint.config.js` para `apps/example/src`.
+- **Ficheiros alterados:** `apps/example/{package.json,tsconfig.json,vite.config.ts,index.html}`, `apps/example/src/{main.tsx,App.tsx,Overview.tsx,Tasks.tsx,data.ts,theme.ts,layout.css,vite-env.d.ts,vitest-env.d.ts,App.test.tsx}`, `eslint.config.js`, `package.json`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** bc714d0 `feat(ui): DS-044 add example app with layout, tabs navigation and theme toggle`
+- **Critérios de aceitação cobertos:** todos, exceto a verificação visual a 320px e nos dois temas, que fica para o testador (`pnpm example`). G1 a G3.
+- **Testes escritos pelo programador:** `apps/example/src/App.test.tsx` (12 testes): vista Overview inicial; mudança para Tasks; carregamento simulado; abrir pergunta do `Accordion`; alternância de tema com `data-theme` e `localStorage`; tema guardado aplicado ao recarregar; `prefers-color-scheme` na primeira visita; menu de utilizador; axe sem violações nas duas vistas (helper da DS-009); marcos `banner`/`navigation`/`main` e um só `h1` por vista; ordem de Tab (skip link, navegação, tema, menu).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991, example: 12) · build ✔ (a app constrói e sai com 0). Verificação manual: um `<button>` temporário em `apps/example/src` faz o ESLint falhar (`no-restricted-syntax`); removido, não commitado.
+- **Notas para o testador:**
+  - A regra do ESLint proíbe também qualquer atributo `style` em `apps/example/src` (mais estrita que "sem cores ou espaçamentos").
+  - A app resolve `@up201905892/ui` pelo `dist` (sem condição `source`), por isso o `pnpm test` da app precisa do `pnpm build` do `ui` feito antes (como o CI, que faz build antes dos testes).
+  - O `Skeleton` usa `height={96}` (prop da biblioteca, não é `style` escrito na app) e o `Grid` usa `minColumnWidth="14rem"`.
+  - O tema só é gravado quando o utilizador clica; a primeira visita não grava nada.
+  - Os itens "Profile" e "Sign out" do menu de utilizador não fazem nada (sem backend).
+  - Não verifiquei visualmente a 320px nem os dois temas num navegador.
+  - Sem sugestões novas para o planeador.
+
+### DS-045 · App de exemplo: formulário e tabela de dados
+
+**Iteração 1 — 2026-11-10**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** vista "Tasks" completa em `apps/example`. `DataTable` com 34 tarefas fictícias (`src/data.ts`), colunas ordenáveis (título, responsável, prioridade com `compare` próprio, data limite), estado e prioridade em `Badge`, paginação de 10 em 10 (página controlada, volta à 1 ao ordenar ou filtrar), e `DropdownMenu` por linha ("Edit", "Delete") aberto por um `IconButton` com `Tooltip`. `Popover` de filtros por estado (`RadioGroup`, com `PopoverClose` "Clear filter"). Botão "New task" abre um `Dialog` com o `TaskForm` (`Field`, `Input`, `Textarea`, `Select`, `Input type="date"`, `RadioGroup`, `Checkbox`, `Switch`); "Edit" abre o mesmo formulário preenchido. Validação ao submeter: título vazio mostra o `FieldError`, `aria-invalid`, focus no campo e o diálogo mantém-se aberto. Submeter com sucesso mostra o botão em `loading` durante 400 ms simulados, fecha, atualiza a tabela, mostra `Toast` de sucesso e devolve o focus a quem abriu (`onCloseAutoFocus` com um `opener` explícito: botão "New task" ou botão de ações da linha). "Delete" abre `Dialog` de confirmação com `Button variant="danger"`; confirmar remove a linha e mostra `Toast` com "Undo", que repõe a tarefa na posição original. `TooltipProvider` e `ToastProvider` passam a envolver a app em `App.tsx`, e os botões só com ícone do cabeçalho ganham `Tooltip`.
+- **Ficheiros alterados:** `apps/example/src/{Tasks.tsx,TaskForm.tsx,App.tsx,data.ts,layout.css,Tasks.test.tsx,coverage.test.ts}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** c7ad0b7 `feat(ui): DS-045 add task form, data table, filters and delete with undo to the example app`
+- **Critérios de aceitação cobertos:** todos, exceto a verificação visual a 320px e nos dois temas (para o testador, `pnpm example`). A regra "só com a biblioteca" (ESLint) e o Stylelint passam; o CSS acrescentou apenas `.ds-example-toolbar` e `.ds-example-table`, com tokens. G1 a G3.
+- **Testes escritos pelo programador:** `Tasks.test.tsx` (13 testes): 30+ tarefas e página de 10; mudar de página; ordenar por data limite (asc/desc, `aria-sort`); filtro por estado; criar tarefa válida (loading, toast, focus em "New task"); título vazio (erro, `aria-invalid`, focus, diálogo aberto); editar (focus volta ao botão da linha); apagar e "Undo"; Esc sem guardar; fluxo completo só com teclado (Tab até "New task", Enter, título, `Select` com setas e Enter, prioridade com setas, Espaço na checkbox, Enter para submeter, focus de volta); axe na vista, com o diálogo aberto e com o formulário em erro. `coverage.test.ts` (3 testes): percorre as exportações de `@up201905892/ui` e falha se alguma não for importada em `apps/example/src`, com lista `EXCEPTIONS` justificada.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 991, example: 28) · build ✔
+- **Notas para o testador:**
+  - O `pnpm test` da app precisa do `dist` do `ui` já construído (`pnpm build` antes).
+  - `EXCEPTIONS` (15 nomes) cobre as peças de `Table`, `Pagination`/`usePagination`/`useTableSort` (compostas pelo `DataTable`), `useFieldControl`, `GridItem`, `DropdownMenuGroup`, `SelectGroup`, `SelectSeparator`, `CardDescription` e `CardFooter`. O teste também falha se uma exceção passar a ser usada.
+  - No `RadioGroup`, o Radix só seleciona ao focar com a seta enquanto a tecla está premida; no teste de teclado a seta é mantida (`{ArrowRight>}` e `{/ArrowRight}`), como nos testes do `ui`.
+  - Fecho do diálogo de apagar: o focus vai para "New task" (a linha deixa de existir); ao cancelar volta ao botão de ações da linha.
+  - O diálogo do formulário não fecha ao clicar fora (`closeOnOverlayClick={false}`), para não perder dados por engano; Esc e "Cancel" fecham.
+  - A data limite aparece em formato ISO (`AAAA-MM-DD`), sem formatação por locale (internacionalização está fora de âmbito).
+  - Não verifiquei visualmente a 320px nem os dois temas num navegador.
+  - Sem sugestões novas para o planeador.
+
+### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px`
+
+**Iteração 1 — 2026-11-10**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** novo `packages/tokens/src/primitives/border.json` com `border.width.1` (`1px`), `border.width.2` (`2px`), `focus.ring.width` (referência a `border.width.2`) e `focus.ring.offset` (`2px`); o build gera `--ds-border-width-1`, `--ds-border-width-2`, `--ds-focus-ring-width` e `--ds-focus-ring-offset` e as chaves `border.width.*` e `focus.ring.*` no objeto `tokens`. Todos os `border*`, `outline` e `outline-offset` dos `.css` de `packages/ui/src` (incluindo `styles/focus.css`) passam a usar os tokens; o indicador dos `Tabs` usa `--ds-border-width-2`, o offset negativo (`Tabs`, `Accordion`) usa `calc(-1 * var(--ds-focus-ring-offset))` e a regra `forced-colors` dos `Tabs` usa o token. Os separadores de `DropdownMenu` e `Select` usam `--ds-border-width-1` na altura; o `clip` de `VisuallyHidden` e da legenda da `Table` fica com `1px`. O Stylelint passa a abranger `border*` e `outline*` (a regra de `border-radius` fica coberta pelo mesmo prefixo) e o comentário no topo de `stylelint.config.js` deixa de listar a exceção. Nada muda visualmente (mesmos valores resolvidos).
+- **Ficheiros alterados:** `packages/tokens/src/primitives/border.json` (novo), `packages/tokens/src/tokens.test.ts`, `stylelint.config.js`, `packages/ui/README.md` (C3), `packages/ui/src/styles/focus.css`, `packages/ui/src/{Accordion,Alert,Badge,Button,Card,Checkbox,Dialog,DropdownMenu,Input,Popover,RadioGroup,Select,Switch,Table,Tabs,Textarea,Toast}/*.css`, `packages/ui/src/css-tokens.test.ts` (novo), `packages/ui/src/Card/Card.css.test.ts`, `packages/ui/src/Switch/Switch.css.test.ts`, `packages/ui/src/Tabs/Tabs.stories.tsx`, `packages/ui/src/styles/FocusRing.stories.tsx`, `apps/docs/src/foundations/Scales.stories.tsx`, `apps/example/src/layout.css`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d00a7dc `feat(ui): DS-052 add border width and focus ring tokens and forbid literal lengths in border and outline`
+- **Critérios de aceitação cobertos:** tokens e testes de tokens (`tokens.test.ts`); CSS sem comprimentos literais em border/outline (`css-tokens.test.ts`, Stylelint); separadores (`DropdownMenu.css`, `Select.css`); Stylelint e README; secção `Foundations/Scales` > `Borders` gerada de `tokens` (`Scales.stories.tsx`; a especificação diz `Foundations/Borders`, mas as escalas já vivem em `Foundations/Scales`, onde `Borders` é uma story ao lado de `Radii` e `Shadows`); `play` em `FocusRing` (`outlineWidth === '2px'`) e em `Tabs/Default` (`border-bottom-width` de `2px`). G1 a G3 (sem dependências novas).
+- **Testes escritos pelo programador:** `packages/ui/src/css-tokens.test.ts` (percorre todos os `.css` e falha se `border*` exceto `border-radius`, ou `outline*`, tiver `px`/`rem`/`em`); `tokens.test.ts` (valores dos quatro tokens em `dist/tokens.css` e no objeto, e o número de ficheiros primitivos passa de 7 para 8); `Card.css.test.ts` e `Switch.css.test.ts` ajustados às novas strings com tokens.
+- **Verificações locais:** typecheck ✔ · test ✔ (tokens: 90, icons: 10, ui: 1023, example: 28) · build ✔ · Stylelint e Prettier ✔ · ESLint ✔ em `packages`, `apps` e `stylelint.config.js`. `pnpm lint` global sai com erro só por `.qa045-tmp/check.mjs` (diretório não rastreado da DS-045, fora do âmbito; erros `no-undef` de `process`/`document`). Verificação negativa: um `.css` temporário com `border: 1px solid ...` e `outline-offset: 2px` faz o Stylelint falhar (removido, não commitado).
+- **Notas para o testador:**
+  - `apps/example/src/layout.css` tinha um `border-bottom: 1px` e também passou a usar `--ds-border-width-1` (o Stylelint abrange essa pasta e falharia); é a única alteração na app de exemplo.
+  - As stories com `play` não foram corridas em browser aqui (`pnpm test:a11y` não executado); o `play` de `FocusRing` usa `button.focus()`, que em Chromium ativa `:focus-visible` se não houve interação com o rato antes. Se falhar, trocar por `userEvent.tab()`.
+  - Sobreposição com DS-053 (também altera `Card.css`): a DS-053 está `Planeado`, não houve trabalho em simultâneo.
+  - Não foi acrescentado changeset: a primeira versão (`first-release-components.md`) ainda não saiu e já cobre tokens e componentes; nenhum valor resolvido muda.
+  - Sugestão para o planeador: uma tarefa para corrigir o ESLint global, que hoje analisa diretórios não rastreados como `.qa045-tmp/` (ou apagar esse diretório).
+
+### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas
+
+**Iteração 1 — 2026-11-11**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** novas sombras primitivas `shadow.strong.md` e `shadow.strong.lg` (mesma geometria de `md`/`lg`, preto a 0,5). Novos tokens semânticos nos dois temas: `shadow-raised`, `shadow-floating`, `shadow-modal` (claro: `md`, `md`, `lg`, sem mudança visual; escuro: `strong.md`, `strong.md`, `strong.lg`) e `color-border-raised` (claro: `color.white`, o mesmo primitivo de `color-bg-surface`; escuro: `color.neutral.700`, o mesmo de `color-border-default`). `Card elevated` usa `--ds-shadow-raised` e `--ds-color-border-raised`; Tooltip, Popover, DropdownMenu e Select usam `--ds-shadow-floating`; Dialog e Toast usam `--ds-shadow-modal`. `Card` e as subpartes com `min-width: 0` e `overflow-wrap: anywhere`.
+- **Ficheiros alterados:** `packages/tokens/src/primitives/shadow.json`, `packages/tokens/src/semantic/{light,dark}.json`, `packages/tokens/src/{themes,tokens}.test.ts`, `packages/ui/src/Card/{Card.css,Card.css.test.ts,Card.stories.tsx}`, `packages/ui/src/{Dialog,DropdownMenu,Popover,Select,Toast,Tooltip}/*.css`, `packages/ui/src/shadow-tokens.css.test.ts` (novo), `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 9de2315 `feat(ui): DS-053 add semantic shadow tokens per theme and break long words in Card`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 (sem dependências novas).
+- **Testes escritos pelo programador:** `themes.test.ts` (chaves novas nos dois temas, `color-border-raised` igual ao primitivo esperado, opacidade das sombras escuras >= 0,5, sombras do tema claro iguais a `md`/`lg`; o teste das fontes semânticas passa a aceitar referências `{shadow.*}` e o dos valores resolvidos aceita sombras); `tokens.test.ts` (chaves de `shadow` incluem `strong.md|lg`); `shadow-tokens.css.test.ts` (percorre `packages/ui/src/**/*.css` e falha com `--ds-shadow-sm|md|lg`); `Card.css.test.ts` (tokens novos e `overflow-wrap`). Stories: `Card/LongWord` (240px, palavra de 200 caracteres, `play` com `scrollWidth <= clientWidth`), `Card/InGrid` (agora com um cartão de palavra longa e `play` equivalente), `Card/DarkTheme` (`play` com `border-top-color` e `box-shadow`).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1025, example: 28) · build ✔
+- **Notas para o testador:**
+  - Os `play` não foram corridos em browser (`pnpm test:a11y` não executado aqui). Confirmar `Card/DarkTheme`, `Card/LongWord` e `Card/InGrid` e as stories `DarkTheme` dos overlays.
+  - A especificação pedia o caso da `Grid` na story `InGrid`; acrescentei um terceiro cartão com a palavra longa (substitui "Cobalt") em vez de uma story nova.
+  - `Theme.stories.tsx` (apps/docs) ainda usa `--ds-shadow-sm` diretamente; está fora de `packages/ui` e, por isso, fora do critério.
+  - Sem sugestões novas para o planeador.
+
+### DS-054 · `@storybook/test` nos `play` de interação das stories
+
+**Iteração 1 — 2026-11-11**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `@storybook/test@^8.6.18` instalado como devDependency de `packages/ui` e de `apps/docs`. Os `play` de `Button/LoadingToggle`, `Toast/AfterLoading`, `Tooltip/KeyboardInteraction`, `Popover/KeyboardInteraction`, `DropdownMenu/KeyboardInteraction`, `Select/KeyboardInteraction` e `Select/Offset` (também usava `dispatchEvent`), `Dialog/KeyboardInteraction`, `Table/SortKeyboardInteraction`, `Pagination/KeyboardInteraction` e `DataTable/KeyboardInteraction` (DS-035 já `Concluído`) usam `userEvent` (`tab`, `keyboard`, `click`) e `expect`/`waitFor`/`findBy*` com `within(canvasElement)` ou `within(document.body)` (portais). Os `setTimeout` de duração fixa e os helpers `press`/`wait` deixaram de existir nas stories migradas (ficam só nos `play` de medição `Offset` de Tooltip, DropdownMenu e Select, e em `waitForToastsSettled`). `apps/docs/README.md` ganhou a secção "Interaction stories (`play`)" com a convenção e a divisão com o `postVisit` do `test-runner.ts` (`Table/HorizontalScroll` fica com teclas reais do Playwright, inalterado).
+- **Ficheiros alterados:** `packages/ui/package.json`, `apps/docs/package.json`, `pnpm-lock.yaml`, `packages/ui/src/{Button,Toast,Tooltip,Popover,DropdownMenu,Select,Dialog,Table,Pagination,DataTable}/*.stories.tsx`, `apps/docs/README.md`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`. Nenhum componente alterado.
+- **Commit(s):** 05286f5 `feat(ui): DS-054 use @storybook/test userEvent and expect in interaction stories`
+- **Critérios de aceitação cobertos:** todos. `grep -nE "new KeyboardEvent|dispatchEvent\(|\.click\(\)"` em `packages/ui/src/**/*.stories.tsx` não devolve nada. G1 a G3 (dependência `@storybook/test`, mesma versão do Storybook).
+- **Testes escritos pelo programador:** os próprios `play` migrados (os testes Vitest não mudam). Em `Pagination/KeyboardInteraction` acrescentei, no fim, sair do botão "seguinte" desativado com Shift+Tab e voltar com Tab: sem isto a terceira prova negativa não falhava (o focus fica retido num botão que passa a `tabIndex=-1` depois de focado).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1025, example: 28) · build ✔ · `pnpm test:a11y` ✔ (225 testes, `play` corridos em Chromium).
+- **Provas negativas (temporárias, revertidas, não commitadas):** (1) `aria-sort` esperado errado em `Table/SortKeyboardInteraction` faz o test:a11y falhar nessa story; (2) `onKeyDown={(e) => e.preventDefault()}` no botão de ordenação faz falhar a mesma story no passo do Enter; (3) `tabIndex={-1}` no "seguinte" desativado da `Pagination` faz falhar `Pagination/KeyboardInteraction`.
+- **Notas para o testador:**
+  - `Table/SortKeyboardInteraction`: a região de scroll (`tabIndex=0`) apanha o primeiro Tab, por isso o `play` repete `tab()` até chegar ao botão (máx. 3). O mesmo padrão (`tab()` em ciclo até ao alvo) é usado em `Pagination` e `DataTable`.
+  - `Toast/AfterLoading` espera agora com `waitForToastsSettled` antes de terminar, para o axe não medir o toast a meio da animação (sem isso o test:a11y falhava por contraste).
+  - `Table/SortKeyboardInteraction` inclui uma asserção redundante de linhas (`getAllByRole('row')`) que pode ser retirada sem perda.
+  - Sem sugestões novas para o planeador.
+
+### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la
+
+**Iteração 1 — 2026-11-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `ButtonProps.focusableWhenDisabled` (omissão `false`). Com `disabled` num `<button>`: sem atributo `disabled`, com `aria-disabled="true"` e `data-disabled`, clique bloqueado em captura (`blockClick`, como no `loading`). Com `asChild`: sem `tabIndex={-1}`, `aria-disabled` e clique bloqueado. Sem `disabled` a prop não tem efeito. Com `loading` + `disabled` + a prop, o botão continua focável; o JSDoc de `loading` foi atualizado. `IconButton` herda a prop (só JSDoc alterado). `Pagination` usa `disabled={!canPrevious}`/`disabled={!canNext}` com `focusableWhenDisabled` e deixou de escrever `aria-disabled`, `data-disabled` e o bloqueio do clique; o JSDoc refere a prop. `Button.css` não mudou.
+- **Ficheiros alterados:** `packages/ui/src/Button/{Button.tsx,Button.stories.tsx,Button.focusable.test.tsx}`, `packages/ui/src/IconButton/{IconButton.tsx,IconButton.stories.tsx,IconButton.focusable.test.tsx}`, `packages/ui/src/Pagination/Pagination.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** dd8c6ce `feat(ui): DS-056 add focusableWhenDisabled to Button and IconButton and use it in Pagination`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 (sem dependências novas). Testes e stories da DS-010, DS-011, DS-021 e DS-034 inalterados e verdes; stories da `Pagination` não alteradas.
+- **Testes escritos pelo programador:** `Button.focusable.test.tsx` (sem `disabled` sem efeito; atributos e clique bloqueado; `type="submit"` sem envio por clique nem por Enter num `Input`; `asChild` com `<a href>` e `defaultPrevented`; `loading` + `disabled` focável; Tab, Enter e Espaço; focus mantido ao passar a `disabled` com a prop; axe) e `IconButton.focusable.test.tsx` (atributos, clique e Enter bloqueados, focável, axe, `asChild`). Stories: `Button/FocusableWhenDisabled`, `IconButton/FocusableWhenDisabled`, e um exemplo com a prop em ambas as `DarkTheme`.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1036, example: 28) · build ✔ · `pnpm test:a11y` não executado.
+- **Notas para o testador:**
+  - O `typecheck` de `apps/example` falha se o `build` do `ui` ainda não existir (dist em falta); corre-se depois do `pnpm build`.
+  - No teste "sem a prop", o jsdom mantém `document.activeElement` no botão que passou a `disabled` (os browsers largam o focus), por isso o teste verifica que o botão deixa de estar na ordem de Tab (Tab para o botão seguinte, Shift+Tab não volta a ele) em vez de `activeElement`.
+  - `pnpm test:a11y` (stories `FocusableWhenDisabled`, `DarkTheme`, `Pagination/FirstPage`, `LastPage`, `KeyboardInteraction`) deve ser corrido em browser pelo testador.
+  - Sem sugestões novas para o planeador.
+
+### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
+
+**Iteração 1 — 2026-11-12**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `GridItem` só aceita inteiros ≥ 1 em `colSpan`; `0`, negativos, decimais, `NaN` e `Infinity` são ignorados (sem `data-col-span` nem `--ds-grid-col-span`, ocupa uma coluna). `Grid` partilha o `columns` numérico por um contexto (`undefined` com `minColumnWidth`); dentro dele, `colSpan` acima de `columns` é limitado a `columns` (também em `data-col-span`). Fora de produção, um valor inválido emite um único `console.warn` por elemento (`GridItem: colSpan must be a whole number ≥ 1, received <valor>`), num `useEffect` com `ref` que evita repetir o mesmo valor em re-renders e no StrictMode. JSDoc de `colSpan` reescrito. Story `Grid/SpanClamped` com `play`.
+- **Mecanismo de produção:** `try { return process.env.NODE_ENV === 'production' } catch { return false }`. Os bundlers substituem o literal `process.env.NODE_ENV`; sem `process` (browser sem bundler) o acesso lança e conta como desenvolvimento. O `process` é declarado localmente no módulo (`declare const process`) porque o pacote não tem `@types/node` (G1: sem dependências novas). Não corre no servidor durante o render (só em `useEffect`), logo não afeta SSR; build ESM/CJS e `.d.ts` verificados.
+- **Ficheiros alterados:** `packages/ui/src/Grid/{Grid.tsx,Grid.test.tsx,Grid.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** b0e40b7 `feat(ui): DS-055 validate GridItem colSpan and clamp it to the Grid columns`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 e C1 a C5.
+- **Testes escritos pelo programador:** em `Grid.test.tsx`, `colSpan` `0`, `-1`, `1.5`, `NaN`, `Infinity` (sem atributo, sem custom property, um só aviso, sem repetição em re-render); sem aviso em produção (`vi.stubEnv`); sem aviso com valores válidos; `colSpan={5}` em `columns={3}` → `3`; `minColumnWidth` e fora do `Grid` mantêm o valor; axe. Story `Grid/SpanClamped` (largura do item igual à largura de conteúdo do `Grid`, 3 valores em `gridTemplateColumns`).
+- **Verificações locais:** lint ✔ · typecheck ✔ (depois do `build`) · test ✔ (tokens: 92, icons: 10, ui: 1046, example: 28) · build ✔ · `pnpm test:a11y` ✔ (228 testes, `play` corridos em Chromium).
+- **Notas para o testador:**
+  - O `pnpm test` do `ui` corre o `build` (`package-metadata.test.ts`), por isso falhava antes de eu declarar o `process` localmente.
+  - O commit `139d6f1` (finalizador, DS-056) apanhou a linha de estado `Em desenvolvimento` da DS-055 no `01-planeamento.md`; o commit de código é `b0e40b7`.
+  - Sem sugestões novas para o planeador.
+
+### DS-042 · Página "Getting started" no Storybook
+
+**Iteração 1 — 2026-11-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** página `getting-started.mdx` em inglês, com `<Meta title="Getting started" />`, primeira na barra lateral por `storySort` (`Getting started`, `Foundations`, `Components`, `Utilities`, `Icons`). Secções pela ordem pedida: o que é, requisitos, instalação (pnpm, npm, yarn), estilos, primeiro `Button` (código e renderizado), tema escuro, ícones, TypeScript e ligações (Colors, Scales, Theme, repositório). Exemplos em `apps/docs/src/snippets/*.tsx`, importados como `?raw` e verificados pelo `typecheck`. `apps/docs` ganhou `vitest` (script `test`, `vitest.config.ts`), `@storybook/blocks` e `@up201905892/icons` como devDependencies (lockfile atualizado) e `env.d.ts` com os tipos do Vite para `?raw`.
+- **Ligação para a página de acessibilidade:** `apps/docs/src/accessibility.mdx` não existe (DS-040 por fazer), por isso a página não tem ligação nem texto provisório. A ligação fica por acrescentar depois da DS-040 (registar em "Decisões para o João").
+- **Ficheiros alterados:** `apps/docs/src/getting-started.mdx`, `apps/docs/src/getting-started.test.ts`, `apps/docs/src/env.d.ts`, `apps/docs/src/snippets/{first-button,theme-toggle,icons,typescript,entry}.tsx`, `apps/docs/vitest.config.ts`, `apps/docs/package.json`, `apps/docs/.storybook/preview.tsx`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** b920cc7 `feat(ui): DS-042 add Getting started page to Storybook`
+- **Critérios de aceitação cobertos:** todos, exceto a ligação de acessibilidade (condicional, não aplicável). G1: só `@storybook/blocks`, `vitest` e `icons` (já existentes no monorepo) como devDependencies do `docs`; G2 e G3 sem alterações.
+- **Testes escritos pelo programador:** `getting-started.test.ts` (todos os snippets referenciados, nomes reais dos pacotes, sem conteúdo provisório, sem ligação de acessibilidade enquanto a página não existir, títulos sem saltos).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1046, docs: 9) · build ✔ · `build:docs` ✔ · `pnpm test:a11y` não executado.
+- **Notas para o testador:**
+  - O test runner do Storybook ignora páginas só de docs, por isso o axe não cobre a página; o contraste dos blocos de código e a hierarquia de títulos devem ser verificados no browser nos dois temas.
+  - O `typecheck` de `apps/docs` precisa do `build` do `ui` (os snippets importam `@up201905892/ui` por `dist`).
+  - Sugestão para o planeador: tarefa para acrescentar a ligação à página de acessibilidade depois da DS-040.
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`)
+
+**Iteração 1 — 2026-11-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Accordion.css`: `.ds-accordion__trigger-label` com `flex: 1 1 auto`, `min-width: 0` e `overflow-wrap: anywhere`; `.ds-accordion__content-inner` com `overflow-wrap: anywhere`; o `.ds-accordion__icon` mantém `flex-shrink: 0`. `Dialog.css`: `.ds-dialog__title` (também com `min-width: 0`), `.ds-dialog__description` e `.ds-dialog__body` com `overflow-wrap: anywhere`. Sem alterações aos `.tsx` nem à API.
+- **Sobreposição com a DS-052:** a DS-052 não estava `Em desenvolvimento`; sem conflito.
+- **Ficheiros alterados:** `packages/ui/src/Accordion/{Accordion.css,Accordion.css.test.ts,Accordion.stories.tsx}`, `packages/ui/src/Dialog/{Dialog.css,Dialog.css.test.ts,Dialog.stories.tsx}`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** 07b77fd `feat(ui): DS-057 break long words in Accordion and Dialog`
+- **Critérios de aceitação cobertos:** todos. G1 a G3 e C1 a C5.
+- **Testes escritos pelo programador:** um teste novo em cada `*.css.test.ts` (regras de `overflow-wrap` e `min-width`); stories `Accordion/LongWord` e `Dialog/LongWord` com `play` (sem overflow horizontal no gatilho, painel, diálogo e corpo; chevron e botão de fechar dentro dos retângulos respetivos).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui: 1048) · build ✔ · `pnpm test:a11y` ✔ (230 testes).
+- **Notas para o testador:** texto com espaços não muda (a regra só quebra palavras que não cabem sozinhas). Sem sugestões para o planeador.

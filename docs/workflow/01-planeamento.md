@@ -43,28 +43,30 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-033 | Table: ordenação | Layout e dados | Alta | DS-008, DS-032 | Concluído |
 | DS-034 | Pagination | Layout e dados | Média | DS-011 | Concluído |
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
-| DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Proposta |
-| DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Proposta |
-| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035 | Proposta |
-| DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Proposta |
-| DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035 | Proposta |
-| DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Proposta |
-| DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036, DS-040 | Proposta |
-| DS-043 | Guias de temas e de personalização de estilos | Documentação | Média | DS-042 | Proposta |
-| DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Proposta |
-| DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Proposta |
-| DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Proposta |
-| DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042, DS-046 | Proposta |
-| DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Proposta |
-| DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Proposta |
+| DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
+| DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
+| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Planeado |
+| DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
+| DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Planeado |
+| DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
+| DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036 | Em teste |
+| DS-043 | Guias de temas e de personalização de estilos | Documentação | Média | DS-042 | Planeado |
+| DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Concluído |
+| DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Concluído |
+| DS-046 | README do repositório e dos pacotes | Documentação | Média | DS-039, DS-042, DS-045 | Planeado |
+| DS-047 | Storybook no GitHub Pages: build estático e proposta de workflow | Documentação | Média | DS-042 | Planeado |
+| DS-048 | App de exemplo no GitHub Pages (subpasta `example/`) | Documentação | Média | DS-045, DS-047 | Planeado |
+| DS-049 | Referência técnica e apresentação do projeto (versão inicial) | Documentação | Média | DS-041, DS-048 | Planeado |
 | DS-050 | Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio) | Fundações | Alta | — | Concluído |
-| DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Proposta |
-| DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Proposta |
-| DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Proposta |
-| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Proposta |
-| DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Proposta |
-| DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Proposta |
-| DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Proposta |
+| DS-051 | Afastamentos dos overlays pelos tokens de espaçamento (Tooltip, DropdownMenu, Select) | Overlays e feedback | Média | DS-018, DS-023, DS-024, DS-026 | Concluído |
+| DS-052 | Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px` | Fundações | Média | DS-007, DS-029, DS-030 | Concluído |
+| DS-053 | Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas | Layout e dados | Média | DS-005, DS-029, DS-052 | Concluído |
+| DS-054 | `@storybook/test` nos `play` de interação das stories | Fundações | Média | DS-003, DS-033, DS-034 | Concluído |
+| DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Concluído |
+| DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Concluído |
+| DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Concluído |
+| DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Planeado |
+| DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Proposta |
 
 ## Decisões aplicadas
 
@@ -77,6 +79,17 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | 2026-10-12 | Responder | DS-003 | 2026-10-12 |
 | 2026-10-16 | Aprovar | DS-021 a DS-035 | 2026-10-19 |
 | 2026-10-16 | Aprovar | DS-050 | 2026-10-19 |
+| 2026-11-04 | Aprovar | DS-036, DS-037, DS-039, DS-041 a DS-049 | 2026-11-05 |
+| 2026-11-04 | Aprovar | DS-051 a DS-057 | 2026-11-05 |
+| 2026-11-04 | Alterar | DS-038, DS-040 | 2026-11-05 |
+| 2026-11-13 | Aprovar | DS-038, DS-040 | 2026-11-13 |
+| 2026-11-13 | Aprovar | DS-058 | 2026-11-13 |
+| 2026-11-13 | Responder | DS-036 | 2026-11-13 |
+| 2026-11-13 | Responder | DS-044, DS-045 | 2026-11-13 |
+| 2026-11-13 | Responder | DS-035 | 2026-11-13 |
+| 2026-11-13 | Responder | DS-009 | 2026-11-13 |
+| 2026-11-13 | Alterar | DS-042 | 2026-11-13 |
+| 2026-11-13 | Alterar | DS-047 | 2026-11-13 |
 
 ## Decisões técnicas
 
@@ -463,6 +476,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-13 · testador · Pronto para teste → Em teste · início do relatório 1
 - 2026-10-13 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados
 - 2026-10-13 · finalizador · Aprovado → Concluído · changeset não aplicável (pacotes privados)
+- 2026-11-13 · planeador · Concluído (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-13): propor uma tarefa para o teste intermitente "fails for an img without alt" do helper de axe (encontrar a causa e estabilizar); proposta criada como DS-059
 
 ### DS-010 · Button
 
@@ -1397,6 +1411,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-28 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-10-28 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
 - 2026-10-28 · finalizador · Aprovado → Concluído · entrada em 04-concluded.md; changeset não aplicável (pacote privado); marco Layout e dados atingido
+- 2026-11-13 · planeador · Concluído (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-13): `pageSize={0}` sem resumo fica como está; a revisão visual do DataTable no Storybook passa para a auditoria da DS-040 (critério acrescentado à DS-040); pedido fechado
 
 ### DS-036 · Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença
 
@@ -1431,6 +1446,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): scope npm `@up201905892` e licença MIT decididos; marcas de decisão pendente removidas e placeholder substituído
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-05 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-05 · programador · Em desenvolvimento → Pronto para teste · commit 3abe004
+- 2026-11-05 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-05 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-11-05 · finalizador · Aprovado → Concluído · relatório 1 aprovado (3abe004, 0eaa8b4); changeset não aplicável (sem .changeset/, configuração na DS-037; pacotes em 0.0.0)
+- 2026-11-13 · planeador · Concluído (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-13): manter `up201905892` como autor, no `repository` e no copyright dos `LICENSE`; pedido fechado, não voltar a perguntar
 
 ### DS-037 · Changesets: versionamento e changelog
 
@@ -1461,12 +1483,18 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): a secção do README de `ui` passa a chamar-se "How to create a component" (regra de língua)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-06 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-09 · programador · Em desenvolvimento → Pronto para teste · commit de fecho `git log --grep DS-037`; suite completa verde (incidente intermitente de 2026-11-06 não reproduzido, ver 02-desenvolvimento.md)
+- 2026-11-09 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-09 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas
+- 2026-11-09 · finalizador · Aprovado → Concluído · relatório 1 aprovado; sem commits de código de produção depois do testado; changeset não aplicável (tarefa de infraestrutura, o seu resultado é o primeiro changeset)
 
 ### DS-038 · Limite de tamanho de bundle (< 5 kB gzip por componente)
 
 - **Fase do MVP:** Publicação
 - **Prioridade:** Alta
-- **Depende de:** DS-036, DS-010 a DS-035
+- **Depende de:** DS-036, DS-010 a DS-035, DS-051 a DS-057 (as correções aos componentes entram antes da medição, para os tamanhos medidos serem os do código final da 1.0)
 - **Estimativa:** S (≤ 2h)
 
 **Objetivo:** provar com um comando que importar um componente custa menos de 5 kB gzip e que o tree-shaking funciona, para o requisito de tamanho do MVP não depender de promessas.
@@ -1477,6 +1505,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] A lista de entradas é gerada a partir das exportações de `packages/ui/src/index.ts` (ou validada por um teste), para que um componente novo não fique sem limite.
 - [ ] Há uma entrada adicional para `dist/styles.css` com limite de 15 kB gzip e uma entrada informativa (sem limite) para a biblioteca inteira.
 - [ ] Tree-shaking verificado: o bundle gerado para `import { Button }` não contém referências a `@radix-ui/react-dialog` nem a classes `ds-dialog`.
+- [ ] A medição é feita depois de DS-051 a DS-057 estarem `Concluído`: a tabela de tamanhos colada no registo de desenvolvimento indica o commit medido, que contém os commits dessas sete tarefas (`git log --oneline | grep -E "DS-05[1-7]"` devolve pelo menos um commit por tarefa).
 - [ ] Se algum componente ultrapassar os 5 kB, o limite não é aumentado: a tarefa regista o componente e o valor medido em "Decisões para o João" e fica por aprovar até haver decisão.
 - [ ] G1 a G3 (dependências novas: `size-limit`, `@size-limit/preset-small-lib`).
 
@@ -1491,6 +1520,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
+- 2026-11-05 · planeador · Proposta (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-04, Alterar): passa a depender também de DS-051 a DS-057, para a medição do bundle correr sobre o código final dos componentes; novo critério que regista o commit medido
+- 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 
@@ -1520,12 +1551,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 
 - **Fase do MVP:** Publicação
 - **Prioridade:** Alta
-- **Depende de:** DS-010 a DS-035
+- **Depende de:** DS-010 a DS-035, DS-051 a DS-057 (a auditoria corre sobre o código final dos componentes, já com as correções de tokens, sombras, `focusableWhenDisabled`, palavras longas e `play` com `@storybook/test`)
 - **Estimativa:** M (≤ 1 dia)
 
 **Objetivo:** rever todos os componentes em conjunto antes da versão 1.0, fechar lacunas de acessibilidade e publicar no Storybook uma declaração de conformidade honesta, componente a componente.
@@ -1538,12 +1570,15 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Movimento (WCAG 2.3.3): `grep` de `animation` e `transition` em `packages/ui/src/**/*.css` confirma que todas as ocorrências estão cobertas pela regra de `prefers-reduced-motion` da DS-007.
 - [ ] Alturas do projeto: script `pnpm test:a11y:sizes` (ou verificação equivalente no test runner) que mede, em browser real e com tamanho de letra de base de 16px, a altura renderizada de `Button`, `IconButton` (também a largura), `Input`, gatilho do `Select` e `Textarea` com `rows={1}` em cada `size`, e falha se alguma for inferior a 32px em `sm`, 40px em `md` ou 48px em `lg`.
 - [ ] Alvos de toque (WCAG 2.5.8): 24×24px é o mínimo absoluto para qualquer alvo interativo da biblioteca (inclui Checkbox, Radio, Switch, separadores, gatilhos do Accordion, botões da Pagination, cabeçalhos ordenáveis, botões de fechar e itens de menu); a mesma verificação mede cada um nas respetivas stories e falha se algum tiver menos de 24px de largura ou de altura. As exceções permitidas pela WCAG (ex.: ligações dentro de uma frase) ficam listadas e justificadas na página de conformidade.
+- [ ] A página de conformidade reflete o código depois de DS-051 a DS-057: a linha do `Button`, do `IconButton` e da `Pagination` descreve `focusableWhenDisabled` (DS-056); as stories `LongWord` do `Card`, do `Accordion` e do `Dialog` (DS-053, DS-057) passam no `pnpm test:a11y:reflow` sem constarem das exceções; a coluna "como foi verificado" das stories `KeyboardInteraction` refere os `play` com `userEvent` da DS-054.
+- [ ] Revisão visual do DataTable no Storybook (transferida da DS-035 por decisão do João, 2026-11-13): em browser real (Chromium), nos dois temas e com viewport de 320px e de 1280px, nas stories `DataTable/Default`, `Empty`, `NoPagination`, `KeyboardInteraction` e `DarkTheme`, verifica-se e regista-se no relatório de testes, com o resultado de cada ponto: (a) o rodapé (resumo "`<início>`–`<fim>` of `<total>`" e `Pagination`) não se sobrepõe nem sai do contentor; (b) ao mudar de página, o texto do elemento com `aria-live="polite"` é atualizado (verificado por `play` com `userEvent` que lê o texto antes e depois); (c) o focus é visível nos cabeçalhos ordenáveis e nos botões da paginação; (d) o cabeçalho e as linhas (incluindo `striped`) cumprem o contraste de C4. Com `pageSize={0}` o resumo não aparece: é o comportamento aceite pelo João e não conta como defeito. A linha do `DataTable` na página de conformidade refere esta revisão na coluna "como foi verificado".
 - [ ] Defeitos encontrados: os que se corrigem em menos de 30 minutos cada são corrigidos nesta tarefa (com teste que os cobre); os restantes ficam listados na página como "limitações conhecidas" e em "Decisões para o João", para o planeador propor tarefas novas.
 - [ ] G1 a G3; alterações a componentes incluem um changeset `patch`.
 
 **Testes exigidos:**
 - Unitários: os testes de teclado em falta, por componente.
 - Acessibilidade: `pnpm test:a11y`, `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` com código 0; prova negativa temporária da verificação de tamanhos: reduzir o `min-height` de um `size` do `Button` faz `pnpm test:a11y:sizes` falhar e identificar o componente e o tamanho (não commitado); verificação manual só com teclado das stories `KeyboardInteraction` de Select, Dialog, DropdownMenu, Popover, Tooltip e DataTable, nos dois temas, com o resultado registado no relatório de testes.
+- Visual/Storybook (DataTable): a revisão visual descrita nos critérios, a 320px e 1280px, nos dois temas; o `play` de `DataTable/KeyboardInteraction` (ou uma story nova `DataTable/LiveSummary`) verifica a atualização do resumo `aria-live` depois de mudar de página.
 - Visual/Storybook: a página "Accessibility/Conformance" abre sem erros e tem uma linha por cada componente exportado (verificado por um teste que compara com as exportações de `packages/ui/src/index.ts`).
 
 **Fora de âmbito:** testes com leitores de ecrã reais (NVDA, VoiceOver) feitos por agentes (ficam como verificação manual recomendada ao João), modo de alto contraste do Windows (`forced-colors`), WCAG 2.2 e nível AAA, certificação externa.
@@ -1551,6 +1586,9 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): a auditoria verifica as alturas do projeto (32/40/48px em Button, IconButton, Input, Select e Textarea mínima) e mantém 24×24px como mínimo absoluto para qualquer alvo interativo, com script que falha abaixo desses valores
+- 2026-11-05 · planeador · Proposta (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-04, Alterar): passa a depender também de DS-051 a DS-057, para a auditoria correr sobre o código final dos componentes; novo critério que liga a página de conformidade às alterações dessas tarefas
+- 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
+- 2026-11-13 · planeador · Planeado (sem mudança de estado) · especificação revista segundo a resposta do João à DS-035 (aprovacoes.md, 2026-11-13, Responder): a revisão visual do DataTable no Storybook passa para esta auditoria (critério e teste novos); `pageSize={0}` sem resumo é comportamento aceite
 
 ### DS-041 · Preparação da versão 1.0.0 e guia de publicação manual
 
@@ -1583,12 +1621,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`; a publicação do Storybook online passa a remeter para a DS-047
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): o guia recomenda publicar só depois de DS-042 a DS-047 (inclui a DS-047, que altera o campo `homepage` dos pacotes)
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): o guia passa a `docs/publishing.md`, em inglês; a lista de tarefas a concluir antes de publicar passa a DS-042 a DS-048
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 
 ### DS-042 · Página "Getting started" no Storybook
 
 - **Fase do MVP:** Documentação
 - **Prioridade:** Alta
-- **Depende de:** DS-036, DS-040
+- **Depende de:** DS-036 (não espera pela auditoria de acessibilidade, DS-040; se a DS-040 mudar alguma coisa que a página descreve, a página atualiza-se depois)
 - **Estimativa:** S (≤ 2h)
 
 **Objetivo:** primeira página que um programador lê: como instalar, importar os estilos e usar o primeiro componente em menos de cinco minutos.
@@ -1596,7 +1635,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Critérios de aceitação:**
 - [ ] A página está escrita em inglês (regra de língua em "Decisões técnicas"), incluindo títulos, texto, comentários dos exemplos e nomes na barra lateral.
 - [ ] `apps/docs/src/getting-started.mdx` é a página de entrada do Storybook (primeira na barra lateral, com a ordem definida em `storySort`).
-- [ ] Secções, por esta ordem: o que é a biblioteca (duas frases); requisitos (versões de React e de Node); instalação com pnpm, npm e yarn; importar `@up201905892/ui/styles.css` uma vez; primeiro exemplo com `Button`; ativar o tema escuro com `data-theme="dark"` no `<html>`; usar ícones; utilização com TypeScript; ligações para as páginas de tokens (DS-006), para a página de acessibilidade (DS-040) e para o repositório (as ligações para os guias são acrescentadas pela DS-043).
+- [ ] Secções, por esta ordem: o que é a biblioteca (duas frases); requisitos (versões de React e de Node); instalação com pnpm, npm e yarn; importar `@up201905892/ui/styles.css` uma vez; primeiro exemplo com `Button`; ativar o tema escuro com `data-theme="dark"` no `<html>`; usar ícones; utilização com TypeScript; ligações para as páginas de tokens (DS-006) e para o repositório (as ligações para os guias são acrescentadas pela DS-043).
+- [ ] Ligação para a página "Accessibility/Conformance" (DS-040): só entra se `apps/docs/src/accessibility.mdx` já existir quando a tarefa for desenvolvida. Se não existir, a página não tem nenhuma ligação para ela (nem texto provisório) e o programador regista em `02-desenvolvimento.md` e em "Decisões para o João" que a ligação fica por acrescentar depois da DS-040.
 - [ ] Os nomes dos pacotes na página são os reais dos `package.json` (sem placeholder).
 - [ ] Os exemplos de código não se podem desatualizar: vivem em `apps/docs/src/snippets/*.tsx`, são verificados pelo `pnpm typecheck` e importados para a página como texto (`?raw`), e o primeiro exemplo aparece também renderizado.
 - [ ] Texto sem erros ortográficos e sem conteúdo provisório ("TODO", "lorem ipsum").
@@ -1613,6 +1653,11 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação alinhada com a regra de língua decidida pelo João (conversa): marca de decisão pendente removida; a página é escrita em inglês
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-13 · planeador · Planeado (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-13, Alterar): passa a depender só de DS-036 (deixa de depender da DS-040); a ligação para a página de acessibilidade só entra se a página já existir, senão fica registada para depois da DS-040
+- 2026-11-13 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-13 · programador · Em desenvolvimento → Pronto para teste · commit b920cc7
+- 2026-11-13 · testador · Pronto para teste → Em teste · início dos testes
 
 ### DS-043 · Guias de temas e de personalização de estilos
 
@@ -1640,6 +1685,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 
 ### DS-044 · App de exemplo: estrutura, layout e tema
 
@@ -1671,6 +1717,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-09 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-09 · programador · Em desenvolvimento → Pronto para teste · commit bc714d0
+- 2026-11-09 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-09 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados (incl. 320px e dois temas em Chromium)
+- 2026-11-09 · finalizador · Aprovado → Concluído · registo em 04-concluded.md; changeset não aplicável (app privada)
+- 2026-11-13 · planeador · Concluído (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-13): não se acrescenta dependência das DS-051 a DS-057 (já concluídas); pedido fechado
 
 ### DS-045 · App de exemplo: formulário e tabela de dados
 
@@ -1702,6 +1755,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-10 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-10 · programador · Em desenvolvimento → Pronto para teste · commit c7ad0b7
+- 2026-11-10 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-10 · testador · Em teste → Aprovado · relatório 1, todas as verificações e critérios verdes
+- 2026-11-10 · finalizador · Aprovado → Concluído · relatório 1 aprovado; sem commits de produção após o commit testado; changeset não aplicável (app privada)
+- 2026-11-13 · planeador · Concluído (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-13): não se acrescenta dependência das DS-051 a DS-057 (já concluídas); pedido fechado
 
 ### DS-046 · README do repositório e dos pacotes
 
@@ -1731,12 +1791,13 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação alinhada com a regra de língua decidida pelo João (conversa): o README da raiz é escrito em inglês, sem remeter para uma decisão pendente
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): títulos de secção em inglês ("Credits", "How to create a component", "License"); licença MIT; nomes reais dos pacotes com o scope `@up201905892`; a ligação para o Storybook publicado passa para a DS-047
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 
 ### DS-047 · Storybook no GitHub Pages: build estático e proposta de workflow
 
 - **Fase do MVP:** Documentação
 - **Prioridade:** Média
-- **Depende de:** DS-042, DS-046
+- **Depende de:** DS-042 (não precisa do README da DS-046)
 - **Estimativa:** S (≤ 2h)
 
 **Objetivo:** deixar o Storybook pronto a ser publicado no GitHub Pages, com um build que funciona debaixo do caminho base do repositório e um workflow proposto que o João só tem de copiar para `.github/`.
@@ -1748,7 +1809,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Verificação automática `pnpm test:pages`: com o site servido debaixo do caminho base, abre a página inicial num browser (Playwright, já instalado pela DS-003), confirma que a página "Getting started" aparece, que uma story de componente (ex.: `Button/Primary`) renderiza dentro do iframe, e que nenhum pedido de rede termina em 404; sai com código ≠ 0 se algo falhar.
 - [ ] `docs/github-pages.md`, em inglês, com: (1) o conteúdo completo proposto para `.github/workflows/pages.yml` (disparo em `push` para `main` e `workflow_dispatch`; pnpm 10 e Node 22; `pnpm install --frozen-lockfile`; `pnpm build:pages`; `actions/configure-pages`, `actions/upload-pages-artifact` com `apps/docs/storybook-static` e `actions/deploy-pages`; permissões `contents: read`, `pages: write` e `id-token: write`; grupo de `concurrency`); (2) os passos manuais do João: copiar o ficheiro para `.github/workflows/`, ativar Pages em Settings → Pages com a origem "GitHub Actions", e confirmar o URL; (3) como testar localmente com `pnpm preview:pages`; (4) o URL esperado, `https://<dono>.github.io/<nome-do-repositório>/`, calculado a partir do campo `repository`.
 - [ ] Nenhum ficheiro em `.github/` é criado ou alterado por esta tarefa; o pedido para o João acrescentar o workflow e ativar o Pages fica registado em "Decisões para o João" no registo diário, com ligação para `docs/github-pages.md`.
-- [ ] O `README.md` da raiz ganha, numa secção "Documentation", a ligação para o URL esperado do Storybook, e o campo `homepage` dos `package.json` publicados aponta para o mesmo URL; o registo em "Decisões para o João" avisa que a ligação só funciona depois de o João ativar o Pages.
+- [ ] O `README.md` da raiz ganha, numa secção "Documentation", a ligação para o URL esperado do Storybook, e o campo `homepage` dos `package.json` publicados aponta para o mesmo URL; o registo em "Decisões para o João" avisa que a ligação só funciona depois de o João ativar o Pages. Se a DS-046 ainda não estiver `Concluído`, a secção "Documentation" é acrescentada ao `README.md` atual sem reescrever o resto; o teste que compara o URL do README com o calculado a partir de `repository` fica no repositório e garante que a ligação se mantém quando a DS-046 reescrever o README.
 - [ ] G1 a G3 (sem dependências novas além de um servidor estático de desenvolvimento, se o já usado pelo `pnpm test:a11y` não servir).
 
 **Testes exigidos:**
@@ -1762,6 +1823,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): a publicação da app de exemplo no mesmo site passa a remeter para a DS-048
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-13 · planeador · Planeado (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-13, Alterar): passa a depender só de DS-042 (deixa de depender da DS-046); se o README ainda não tiver sido reescrito pela DS-046, a secção "Documentation" é acrescentada ao README atual
 
 ### DS-048 · App de exemplo no GitHub Pages (subpasta `example/`)
 
@@ -1792,6 +1855,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-09 · planeador · criada como Proposta
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 
 ### DS-049 · Referência técnica e apresentação do projeto (versão inicial)
 
@@ -1846,6 +1910,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-16 · planeador · — → Proposta · pedida pelo João na conversa
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 
 ### DS-050 · Pacotes do workspace resolvidos a partir do código-fonte (typecheck e testes sem build prévio)
 
@@ -1922,6 +1987,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-024, DS-027; registo diário)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-05 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-05 · programador · Em desenvolvimento → Pronto para teste · commit 1983c2a
+- 2026-11-05 · testador · Pronto para teste → Em teste · início do teste (commit 1983c2a)
+- 2026-11-05 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-11-05 · finalizador · Aprovado → Concluído · relatório 1 aprovado; sem commits de código depois do testado; changeset não aplicável (DS-037 ainda não configurou o Changesets)
 
 ### DS-052 · Tokens de largura de borda e de anel de focus, e Stylelint sem exceção de `1px`/`2px`
 
@@ -1955,6 +2026,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão do programador e do testador (DS-029, DS-030)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-10 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-10 · programador · Em desenvolvimento → Pronto para teste · commit d00a7dc
+- 2026-11-10 · testador · Pronto para teste → Em teste · início do teste (commit d00a7dc)
+- 2026-11-10 · testador · Em teste → Aprovado · relatório 1, sem falhas
+- 2026-11-10 · finalizador · Aprovado → Concluído · relatório 1; sem commits de código depois de d00a7dc; changeset coberto pelo first-release-components.md
 
 ### DS-053 · Sombras semânticas por tema e Card: elevação no tema escuro e palavras longas
 
@@ -1985,6 +2062,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão do programador e do testador (DS-029)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-11 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-11 · programador · Em desenvolvimento → Pronto para teste · commit 9de2315
+- 2026-11-11 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-11 · testador · Em teste → Aprovado · relatório 1, todos os critérios verificados, zero falhas
+- 2026-11-11 · finalizador · Aprovado → Concluído · changeset acrescentado a first-release-components.md; registo em 04-concluded.md
 
 ### DS-054 · `@storybook/test` nos `play` de interação das stories
 
@@ -2019,6 +2102,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão repetida do programador e do testador (DS-010, DS-018, DS-021, DS-033; registo diário)
 - 2026-10-27 · planeador · Proposta (sem mudança de estado) · especificação revista: absorve a migração de `Pagination/KeyboardInteraction` sugerida na conclusão da DS-034 (critério, prova negativa e dependência DS-034); a DS-035 fica abrangida se já estiver concluída
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-11 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-11 · programador · Em desenvolvimento → Pronto para teste · commit 05286f5
+- 2026-11-11 · testador · Pronto para teste → Em teste · início do teste
+- 2026-11-11 · testador · Em teste → Aprovado · relatório 1 (03-testing.md), sem falhas
+- 2026-11-11 · finalizador · Aprovado → Concluído · changeset não aplicável (só stories e devDependencies); registo em 04-concluded.md
 
 ### DS-055 · GridItem: validação de `colSpan` e limite ao número de colunas
 
@@ -2047,6 +2136,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-26 · planeador · — → Proposta · sugestão do testador (DS-028)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-12 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-12 · programador · Em desenvolvimento → Pronto para teste · commit b0e40b7
+- 2026-11-12 · testador · Pronto para teste → Em teste · início do teste
+- 2026-11-12 · testador · Em teste → Aprovado · relatório 1 aprovado
+- 2026-11-12 · finalizador · Aprovado → Concluído · changeset acrescentado ao first-release-components.md
 
 ### DS-056 · Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la
 
@@ -2080,6 +2175,12 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-27 · planeador · — → Proposta · sugestão do programador e do finalizador (DS-034)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-12 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-12 · programador · Em desenvolvimento → Pronto para teste · commit dd8c6ce
+- 2026-11-12 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-12 · testador · Em teste → Aprovado · relatório 1, todas as verificações e critérios verdes
+- 2026-11-12 · finalizador · Aprovado → Concluído · changeset da primeira versão atualizado, registo em 04-concluded.md
 
 ### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`)
 
@@ -2109,3 +2210,72 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-10-27 · planeador · — → Proposta · sugestão do testador e do finalizador (DS-031)
+- 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-13 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-13 · programador · Em desenvolvimento → Pronto para teste · commit 07b77fd
+- 2026-11-13 · testador · Pronto para teste → Em teste · início do teste
+- 2026-11-13 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, todas as verificações e critérios verdes
+- 2026-11-13 · finalizador · Aprovado → Concluído · changeset da primeira versão atualizado, registo em 04-concluded.md
+
+### DS-058 · Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Baixa
+- **Depende de:** DS-006, DS-052, DS-053 (todas `Concluído`)
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** alinhar as páginas de fundações do Storybook (`apps/docs/src/foundations`) com as regras que os componentes já seguem: a superfície de exemplo usa a sombra semântica do tema (e não a primitiva, quase invisível no tema escuro), as sombras semânticas `raised`, `floating` e `modal` ficam documentadas nos dois temas, e as larguras de borda deixam de estar escritas à mão.
+
+**Contexto (verificado no código em 2026-11-12):** `apps/docs/src/foundations/Theme.stories.tsx` (linhas 21 e 23) usa `border: '1px solid …'` e `boxShadow: 'var(--ds-shadow-sm)'`; a DS-053 só proibiu `--ds-shadow-sm|md|lg` em `packages/ui/src/**/*.css` (teste `shadow-tokens.css.test.ts`), e a DS-052 só tratou os `.css`. A story `Foundations/Scales › Shadows` lista apenas `tokens.shadow` (primitivas `sm`, `md`, `lg`, `strong.md`, `strong.lg`); os tokens semânticos `shadow-raised|floating|modal` (exportados em `themes.light.shadow` e `themes.dark.shadow` de `@up201905892/tokens`) não aparecem em nenhuma página. Há ainda larguras literais em `Colors.stories.tsx` (linhas 30 e 98: `1px`) e em `Scales.stories.tsx` (linha 137: `2px`, story `Radii`). Apontado pelo programador, pelo testador e pelo finalizador da DS-053 e perguntado ao João no registo diário de 2026-11-11.
+
+**Critérios de aceitação:**
+- [ ] `Theme.stories.tsx`: a superfície usa `boxShadow: 'var(--ds-shadow-raised)'` e `border: 'var(--ds-border-width-1) solid var(--ds-color-border-default)'`.
+- [ ] `Colors.stories.tsx` e `Scales.stories.tsx`: os `1px` e `2px` das bordas passam a `var(--ds-border-width-1)` e `var(--ds-border-width-2)`, sem mudança visual (os valores resolvidos são os mesmos).
+- [ ] `grep -rnE "\-\-ds-shadow-(sm|md|lg)\b|'[0-9]+px solid|\"[0-9]+px solid" apps/docs/src` não devolve resultados (a story `Shadows` continua a mostrar as primitivas, mas lê os nomes a partir do objeto `tokens`, por isso não os escreve à mão).
+- [ ] A story `Foundations/Scales › Shadows` ganha uma secção "Semantic shadows" com os tokens de `themes.light.shadow` e `themes.dark.shadow`, um painel por tema com o respetivo `data-theme` (mesmo padrão da secção de tokens semânticos de `Colors.stories.tsx`), cada linha com o nome da CSS variable, o valor e uma amostra com `box-shadow: var(<token>)` sobre `--ds-color-bg-surface`. A lista é gerada a partir do objeto `themes` (um token semântico novo aparece sem editar a story).
+- [ ] A secção existente das primitivas indica, num parágrafo curto em inglês, que os componentes usam as sombras semânticas e que as primitivas não devem ser usadas diretamente.
+- [ ] Nenhuma alteração em `packages/` nem nos tokens; nenhum componente muda.
+- [ ] G1 a G3 (sem dependências novas).
+
+**Testes exigidos:**
+- Unitários: não aplicável (`apps/docs` não tem Vitest; os testes existentes continuam a passar).
+- Acessibilidade: `pnpm test:a11y` passa em todas as stories de `Foundations/*`, incluindo `Foundations/Theme/DarkTheme` e a story `Shadows` com os dois painéis de tema (contraste do texto dos rótulos ≥ 4,5:1 em cada painel).
+- Visual/Storybook: `Foundations/Theme/DarkTheme` ganha `play` que, em browser real, confirma que o `box-shadow` calculado da superfície é diferente de `none` e igual ao valor de `--ds-shadow-raised` lido com `getComputedStyle(document.documentElement)` no tema escuro (e, portanto, diferente do `--ds-shadow-sm`); `Foundations/Scales › Shadows` ganha `play` que confirma que existem 3 amostras semânticas por painel de tema e que, no painel `dark`, o `box-shadow` calculado da amostra `raised` é diferente do da mesma amostra no painel `light`. Prova negativa (não commitada): repor `var(--ds-shadow-sm)` na `Theme.stories.tsx` faz o `play` de `DarkTheme` falhar.
+
+**Fora de âmbito:** mudar valores ou nomes de tokens; mover a story `Borders` para `Foundations/Borders` (pergunta ainda aberta ao João no registo diário); regra de ESLint ou teste automático para estilos inline em `apps/docs`; estilos inline de `apps/example` (a DS-052 já tratou o `layout.css`); páginas de "Getting started" e guias de temas (DS-042, DS-043).
+
+**Histórico:**
+- 2026-11-12 · planeador · — → Proposta · observação do programador, do testador e do finalizador da DS-053; pergunta ao João no registo diário de 2026-11-11
+- 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
+
+### DS-059 · Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt"
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Média
+- **Depende de:** DS-009 (`Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** encontrar a causa de o `expectNoA11yViolations` ter, uma vez, deixado passar um `<img>` sem `alt`, e tornar o helper e o seu teste deterministas. Um falhanço intermitente já parou o ciclo (DS-037, 2026-11-06); e, como o mesmo helper corre nos testes de axe de todos os componentes, um falso negativo intermitente pode esconder violações reais (falso verde).
+
+**Contexto (verificado no código em 2026-11-13):** `packages/ui/test/a11y.ts` chama `axe(container)` do `vitest-axe` (`^0.1.0`) sem opções e lança erro se `violations` não estiver vazio. `packages/ui/test/a11y.test.tsx` renderiza `<img src="x.png" />` e espera `rejects.toThrow(/image-alt/)`. Em 2026-11-06 este teste falhou porque o helper resolveu sem violações (990/991; registo diário de 2026-11-06 e entrada da DS-037 em `02-desenvolvimento.md`); em 2026-11-09, sem alterações de código, passou em três execuções seguidas. A configuração do Vitest (`packages/ui/vitest.config.ts`) usa `jsdom`, `globals: true`, um `globalSetup` que gera o `dist` dos tokens e o setup partilhado `test/setup.ts` (polyfills dos primitivos Radix). Causa por identificar. Pedido do João (aprovacoes.md, 2026-11-13, Responder DS-009).
+
+**Critérios de aceitação:**
+- [ ] Reprodução medida: comando ou script documentado em `02-desenvolvimento.md` que corre `packages/ui/test/a11y.test.tsx` 100 vezes isolado e a suite completa do pacote (`pnpm --filter @up201905892/ui test`) 20 vezes, e conta as falhas desse teste; a contagem é registada antes e depois da correção. O script, se for um ficheiro, fica fora de `packages/*/src` e não entra em `pnpm test`; ficheiros temporários ficam fora do repositório.
+- [ ] Causa registada em `02-desenvolvimento.md`, com prova (ex.: o resultado do axe para a regra `image-alt` em `violations`, `incomplete` ou `inapplicable`; ordem dos ficheiros de teste no worker; versões resolvidas no lockfile). São verificadas, e marcadas como confirmadas ou descartadas com o motivo, pelo menos estas hipóteses: (a) chamadas ao axe concorrentes ou sobrepostas no mesmo worker; (b) estado do `document` deixado por testes anteriores no mesmo worker (elementos fora do `container`, `aria-hidden` ou `inert` deixados no `body` por overlays Radix, limpeza do Testing Library); (c) a regra `image-alt` a sair em `incomplete` em vez de `violations` (visibilidade calculada no jsdom); (d) versões de `axe-core`, `vitest-axe` e `jsdom` resolvidas no `pnpm-lock.yaml`; (e) tempo limite do teste sob carga.
+- [ ] Correção aplicada à causa: depois dela, 0 falhas nas 100 execuções isoladas e nas 20 da suite completa (contagem colada em `02-desenvolvimento.md`).
+- [ ] Se a causa não for encontrada depois das cinco hipóteses, a tarefa aplica a mitigação mais restrita que deixe as execuções acima a verde (ex.: `runOnly` com as tags `wcag2a`, `wcag2aa`, `wcag21a` e `wcag21aa`, as mesmas do `pnpm test:a11y` da DS-003; serialização das chamadas ao axe), descreve-a no JSDoc do helper como mitigação e regista o caso em "Decisões para o João". Não são aceites: `retry` do teste, `skip`/`todo`, apagar o teste, nem aumentar tempos limite sem prova de que a causa é o tempo.
+- [ ] O helper continua a apanhar violações reais: `a11y.test.tsx` ganha dois casos negativos, um `<button>` sem nome acessível (`button-name`) e um `<input>` sem rótulo (`label`), e cada caso negativo verifica o id da regra na mensagem de erro; o caso positivo existente mantém-se.
+- [ ] A assinatura pública do helper não muda (`expectNoA11yViolations(container: Element): Promise<void>`); nenhum teste de componente é alterado, salvo se a causa estiver nele (nesse caso, cada ficheiro alterado e o motivo ficam listados em `02-desenvolvimento.md`).
+- [ ] Nenhum ficheiro em `.github/` é alterado; se a correção precisar de mudar o CI, o pedido fica em "Decisões para o João".
+- [ ] G1 a G3 (sem dependências novas; uma atualização de `axe-core` ou `vitest-axe` só é aceite se a causa for a versão, com a prova registada); sem changeset (código de teste, não publicado).
+
+**Testes exigidos:**
+- Unitários: os quatro casos de `a11y.test.tsx` (caso positivo, `image-alt`, `button-name`, `label`); se a causa for concorrência ou estado partilhado, um teste que a reproduz de forma determinista (ex.: duas chamadas ao helper em paralelo com `Promise.all`; ou um overlay Radix aberto e fechado antes da verificação) e que passa depois da correção.
+- Acessibilidade: `pnpm test` (todos os testes de axe dos componentes) e `pnpm test:a11y` continuam verdes; nenhum teste de componente que passava passa a falhar.
+- Visual/Storybook: não aplicável.
+- Verificação manual no terminal: as 100 + 20 execuções descritas nos critérios, antes e depois da correção, com as contagens registadas; o testador repete pelo menos 30 execuções isoladas e 5 da suite completa e regista o resultado no relatório.
+
+**Fora de âmbito:** o `test-runner.ts` do Storybook (`axe-playwright`), regras do axe novas ou desativadas, migração do `vitest-axe` para outra biblioteca sem que a causa o exija, testes de axe de `apps/example` (salvo se usarem este helper e a causa for a mesma).
+
+**Histórico:**
+- 2026-11-13 · planeador · — → Proposta · pedido do João (aprovacoes.md, 2026-11-13, Responder DS-009): encontrar a causa e estabilizar o teste intermitente do helper de axe

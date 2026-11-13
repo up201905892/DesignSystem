@@ -5,7 +5,7 @@ import {
   type TdHTMLAttributes,
   type ThHTMLAttributes,
 } from 'react';
-import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from '@ds/icons';
+import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from '@up201905892/icons';
 import { cx } from '../utils/cx';
 
 type Align = 'start' | 'center' | 'end';

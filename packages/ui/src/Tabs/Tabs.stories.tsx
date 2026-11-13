@@ -21,6 +21,13 @@ const panels = (
 
 export const Default: Story = {
   args: { defaultValue: 'account' },
+  play: async ({ canvasElement }) => {
+    const active = canvasElement.querySelector<HTMLElement>('[role="tab"][data-state="active"]');
+    if (!active) throw new Error('No active tab');
+    const width = getComputedStyle(active).borderBottomWidth;
+    if (width !== '2px')
+      throw new Error(`Active tab border-bottom-width is ${width}, expected 2px`);
+  },
   render: (args) => (
     <Tabs {...args}>
       <TabsList aria-label="Settings">

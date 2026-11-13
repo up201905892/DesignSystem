@@ -25,10 +25,10 @@
   max-height: calc(100vh - var(--ds-space-8));
   max-height: calc(100dvh - var(--ds-space-8));
   transform: translate(-50%, -50%);
-  border: 1px solid var(--ds-color-border-default);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-lg);
   background-color: var(--ds-color-bg-surface);
-  box-shadow: var(--ds-shadow-lg);
+  box-shadow: var(--ds-shadow-modal);
   color: var(--ds-color-text-default);
   font-family: var(--ds-font-family-sans);
   font-size: var(--ds-font-size-md);
@@ -55,8 +55,8 @@
 }
 
 .ds-dialog:focus-visible {
-  outline: 2px solid var(--ds-color-focus-ring);
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 .ds-dialog__header {
@@ -69,14 +69,18 @@
 }
 
 .ds-dialog__title {
+  min-width: 0;
   margin: 0;
+  overflow-wrap: anywhere;
   font-size: var(--ds-font-size-lg);
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-font-line-height-tight);
 }
 
 .ds-dialog__description {
+  min-width: 0;
   margin: 0;
+  overflow-wrap: anywhere;
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-sm);
 }
@@ -85,6 +89,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overflow-wrap: anywhere;
   padding-block: var(--ds-space-2);
   padding-inline: var(--ds-space-6);
 }

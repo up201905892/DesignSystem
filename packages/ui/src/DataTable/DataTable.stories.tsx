@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { PencilIcon } from '@ds/icons';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { PencilIcon } from '@up201905892/icons';
 import { Badge } from '../Badge';
 import { IconButton } from '../IconButton';
 import type { TableSortState } from '../Table';
@@ -40,8 +41,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const Default: Story = {
   render: () => (
@@ -141,25 +140,27 @@ export const KeyboardInteraction: Story = {
     <DataTable caption="People" data={people} columns={columns} getRowId={(p) => p.id} />
   ),
   play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     const age = Array.from(canvasElement.querySelectorAll<HTMLButtonElement>('th button')).find(
       (b) => b.textContent?.includes('Age'),
     );
     if (!age) throw new Error('No Age sort button');
-    age.focus();
-    // `click()` is what Enter does on a focused button.
-    age.click();
-    await wait(20);
-    if (age.closest('th')?.getAttribute('aria-sort') !== 'ascending') {
-      throw new Error('Not sorted ascending');
-    }
-    const next = canvasElement.querySelector<HTMLButtonElement>('button[aria-label="Next page"]');
-    if (!next) throw new Error('No next button');
-    next.focus();
-    next.click();
-    await wait(20);
-    const live = canvasElement.querySelector('[aria-live="polite"]');
-    if (live?.textContent !== '11–20 of 50') throw new Error('Did not go to page 2');
-    if (document.activeElement !== next) throw new Error('Focus left the next button');
+    const next = canvas.getByRole('button', { name: 'Next page' });
+    const tabTo = async (target: HTMLElement) => {
+      for (let i = 0; i < 30 && document.activeElement !== target; i += 1) {
+        await userEvent.tab();
+      }
+      await expect(target).toHaveFocus();
+    };
+    await tabTo(age);
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(age.closest('th')).toHaveAttribute('aria-sort', 'ascending'));
+    await tabTo(next);
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() =>
+      expect(canvasElement.querySelector('[aria-live="polite"]')).toHaveTextContent('11–20 of 50'),
+    );
+    await expect(next).toHaveFocus();
   },
 };
 

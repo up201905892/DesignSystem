@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { useState } from 'react';
 import { Badge } from '../Badge';
 import {
@@ -328,26 +329,25 @@ export const CustomCompare: Story = {
 export const SortKeyboardInteraction: Story = {
   render: () => <SortableTable />,
   play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     const header = canvasElement.querySelector<HTMLElement>('th');
     const button = header?.querySelector<HTMLButtonElement>('button');
     if (!header || !button) throw new Error('No sortable header');
-    button.focus();
-    if (document.activeElement !== button) throw new Error('Sort button did not get the focus');
-    const firstCell = () => canvasElement.querySelector('tbody td')?.textContent;
-    if (header.getAttribute('aria-sort') !== 'none') throw new Error('Expected aria-sort none');
-    // React commits the update after the event, so wait for the next frame.
-    const settle = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-    button.click();
-    await settle();
-    if (header.getAttribute('aria-sort') !== 'ascending')
-      throw new Error('Expected aria-sort ascending');
-    if (firstCell() !== 'Ada Lovelace') throw new Error(`Unexpected first row ${firstCell()}`);
-    if (document.activeElement !== button) throw new Error('Focus left the sort button');
-    button.click();
-    await settle();
-    if (header.getAttribute('aria-sort') !== 'descending')
-      throw new Error('Expected aria-sort descending');
-    if (document.activeElement !== button) throw new Error('Focus left the sort button');
+    const firstCell = () => canvasElement.querySelector('tbody td');
+    // The scroll region (`tabIndex=0`) takes the first Tab; the sort button is next.
+    for (let i = 0; i < 3 && document.activeElement !== button; i += 1) {
+      await userEvent.tab();
+    }
+    await expect(button).toHaveFocus();
+    await expect(header).toHaveAttribute('aria-sort', 'none');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(header).toHaveAttribute('aria-sort', 'ascending'));
+    await expect(firstCell()).toHaveTextContent('Ada Lovelace');
+    await expect(canvas.getAllByRole('row').length).toBeGreaterThan(1);
+    await expect(button).toHaveFocus();
+    await userEvent.keyboard(' ');
+    await waitFor(() => expect(header).toHaveAttribute('aria-sort', 'descending'));
+    await expect(button).toHaveFocus();
   },
 };
 
