@@ -431,6 +431,15 @@ Modelo de entrada:
 - **Documentação:** JSDoc de `colSpan` com valores aceites e limite; story `Grid/SpanClamped` (com `play` em browser real) e `Grid/DarkTheme` existente. Sem `TODO` na tarefa.
 - **Lições:** o aviso só corre em `useEffect` (SSR seguro) e deteta produção por `process.env.NODE_ENV` com `try/catch`, com `process` declarado localmente por não haver `@types/node`. Sem sugestões novas para o planeador.
 
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`) — concluída a 2026-11-13
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-13), commit 07b77fd (implementação); sem commits de código de produção depois do commit testado (beb1f36 e 61c8aed são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `Accordion.css` com `overflow-wrap: anywhere` no texto do gatilho (também `flex: 1 1 auto` e `min-width: 0`) e no painel, com o ícone a manter `flex-shrink: 0`; `Dialog.css` com `overflow-wrap: anywhere` no título (também `min-width: 0`), na descrição e no corpo. Sem alterações aos `.tsx` nem à API.
+- **Changeset:** não foi criado ficheiro novo; acrescentei um parágrafo ao `first-release-components.md` (`minor`, grupo `fixed`), ainda não consumido, mesmo critério da DS-052 a DS-056
+- **Documentação:** stories `Accordion/LongWord` e `Dialog/LongWord` (com `play` em browser real) e `DarkTheme` existentes de ambos; props inalteradas. Sem `TODO` na tarefa.
+- **Lições:** prova negativa dos `play` não executada pelo testador (exigiria alterar código de produção). Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
