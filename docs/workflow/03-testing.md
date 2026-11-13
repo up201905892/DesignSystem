@@ -1661,3 +1661,40 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas (não são falhas):**
 - Consistência do histórico da DS-055: o commit 139d6f1 (finalizador, DS-056) apanhou a linha `Em desenvolvimento` da DS-055; o histórico da tarefa em `01-planeamento.md` está coerente (Planeado → Em desenvolvimento → Pronto para teste → Em teste) e a tabela-índice mostrava `Pronto para teste` antes do teste.
 - Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
+
+### DS-057 · Palavras longas no Accordion e no Dialog (`overflow-wrap`) — Relatório 1 — 2026-11-13
+
+- **Commit testado:** 07b77fd (implementação; beb1f36 é registo); presente no histórico de `develop`; sem alterações por guardar antes de começar
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1048, docs 9, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (32 suites, 230 testes, axe e `play`, chromium) | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Accordion.css`: `.ds-accordion__trigger-label` com `flex: 1 1 auto`, `min-width: 0`, `overflow-wrap: anywhere`; `.ds-accordion__content-inner` com `overflow-wrap: anywhere`; `.ds-accordion__icon` mantém `flex-shrink: 0` — diff e teste CSS
+- [x] `Dialog.css`: título, descrição e corpo com `overflow-wrap: anywhere`; título com `min-width: 0` (o cabeçalho é `flex` em coluna) — diff e teste CSS
+- [x] Texto normal inalterado: `overflow-wrap: anywhere` só quebra palavras que não cabem sozinhas; o diff só acrescenta linhas (12 no CSS), sem alterar outras propriedades
+- [x] Stylelint verde (`pnpm lint`); o commit não toca em `.tsx` de componente nem em `package.json` (só `.css`, testes e stories)
+- [x] Sobreposição com a DS-052: registada em `02-desenvolvimento.md` como inexistente
+- [x] G1 a G3 e C1 a C5: sem dependências novas, commit Conventional com ID, nenhum ficheiro do João alterado; testes e stories só nas pastas `Accordion` e `Dialog`
+
+**Testes exigidos:**
+- [x] Unitários: um teste novo em `Accordion.css.test.ts` e outro em `Dialog.css.test.ts`, com regex ligada ao seletor correto (não triviais); os existentes passam
+- [x] Acessibilidade: axe sem violações em `pnpm test:a11y`; teclado e árvore de acessibilidade inalterados (testes da DS-025 e da DS-031 verdes)
+- [x] Stories `Accordion/LongWord` (240px, palavra de 200 caracteres) e `Dialog/LongWord` (`size="sm"`) com `play` que falha com overflow horizontal e com chevron/botão de fechar fora do retângulo; passam em Chromium; `DarkTheme` de ambos continua a passar
+
+**Casos limite verificados:** `defaultOpen` do Dialog e painel aberto por omissão no Accordion; tema escuro (stories `DarkTheme`); sem props novas, logo modo controlado e `disabled` não mudam; sem cores novas, logo contraste inalterado.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas (não são falhas):**
+- Prova negativa dos `play` (remover o CSS e ver a story falhar) não executada: exigiria alterar código de produção, o que o testador não faz.
+- A `maxWidth: '240px'` da story `Accordion/LongWord` é um estilo inline de demonstração pedido pela especificação, fora do CSS do componente.
+- Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
