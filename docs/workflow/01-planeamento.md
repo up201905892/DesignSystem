@@ -49,7 +49,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Planeado |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
-| DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036 | Pronto para teste |
+| DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036 | Em teste |
 | DS-043 | Guias de temas e de personalização de estilos | Documentação | Média | DS-042 | Planeado |
 | DS-044 | App de exemplo: estrutura, layout e tema | Documentação | Alta | DS-036, DS-010 a DS-035 | Concluído |
 | DS-045 | App de exemplo: formulário e tabela de dados | Documentação | Alta | DS-044 | Concluído |
@@ -1657,6 +1657,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-13 · planeador · Planeado (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-13, Alterar): passa a depender só de DS-036 (deixa de depender da DS-040); a ligação para a página de acessibilidade só entra se a página já existir, senão fica registada para depois da DS-040
 - 2026-11-13 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-13 · programador · Em desenvolvimento → Pronto para teste · commit b920cc7
+- 2026-11-13 · testador · Pronto para teste → Em teste · início dos testes
 
 ### DS-043 · Guias de temas e de personalização de estilos
 
