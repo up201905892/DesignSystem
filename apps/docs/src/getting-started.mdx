@@ -1,0 +1,73 @@
+import { Meta, Source } from '@storybook/blocks';
+import { FirstButton } from './snippets/first-button';
+import entrySource from './snippets/entry.tsx?raw';
+import firstButtonSource from './snippets/first-button.tsx?raw';
+import themeToggleSource from './snippets/theme-toggle.tsx?raw';
+import iconsSource from './snippets/icons.tsx?raw';
+import typescriptSource from './snippets/typescript.tsx?raw';
+
+<Meta title="Getting started" />
+
+# Getting started
+
+## What is this library
+
+`@up201905892/ui` is an accessible React component library with light and dark themes. Every component works with the keyboard only, and all colours, spacing and radii come from design tokens.
+
+## Requirements
+
+- React 18 or 19 (`react` and `react-dom` are peer dependencies).
+- Node.js 22 or later for the tooling of this repository; the published packages run in any bundler that supports ES modules or CommonJS.
+
+## Installation
+
+<Source
+  language="bash"
+  dark
+  code={`pnpm add @up201905892/ui @up201905892/icons
+# or
+npm install @up201905892/ui @up201905892/icons
+# or
+yarn add @up201905892/ui @up201905892/icons`}
+/>
+
+`@up201905892/icons` is optional. It is only needed for the icon components described below.
+
+## Import the styles
+
+Import the stylesheet once, at the root of your application. It contains the design tokens for both themes and the styles of every component.
+
+<Source language="tsx" dark code={entrySource} />
+
+## Your first component
+
+<Source language="tsx" dark code={firstButtonSource} />
+
+This is the result:
+
+<FirstButton />
+
+## Dark theme
+
+The light theme is the default. Set `data-theme="dark"` on the `<html>` element to switch to the dark theme.
+
+<Source language="tsx" dark code={themeToggleSource} />
+
+## Icons
+
+Icons are React components from `@up201905892/icons`. They are decorative by default; pass a `title` when an icon carries meaning on its own.
+
+<Source language="tsx" dark code={iconsSource} />
+
+## TypeScript
+
+The packages ship their own type declarations. No extra `@types` package is needed.
+
+<Source language="tsx" dark code={typescriptSource} />
+
+## Next steps
+
+- [Colors](?path=/story/foundations-colors--colors): the colour palette and the semantic colours of each theme.
+- [Scales](?path=/story/foundations-scales--spacing): spacing, typography, radii, borders and shadows.
+- [Theme](?path=/story/foundations-theme--default): how the light and dark themes look.
+- [Source code on GitHub](https://github.com/up201905892/DesignSystem): issues and contributions.

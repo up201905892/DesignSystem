@@ -914,3 +914,20 @@ Modelo de entrada:
   - O `pnpm test` do `ui` corre o `build` (`package-metadata.test.ts`), por isso falhava antes de eu declarar o `process` localmente.
   - O commit `139d6f1` (finalizador, DS-056) apanhou a linha de estado `Em desenvolvimento` da DS-055 no `01-planeamento.md`; o commit de código é `b0e40b7`.
   - Sem sugestões novas para o planeador.
+
+### DS-042 · Página "Getting started" no Storybook
+
+**Iteração 1 — 2026-11-13**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** página `getting-started.mdx` em inglês, com `<Meta title="Getting started" />`, primeira na barra lateral por `storySort` (`Getting started`, `Foundations`, `Components`, `Utilities`, `Icons`). Secções pela ordem pedida: o que é, requisitos, instalação (pnpm, npm, yarn), estilos, primeiro `Button` (código e renderizado), tema escuro, ícones, TypeScript e ligações (Colors, Scales, Theme, repositório). Exemplos em `apps/docs/src/snippets/*.tsx`, importados como `?raw` e verificados pelo `typecheck`. `apps/docs` ganhou `vitest` (script `test`, `vitest.config.ts`), `@storybook/blocks` e `@up201905892/icons` como devDependencies (lockfile atualizado) e `env.d.ts` com os tipos do Vite para `?raw`.
+- **Ligação para a página de acessibilidade:** `apps/docs/src/accessibility.mdx` não existe (DS-040 por fazer), por isso a página não tem ligação nem texto provisório. A ligação fica por acrescentar depois da DS-040 (registar em "Decisões para o João").
+- **Ficheiros alterados:** `apps/docs/src/getting-started.mdx`, `apps/docs/src/getting-started.test.ts`, `apps/docs/src/env.d.ts`, `apps/docs/src/snippets/{first-button,theme-toggle,icons,typescript,entry}.tsx`, `apps/docs/vitest.config.ts`, `apps/docs/package.json`, `apps/docs/.storybook/preview.tsx`, `pnpm-lock.yaml`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** ver histórico do `01-planeamento.md` (`feat(ui): DS-042 add Getting started page to Storybook`)
+- **Critérios de aceitação cobertos:** todos, exceto a ligação de acessibilidade (condicional, não aplicável). G1: só `@storybook/blocks`, `vitest` e `icons` (já existentes no monorepo) como devDependencies do `docs`; G2 e G3 sem alterações.
+- **Testes escritos pelo programador:** `getting-started.test.ts` (todos os snippets referenciados, nomes reais dos pacotes, sem conteúdo provisório, sem ligação de acessibilidade enquanto a página não existir, títulos sem saltos).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens: 92, icons: 10, ui: 1046, docs: 9) · build ✔ · `build:docs` ✔ · `pnpm test:a11y` não executado.
+- **Notas para o testador:**
+  - O test runner do Storybook ignora páginas só de docs, por isso o axe não cobre a página; o contraste dos blocos de código e a hierarquia de títulos devem ser verificados no browser nos dois temas.
+  - O `typecheck` de `apps/docs` precisa do `build` do `ui` (os snippets importam `@up201905892/ui` por `dist`).
+  - Sugestão para o planeador: tarefa para acrescentar a ligação à página de acessibilidade depois da DS-040.
