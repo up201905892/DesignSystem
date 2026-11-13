@@ -15,3 +15,5 @@ Breaking change for early adopters: the `sideOffset` prop of `Tooltip` (and `Dro
 `Button` and `IconButton` accept `focusableWhenDisabled`: together with `disabled` the control stays in the Tab order (`aria-disabled`, click and form submission blocked) so focus is not lost when activating it disables it. `Pagination` uses it for the previous and next buttons.
 
 `GridItem` only accepts a whole-number `colSpan` of 1 or more (anything else is ignored, with a development-only warning) and clamps it to the number of columns of the enclosing `Grid` when `columns` is a number.
+
+`Accordion` (trigger and panel) and `Dialog` (title, description and body) break long words instead of overflowing, keeping the chevron and the close button visible.
