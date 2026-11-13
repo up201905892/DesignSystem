@@ -21,7 +21,8 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | 2026-11-13 | Responder | DS-044, DS-045 | Não acrescentar dependência das DS-051 a DS-057; ambas já estão concluídas. Pedido fechado. |
 | 2026-11-13 | Responder | DS-035 | `pageSize={0}` sem resumo fica como está. A revisão visual do DataTable no Storybook passa para a auditoria da DS-040. Pedido fechado. |
 | 2026-11-13 | Responder | DS-009 | Propor uma tarefa para o teste intermitente "fails for an img without alt" no helper de axe (encontrar a causa e estabilizar). |
-
+| 2026-11-13 | Alterar | DS-042 | Depender só de DS-036. O "Getting started" não precisa de esperar pela auditoria de acessibilidade; se a DS-040 mudar alguma coisa, a página atualiza-se depois. |
+| 2026-11-13 | Alterar | DS-047 | Depender só de DS-042. Publicar o Storybook no GitHub Pages não precisa do README (DS-046). |
 
 Decisões possíveis:
 
