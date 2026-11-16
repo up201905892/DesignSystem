@@ -18,6 +18,7 @@
     "test": "pnpm -r --if-present test",
     "test:watch": "pnpm -r --if-present test:watch",
     "build": "pnpm -r --if-present build",
+    "size": "pnpm --filter @up201905892/ui size",
     "storybook": "pnpm --filter docs storybook",
     "build:docs": "pnpm --filter docs build-storybook",
     "test:a11y": "pnpm --filter docs test:a11y",

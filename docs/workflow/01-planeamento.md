@@ -45,7 +45,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
-| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Planeado |
+| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Em desenvolvimento |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Planeado |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
@@ -1522,6 +1522,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 - 2026-11-05 · planeador · Proposta (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-04, Alterar): passa a depender também de DS-051 a DS-057, para a medição do bundle correr sobre o código final dos componentes; novo critério que regista o commit medido
 - 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
+- 2026-11-16 · programador · Planeado → Em desenvolvimento · início da implementação
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 

@@ -17,6 +17,14 @@ import { Button } from '@up201905892/ui';
 <Button>Save</Button>;
 ```
 
+## Bundle size
+
+`pnpm build && pnpm size` (from the repository root) measures, with [size-limit](https://github.com/ai/size-limit), what each export of `dist/index.js` costs and exits with a non-zero code if a limit is exceeded.
+
+- **Method.** One entry per runtime export of `src/index.ts` (`import { Button } from './dist/index.js'`), bundled and minified, then gzipped. `react`, `react-dom`, `react/jsx-runtime`, `@radix-ui/*` and `@up201905892/icons` are external: the consumer installs them, so they are not counted.
+- **Limits.** 5 kB gzip per export, 15 kB gzip for `dist/styles.css`; the whole library is reported without a limit.
+- **Entries.** `.size-limit.mjs` builds the list from `src/index.ts` (`scripts/size-entries.mjs`) and `src/size-limit.test.ts` fails if an export has no entry. A limit is never raised to make a check pass.
+
 ## How to create a component
 
 Every component follows the same checklist. `src/VisuallyHidden/` is the reference example.
