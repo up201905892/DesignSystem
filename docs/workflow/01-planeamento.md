@@ -67,6 +67,8 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Concluído |
 | DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Planeado |
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Proposta |
+| DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Proposta |
+| DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Proposta |
 
 ## Decisões aplicadas
 
@@ -1524,6 +1526,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
 - 2026-11-16 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-16 · programador · Em desenvolvimento (sem mudança de estado) · commit 317140f; BLOQUEADA: todos os exports medem ≥ 8,05 kB gzip (tree-shaking não funciona), à espera de decisão do João; ver 02-desenvolvimento.md
+- 2026-11-16 · planeador · Em desenvolvimento (sem mudança de estado) · proposta a DS-060 (build tree-shakeable), que remove a causa do bloqueio; dependências desta tarefa não alteradas. Sugestão ao João: `Alterar` a DS-038 para depender também da DS-060 (a medição final e o critério de tree-shaking só podem passar depois dela; a DS-060 não depende da DS-038, logo não há ciclo) e, quando a DS-060 estiver `Concluído`, `Desbloquear` a DS-038 para o programador repetir `pnpm build && pnpm size` sobre o novo build. Enquanto bloqueada, a DS-038 ocupa uma das 2 vagas de `Em desenvolvimento`
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 
@@ -2286,3 +2289,67 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-11-13 · planeador · — → Proposta · pedido do João (aprovacoes.md, 2026-11-13, Responder DS-009): encontrar a causa e estabilizar o teste intermitente do helper de axe
+
+### DS-060 · Build tree-shakeable de `@up201905892/ui`
+
+- **Fase do MVP:** Publicação
+- **Prioridade:** Alta
+- **Depende de:** DS-036, DS-010 a DS-035, DS-051 a DS-057 (todas `Concluído`). Não depende da DS-038: é a DS-038 que precisa desta tarefa (ver nota ao João no histórico da DS-038).
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** fazer com que `import { Button } from '@up201905892/ui'` leve só o código do `Button` e do que ele usa, e não a biblioteca inteira, para que a medição por componente da DS-038 (< 5 kB gzip) seja possível e o requisito de tamanho do MVP seja real.
+
+**Contexto (verificado no código e no registo da DS-038 em 2026-11-16):** `packages/ui/tsup.config.ts` gera um único `dist/index.js` a partir de `src/index.ts` (`format: ['esm', 'cjs']`, externos só `react` e `react-dom`). O `package.json` já declara `"sideEffects": ["**/*.css"]`. Medido no commit 317140f: as 70 entradas por export ficam entre 8,05 e 8,66 kB gzip e a biblioteca inteira mede 9,44 kB; o bundle de `import { Button }` contém `@radix-ui/react-dialog` e `ds-dialog`. Causa apontada pelo programador: cada componente é seguido de `Nome.displayName = '…'` (atribuição que o esbuild mantém como efeito secundário) e as chamadas `forwardRef(...)`/`createContext(...)` não têm `/* @__PURE__ */`; anotar só as chamadas com um plugin do esbuild não bastou. O teste `packages/ui/src/size-limit.test.ts` › "keeps the unrelated code out of an `import { Button }` bundle" está marcado `it.fails` à espera desta tarefa.
+
+**Critérios de aceitação:**
+- [ ] A abordagem escolhida (ex.: `displayName` definido sem efeito secundário de topo, com `/* @__PURE__ */` nas chamadas de `forwardRef`/`createContext`/`Object.assign`; `treeshake` do tsup; vários pontos de entrada internos com `splitting`) fica descrita em `02-desenvolvimento.md` com o motivo, e as alternativas experimentadas e descartadas com o resultado medido.
+- [ ] A API pública não muda: o `exports` do `package.json` mantém exatamente as entradas `"."`, `"./styles.css"` e `"./package.json"` (sem subcaminhos novos como `@up201905892/ui/button`); `Object.keys(await import('@up201905892/ui'))` é igual antes e depois (lista colada em `02-desenvolvimento.md` ou verificada por teste); `dist/index.js`, `dist/index.cjs`, `dist/index.d.ts` e `dist/index.d.cts` continuam a existir (chunks internos adicionais são permitidos).
+- [ ] Todos os componentes continuam com `displayName` igual ao nome exportado (C2): um teste percorre os exports de `src/index.ts` que são componentes React e verifica o `displayName` de cada um.
+- [ ] No teste `size-limit.test.ts`, o caso de tree-shaking passa de `it.fails` para `it` e passa: o bundle de `import { Button }` (esbuild, externos como na DS-038) não contém `@radix-ui/react-dialog` nem `ds-dialog`. O comentário "KNOWN FAILURE" é removido.
+- [ ] O mesmo teste ganha mais dois casos com `it`: `import { Stack }` não contém `@radix-ui/` nem `ds-button`; `import { Badge }` não contém `@radix-ui/` nem `ds-dialog`.
+- [ ] Os builds ESM e CJS continuam a carregar: `node -e "require('@up201905892/ui')"` e `node --input-type=module -e "import('@up201905892/ui')"`, a partir de `apps/docs`, terminam sem erro; o teste de metadados da DS-036 (`package-metadata.test.ts`) continua a passar.
+- [ ] Medição informativa: a tabela de `pnpm build && pnpm size` depois da alteração (uma linha por entrada, em kB gzip) é colada em `02-desenvolvimento.md` com o commit medido. Esta tarefa não altera `.size-limit.mjs`, os limites nem as entradas (são da DS-038); se algum export continuar acima de 5 kB, o nome e o valor ficam em "Decisões para o João".
+- [ ] Storybook, app de exemplo e testes continuam a funcionar sem alterações de código fora de `packages/ui` (o `pnpm test` de `apps/docs` e de `apps/example` passa).
+- [ ] Changeset `patch` para `@up201905892/ui` (o artefacto publicado muda, a API não).
+- [ ] G1 a G3 (sem dependências novas, salvo um plugin de build que a abordagem exija, nomeado e justificado em `02-desenvolvimento.md`).
+
+**Testes exigidos:**
+- Unitários: os três casos de tree-shaking em `size-limit.test.ts` (Button, Stack, Badge) com `it`; o teste de `displayName` de todos os componentes exportados; o teste de metadados da DS-036 e o teste de lista de entradas da DS-038 continuam verdes.
+- Acessibilidade: não aplicável (sem alteração de comportamento); `pnpm test:a11y` continua a passar.
+- Visual/Storybook: o Storybook arranca e as stories existentes funcionam; nenhuma story nova.
+- Verificação manual no terminal: `pnpm build && pnpm size` (código de saída e tabela registados, mesmo que algum limite falhe); prova negativa temporária (não commitada): repor num componente um `Nome.displayName = '…'` como atribuição de topo do módulo, no estilo anterior, faz o caso de tree-shaking correspondente falhar.
+
+**Fora de âmbito:** alterar limites, entradas ou externos do `size-limit` e fechar a DS-038 (a medição final é da DS-038); subcaminhos de importação por componente no `exports`; mudar dependências do Radix ou do pacote de ícones; `preserveModules` no pacote `icons` ou `tokens`; passo `pnpm size` no CI (`.github/`, ficheiro do João).
+
+**Histórico:**
+- 2026-11-16 · planeador · — → Proposta · bloqueio da DS-038 (02-desenvolvimento.md, iteração 1): `import { Button }` arrasta a biblioteca inteira; sugestão do programador
+
+### DS-061 · "Getting started": ligação para "Accessibility/Conformance"
+
+- **Fase do MVP:** Documentação
+- **Prioridade:** Média
+- **Depende de:** DS-040, DS-042
+- **Estimativa:** S (≤ 2h)
+
+**Objetivo:** depois de a página de conformidade existir (DS-040) e de a página de entrada estar fechada (DS-042), ligar uma à outra, para que quem começa pela página "Getting started" encontre a declaração de acessibilidade da biblioteca.
+
+**Contexto (verificado no código em 2026-11-16):** `apps/docs/src/accessibility.mdx` existe com `<Meta title="Accessibility/Conformance" />`. `apps/docs/src/getting-started.mdx` tem na secção de ligações (linhas 70–72) ligações no formato `?path=/story/…` para Colors, Scales e Theme, e nenhuma para a acessibilidade (critério condicional da DS-042). `apps/docs/src/getting-started.test.ts` tem o caso "does not link to the accessibility page while it does not exist", que só verifica a ausência enquanto o ficheiro não existir. Sugestão do programador nos registos da DS-042 e da DS-040.
+
+**Critérios de aceitação:**
+- [ ] `getting-started.mdx` ganha, na secção de ligações, uma entrada em inglês para a página de conformidade, com texto descritivo (ex.: "Accessibility conformance: how each component meets WCAG 2.1 AA"), no mesmo formato das restantes, apontando para `?path=/docs/accessibility-conformance--docs`.
+- [ ] A frase de apresentação da biblioteca (secção inicial) não é reescrita; só a secção de ligações muda.
+- [ ] `getting-started.test.ts`: o caso condicional passa a "links to the accessibility conformance page" e verifica que `accessibility.mdx` existe, que o `Meta title` dessa página é `Accessibility/Conformance` e que a página "Getting started" contém uma ligação cujo destino é o id derivado desse título (`accessibility-conformance--docs`). O ramo "enquanto não existir" é removido.
+- [ ] Ao seguir a ligação no Storybook construído (`pnpm build:docs`), abre a página "Accessibility/Conformance" (verificado pelo testador em browser, ou por um teste que confirma que o id existe no `index.json` do `storybook-static`).
+- [ ] Texto sem erros ortográficos nem conteúdo provisório; o teste "sem conteúdo provisório" da DS-042 continua a passar.
+- [ ] Nenhuma alteração em `packages/` nem em `accessibility.mdx`.
+- [ ] G1 a G3 (sem dependências novas); sem changeset (`apps/docs` é privado).
+
+**Testes exigidos:**
+- Unitários: o caso novo de `getting-started.test.ts` descrito acima; os restantes testes da página continuam verdes. Prova negativa temporária (não commitada): mudar o destino da ligação para `accessibility-conformance--story` faz o teste falhar.
+- Acessibilidade: a ligação tem texto descritivo (não "here" nem "click"); a hierarquia de títulos da página não muda; `pnpm test:a11y` continua a passar.
+- Visual/Storybook: a página "Getting started" abre como página inicial e a ligação nova leva à página de conformidade nos dois temas.
+
+**Fora de âmbito:** ligações para os guias de temas e estilos (DS-043); alterações ao conteúdo da página de conformidade; ligação no README (DS-046).
+
+**Histórico:**
+- 2026-11-16 · planeador · — → Proposta · sugestão do programador nos registos da DS-042 e da DS-040 (02-desenvolvimento.md)
