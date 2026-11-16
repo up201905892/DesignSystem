@@ -144,7 +144,7 @@ export const StickyHeader: Story = {
 
 export const HorizontalScroll: Story = {
   render: (args) => (
-    <div style={{ width: '20rem' }}>
+    <div style={{ width: '20rem', maxWidth: '100%' }}>
       <Table {...args}>
         <TableHead>
           <TableRow>
@@ -279,8 +279,8 @@ function ControlledSort() {
   return (
     <div style={{ display: 'grid', gap: 'var(--ds-space-3)' }}>
       <SortableTable sort={sort} onSortChange={setSort} />
-      <p style={{ margin: 0 }}>
-        Sort state: <code>{JSON.stringify(sort)}</code>
+      <p style={{ margin: 0, overflowWrap: 'anywhere' }}>
+        Sort state:<code>{JSON.stringify(sort)}</code>
       </p>
     </div>
   );

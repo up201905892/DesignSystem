@@ -15,13 +15,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const target = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  minHeight: 'var(--ds-space-6)',
+} as const;
+
 function Controls() {
   return (
     <div style={{ display: 'flex', gap: 'var(--ds-space-4)', alignItems: 'center' }}>
-      <button type="button" className="ds-focus-ring">
+      <button type="button" className="ds-focus-ring" style={target}>
         Native button
       </button>
-      <a href="#focus-ring" className="ds-focus-ring">
+      <a href="#focus-ring" className="ds-focus-ring" style={target}>
         Native link
       </a>
     </div>

@@ -22,6 +22,8 @@
     "storybook": "pnpm --filter docs storybook",
     "build:docs": "pnpm --filter docs build-storybook",
     "test:a11y": "pnpm --filter docs test:a11y",
+    "test:a11y:reflow": "pnpm --filter docs test:a11y:reflow",
+    "test:a11y:sizes": "pnpm --filter docs test:a11y:sizes",
     "test:a11y:setup": "pnpm --filter docs test:a11y:setup"
   },
   "devDependencies": {

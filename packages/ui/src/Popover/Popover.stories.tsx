@@ -38,8 +38,8 @@ export const Placement: Story = {
   render: () => (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, max-content)',
+        display: 'flex',
+        flexWrap: 'wrap',
         gap: 'var(--ds-space-8)',
       }}
     >
@@ -98,7 +98,14 @@ export const WithCloseButton: Story = {
 function ControlledExample() {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ display: 'flex', gap: 'var(--ds-space-3)', alignItems: 'flex-start' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 'var(--ds-space-3)',
+        alignItems: 'flex-start',
+      }}
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="secondary">{open ? 'Open' : 'Closed'}</Button>

@@ -105,6 +105,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ds-space-2);
+  /* WCAG 2.5.8: the sort button is at least 24px tall. */
+  min-height: var(--ds-space-6);
   margin: 0;
   padding: 0;
   border: 0;

@@ -25,6 +25,11 @@ describe('Table.css', () => {
     expect(css).toMatch(/\[data-numeric='true'\]\s*{[^}]*tabular-nums/);
   });
 
+  it('keeps the sort button at least 24px tall (WCAG 2.5.8)', () => {
+    expect(css).toMatch(/\.ds-table__sort-button\s*{[^}]*min-height:\s*var\(--ds-space-6\)/);
+    expect(all).toMatch(/--ds-space-6:\s*1\.5rem/);
+  });
+
   it('has no hard-coded colours', () => {
     expect(css).not.toMatch(/#[0-9a-fA-F]{3,8}\b|rgba?\(/);
   });

@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Field, FieldDescription, FieldError, FieldLabel, useFieldControl } from './Field';
 
 /** Native input wired through the hook until the Input component exists. */
-const NativeInput = () => <input {...useFieldControl()} />;
+const NativeInput = () => (
+  <input {...useFieldControl()} style={{ minHeight: 'var(--ds-space-6)' }} />
+);
 
 const meta = {
   title: 'Components/Field',

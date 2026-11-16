@@ -14,7 +14,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const column = { display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-3)' } as const;
-const row = { display: 'flex', gap: 'var(--ds-space-3)', alignItems: 'flex-start' } as const;
+const row = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 'var(--ds-space-3)',
+  alignItems: 'flex-start',
+} as const;
 
 const heights = { sm: 32, md: 40, lg: 48 } as const;
 

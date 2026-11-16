@@ -140,9 +140,10 @@ function PositionsDemo() {
         ))}
       </div>
       <div style={{ marginTop: 'var(--ds-space-4)' }}>
-        <label>
-          Position{' '}
+        <label style={{ display: 'inline-flex', gap: 'var(--ds-space-2)', alignItems: 'center' }}>
+          Position
           <select
+            style={{ minHeight: 'var(--ds-space-6)' }}
             value={position}
             onChange={(event) => setPosition(event.target.value as typeof position)}
           >

@@ -49,7 +49,7 @@ export const Gaps: Story = {
   render: () => (
     <Stack gap={6}>
       {gaps.map((gap) => (
-        <Stack key={gap} direction="horizontal" gap={gap} align="center">
+        <Stack key={gap} direction="horizontal" gap={gap} align="center" wrap>
           <span style={{ width: '4rem', color: 'var(--ds-color-text-default)' }}>gap {gap}</span>
           <Box>A</Box>
           <Box>B</Box>

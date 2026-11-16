@@ -52,7 +52,7 @@ export const Default: Story = { args: { defaultOpen: true } };
 
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--ds-space-3)' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-space-3)' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <Dialog key={size}>
           <DialogTrigger asChild>

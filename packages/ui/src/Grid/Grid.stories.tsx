@@ -30,8 +30,12 @@ export const Columns: Story = {
   render: () => (
     <Grid columns={1} gap={6}>
       {([1, 2, 3, 4, 6, 12] as const).map((n) => (
-        <Grid key={n} columns={n} gap={2}>
-          {cells(n)}
+        <Grid key={n} columns={n} gap={1}>
+          {cells(n).map((cell) => (
+            <div key={cell.key} style={{ minWidth: 0, overflow: 'hidden' }}>
+              {cell}
+            </div>
+          ))}
         </Grid>
       ))}
     </Grid>

@@ -8,6 +8,8 @@
     "build-storybook": "pnpm --filter @up201905892/tokens build && storybook build",
     "test": "vitest run",
     "test:a11y": "node scripts/test-a11y.mjs",
+    "test:a11y:reflow": "node scripts/test-a11y.mjs reflow",
+    "test:a11y:sizes": "node scripts/test-a11y.mjs sizes",
     "test:a11y:setup": "playwright install chromium",
     "typecheck": "pnpm --filter @up201905892/tokens build && tsc --noEmit"
   },

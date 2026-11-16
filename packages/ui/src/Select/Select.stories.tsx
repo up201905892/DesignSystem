@@ -24,7 +24,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const column = { display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-3)' } as const;
-const row = { display: 'flex', gap: 'var(--ds-space-3)', alignItems: 'center' } as const;
+const row = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 'var(--ds-space-3)',
+  alignItems: 'center',
+} as const;
 const heights = { sm: 32, md: 40, lg: 48 } as const;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,7 +40,7 @@ export const WithDefaultValue: Story = { args: { defaultValue: 'banana' } };
 
 export const Sizes: Story = {
   render: () => (
-    <div style={{ ...column, width: '20rem' }}>
+    <div style={{ ...column, width: '20rem', maxWidth: '100%' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size} style={row}>
           <Select aria-label={`Select ${size}`} size={size} placeholder={`Select ${size}`}>
@@ -105,7 +110,7 @@ export const Disabled: Story = {
 
 export const WithField: Story = {
   render: () => (
-    <div style={{ width: '20rem' }}>
+    <div style={{ width: '20rem', maxWidth: '100%' }}>
       <Field invalid required>
         <FieldLabel>Country</FieldLabel>
         <Select placeholder="Choose a country">

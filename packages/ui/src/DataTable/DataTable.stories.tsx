@@ -164,6 +164,36 @@ export const KeyboardInteraction: Story = {
   },
 };
 
+export const LiveSummary: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The summary is an `aria-live="polite"` region. The `play` function reads its text, goes to the next page with the keyboard and reads it again.',
+      },
+    },
+  },
+  render: () => (
+    <DataTable caption="People" data={people} columns={columns} getRowId={(p) => p.id} />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const live = canvasElement.querySelector('[aria-live="polite"]');
+    if (!live) throw new Error('No aria-live="polite" summary');
+    await expect(live).toHaveTextContent('1–10 of 50');
+    const next = canvas.getByRole('button', { name: 'Next page' });
+    for (let i = 0; i < 30 && document.activeElement !== next; i += 1) {
+      await userEvent.tab();
+    }
+    await expect(next).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(live).toHaveTextContent('11–20 of 50'));
+    await userEvent.keyboard(' ');
+    await waitFor(() => expect(live).toHaveTextContent('21–30 of 50'));
+    await expect(live).toHaveAttribute('aria-live', 'polite');
+  },
+};
+
 export const DarkTheme: Story = {
   parameters: { theme: 'dark' },
   render: () => (
