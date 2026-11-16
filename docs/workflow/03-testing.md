@@ -1736,3 +1736,49 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Falhas:** nenhuma encontrada até ao momento.
 
 **Notas:** `apps/docs/storybook-static` foi gerado por `pnpm build:docs` e está no `.gitignore`; nenhum ficheiro temporário foi criado e nenhum processo ficou a correr.
+
+### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA) — Relatório 1 — 2026-11-16
+
+- **Commit testado:** 674e068 (presente no histórico de `develop`; `git status` limpo antes de começar; registo do programador em ddb2b20)
+- **Resultado:** Incompleto (sem veredicto). A revisão visual do DataTable e a verificação manual só com teclado exigem servir o `storybook-static` em segundo plano, o que as permissões bloquearam; a tarefa fica em `Em teste`.
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Build | `pnpm build` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1151 + 1 falha esperada (`expected fail`), docs 91, example 28) | ✔ |
+| Acessibilidade (axe) | `pnpm test:a11y` (33 suites, 233 testes) | ✔ |
+| Reflow a 320px | `pnpm test:a11y:reflow` (33 suites, 233 testes) | ✔ |
+| Alturas e alvos | `pnpm test:a11y:sizes` (33 suites, 233 testes) | ✔ |
+| Prova negativa das alturas | reduzir `min-height` do `Button` | NÃO EXECUTADO (exigiria alterar código de produção, o que o testador não faz; o programador regista a prova) |
+| Revisão visual do DataTable (320px e 1280px, dois temas, pontos a a d) | Chromium com Playwright sobre `storybook-static` servido | NÃO EXECUTADO |
+| Verificação manual só com teclado (Select, Dialog, DropdownMenu, Popover, Tooltip, DataTable, dois temas) | idem | NÃO EXECUTADO |
+| Página "Accessibility/Conformance" aberta sem erros no browser | idem | NÃO EXECUTADO (só confirmada pelo build e por `accessibility.test.ts`) |
+
+**Critérios de aceitação verificados (sem browser manual):**
+- [x] Página de conformidade: `accessibility.mdx` lida; uma linha por export (teste `accessibility.test.ts` compara com `index.ts`, verde); colunas ARIA, APG, teclas, WCAG, verificação
+- [x] Teclado: `keyboard-coverage.test.ts` verde e testes de teclado existentes lidos por amostragem (F8 no Toast, Escape no Tooltip); ver nota 1
+- [x] `pnpm test:a11y` verde e `DarkTheme` em todos (teste de convenções verde)
+- [x] Reflow: `pnpm test:a11y:reflow` verde, `reflowExceptions` vazio, `LongWord` de Card, Accordion e Dialog sem exceção
+- [x] Movimento: `motion.test.ts` verde; `grep` de `animation`/`transition` em `packages/ui/src/**/*.css` lido, todas as regras em seletores `ds-`
+- [x] Alturas: `pnpm test:a11y:sizes` verde; código de `checkSizes` lido (Button, IconButton com largura, Input, Select, Textarea, em sm/md/lg; falha se algum não for encontrado)
+- [x] Alvos 24x24px: `checkTargets` lido, corre em todas as stories; exceções listadas e justificadas na página
+- [x] Linhas de `Button`, `IconButton` e `Pagination` descrevem `focusableWhenDisabled`; as referências aos `play` com `userEvent` (DS-054) estão na página
+- [x] Changeset `patch` presente (`.changeset/ds-040-sort-button-target.md`); sem dependências novas
+- [ ] Revisão visual do DataTable (a) a (d) em browser: NÃO VERIFICADO, bloqueado. Só há a parte automatizada (`checkDataTable`, axe nos dois temas, `play` de `LiveSummary`, que passou)
+- [ ] Prova negativa e verificação manual só com teclado: NÃO VERIFICADO, bloqueado ou fora do que o testador pode fazer
+
+**Comando bloqueado pelas permissões (não contornado):**
+- `pnpm exec http-server storybook-static -p 6010 -a 127.0.0.1 -s &` (em `apps/docs`), para servir o Storybook estático em segundo plano. O ambiente recusou-o ("This command can't be checked before it runs"). Os scripts `pnpm test:a11y*` servem o Storybook por si e funcionaram, mas não permitem inspeção manual nem capturas.
+- Para desbloquear: o João autoriza servir a pasta em segundo plano (ou a serve ele), e o testador repete a revisão visual e a verificação por teclado.
+
+**Notas (não são falhas):**
+1. `keyboard-coverage.test.ts` só confirma por expressão regular que as teclas aparecem em algum teste do componente (por exemplo, o espaço é qualquer `' '`); é uma rede de segurança fraca. Não encontrei lacunas por leitura de amostras.
+2. A página diz "checked with the keyboard" para o focus do DataTable; é a verificação automatizada por Tab no test runner, não manual (a página tem a ressalva final).
+3. O botão de ordenação passou a 24px, pelo que a linha de cabeçalho das tabelas ordenáveis pode ficar mais alta (a ver na revisão visual).
+4. Ficheiros temporários: nenhum criado; nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma encontrada até ao momento.
