@@ -47,7 +47,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Em desenvolvimento |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
-| DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Planeado |
+| DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Pronto para teste |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
 | DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036 | Em teste |
 | DS-043 | Guias de temas e de personalização de estilos | Documentação | Média | DS-042 | Planeado |
@@ -1591,6 +1591,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-05 · planeador · Proposta (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-04, Alterar): passa a depender também de DS-051 a DS-057, para a auditoria correr sobre o código final dos componentes; novo critério que liga a página de conformidade às alterações dessas tarefas
 - 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
 - 2026-11-13 · planeador · Planeado (sem mudança de estado) · especificação revista segundo a resposta do João à DS-035 (aprovacoes.md, 2026-11-13, Responder): a revisão visual do DataTable no Storybook passa para esta auditoria (critério e teste novos); `pageSize={0}` sem resumo é comportamento aceite
+- 2026-11-16 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-16 · programador · Em desenvolvimento → Pronto para teste · commit 674e068
 
 ### DS-041 · Preparação da versão 1.0.0 e guia de publicação manual
 
