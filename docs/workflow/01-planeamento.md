@@ -1523,6 +1523,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-05 · planeador · Proposta (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-04, Alterar): passa a depender também de DS-051 a DS-057, para a medição do bundle correr sobre o código final dos componentes; novo critério que regista o commit medido
 - 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
 - 2026-11-16 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-16 · programador · Em desenvolvimento (sem mudança de estado) · commit 317140f; BLOQUEADA: todos os exports medem ≥ 8,05 kB gzip (tree-shaking não funciona), à espera de decisão do João; ver 02-desenvolvimento.md
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 
