@@ -1658,6 +1658,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-13 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-13 · programador · Em desenvolvimento → Pronto para teste · commit b920cc7
 - 2026-11-13 · testador · Pronto para teste → Em teste · início dos testes
+- 2026-11-16 · testador · Em teste (sem mudança de estado) · relatório 1 incompleto: G1 verde, falta a verificação em browser da página MDX (servidor em segundo plano bloqueado pelas permissões; ver 03-testing.md)
 
 ### DS-043 · Guias de temas e de personalização de estilos
 

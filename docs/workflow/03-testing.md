@@ -1698,3 +1698,41 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 - Prova negativa dos `play` (remover o CSS e ver a story falhar) não executada: exigiria alterar código de produção, o que o testador não faz.
 - A `maxWidth: '240px'` da story `Accordion/LongWord` é um estilo inline de demonstração pedido pela especificação, fora do CSS do componente.
 - Ficheiros temporários: nenhum criado; `git status` só mostra os ficheiros de registo.
+
+### DS-042 · Página "Getting started" no Storybook — Relatório 1 — 2026-11-16
+
+- **Commit testado:** b920cc7 (presente no histórico de `develop`); sem alterações por guardar antes de começar
+- **Resultado:** Incompleto (sem veredicto). A verificação em browser da página MDX não foi executada por falta de permissão; a tarefa fica em `Em teste`.
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Build | `pnpm build` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1048, docs 9, example 28) | ✔ |
+| Acessibilidade (stories) | `pnpm test:a11y` (32 suites, 230 testes) | ✔ |
+| Storybook estático | `pnpm build:docs` | ✔ |
+| Página MDX no browser (axe, contraste dos blocos de código, títulos, tema claro e escuro) | servir `storybook-static` e abrir `getting-started--docs` com Playwright | NÃO EXECUTADO |
+
+**Verificado sem browser:**
+- [x] Página em inglês, secções pela ordem pedida, sem "TODO" nem "lorem" — leitura de `getting-started.mdx` e `grep`
+- [x] `getting-started` primeiro em `storySort`; o ID `getting-started--docs` existe no `index.json` do build
+- [x] Títulos: um `h1` e sete `h2` no MDX, sem saltos (a hierarquia renderizada não foi vista)
+- [x] Ligações internas (Colors, Scales, Theme) apontam para IDs que existem no `index.json`; sem ligação para a página de acessibilidade, que não existe
+- [x] Snippets em `snippets/*.tsx` importados com `?raw` e verificados por `pnpm typecheck`; `getting-started.test.ts` verde
+- [x] Nomes de pacotes reais (`@up201905892/ui`, `@up201905892/icons`)
+
+**Por verificar (bloqueado):**
+- axe na página renderizada, nos dois temas
+- contraste dos blocos de código (os `<Source dark>` forçam fundo escuro; falta ver o contraste com `data-theme="light"` e `"dark"`)
+- renderização do exemplo `FirstButton` e hierarquia de títulos tal como o Storybook Docs a renderiza
+
+**Comando bloqueado pelas permissões (não contornado):**
+- Servir `apps/docs/storybook-static` em segundo plano (`http-server storybook-static -p 6008 -a 127.0.0.1 -s &`), necessário para abrir o Storybook estático num browser. O ambiente recusou-o ("This command can't be checked before it runs" e pedido de aprovação). `test-storybook` ignora páginas só de docs, por isso `pnpm test:a11y` não cobre esta página.
+- Para desbloquear: o João autoriza servir a pasta em segundo plano (ou a serve ele), e o testador repete a verificação com Playwright e axe.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma encontrada até ao momento.
+
+**Notas:** `apps/docs/storybook-static` foi gerado por `pnpm build:docs` e está no `.gitignore`; nenhum ficheiro temporário foi criado e nenhum processo ficou a correr.
