@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-16
+
+- **Decisões para o João:**
+  1. **Aprovar DS-060** (build tree-shakeable do `ui`). Desbloqueia a DS-038: todos os 70 exports medem 8,05–8,66 kB gzip (limite 5 kB) porque `import { Button }` arrasta a biblioteca toda (`displayName` e `forwardRef` sem `/* @__PURE__ */`). Depois: `Alterar` DS-038 para depender também da DS-060 e, quando a DS-060 estiver `Concluído`, `Desbloquear` a DS-038. Entretanto a DS-038 ocupa 1 das 2 vagas de desenvolvimento.
+  2. **DS-042 e DS-040 paradas em `Em teste`.** O testador foi bloqueado ao servir o Storybook estático em segundo plano (`http-server storybook-static -p 6008|6010 -a 127.0.0.1 -s &`, "can't be checked before it runs"). Falta: axe e contraste da página MDX da DS-042 nos dois temas; revisão visual do DataTable e verificação manual por teclado (DS-040). Autorizar esse comando em `.claude/settings.json` (é só teu) ou dizer como queres que se teste. Tudo o resto passou, sem falhas. Nota: o programador conseguiu servir o Storybook, o testador não; as permissões estão inconsistentes entre agentes.
+  3. **Aprovar DS-059** (teste intermitente do axe) e **DS-061** (ligação do "Getting started" para "Accessibility/Conformance"; só arranca depois de DS-040 e DS-042).
+  4. Pedidos para `.github/` (só teu): passo `pnpm size` no CI (DS-038), e opcionalmente `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` (DS-040). Pendentes anteriores: `ci.yml` sem `pnpm build` prévio e `source` do icons na DS-039.
+- **Concluídas:** nenhuma.
+- **Testadas:** DS-042 e DS-040, sem veredicto (verificação em browser bloqueada; G1 completo verde nas duas).
+- **Desenvolvidas:** DS-040 (Pronto para teste → Em teste), DS-038 (parada em `Em desenvolvimento`, bloqueada pelo tree-shaking; nenhum limite foi aumentado). Também em `devDependencies` do `ui`: `esbuild@^0.27.7` (já era transitivo).
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Propostas novas:** DS-060, DS-061.
+- **Violações de regras encontradas:** nenhuma.
+- **Próximo passo:** DS-058 (Baixa, `Planeado`) é a única tarefa desenvolvível; DS-039/041 esperam pela DS-038. Sem aprovações, o ciclo fica quase sem trabalho.
+
 ## 2026-11-13
 
 - **Decisões para o João:**
