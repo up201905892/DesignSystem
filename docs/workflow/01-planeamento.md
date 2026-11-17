@@ -65,7 +65,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-055 | GridItem: validação de `colSpan` e limite ao número de colunas | Layout e dados | Baixa | DS-028 | Concluído |
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Concluído |
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Concluído |
-| DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Planeado |
+| DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Pronto para teste |
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Proposta |
 | DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Proposta |
 | DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Proposta |
@@ -2257,6 +2257,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-11-12 · planeador · — → Proposta · observação do programador, do testador e do finalizador da DS-053; pergunta ao João no registo diário de 2026-11-11
 - 2026-11-13 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-13)
+- 2026-11-17 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-17 · programador · Em desenvolvimento → Pronto para teste · commit 8bb9445
 
 ### DS-059 · Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt"
 

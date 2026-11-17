@@ -990,3 +990,19 @@ Modelo de entrada:
   - A página "Getting started" (DS-042, `Em teste`) não liga para `Accessibility/Conformance`; a ligação fica por acrescentar depois de a DS-042 estar fechada (tarefa nova para o planeador, ou ajuste na própria DS-042).
   - Opcional: passos `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` no CI (`.github/`, ficheiro do João).
 - **Sugestões para o planeador:** tarefa para a ligação "Getting started" → "Accessibility/Conformance" depois da DS-042; nenhuma limitação conhecida nova ficou por corrigir.
+
+### DS-058 · Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token
+
+**Iteração 1 — 2026-11-17**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `Theme.stories.tsx`: superfície com `var(--ds-shadow-raised)` e `var(--ds-border-width-1)`; `Colors.stories.tsx` (2 bordas) e `Scales.stories.tsx` (`Radii`) com `var(--ds-border-width-1|2)`. Story `Foundations/Scales › Shadows` com secção "Primitive shadows" (parágrafo em inglês a dizer que os componentes usam as semânticas) e secção "Semantic shadows": um painel por tema com `data-theme`, gerado de `themes.light.shadow` e `themes.dark.shadow`, cada linha com variável CSS, valor e amostra sobre `--ds-color-bg-surface`.
+- **`play` novos:** `Foundations/Theme/DarkTheme` (box-shadow da superfície diferente de `none`, igual ao valor normalizado de `--ds-shadow-raised` e diferente da primeira sombra primitiva, lida de `tokens.shadow`, para o grep da tarefa ficar vazio); `Foundations/Scales/Shadows` (3 amostras por painel; `raised` no painel `dark` com box-shadow diferente do `light`).
+- **Prova negativa (não commitada):** repor `var(--ds-shadow-sm)` na superfície fez `pnpm test:a11y` falhar em `Foundations/Theme › DarkTheme › play-test` (`expected 'rgba(0, 0, 0, 0.05) 0px 1px 2px 0px' to be 'rgba(0, 0, 0, 0.5) 0px 4px 6px -1px, …'`); revertido.
+- **Ficheiros alterados:** `apps/docs/src/foundations/{Theme,Colors,Scales}.stories.tsx`, `docs/workflow/{01-planeamento.md,02-desenvolvimento.md}`. Nada em `packages/`.
+- **Commit(s):** 8bb9445 `feat(ui): DS-058 use semantic shadows and border width tokens in foundations pages`
+- **Critérios de aceitação cobertos:** todos; o grep `grep -rnE "\-\-ds-shadow-(sm|md|lg)\b|'[0-9]+px solid|\"[0-9]+px solid" apps/docs/src` não devolve resultados. G1 a G3: sem dependências novas.
+- **Testes escritos pelo programador:** os dois `play` acima (`apps/docs` não tem testes unitários para stories).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens 92, icons 10, ui 1151 + 1 falha esperada da DS-038, docs 91, example 28) · build ✔ · `pnpm test:a11y` ✔ (233). Nenhum comando foi recusado pelas permissões, exceto comandos compostos e `sed -i`/`python3` que usei de outra forma (Edit).
+- **Notas para o testador:** o contraste dos rótulos nos dois painéis é verificado pelo axe em `Shadows`; não abri as páginas num browser para inspeção visual. O `play` de `DarkTheme` normaliza o valor da variável com um elemento de apoio, porque o `getComputedStyle` reescreve cores e ordem.
+
