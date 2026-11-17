@@ -2,6 +2,21 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-17
+
+- **Decisões para o João:**
+  1. **Aprovar DS-060** (build tree-shakeable do `ui`) e depois `Alterar` DS-038 para depender dela e `Desbloquear` quando a DS-060 estiver `Concluído`. É o que desbloqueia a DS-038, DS-039 e DS-041. A DS-038 continua a ocupar 1 das 2 vagas.
+  2. **Violação: DS-042 está há 4 dias em `Em teste`** (desde 2026-11-13), parada pelo mesmo bloqueio de permissões. A DS-040 (`Em teste`) está igual. Não voltei a testar nenhuma das duas, porque nada mudou. Falta autorizar em `.claude/settings.json` (é só teu) servir o `storybook-static` em segundo plano (`http-server storybook-static -p <porta> -a 127.0.0.1 -s &`), ou dizer como queres que se teste.
+  3. **Aprovar DS-059** (teste intermitente do axe) e **DS-061** (ligação do "Getting started" para "Accessibility/Conformance").
+  4. Pedidos para `.github/` (só teu), sem resposta: passo `pnpm size` no CI (DS-038), opcionalmente `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` (DS-040), `ci.yml` sem `pnpm build` prévio e `source` do icons na DS-039.
+- **Concluídas:** DS-058 (sombras semânticas e larguras de borda nas páginas de fundações). Ciclo completo hoje, relatório 1 Aprovado, `test:a11y` com 233 testes verdes. Ressalva: a prova negativa de repor `--ds-shadow-sm` foi só a do programador (o testador não alterou código); sem inspeção visual em browser.
+- **Testadas:** DS-058 (Aprovado). DS-042 e DS-040 não retestadas (ver decisão 2).
+- **Desenvolvidas:** DS-058.
+- **Decisões aplicadas:** nenhuma (`aprovacoes.md` não tem linhas novas desde 2026-11-13).
+- **Propostas novas:** nenhuma. Há 3 propostas por aprovar (DS-059, DS-060, DS-061) e nenhuma tarefa `Planeado` com dependências satisfeitas; propor mais só aumentaria a fila.
+- **Violações de regras encontradas:** DS-042 em `Em teste` há mais de 3 dias (acima). Mais nenhuma.
+- **Próximo passo:** o ciclo está sem trabalho desenvolvível até haveres decisões: aprovações (DS-060, DS-059, DS-061) e/ou o desbloqueio dos testes de DS-042 e DS-040. Isso liberta DS-043, DS-047 a DS-049 e DS-046.
+
 ## 2026-11-16
 
 - **Decisões para o João:**
