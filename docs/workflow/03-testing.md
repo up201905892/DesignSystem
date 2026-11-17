@@ -1782,3 +1782,40 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas:** nenhuma encontrada até ao momento.
+
+### DS-058 · Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token — Relatório 1 — 2026-11-17
+
+- **Commit testado:** 8bb9445 (registo do programador em e9819ad; ambos no histórico de `develop`; `git status` limpo antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (ESLint, Stylelint, Prettier) | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1151 + 1 falha esperada, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (33 suites, 233 testes, inclui os `play` novos de `Theme/DarkTheme` e `Scales/Shadows`) | ✔ |
+| Build | `pnpm build` | ✔ |
+
+**Critérios de aceitação:**
+- [x] `Theme.stories.tsx`: leitura do diff; superfície com `var(--ds-shadow-raised)` e `var(--ds-border-width-1) solid var(--ds-color-border-default)`
+- [x] `Colors.stories.tsx` e `Scales.stories.tsx`: diff mostra `1px`/`2px` trocados por `var(--ds-border-width-1|2)`; `packages/tokens/dist/tokens.css` define 1px e 2px, por isso sem mudança visual
+- [x] `grep -rnE "\-\-ds-shadow-(sm|md|lg)\b|'[0-9]+px solid|\"[0-9]+px solid" apps/docs/src` sem resultados (executado)
+- [x] Secção "Semantic shadows": um painel por tema com `data-theme`, lista gerada de `themes[theme].shadow` via `flatten`; nomes `--ds-shadow-raised|floating|modal` conferem com `dist/themes.css` (valores diferentes entre light e dark); linha com variável, valor e amostra sobre `--ds-color-bg-surface`
+- [x] Parágrafo em inglês nas primitivas a dizer que os componentes usam as semânticas e que as primitivas não se usam diretamente
+- [x] Nenhuma alteração em `packages/` (`git diff --stat 8bb9445~1 e9819ad`: só 3 stories e 2 ficheiros de workflow)
+- [x] G1 a G3: sem alterações de `package.json` nem do lockfile no diff
+
+**Testes exigidos:**
+- [x] Axe em todas as stories de `Foundations/*`, incluindo `DarkTheme` e `Shadows` com os dois painéis (233/233 verde)
+- [x] `play` de `DarkTheme`: box-shadow calculado diferente de `none`, igual a `--ds-shadow-raised` (normalizado) e diferente da primeira primitiva; não trivial. Verde em browser real no test runner
+- [x] `play` de `Shadows`: 3 amostras por painel; `raised` do painel dark diferente do light. Verde
+- [ ] Prova negativa (repor `--ds-shadow-sm`): NÃO REPETIDA por mim, exigiria alterar código; aceito o registo do programador (falha em `DarkTheme › play-test` com o valor esperado), coerente com a lógica do `play` lida no diff
+
+**Notas (não são falhas):**
+1. Não fiz inspeção visual manual num browser (servir o Storybook em segundo plano não é permitido neste modo); a cobertura é o axe (contraste em ambos os painéis) e os `play` em browser real.
+2. Nos tokens atuais `raised` e `floating` têm o mesmo valor em cada tema; a story mostra-os corretamente, sem impacto na tarefa.
+3. Ficheiros temporários: nenhum; nenhum processo ficou a correr. `git status` só com as edições de workflow.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
