@@ -440,6 +440,15 @@ Modelo de entrada:
 - **Documentação:** stories `Accordion/LongWord` e `Dialog/LongWord` (com `play` em browser real) e `DarkTheme` existentes de ambos; props inalteradas. Sem `TODO` na tarefa.
 - **Lições:** prova negativa dos `play` não executada pelo testador (exigiria alterar código de produção). Sem sugestões novas para o planeador.
 
+### DS-058 · Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token — concluída a 2026-11-17
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-17), commit 8bb9445 (implementação); sem commits de código de produção depois do commit testado (e9819ad e c104676 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** as páginas de fundações do Storybook usam a sombra semântica `--ds-shadow-raised` e as larguras `--ds-border-width-1|2` por token (sem `px` escritos à mão); `Foundations/Scales › Shadows` ganha a secção "Semantic shadows" com um painel por tema (`light` e `dark`), gerada de `themes.*.shadow`, e um parágrafo a dizer que as primitivas não se usam diretamente.
+- **Changeset:** não aplicável (só stories em `apps/docs`, que é privado; nenhum pacote publicado muda)
+- **Documentação:** stories `Foundations/Theme/DarkTheme` e `Foundations/Scales/Shadows` (com `play` em browser real e os dois painéis de tema). Sem `TODO` na tarefa.
+- **Lições:** a prova negativa dos `play` não foi repetida pelo testador (exigiria alterar código); fica com o registo do programador. Não houve inspeção visual manual. Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
