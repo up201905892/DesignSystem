@@ -27,7 +27,7 @@ function Swatch({ name, cssVar, value }: { name: string; cssVar: string; value: 
         style={{
           height: 'var(--ds-space-12)',
           background: `var(${cssVar})`,
-          border: '1px solid var(--ds-color-border-strong)',
+          border: 'var(--ds-border-width-1) solid var(--ds-color-border-strong)',
           borderRadius: 'var(--ds-radius-md)',
         }}
       />
@@ -95,7 +95,7 @@ export const Semantic: Story = {
             padding: 'var(--ds-space-4)',
             marginTop: 'var(--ds-space-4)',
             borderRadius: 'var(--ds-radius-lg)',
-            border: '1px solid var(--ds-color-border-default)',
+            border: 'var(--ds-border-width-1) solid var(--ds-color-border-default)',
           }}
         >
           <Section title={`Theme: ${theme}`}>

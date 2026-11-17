@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { tokens } from '@up201905892/tokens';
+import { expect } from '@storybook/test';
+import { themes, tokens } from '@up201905892/tokens';
 import type { CSSProperties } from 'react';
 import { asTree, codeStyle, flatten, Page, Section } from './utils';
 
@@ -134,7 +135,7 @@ export const Radii: Story = {
                 width: 'var(--ds-space-16)',
                 height: 'var(--ds-space-12)',
                 background: 'var(--ds-color-accent-subtle)',
-                border: '2px solid var(--ds-color-accent-default)',
+                border: 'var(--ds-border-width-2) solid var(--ds-color-accent-default)',
                 borderRadius: `var(${r.cssVar})`,
               }}
             />
@@ -182,23 +183,81 @@ export const Borders: Story = {
 export const Shadows: Story = {
   render: () => (
     <Page title="Shadows">
-      <ul style={list}>
-        {tokensOf(t.shadow, 'shadow').map((s) => (
-          <li key={s.cssVar} style={row}>
-            <Label cssVar={s.cssVar} value={s.value} />
-            <div
-              aria-hidden="true"
-              style={{
-                width: 'var(--ds-space-16)',
-                height: 'var(--ds-space-12)',
-                background: 'var(--ds-color-bg-surface)',
-                borderRadius: 'var(--ds-radius-md)',
-                boxShadow: `var(${s.cssVar})`,
-              }}
-            />
-          </li>
+      <Section title="Primitive shadows">
+        <p style={{ margin: 0, marginBottom: 'var(--ds-space-4)' }}>
+          Components use the semantic shadows below, which change with the theme. Do not use the
+          primitive shadows directly: they are the raw scale the semantic tokens point to.
+        </p>
+        <ul style={list}>
+          {tokensOf(t.shadow, 'shadow').map((s) => (
+            <li key={s.cssVar} style={row}>
+              <Label cssVar={s.cssVar} value={s.value} />
+              <div
+                aria-hidden="true"
+                style={{
+                  width: 'var(--ds-space-16)',
+                  height: 'var(--ds-space-12)',
+                  background: 'var(--ds-color-bg-surface)',
+                  borderRadius: 'var(--ds-radius-md)',
+                  boxShadow: `var(${s.cssVar})`,
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      </Section>
+      <Section title="Semantic shadows">
+        {(['light', 'dark'] as const).map((theme) => (
+          <div
+            key={theme}
+            data-theme={theme}
+            data-testid={`shadow-panel-${theme}`}
+            style={{
+              background: 'var(--ds-color-bg-canvas)',
+              color: 'var(--ds-color-text-default)',
+              padding: 'var(--ds-space-4)',
+              marginTop: 'var(--ds-space-4)',
+              borderRadius: 'var(--ds-radius-lg)',
+              border: 'var(--ds-border-width-1) solid var(--ds-color-border-default)',
+            }}
+          >
+            <h3 style={{ margin: 0, marginBottom: 'var(--ds-space-3)' }}>Theme: {theme}</h3>
+            <ul style={list}>
+              {flatten(asTree(themes[theme].shadow), ['shadow']).map((s) => (
+                <li key={s.cssVar} style={row}>
+                  <Label cssVar={s.cssVar} value={s.value} />
+                  <div
+                    aria-hidden="true"
+                    data-shadow-sample={s.path}
+                    style={{
+                      width: 'var(--ds-space-16)',
+                      height: 'var(--ds-space-12)',
+                      background: 'var(--ds-color-bg-surface)',
+                      borderRadius: 'var(--ds-radius-md)',
+                      boxShadow: `var(${s.cssVar})`,
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </Section>
     </Page>
   ),
+  play: async ({ canvasElement }) => {
+    const panel = (theme: string) => `[data-testid="shadow-panel-${theme}"]`;
+    for (const theme of ['light', 'dark']) {
+      const count = canvasElement.querySelectorAll(`${panel(theme)} [data-shadow-sample]`).length;
+      await expect(count).toBe(3);
+    }
+    const sample = (theme: string) =>
+      canvasElement.querySelector<HTMLElement>(
+        `${panel(theme)} [data-shadow-sample="shadow.raised"]`,
+      );
+    const light = sample('light');
+    const dark = sample('dark');
+    if (!light || !dark) throw new Error('Raised samples not found');
+    await expect(getComputedStyle(dark).boxShadow).not.toBe(getComputedStyle(light).boxShadow);
+  },
 };
