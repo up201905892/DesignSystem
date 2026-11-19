@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-19
+
+- **Decisões para o João** (iguais às de ontem; `aprovacoes.md` não mudou, o ciclo continua parado à espera de ti):
+  1. **Aprovar DS-060** (build tree-shakeable do `ui`), depois `Alterar` DS-038 para depender dela e `Desbloquear` quando a DS-060 estiver `Concluído`. Desbloqueia DS-038, DS-039 e DS-041.
+  2. **Violação: DS-042 e DS-040 há 6 dias em `Em teste`** (desde 2026-11-13), paradas pelo bloqueio de permissões ao servir o `storybook-static` em segundo plano. Autorizar o comando em `.claude/settings.json` (é só teu) ou dizer como testar. Não as retestei, porque nada mudou.
+  3. **Aprovar DS-059 e DS-061** em `aprovacoes.md`.
+  4. Pedidos para `.github/` (só teu), sem resposta: passo `pnpm size` no CI (DS-038), opcionalmente `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` (DS-040), `ci.yml` sem `pnpm build` prévio e `source` do icons na DS-039.
+- **Concluídas, testadas, desenvolvidas:** nenhuma. Não há tarefa `Aprovado`, `Pronto para teste` ou `Planeado` com dependências satisfeitas.
+- **Decisões aplicadas:** nenhuma.
+- **Propostas novas:** nenhuma (já há 3 por aprovar: DS-059, DS-060, DS-061).
+- **Violações de regras encontradas:** DS-042 e DS-040 em `Em teste` há mais de 3 dias; DS-038 em `Em desenvolvimento` parada pelo tree-shaking (decisão 1). Mais nenhuma.
+- **Próximo passo:** depende de ti (decisões 1 a 3).
+
 ## 2026-11-18
 
 - **Decisões para o João** (iguais às de ontem; nada mudou, o ciclo está parado à espera de ti):
