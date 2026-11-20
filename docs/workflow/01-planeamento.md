@@ -45,7 +45,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
-| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Em desenvolvimento |
+| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057, DS-060 | Em desenvolvimento |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Em teste |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
@@ -66,9 +66,9 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Concluído |
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Concluído |
 | DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Concluído |
-| DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Proposta |
-| DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Proposta |
-| DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Proposta |
+| DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Planeado |
+| DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Planeado |
+| DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Planeado |
 
 ## Decisões aplicadas
 
@@ -92,6 +92,11 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | 2026-11-13 | Responder | DS-009 | 2026-11-13 |
 | 2026-11-13 | Alterar | DS-042 | 2026-11-13 |
 | 2026-11-13 | Alterar | DS-047 | 2026-11-13 |
+| 2026-11-20 | Aprovar | DS-060 | 2026-11-20 |
+| 2026-11-20 | Alterar | DS-038 | 2026-11-20 |
+| 2026-11-20 | Aprovar | DS-059, DS-061 | 2026-11-20 |
+| 2026-11-20 | Responder | DS-039 | 2026-11-20 |
+| 2026-11-20 | Desbloquear | DS-040, DS-042 | 2026-11-20 |
 
 ## Decisões técnicas
 
@@ -1496,7 +1501,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 - **Fase do MVP:** Publicação
 - **Prioridade:** Alta
-- **Depende de:** DS-036, DS-010 a DS-035, DS-051 a DS-057 (as correções aos componentes entram antes da medição, para os tamanhos medidos serem os do código final da 1.0)
+- **Depende de:** DS-036, DS-010 a DS-035, DS-051 a DS-057 (as correções aos componentes entram antes da medição, para os tamanhos medidos serem os do código final da 1.0), DS-060 (build tree-shakeable; sem ela a medição por componente e o critério de tree-shaking não podem passar)
 - **Estimativa:** S (≤ 2h)
 
 **Objetivo:** provar com um comando que importar um componente custa menos de 5 kB gzip e que o tree-shaking funciona, para o requisito de tamanho do MVP não depender de promessas.
@@ -1508,6 +1513,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - [ ] Há uma entrada adicional para `dist/styles.css` com limite de 15 kB gzip e uma entrada informativa (sem limite) para a biblioteca inteira.
 - [ ] Tree-shaking verificado: o bundle gerado para `import { Button }` não contém referências a `@radix-ui/react-dialog` nem a classes `ds-dialog`.
 - [ ] A medição é feita depois de DS-051 a DS-057 estarem `Concluído`: a tabela de tamanhos colada no registo de desenvolvimento indica o commit medido, que contém os commits dessas sete tarefas (`git log --oneline | grep -E "DS-05[1-7]"` devolve pelo menos um commit por tarefa).
+- [ ] A medição final é feita depois de a DS-060 estar `Concluído`: o commit medido contém o commit da DS-060 (`git log --oneline | grep DS-060` devolve pelo menos um commit) e o teste de tree-shaking de `size-limit.test.ts` está com `it` (não `it.fails`) e passa. As medições anteriores (commit 317140f) ficam no registo como histórico, não contam para este critério.
 - [ ] Se algum componente ultrapassar os 5 kB, o limite não é aumentado: a tarefa regista o componente e o valor medido em "Decisões para o João" e fica por aprovar até haver decisão.
 - [ ] G1 a G3 (dependências novas: `size-limit`, `@size-limit/preset-small-lib`).
 
@@ -1527,6 +1533,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-16 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-16 · programador · Em desenvolvimento (sem mudança de estado) · commit 317140f; BLOQUEADA: todos os exports medem ≥ 8,05 kB gzip (tree-shaking não funciona), à espera de decisão do João; ver 02-desenvolvimento.md
 - 2026-11-16 · planeador · Em desenvolvimento (sem mudança de estado) · proposta a DS-060 (build tree-shakeable), que remove a causa do bloqueio; dependências desta tarefa não alteradas. Sugestão ao João: `Alterar` a DS-038 para depender também da DS-060 (a medição final e o critério de tree-shaking só podem passar depois dela; a DS-060 não depende da DS-038, logo não há ciclo) e, quando a DS-060 estiver `Concluído`, `Desbloquear` a DS-038 para o programador repetir `pnpm build && pnpm size` sobre o novo build. Enquanto bloqueada, a DS-038 ocupa uma das 2 vagas de `Em desenvolvimento`
+- 2026-11-20 · planeador · Em desenvolvimento (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-20, Alterar): passa a depender também da DS-060; novo critério que exige a medição final sobre um commit com a DS-060 e o teste de tree-shaking com `it`. A tarefa já estava `Em desenvolvimento` (bloqueada), por isso não volta a `Proposta`; continua parada até a DS-060 estar `Concluído` e o João a `Desbloquear` em `aprovacoes.md`
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 
@@ -1557,6 +1564,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · criada como Proposta
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
+- 2026-11-20 · planeador · Planeado (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-20, Responder): o `ci.yml` já corre `pnpm build` antes de lint/typecheck/test; pedido fechado, não repetir
 
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 
@@ -1598,6 +1606,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-16 · programador · Em desenvolvimento → Pronto para teste · commit 674e068
 - 2026-11-16 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-16 · testador · Em teste (sem mudança de estado) · relatório 1 em 03-testing.md, incompleto: verificações automáticas verdes, mas a revisão visual do DataTable e a verificação manual por teclado ficaram bloqueadas (servir `storybook-static` em segundo plano recusado pelas permissões)
+- 2026-11-20 · planeador · Em teste (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-20, Desbloquear): o testador serve o `storybook-static` com `run_in_background` (ver `.claude/agents/testador.md`) e repete só a verificação em browser que ficou por fazer no relatório 1 (revisão visual do DataTable e verificação manual só com teclado); as verificações automáticas já verdes não são repetidas
+- 2026-11-20 · testador · Em teste (sem mudança de estado) · relatório 2 em 03-testing.md, incompleto: build do Storybook ✔, mas a ferramenta Bash não tem o parâmetro `run_in_background` (`InputValidationError`), por isso a revisão visual do DataTable e a verificação manual por teclado continuam por fazer
 
 ### DS-041 · Preparação da versão 1.0.0 e guia de publicação manual
 
@@ -1668,6 +1678,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-13 · programador · Em desenvolvimento → Pronto para teste · commit b920cc7
 - 2026-11-13 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-16 · testador · Em teste (sem mudança de estado) · relatório 1 incompleto: G1 verde, falta a verificação em browser da página MDX (servidor em segundo plano bloqueado pelas permissões; ver 03-testing.md)
+- 2026-11-20 · planeador · Em teste (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-20, Desbloquear): o testador serve o `storybook-static` com `run_in_background` (ver `.claude/agents/testador.md`) e repete só a verificação em browser da página MDX que ficou por fazer no relatório 1; as verificações já verdes não são repetidas
 
 ### DS-043 · Guias de temas e de personalização de estilos
 
@@ -2294,6 +2305,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-11-13 · planeador · — → Proposta · pedido do João (aprovacoes.md, 2026-11-13, Responder DS-009): encontrar a causa e estabilizar o teste intermitente do helper de axe
+- 2026-11-20 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-20)
 
 ### DS-060 · Build tree-shakeable de `@up201905892/ui`
 
@@ -2328,6 +2340,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-11-16 · planeador · — → Proposta · bloqueio da DS-038 (02-desenvolvimento.md, iteração 1): `import { Button }` arrasta a biblioteca inteira; sugestão do programador
+- 2026-11-20 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-20)
 
 ### DS-061 · "Getting started": ligação para "Accessibility/Conformance"
 
@@ -2358,3 +2371,4 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-11-16 · planeador · — → Proposta · sugestão do programador nos registos da DS-042 e da DS-040 (02-desenvolvimento.md)
+- 2026-11-20 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-20); só pode ser desenvolvida quando DS-040 e DS-042 estiverem `Concluído`

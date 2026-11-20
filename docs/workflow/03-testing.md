@@ -1816,6 +1816,36 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 2. Nos tokens atuais `raised` e `floating` têm o mesmo valor em cada tema; a story mostra-os corretamente, sem impacto na tarefa.
 3. Ficheiros temporários: nenhum; nenhum processo ficou a correr. `git status` só com as edições de workflow.
 
+### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA) — Relatório 2 — 2026-11-20
+
+- **Commit testado:** 674e068 (confirmado no histórico de `develop` com `git merge-base --is-ancestor`; `git status` só com edições de workflow do planeador em `01-planeamento.md`, nenhum ficheiro de código por guardar)
+- **Resultado:** Incompleto (sem veredicto). Retoma desbloqueada pelo João (aprovacoes.md, 2026-11-20): só se repetia a verificação em browser. Continua impossível servir o `storybook-static` em segundo plano, agora por outra razão; a tarefa fica em `Em teste`.
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Build dos pacotes (necessário ao Storybook) | `pnpm build` | ✔ |
+| Build do Storybook | `pnpm -C <raiz> --filter docs build-storybook` | ✔ (1.ª tentativa falhou por falta do `dist` do `ui`; depois do `pnpm build` passou) |
+| Servir `storybook-static` em segundo plano | Bash com `run_in_background: true` | NÃO EXECUTADO (ver bloqueio) |
+| Revisão visual do DataTable (320px e 1280px, dois temas, pontos a a d) | Chromium com Playwright sobre o servidor | NÃO EXECUTADO |
+| Verificação manual só com teclado (Select, Dialog, DropdownMenu, Popover, Tooltip, DataTable, dois temas) | idem | NÃO EXECUTADO |
+| Página "Accessibility/Conformance" aberta sem erros no browser | idem | NÃO EXECUTADO |
+| Verificações automáticas (lint, typecheck, test, test:a11y, reflow, sizes) | Não repetidas, por indicação do João (verdes no relatório 1) | n/a |
+
+**Comando bloqueado (não contornado):**
+- Ferramenta Bash com o comando `pnpm -C /home/runner/work/DesignSystem/DesignSystem --filter docs exec http-server storybook-static -p 6010 -a 127.0.0.1 -s` e `run_in_background: true`.
+- Mensagem de erro: `InputValidationError: Bash failed due to the following issue: An unexpected parameter run_in_background was provided`.
+- Causa: a ferramenta Bash disponível ao testador nesta sessão não tem o parâmetro `run_in_background`, apesar de `.claude/agents/testador.md` o prescrever. Não usei `&`, `nohup`, `;`, `&&` nem `|`, nem um script de Playwright que sirva a pasta por si, porque seria contornar a restrição.
+- Nota: `--filter ./apps/docs` não funciona quando o diretório de trabalho é `docs/workflow` (o caminho resolve-se a partir do cwd); usei `--filter docs` com `-C` na raiz.
+- Para desbloquear: ou a ferramenta Bash do testador passa a aceitar `run_in_background` (configuração em `.claude/`, só do João), ou o João autoriza expressamente que o testador use um único script Playwright que sirva `apps/docs/storybook-static` no próprio processo e termine no fim.
+
+**Critérios de aceitação:** sem alterações face ao relatório 1. Continuam por verificar, só por falta de browser: revisão visual do DataTable (a) a (d), verificação manual só com teclado e abertura da página de conformidade.
+
+**Notas:** `apps/docs/storybook-static` foi gerado (está no `.gitignore`); nenhum ficheiro temporário foi criado no repositório e nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma encontrada.
+
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas:** nenhuma.
