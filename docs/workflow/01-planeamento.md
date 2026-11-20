@@ -69,6 +69,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Concluído |
 | DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Concluído |
 | DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Planeado |
+| DS-062 | Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`) | Fundações | Média | DS-059 | Proposta |
 
 ## Decisões aplicadas
 
@@ -2382,3 +2383,41 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-11-16 · planeador · — → Proposta · sugestão do programador nos registos da DS-042 e da DS-040 (02-desenvolvimento.md)
 - 2026-11-20 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-20); só pode ser desenvolvida quando DS-040 e DS-042 estiverem `Concluído`
+
+### DS-062 · Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`)
+
+- **Fase do MVP:** Fundações
+- **Prioridade:** Média
+- **Depende de:** DS-059 (`Concluído`)
+- **Estimativa:** M (≤ 1 dia)
+
+**Objetivo:** impedir o falso verde medido na DS-059: quando o elemento passado a `expectNoA11yViolations` (ou um dos seus ascendentes) está fora da árvore de acessibilidade, o axe classifica as regras como `inapplicable` e o helper passa sem verificar nada. O helper passa a falhar nesse caso, com uma mensagem que diz porquê, e os testes que hoje caem nesta armadilha são corrigidos para verificar o que está realmente exposto.
+
+**Contexto (verificado no código em 2026-11-20):** `packages/ui/test/a11y.ts` chama `axe(container)` (fila de promessas da DS-059) e só lança erro se `violations` não estiver vazio; o JSDoc já avisa do caso, mas nada o impede. Medido pelo programador da DS-059 (hipótese (b), `02-desenvolvimento.md`): um `<img>` sem `alt` dentro de um `container` com ascendente `aria-hidden="true"`, `inert` ou `display: none` dá `image-alt` em `inapplicable` e zero violações. Os overlays modais do Radix (Dialog, Select, DropdownMenu, Popover modal) põem `aria-hidden` nos irmãos do portal no `body`, que incluem o `container` do Testing Library. O helper é usado em 30 ficheiros de teste de `packages/ui/src`, em `packages/ui/test/a11y.test.tsx` e em `apps/example/src/App.test.tsx` e `Tasks.test.tsx` (importação relativa). Sugestão do programador (02-desenvolvimento.md), do testador (03-testing.md, relatório 1) e do finalizador (04-concluded.md) da DS-059.
+
+**Critérios de aceitação:**
+- [ ] Antes de chamar o axe, `expectNoA11yViolations` percorre o elemento recebido e todos os seus ascendentes até `document.documentElement` e lança um `Error` se algum tiver `aria-hidden="true"`, o atributo `inert`, o atributo `hidden`, ou `getComputedStyle(el).display === 'none'`. A mensagem começa por `expectNoA11yViolations: target is hidden from assistive technology` e indica o motivo (`aria-hidden="true"`, `inert`, `hidden` ou `display: none`) e o elemento onde foi encontrado (nome da tag e, se existirem, `id` e `class`), e se é o próprio alvo ou um ascendente.
+- [ ] `aria-hidden="false"`, `aria-hidden` ausente e conteúdo escondido *dentro* do alvo (ex.: um `<span aria-hidden="true">` com um ícone dentro de um botão) não fazem o helper falhar.
+- [ ] Passar `document.body` com um overlay modal do Radix aberto continua a funcionar (o `body` não fica escondido; os irmãos escondidos são ignorados pelo axe, como hoje).
+- [ ] A verificação corre dentro da fila de serialização da DS-059 (a ordem das chamadas mantém-se) e a assinatura pública não muda (`expectNoA11yViolations(container: Element): Promise<void>`). O JSDoc deixa de ser só um aviso: descreve a verificação, os quatro motivos e o que fazer (passar o elemento exposto, ex.: `document.body` ou `screen.getByRole('dialog')`).
+- [ ] Revisão dos testes existentes: `pnpm test` corre com o helper novo e todos os testes que passam a falhar por esta verificação ficam listados em `02-desenvolvimento.md` (ficheiro, nome do teste, motivo encontrado). Cada um é corrigido para verificar o conteúdo realmente exposto (ex.: `document.body` ou o elemento do overlay em vez do `container` escondido; ou separar a verificação do estado fechado e do estado aberto). Não são aceites: `skip`/`todo`, apagar a verificação de axe, envolver a chamada em `try/catch`, nem uma opção do helper para desligar a verificação.
+- [ ] Se, ao passar a verificar o conteúdo exposto, o axe encontrar uma violação real num componente, a correção do componente fica fora desta tarefa: o caso (componente, regra, nó) fica em "Decisões para o João" e "Sugestões para o planeador" em `02-desenvolvimento.md` e a tarefa para em `Em desenvolvimento` até haver decisão; a violação não é escondida no teste.
+- [ ] Nenhum ficheiro de `packages/ui/src` muda além de `*.test.tsx`; nenhum componente, story, `.css` ou API pública muda.
+- [ ] Nenhum ficheiro em `.github/` é alterado.
+- [ ] G1 a G3 (sem dependências novas); sem changeset (código de teste, não publicado).
+
+**Testes exigidos:**
+- Unitários (`packages/ui/test/a11y.test.tsx`; os cinco casos da DS-059 mantêm-se):
+  - Falha, com o motivo verificado na mensagem, quando um `<img alt="ok">` válido é verificado num alvo: com `aria-hidden="true"` no próprio alvo; num ascendente `aria-hidden="true"`; num ascendente com `inert`; num ascendente com `hidden`; num ascendente com `style="display: none"`. Cada caso confirma também que a mensagem diz "target" ou "ancestor" conforme o caso.
+  - Não falha: ascendente com `aria-hidden="false"`; botão com um ícone `aria-hidden="true"` dentro e nome acessível por texto.
+  - Regressão do falso verde: um `<img>` sem `alt` dentro de um ascendente `aria-hidden="true"` faz o helper rejeitar (antes da DS-062 resolvia sem erro).
+  - Overlay real: com um `Dialog` aberto (`open`), chamar o helper com o `container` do `render` rejeita com o motivo `aria-hidden="true"` (posto pelo Radix); chamar com `document.body` resolve.
+  - Serialização: duas chamadas sobrepostas, uma com alvo escondido e outra com alvo válido, dão uma rejeição (a do alvo escondido) e uma resolução, sem "Axe is already running".
+- Acessibilidade: `pnpm test` verde em `packages/ui`, `apps/docs` e `apps/example` com o helper novo; `pnpm test:a11y` continua verde (não usa o helper).
+- Visual/Storybook: não aplicável.
+- Prova negativa (não commitada): retirar a verificação do helper faz falhar o caso de regressão e os casos de overlay; registada em `02-desenvolvimento.md`.
+
+**Fora de âmbito:** o `test-runner.ts` do Storybook (`axe-playwright`); `visibility: hidden`, `opacity: 0`, `content-visibility` e elementos fora do ecrã; regras do axe novas ou desativadas; corrigir violações reais em componentes (tarefa própria, se aparecerem); a causa do incidente de 2026-11-06 (em observação, DS-059).
+
+**Histórico:**
+- 2026-11-20 · planeador · — → Proposta · sugestão do programador, do testador e do finalizador da DS-059 (falso verde medido na hipótese (b), 02-desenvolvimento.md)
