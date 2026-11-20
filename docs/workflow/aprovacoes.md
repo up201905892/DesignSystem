@@ -27,6 +27,7 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | 2026-11-20 | Alterar | DS-038 | Passa a depender também de DS-060. |
 | 2026-11-20 | Aprovar | DS-059, DS-061 | |
 | 2026-11-20 | Responder | DS-039 | ci.yml já corre pnpm build antes de lint/typecheck/test. Pedido fechado. |
+| 2026-11-20 | Desbloquear | DS-040, DS-042 | Testador serve o storybook-static com run_in_background (ver testador.md). Repetir só a verificação em browser que ficou por fazer. |
 
 Decisões possíveis:
 
