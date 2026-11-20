@@ -36,6 +36,11 @@ Quando um critério exige ver páginas no browser (páginas MDX, revisão visual
 3. Abre `http://127.0.0.1:6010` com Playwright (já instalado por `pnpm test:a11y:setup`) para correr axe, medir contraste nos dois temas, navegar só com teclado e tirar capturas.
 4. No fim, para o servidor em segundo plano.
 
+Regras:
+- Nunca uses `&`, `nohup`, `;`, `&&` nem `|` para pôr processos em segundo plano ou encadear comandos: as permissões recusam comandos compostos. Um comando por chamada.
+- Scripts Playwright e capturas vão para uma pasta temporária fora do repositório (`$RUNNER_TEMP` no CI, o scratchpad numa sessão local). Nunca deixes ficheiros temporários no repositório.
+- Se mesmo assim um comando for recusado, não o contornes: regista no relatório o comando exato e a mensagem de erro.
+
 ## Veredicto
 
 - **Aprovado:** todas as verificações verdes, todos os critérios verificados, zero falhas em aberto.
