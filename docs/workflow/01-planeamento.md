@@ -66,7 +66,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-056 | Button e IconButton: prop `focusableWhenDisabled` e Pagination a usá-la | Formulários | Média | DS-021, DS-034 | Concluído |
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Concluído |
 | DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Concluído |
-| DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Aprovado |
+| DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Concluído |
 | DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Concluído |
 | DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Planeado |
 
@@ -2310,6 +2310,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-20 · programador · Em desenvolvimento → Pronto para teste · commit 895d6ac
 - 2026-11-20 · testador · Pronto para teste → Em teste · início do teste
 - 2026-11-20 · testador · Em teste → Aprovado · relatório 1 (03-testing.md): checks verdes, 30 isoladas e 5 da suite sem falhas; causa não encontrada, mitigação permitida pelo critério
+- 2026-11-20 · finalizador · Aprovado → Concluído · relatório 1 aprovado (895d6ac), sem código de produção posterior; changeset não aplicável (só helper de teste, não publicado)
 
 ### DS-060 · Build tree-shakeable de `@up201905892/ui`
 
