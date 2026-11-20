@@ -1893,3 +1893,36 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas:** nenhuma.
+
+### DS-059 · Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" — Relatório 1 — 2026-11-20
+
+- **Commit testado:** 895d6ac (presente no histórico de `develop`; `git status` limpo antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui 1161, tokens 92, icons 10, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (33 suites, 233 testes); o helper não é usado aí | ✔ |
+| Build | `pnpm build` | ✔ |
+| Repetição isolada | 30 × `pnpm --filter @up201905892/ui exec vitest run test/a11y.test.tsx` | 0 falhas em 30 |
+| Repetição da suite | 5 × `pnpm --filter @up201905892/ui test` | 0 falhas em 5 |
+
+**Critérios de aceitação:**
+- [x] Reprodução medida: comandos documentados em `02-desenvolvimento.md`, sem ficheiros de script no repositório; contagens antes (0/100 isolado, 0/20 suite) e depois (0/100, 0/20) registadas. Observação: como o incidente nunca foi reproduzido, as contagens "antes" e "depois" são iguais e não provam eficácia; o critério pede apenas o registo e está cumprido.
+- [x] Causa registada com prova para as hipóteses (a) a (e), cada uma marcada como confirmada ou descartada com motivo: (a) confirmada como defeito (rejeição "Axe is already running", não falso verde) mas sem explicar o incidente; (b) descartada neste ficheiro (jsdom isolado por ficheiro, 71 ambientes para 71 ficheiros) e risco real medido noutros (`aria-hidden`/`inert`/`display: none` dá `inapplicable`); (c) descartada (300 execuções, 300 em `violations`); (d) versões do lockfile registadas; (e) descartada (~1 s contra limite de 5 s; um tempo limite não daria passe). Não repeti as sondas de (b) e (c); confiei na descrição, coerente com o código e com 120+30 execuções verdes.
+- [x] Correção aplicada à causa: 0 falhas nas 100 + 20 execuções do programador e nas 30 + 5 deste relatório. Ver o critério seguinte: a causa não foi encontrada, logo aplica-se a mitigação.
+- [x] Causa não encontrada, mitigação permitida: o critério prevê expressamente este caso ("se a causa não for encontrada depois das cinco hipóteses") e cita a serialização das chamadas ao axe como exemplo aceite. A serialização (fila de promessas em `packages/ui/test/a11y.ts`) está descrita como mitigação no JSDoc, com remissão para o registo. Não há `retry`, `skip`/`todo`, teste apagado nem aumento de tempos limite (confirmado no diff). O caso está em "Decisões para o João" na entrada de `02-desenvolvimento.md`. Avaliação: a tarefa não exige a causa quando as cinco hipóteses foram esgotadas e documentadas; exige honestidade sobre ela, o que o registo e o JSDoc cumprem. A mitigação não é uma correção provada: o incidente de 2026-11-06 continua sem explicação e deve ficar em observação (ver nota abaixo).
+- [x] Casos negativos: `a11y.test.tsx` tem 5 casos (positivo mantido, `image-alt`, `button-name`, `label`, chamadas sobrepostas); cada negativo verifica o id da regra com `rejects.toThrow(/id/)`. Lido o código e as 30 execuções passam. Nota menor: `/label/` é uma regex larga (também casaria com texto de ajuda de outra regra), mas o markup do caso só pode produzir a regra `label`; não reprovo por isto.
+- [x] Assinatura `expectNoA11yViolations(container: Element): Promise<void>` inalterada (lida); o diff do commit toca só em `a11y.ts` e `a11y.test.tsx` (mais registos), logo nenhum teste de componente foi alterado.
+- [x] Nenhum ficheiro em `.github/` alterado (`git show --stat 895d6ac`).
+- [x] G1 a G3: sem dependências novas nem alteração de lockfile no commit, sem changeset, commit em inglês com o ID.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas para o João / planeador:**
+1. A causa do incidente de 2026-11-06 continua desconhecida; a aprovação assenta na cláusula de mitigação da especificação, não numa causa provada. Convém manter o caso em observação: se o falso verde voltar, o primeiro passo é registar o resultado completo do axe (`violations`, `incomplete`, `inapplicable`) no momento da falha.
+2. A sugestão do programador (helper a avisar quando o `container` ou um ascendente é `aria-hidden`/`inert`/`display: none`, falso verde medido) é válida e merece tarefa própria, a propor pelo planeador.
