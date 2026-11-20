@@ -41,7 +41,10 @@ export interface UseTableSortResult<T> {
   getSortProps: (columnId: string) => TableSortProps;
 }
 
-const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+const collator = /* @__PURE__ */ new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: 'base',
+});
 
 function isNil(value: unknown): value is null | undefined {
   return value === null || value === undefined;
