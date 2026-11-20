@@ -23,6 +23,10 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | 2026-11-13 | Responder | DS-009 | Propor uma tarefa para o teste intermitente "fails for an img without alt" no helper de axe (encontrar a causa e estabilizar). |
 | 2026-11-13 | Alterar | DS-042 | Depender só de DS-036. O "Getting started" não precisa de esperar pela auditoria de acessibilidade; se a DS-040 mudar alguma coisa, a página atualiza-se depois. |
 | 2026-11-13 | Alterar | DS-047 | Depender só de DS-042. Publicar o Storybook no GitHub Pages não precisa do README (DS-046). |
+| 2026-11-20 | Aprovar | DS-060 | |
+| 2026-11-20 | Alterar | DS-038 | Passa a depender também de DS-060. |
+| 2026-11-20 | Aprovar | DS-059, DS-061 | |
+| 2026-11-20 | Responder | DS-039 | ci.yml já corre pnpm build antes de lint/typecheck/test. Pedido fechado. |
 
 Decisões possíveis:
 
