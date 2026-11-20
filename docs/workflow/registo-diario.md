@@ -2,6 +2,22 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-20
+
+- **Decisões para o João:**
+  1. **Desbloquear DS-038** em `aprovacoes.md`: a DS-060 já está `Concluído` (tamanhos medidos: 70 exports, o maior 3,38 kB gzip). Depois da DS-038 seguem DS-039 e DS-041.
+  2. **DS-040 e DS-042 continuam sem veredicto** (`Em teste` desde 2026-11-13). O desbloqueio não resultou: o `testador` não tem o parâmetro `run_in_background` na ferramenta Bash (`InputValidationError`), por isso não consegue servir o `storybook-static`. Opções: dar-lhe essa capacidade em `.claude/`, ou autorizar um único script Playwright que sirva `apps/docs/storybook-static` no próprio processo. Faltam só a revisão visual do DataTable, o teclado manual e a página `Accessibility/Conformance`. Isto bloqueia DS-043, DS-046 a DS-049 e DS-061.
+  3. **Aprovar DS-062** (o helper de axe falhar quando o alvo está `aria-hidden`/`inert`/`display: none`; falso verde medido pela DS-059).
+  4. Pedido para o `programador` em modo autónomo: `git add`/`git commit` foi recusado ao subagente (e `git -C`/`cd` pedem aprovação); acabei por fazer o commit do código da DS-060 eu próprio.
+  5. Pedidos para `.github/` (só teu), sem resposta: passo `pnpm size` no CI (DS-038), opcionalmente `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` (DS-040), e `source` do icons na DS-039.
+- **Concluídas:** DS-060 (build tree-shakeable do `ui`; Aprovado ao 1.º relatório, 233 testes a11y verdes) e DS-059 (helper de axe). Ressalva da DS-059: a causa do teste intermitente de 2026-11-06 não foi encontrada nem reproduzida (0 falhas em 100 execuções); aplicou-se a mitigação prevista no critério (serializar as chamadas ao axe) e o caso fica em observação. Desvio aceite na DS-060: Stack e Badge não podem ficar sem `@radix-ui/react-slot` (`asChild`).
+- **Testadas:** DS-060 (Aprovado), DS-059 (Aprovado), DS-040 (relatório 2, browser ainda bloqueado). DS-042 não retestada (mesmo bloqueio).
+- **Desenvolvidas:** DS-060 e DS-059, ciclo completo no mesmo dia.
+- **Decisões aplicadas:** 5 linhas de 2026-11-20 (DS-060, DS-059, DS-061 aprovadas; DS-038 passa a depender da DS-060; DS-039 e DS-040/042 respondidas).
+- **Propostas novas:** DS-062.
+- **Violações de regras encontradas:** DS-040 e DS-042 em `Em teste` há 7 dias (acima); DS-038 em `Em desenvolvimento` parada (aguarda o teu desbloqueio). Mais nenhuma.
+- **Próximo passo:** decisões 1 a 3. Com a DS-038 desbloqueada avançam DS-039/041; sem o teste em browser, DS-043, DS-046 a DS-049 e DS-061 ficam paradas.
+
 ## 2026-11-19
 
 - **Decisões para o João** (iguais às de ontem; `aprovacoes.md` não mudou, o ciclo continua parado à espera de ti):

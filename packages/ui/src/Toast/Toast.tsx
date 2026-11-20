@@ -108,7 +108,7 @@ export function useToast(): ToastContextValue {
  * region or the focus is inside it. F8 moves the focus to the region; Esc closes the focused
  * toast. A toast announces a result, so the element that started the action keeps the focus.
  */
-export function ToastProvider({
+function ToastProviderBase({
   position = 'bottom-right',
   max = 3,
   label = 'Notifications',
@@ -222,4 +222,8 @@ export function ToastProvider({
   );
 }
 
-ToastProvider.displayName = 'ToastProvider';
+// `Object.assign` marked as pure (instead of a top-level `displayName` assignment) so a bundler
+// can drop the provider, and the Radix Toast code, when nothing imports it.
+export const ToastProvider = /* @__PURE__ */ Object.assign(ToastProviderBase, {
+  displayName: 'ToastProvider',
+});

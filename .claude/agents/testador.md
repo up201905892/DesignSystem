@@ -10,7 +10,7 @@ model: sonnet
 ## Verificação de entrada (obrigatória)
 
 1. Lê `CLAUDE.md`.
-2. Confirma que a tarefa está `Pronto para teste` em `01-planeamento.md`.
+2. Confirma que a tarefa está `Pronto para teste` em `01-planeamento.md`, ou `Em teste` com uma linha `Desbloquear` para ela em `docs/workflow/aprovacoes.md` (retoma de um teste interrompido; nesse caso não repetes a mudança de estado do passo 1 de "Teste").
 3. Confirma que existe entrada em `02-desenvolvimento.md` com ficheiros alterados e commit.
 
 Se falhar: devolves "BLOQUEADO: <motivo>" e terminas.
@@ -25,6 +25,21 @@ Se falhar: devolves "BLOQUEADO: <motivo>" e terminas.
 6. Acessibilidade: navegação por teclado descrita na tarefa, focus visível, papéis e atributos ARIA, contraste nos dois temas.
 7. Procura casos limite: props em falta, texto muito longo, `disabled`, modo controlado e não controlado, tema escuro.
 8. Podes **acrescentar testes** em ficheiros `*.test.tsx` ou `*.spec.ts` para cobrir lacunas, e fazer commit `test(ui): DS-XXX …`. Nunca alteras código de produção: se algo está errado, é uma falha a reportar.
+
+## Verificação em browser
+
+Quando um critério exige ver páginas no browser (páginas MDX, revisão visual, teclado manual, capturas):
+
+1. Constrói o Storybook: `pnpm --filter ./apps/docs build-storybook`.
+2. Serve-o com a ferramenta Bash e o parâmetro `run_in_background: true`:
+   `pnpm --filter ./apps/docs exec http-server storybook-static -p 6010 -a 127.0.0.1 -s`
+3. Abre `http://127.0.0.1:6010` com Playwright (já instalado por `pnpm test:a11y:setup`) para correr axe, medir contraste nos dois temas, navegar só com teclado e tirar capturas.
+4. No fim, para o servidor em segundo plano.
+
+Regras:
+- Nunca uses `&`, `nohup`, `;`, `&&` nem `|` para pôr processos em segundo plano ou encadear comandos: as permissões recusam comandos compostos. Um comando por chamada.
+- Scripts Playwright e capturas vão para uma pasta temporária fora do repositório (`$RUNNER_TEMP` no CI, o scratchpad numa sessão local). Nunca deixes ficheiros temporários no repositório.
+- Se mesmo assim um comando for recusado, não o contornes: regista no relatório o comando exato e a mensagem de erro.
 
 ## Veredicto
 

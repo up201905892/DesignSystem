@@ -1816,6 +1816,113 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 2. Nos tokens atuais `raised` e `floating` têm o mesmo valor em cada tema; a story mostra-os corretamente, sem impacto na tarefa.
 3. Ficheiros temporários: nenhum; nenhum processo ficou a correr. `git status` só com as edições de workflow.
 
+### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA) — Relatório 2 — 2026-11-20
+
+- **Commit testado:** 674e068 (confirmado no histórico de `develop` com `git merge-base --is-ancestor`; `git status` só com edições de workflow do planeador em `01-planeamento.md`, nenhum ficheiro de código por guardar)
+- **Resultado:** Incompleto (sem veredicto). Retoma desbloqueada pelo João (aprovacoes.md, 2026-11-20): só se repetia a verificação em browser. Continua impossível servir o `storybook-static` em segundo plano, agora por outra razão; a tarefa fica em `Em teste`.
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Build dos pacotes (necessário ao Storybook) | `pnpm build` | ✔ |
+| Build do Storybook | `pnpm -C <raiz> --filter docs build-storybook` | ✔ (1.ª tentativa falhou por falta do `dist` do `ui`; depois do `pnpm build` passou) |
+| Servir `storybook-static` em segundo plano | Bash com `run_in_background: true` | NÃO EXECUTADO (ver bloqueio) |
+| Revisão visual do DataTable (320px e 1280px, dois temas, pontos a a d) | Chromium com Playwright sobre o servidor | NÃO EXECUTADO |
+| Verificação manual só com teclado (Select, Dialog, DropdownMenu, Popover, Tooltip, DataTable, dois temas) | idem | NÃO EXECUTADO |
+| Página "Accessibility/Conformance" aberta sem erros no browser | idem | NÃO EXECUTADO |
+| Verificações automáticas (lint, typecheck, test, test:a11y, reflow, sizes) | Não repetidas, por indicação do João (verdes no relatório 1) | n/a |
+
+**Comando bloqueado (não contornado):**
+- Ferramenta Bash com o comando `pnpm -C /home/runner/work/DesignSystem/DesignSystem --filter docs exec http-server storybook-static -p 6010 -a 127.0.0.1 -s` e `run_in_background: true`.
+- Mensagem de erro: `InputValidationError: Bash failed due to the following issue: An unexpected parameter run_in_background was provided`.
+- Causa: a ferramenta Bash disponível ao testador nesta sessão não tem o parâmetro `run_in_background`, apesar de `.claude/agents/testador.md` o prescrever. Não usei `&`, `nohup`, `;`, `&&` nem `|`, nem um script de Playwright que sirva a pasta por si, porque seria contornar a restrição.
+- Nota: `--filter ./apps/docs` não funciona quando o diretório de trabalho é `docs/workflow` (o caminho resolve-se a partir do cwd); usei `--filter docs` com `-C` na raiz.
+- Para desbloquear: ou a ferramenta Bash do testador passa a aceitar `run_in_background` (configuração em `.claude/`, só do João), ou o João autoriza expressamente que o testador use um único script Playwright que sirva `apps/docs/storybook-static` no próprio processo e termine no fim.
+
+**Critérios de aceitação:** sem alterações face ao relatório 1. Continuam por verificar, só por falta de browser: revisão visual do DataTable (a) a (d), verificação manual só com teclado e abertura da página de conformidade.
+
+**Notas:** `apps/docs/storybook-static` foi gerado (está no `.gitignore`); nenhum ficheiro temporário foi criado no repositório e nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma encontrada.
+
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas:** nenhuma.
+
+### DS-060 · Build tree-shakeable de `@up201905892/ui` — Relatório 1 — 2026-11-20
+
+- **Commit testado:** 616f722 (no histórico de `develop`, seguido de dae9490 só com registo de workflow; `git status` limpo antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Testes | `pnpm test` | ✔ (ui 1158 em 71 ficheiros, docs 91, example 28; tokens e icons sem falhas) |
+| Acessibilidade | `pnpm test:a11y` | ✔ (233 testes, 33 suites, sem violações) |
+| Build | `pnpm build` | ✔ (`dist/index.js`, `.cjs`, `.d.ts`, `.d.cts`; sem chunks novos) |
+| Medição | `pnpm size` | ✔ saída 0; nenhum limite excedido |
+
+**Critérios de aceitação:**
+- [x] Abordagem e alternativas descartadas descritas em `02-desenvolvimento.md` (plugin esbuild `pure-component-calls`; 4 alternativas com resultado). Lido o `tsup.config.ts`: coerente com a descrição.
+- [x] API pública inalterada: `package.json` não consta do commit (`git show --stat`); `exports.test.ts` fixa a lista de 74 exports; `require` e `import()` de `@up201905892/ui` a partir de `apps/docs` devolvem 74 chaves cada; os quatro ficheiros `dist/index.*` existem.
+- [x] `displayName`: `exports.test.ts` (sobre `src`) e teste sobre `dist/index.js` verificam `displayName` igual ao nome exportado. Os componentes que são funções simples (Dialog, Popover, etc.) usam o nome da função, como antes da tarefa (nunca tiveram `displayName`); aceite.
+- [x] Caso de `Button` passou de `it.fails` a `it`, passa, comentário "KNOWN FAILURE" removido (lido o ficheiro).
+- [x] Casos de `Stack` e `Badge` com `it` e a passar (ver desvio abaixo).
+- [x] ESM e CJS carregam a partir de `apps/docs` (comandos do critério, saída 0); `package-metadata.test.ts` verde dentro de `pnpm test`.
+- [x] Medição informativa colada em `02-desenvolvimento.md`; reproduzi `pnpm size`: valores idênticos (ex.: Button 979 B, DataTable 3,38 kB, biblioteca inteira 9,3 kB, `styles.css` 8,66 kB). Nenhum export acima de 5 kB. `.size-limit.mjs` não consta do commit.
+- [x] Sem alterações fora de `packages/ui` (e `.changeset`); testes de `apps/docs` e `apps/example` passam.
+- [x] Changeset `patch` para `@up201905892/ui` (`.changeset/ds-060-tree-shakeable-build.md`).
+- [x] G1 a G3: sem dependências novas (`esbuild` já era devDependency, usado como tipo).
+
+**Desvio assinalado pelo programador (Stack/Badge e `@radix-ui/`) — conclusão: aceitável.**
+- `Stack.tsx` e `Badge.tsx` têm a prop `asChild` e `const Comp = asChild ? Slot : …`, logo importam `Slot` de `@radix-ui/react-slot`. Remover isso violaria a convenção do projeto (API com `asChild`) e o comportamento já testado. O critério, tal como escrito, é inatingível para estes dois componentes; a sua intenção (não arrastar código não relacionado, como Dialog e Button) mantém-se.
+- O teste adaptado `/@radix-ui\/(?!react-slot")/` continua a falhar se aparecer qualquer outro pacote Radix, e as asserções `ds-button` e `ds-dialog` mantêm-se. O custo real é nulo: o Slot é externo e pesa 381 B (Stack) e 358 B (Badge) no `size-limit`.
+- Nota sobre o plugin do teste `side-effect-free-externals` (marca `@radix-ui/*` e `@up201905892/icons` como `sideEffects: false`): é válido porque `@radix-ui/react-dialog` e `@radix-ui/react-slot` declaram `"sideEffects": false` (confirmado nos `package.json`), tal como um bundler de consumidor trata esses pacotes.
+
+**Verificações adicionais minhas:**
+- `grep` no `dist/index.cjs`: 0 atribuições `Nome.displayName =` de topo e 230 anotações `PURE`; o teste da DS-060 só cobria o `dist/index.js`, mas o CJS está igualmente limpo.
+- Teste de tree-shaking com guarda contra regressão silenciosa do plugin (a regex do plugin falharia em silêncio se uma fonte mudasse de forma): o caso "no top-level displayName left in dist/index.js" cobre-o.
+
+**Limitações (não são falhas):**
+1. Prova negativa (repor um `displayName` de topo num componente) NÃO repetida por mim, exigiria alterar código de produção; aceito o registo do programador, coerente com o teste que a deteta.
+2. Não abri o Storybook no browser: a tarefa não altera comportamento nem stories; `pnpm test:a11y` (que corre sobre o Storybook construído) passou integralmente.
+3. A regex do plugin é frágil face a novos padrões de declaração (ex.: `forwardRef` partido por comentário), mas a falha seria detetada pelo teste acima. Sugestão para o planeador: nenhuma.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+### DS-059 · Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" — Relatório 1 — 2026-11-20
+
+- **Commit testado:** 895d6ac (presente no histórico de `develop`; `git status` limpo antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Unitários | `pnpm test` (ui 1161, tokens 92, icons 10, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (33 suites, 233 testes); o helper não é usado aí | ✔ |
+| Build | `pnpm build` | ✔ |
+| Repetição isolada | 30 × `pnpm --filter @up201905892/ui exec vitest run test/a11y.test.tsx` | 0 falhas em 30 |
+| Repetição da suite | 5 × `pnpm --filter @up201905892/ui test` | 0 falhas em 5 |
+
+**Critérios de aceitação:**
+- [x] Reprodução medida: comandos documentados em `02-desenvolvimento.md`, sem ficheiros de script no repositório; contagens antes (0/100 isolado, 0/20 suite) e depois (0/100, 0/20) registadas. Observação: como o incidente nunca foi reproduzido, as contagens "antes" e "depois" são iguais e não provam eficácia; o critério pede apenas o registo e está cumprido.
+- [x] Causa registada com prova para as hipóteses (a) a (e), cada uma marcada como confirmada ou descartada com motivo: (a) confirmada como defeito (rejeição "Axe is already running", não falso verde) mas sem explicar o incidente; (b) descartada neste ficheiro (jsdom isolado por ficheiro, 71 ambientes para 71 ficheiros) e risco real medido noutros (`aria-hidden`/`inert`/`display: none` dá `inapplicable`); (c) descartada (300 execuções, 300 em `violations`); (d) versões do lockfile registadas; (e) descartada (~1 s contra limite de 5 s; um tempo limite não daria passe). Não repeti as sondas de (b) e (c); confiei na descrição, coerente com o código e com 120+30 execuções verdes.
+- [x] Correção aplicada à causa: 0 falhas nas 100 + 20 execuções do programador e nas 30 + 5 deste relatório. Ver o critério seguinte: a causa não foi encontrada, logo aplica-se a mitigação.
+- [x] Causa não encontrada, mitigação permitida: o critério prevê expressamente este caso ("se a causa não for encontrada depois das cinco hipóteses") e cita a serialização das chamadas ao axe como exemplo aceite. A serialização (fila de promessas em `packages/ui/test/a11y.ts`) está descrita como mitigação no JSDoc, com remissão para o registo. Não há `retry`, `skip`/`todo`, teste apagado nem aumento de tempos limite (confirmado no diff). O caso está em "Decisões para o João" na entrada de `02-desenvolvimento.md`. Avaliação: a tarefa não exige a causa quando as cinco hipóteses foram esgotadas e documentadas; exige honestidade sobre ela, o que o registo e o JSDoc cumprem. A mitigação não é uma correção provada: o incidente de 2026-11-06 continua sem explicação e deve ficar em observação (ver nota abaixo).
+- [x] Casos negativos: `a11y.test.tsx` tem 5 casos (positivo mantido, `image-alt`, `button-name`, `label`, chamadas sobrepostas); cada negativo verifica o id da regra com `rejects.toThrow(/id/)`. Lido o código e as 30 execuções passam. Nota menor: `/label/` é uma regex larga (também casaria com texto de ajuda de outra regra), mas o markup do caso só pode produzir a regra `label`; não reprovo por isto.
+- [x] Assinatura `expectNoA11yViolations(container: Element): Promise<void>` inalterada (lida); o diff do commit toca só em `a11y.ts` e `a11y.test.tsx` (mais registos), logo nenhum teste de componente foi alterado.
+- [x] Nenhum ficheiro em `.github/` alterado (`git show --stat 895d6ac`).
+- [x] G1 a G3: sem dependências novas nem alteração de lockfile no commit, sem changeset, commit em inglês com o ID.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
+
+**Notas para o João / planeador:**
+1. A causa do incidente de 2026-11-06 continua desconhecida; a aprovação assenta na cláusula de mitigação da especificação, não numa causa provada. Convém manter o caso em observação: se o falso verde voltar, o primeiro passo é registar o resultado completo do axe (`violations`, `incomplete`, `inapplicable`) no momento da falha.
+2. A sugestão do programador (helper a avisar quando o `container` ou um ascendente é `aria-hidden`/`inert`/`display: none`, falso verde medido) é válida e merece tarefa própria, a propor pelo planeador.

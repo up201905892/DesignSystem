@@ -449,6 +449,24 @@ Modelo de entrada:
 - **Documentação:** stories `Foundations/Theme/DarkTheme` e `Foundations/Scales/Shadows` (com `play` em browser real e os dois painéis de tema). Sem `TODO` na tarefa.
 - **Lições:** a prova negativa dos `play` não foi repetida pelo testador (exigiria alterar código); fica com o registo do programador. Não houve inspeção visual manual. Sem sugestões novas para o planeador.
 
+### DS-060 · Build tree-shakeable de `@up201905892/ui` — concluída a 2026-11-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-20), commit 616f722 (implementação); sem commits de código de produção depois do commit testado (dae9490 e 795ce3d são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `import { Button } from '@up201905892/ui'` já não arrasta a biblioteca inteira para o bundle do consumidor (plugin esbuild `pure-component-calls`); API pública inalterada (74 exports) e `displayName` de todos os componentes preservado.
+- **Changeset:** `.changeset/ds-060-tree-shakeable-build.md` (patch)
+- **Documentação:** abordagem e alternativas descartadas em `02-desenvolvimento.md`; stories e props não aplicáveis (sem alteração de comportamento nem de API). Sem `TODO` na tarefa.
+- **Lições:** Stack e Badge continuam a importar `@radix-ui/react-slot` por causa de `asChild` (desvio aceite pelo testador, custo 381 B e 358 B). A DS-038 já pode ser desbloqueada pelo João em `aprovacoes.md` (a DS-060 está `Concluído`). Prova negativa não repetida pelo testador.
+
+### DS-059 · Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" — concluída a 2026-11-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-20), commit 895d6ac (implementação); sem commits de código de produção depois do commit testado (39f8961 e 6e38604 são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `expectNoA11yViolations` passa a serializar as chamadas ao axe (fila de promessas), com assinatura inalterada; `a11y.test.tsx` ganha casos negativos (`image-alt`, `button-name`, `label`) e o de chamadas sobrepostas. 0 falhas em 30 execuções isoladas e 5 da suite.
+- **Changeset:** não aplicável (só o helper de teste em `packages/ui/test`, que não é publicado)
+- **Documentação:** causa e hipóteses (a) a (e) em `02-desenvolvimento.md` e JSDoc do helper; stories e props não aplicáveis. Sem `TODO` na tarefa.
+- **Lições:** a causa do incidente de 2026-11-06 continua desconhecida; a aprovação assenta na mitigação prevista no critério, e o caso fica em observação (se voltar, registar `violations`, `incomplete` e `inapplicable` no momento da falha). Sugestão do programador, ainda sem tarefa: o helper avisar ou falhar quando o `container` ou um ascendente for `aria-hidden`, `inert` ou `display: none` (falso verde medido); fica para o planeador propor.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
