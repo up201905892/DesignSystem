@@ -10,7 +10,7 @@ model: sonnet
 ## Verificação de entrada (obrigatória)
 
 1. Lê `CLAUDE.md`.
-2. Confirma que a tarefa está `Pronto para teste` em `01-planeamento.md`.
+2. Confirma que a tarefa está `Pronto para teste` em `01-planeamento.md`, ou `Em teste` com uma linha `Desbloquear` para ela em `docs/workflow/aprovacoes.md` (retoma de um teste interrompido; nesse caso não repetes a mudança de estado do passo 1 de "Teste").
 3. Confirma que existe entrada em `02-desenvolvimento.md` com ficheiros alterados e commit.
 
 Se falhar: devolves "BLOQUEADO: <motivo>" e terminas.
