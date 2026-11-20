@@ -1849,3 +1849,47 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas:** nenhuma.
+
+### DS-060 · Build tree-shakeable de `@up201905892/ui` — Relatório 1 — 2026-11-20
+
+- **Commit testado:** 616f722 (no histórico de `develop`, seguido de dae9490 só com registo de workflow; `git status` limpo antes de começar)
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` | ✔ |
+| Testes | `pnpm test` | ✔ (ui 1158 em 71 ficheiros, docs 91, example 28; tokens e icons sem falhas) |
+| Acessibilidade | `pnpm test:a11y` | ✔ (233 testes, 33 suites, sem violações) |
+| Build | `pnpm build` | ✔ (`dist/index.js`, `.cjs`, `.d.ts`, `.d.cts`; sem chunks novos) |
+| Medição | `pnpm size` | ✔ saída 0; nenhum limite excedido |
+
+**Critérios de aceitação:**
+- [x] Abordagem e alternativas descartadas descritas em `02-desenvolvimento.md` (plugin esbuild `pure-component-calls`; 4 alternativas com resultado). Lido o `tsup.config.ts`: coerente com a descrição.
+- [x] API pública inalterada: `package.json` não consta do commit (`git show --stat`); `exports.test.ts` fixa a lista de 74 exports; `require` e `import()` de `@up201905892/ui` a partir de `apps/docs` devolvem 74 chaves cada; os quatro ficheiros `dist/index.*` existem.
+- [x] `displayName`: `exports.test.ts` (sobre `src`) e teste sobre `dist/index.js` verificam `displayName` igual ao nome exportado. Os componentes que são funções simples (Dialog, Popover, etc.) usam o nome da função, como antes da tarefa (nunca tiveram `displayName`); aceite.
+- [x] Caso de `Button` passou de `it.fails` a `it`, passa, comentário "KNOWN FAILURE" removido (lido o ficheiro).
+- [x] Casos de `Stack` e `Badge` com `it` e a passar (ver desvio abaixo).
+- [x] ESM e CJS carregam a partir de `apps/docs` (comandos do critério, saída 0); `package-metadata.test.ts` verde dentro de `pnpm test`.
+- [x] Medição informativa colada em `02-desenvolvimento.md`; reproduzi `pnpm size`: valores idênticos (ex.: Button 979 B, DataTable 3,38 kB, biblioteca inteira 9,3 kB, `styles.css` 8,66 kB). Nenhum export acima de 5 kB. `.size-limit.mjs` não consta do commit.
+- [x] Sem alterações fora de `packages/ui` (e `.changeset`); testes de `apps/docs` e `apps/example` passam.
+- [x] Changeset `patch` para `@up201905892/ui` (`.changeset/ds-060-tree-shakeable-build.md`).
+- [x] G1 a G3: sem dependências novas (`esbuild` já era devDependency, usado como tipo).
+
+**Desvio assinalado pelo programador (Stack/Badge e `@radix-ui/`) — conclusão: aceitável.**
+- `Stack.tsx` e `Badge.tsx` têm a prop `asChild` e `const Comp = asChild ? Slot : …`, logo importam `Slot` de `@radix-ui/react-slot`. Remover isso violaria a convenção do projeto (API com `asChild`) e o comportamento já testado. O critério, tal como escrito, é inatingível para estes dois componentes; a sua intenção (não arrastar código não relacionado, como Dialog e Button) mantém-se.
+- O teste adaptado `/@radix-ui\/(?!react-slot")/` continua a falhar se aparecer qualquer outro pacote Radix, e as asserções `ds-button` e `ds-dialog` mantêm-se. O custo real é nulo: o Slot é externo e pesa 381 B (Stack) e 358 B (Badge) no `size-limit`.
+- Nota sobre o plugin do teste `side-effect-free-externals` (marca `@radix-ui/*` e `@up201905892/icons` como `sideEffects: false`): é válido porque `@radix-ui/react-dialog` e `@radix-ui/react-slot` declaram `"sideEffects": false` (confirmado nos `package.json`), tal como um bundler de consumidor trata esses pacotes.
+
+**Verificações adicionais minhas:**
+- `grep` no `dist/index.cjs`: 0 atribuições `Nome.displayName =` de topo e 230 anotações `PURE`; o teste da DS-060 só cobria o `dist/index.js`, mas o CJS está igualmente limpo.
+- Teste de tree-shaking com guarda contra regressão silenciosa do plugin (a regex do plugin falharia em silêncio se uma fonte mudasse de forma): o caso "no top-level displayName left in dist/index.js" cobre-o.
+
+**Limitações (não são falhas):**
+1. Prova negativa (repor um `displayName` de topo num componente) NÃO repetida por mim, exigiria alterar código de produção; aceito o registo do programador, coerente com o teste que a deteta.
+2. Não abri o Storybook no browser: a tarefa não altera comportamento nem stories; `pnpm test:a11y` (que corre sobre o Storybook construído) passou integralmente.
+3. A regex do plugin é frágil face a novos padrões de declaração (ex.: `forwardRef` partido por comentário), mas a falha seria detetada pelo teste acima. Sugestão para o planeador: nenhuma.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma.
