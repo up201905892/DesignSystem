@@ -26,6 +26,16 @@ Se falhar: devolves "BLOQUEADO: <motivo>" e terminas.
 7. Procura casos limite: props em falta, texto muito longo, `disabled`, modo controlado e não controlado, tema escuro.
 8. Podes **acrescentar testes** em ficheiros `*.test.tsx` ou `*.spec.ts` para cobrir lacunas, e fazer commit `test(ui): DS-XXX …`. Nunca alteras código de produção: se algo está errado, é uma falha a reportar.
 
+## Verificação em browser
+
+Quando um critério exige ver páginas no browser (páginas MDX, revisão visual, teclado manual, capturas):
+
+1. Constrói o Storybook: `pnpm --filter ./apps/docs build-storybook`.
+2. Serve-o com a ferramenta Bash e o parâmetro `run_in_background: true`:
+   `pnpm --filter ./apps/docs exec http-server storybook-static -p 6010 -a 127.0.0.1 -s`
+3. Abre `http://127.0.0.1:6010` com Playwright (já instalado por `pnpm test:a11y:setup`) para correr axe, medir contraste nos dois temas, navegar só com teclado e tirar capturas.
+4. No fim, para o servidor em segundo plano.
+
 ## Veredicto
 
 - **Aprovado:** todas as verificações verdes, todos os critérios verificados, zero falhas em aberto.
