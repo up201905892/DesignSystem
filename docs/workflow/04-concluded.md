@@ -449,6 +449,15 @@ Modelo de entrada:
 - **Documentação:** stories `Foundations/Theme/DarkTheme` e `Foundations/Scales/Shadows` (com `play` em browser real e os dois painéis de tema). Sem `TODO` na tarefa.
 - **Lições:** a prova negativa dos `play` não foi repetida pelo testador (exigiria alterar código); fica com o registo do programador. Não houve inspeção visual manual. Sem sugestões novas para o planeador.
 
+### DS-060 · Build tree-shakeable de `@up201905892/ui` — concluída a 2026-11-20
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-20), commit 616f722 (implementação); sem commits de código de produção depois do commit testado (dae9490 e 795ce3d são só documentação)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `import { Button } from '@up201905892/ui'` já não arrasta a biblioteca inteira para o bundle do consumidor (plugin esbuild `pure-component-calls`); API pública inalterada (74 exports) e `displayName` de todos os componentes preservado.
+- **Changeset:** `.changeset/ds-060-tree-shakeable-build.md` (patch)
+- **Documentação:** abordagem e alternativas descartadas em `02-desenvolvimento.md`; stories e props não aplicáveis (sem alteração de comportamento nem de API). Sem `TODO` na tarefa.
+- **Lições:** Stack e Badge continuam a importar `@radix-ui/react-slot` por causa de `asChild` (desvio aceite pelo testador, custo 381 B e 358 B). A DS-038 já pode ser desbloqueada pelo João em `aprovacoes.md` (a DS-060 está `Concluído`). Prova negativa não repetida pelo testador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
