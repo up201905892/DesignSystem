@@ -67,7 +67,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-057 | Palavras longas no Accordion e no Dialog (`overflow-wrap`) | Layout e dados | Baixa | DS-025, DS-031 | Concluído |
 | DS-058 | Páginas de fundações no Storybook: sombras semânticas e larguras de borda por token | Fundações | Baixa | DS-006, DS-052, DS-053 | Concluído |
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Planeado |
-| DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Planeado |
+| DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Pronto para teste |
 | DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Planeado |
 
 ## Decisões aplicadas
@@ -2341,6 +2341,8 @@ Modelo de tarefa (copiar para cada nova tarefa):
 **Histórico:**
 - 2026-11-16 · planeador · — → Proposta · bloqueio da DS-038 (02-desenvolvimento.md, iteração 1): `import { Button }` arrasta a biblioteca inteira; sugestão do programador
 - 2026-11-20 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-20)
+- 2026-11-20 · programador · Planeado → Em desenvolvimento · início da implementação
+- 2026-11-20 · programador · Em desenvolvimento → Pronto para teste · commit 616f722
 
 ### DS-061 · "Getting started": ligação para "Accessibility/Conformance"
 
