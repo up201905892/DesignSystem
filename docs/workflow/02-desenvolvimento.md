@@ -1035,3 +1035,29 @@ Modelo de entrada:
 - **Commit:** 616f722 `feat(ui): DS-060 make the ui build tree-shakeable` (resolve o bloqueio acima; estado passa a Pronto para teste).
 - **Ficheiros alterados no commit:** `.changeset/ds-060-tree-shakeable-build.md`, `packages/ui/src/Table/useTableSort.ts`, `packages/ui/src/Toast/Toast.tsx`, `packages/ui/src/exports.test.ts`, `packages/ui/src/size-limit.test.ts`, `packages/ui/tsup.config.ts`.
 
+### DS-059 · Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt"
+
+**Iteração 1 — 2026-11-20**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** medição antes/depois, verificação das cinco hipóteses, helper `expectNoA11yViolations` com as chamadas serializadas (mitigação, ver abaixo) e `a11y.test.tsx` com mais três casos. Assinatura pública inalterada; nenhum teste de componente alterado.
+- **Reprodução (comandos, executados a partir da raiz; sem ficheiros de script no repositório):**
+  - isolado: `for i in $(seq 1 100); do pnpm --filter @up201905892/ui exec vitest run test/a11y.test.tsx >/dev/null 2>&1 || echo FAIL; done | sort | uniq -c`
+  - suite: o mesmo ciclo (20 vezes, em lotes de 10 por causa do tempo limite da ferramenta) com `pnpm --filter @up201905892/ui test`.
+  - Contagem de FAIL **antes** da correção: isolado 0/100; suite 0/20. **Depois:** isolado 0/100; suite 0/20. O incidente de 2026-11-06 não foi reproduzido nem antes nem depois.
+- **Hipóteses (sondas temporárias em `packages/ui/test/`, removidas):**
+  - (a) chamadas concorrentes: **confirmada como defeito, mas não explica o incidente.** Quatro `axe()` em paralelo: uma resolve com `image-alt`, as outras três rejeitam com "Axe is already running…". É uma rejeição, não um falso verde, e os testes de um ficheiro correm em série; por isso não explica "resolveu sem violações". Corrigida por serialização (teste novo com `Promise.allSettled`; sem a serialização falharia com a mensagem do axe, como a sonda mostrou).
+  - (b) estado do `document`: **descartada como causa neste ficheiro; confirmada como risco real noutros.** O Vitest isola o ambiente por ficheiro (jsdom criado 71 vezes para 71 ficheiros), por isso o estado de outros ficheiros não chega a `a11y.test.tsx`, que só tem testes de markup simples com limpeza automática do Testing Library. Mas, medido: `<img>` sem `alt` dentro de um `container` com `aria-hidden="true"`, `inert` ou `display: none` no `body` dá `image-alt` em `inapplicable` e **nenhuma violação** (falso verde). É o que um overlay Radix aberto pode fazer ao `container` do RTL. Não corrigido (muda o comportamento do helper e pode afetar testes de componentes; fora de âmbito); documentado no JSDoc e proposto abaixo.
+  - (c) `image-alt` em `incomplete`: **descartada.** 300 execuções sequenciais com render novo: 300 em `violations`, 0 em `incomplete`, 0 em `inapplicable`.
+  - (d) versões (`pnpm-lock.yaml`): `axe-core@4.14.0`, `vitest-axe@0.1.0`, `jsdom@30.1.2`, `vitest@5.0.3`. Sem indício de que a versão seja a causa; nada foi atualizado.
+  - (e) tempo limite: **descartada.** O ficheiro demora ~1 s (limite 5 s), a suite ~35 s, e um tempo limite daria "timed out", não um passe do helper.
+- **Causa:** **não encontrada** (incidente não reproduzível em 120 execuções antes e 120 depois). Aplicada a mitigação mais restrita: serialização das chamadas ao axe (fila de promessas no módulo do helper), descrita como mitigação no JSDoc. Não se usou `retry`, `skip`, aumento de tempos limite nem `runOnly`.
+- **Ficheiros alterados:** `packages/ui/test/a11y.ts`, `packages/ui/test/a11y.test.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** `feat(ui): DS-059 serialise axe calls in the a11y helper and add negative cases` (hash no histórico da tarefa em `01-planeamento.md`).
+- **Critérios de aceitação cobertos:** reprodução medida; hipóteses (a) a (e); mitigação; casos negativos `button-name` e `label` com o id da regra verificado, caso positivo mantido; assinatura mantida; nada em `.github/`; sem dependências novas nem changeset.
+- **Testes escritos pelo programador:** `packages/ui/test/a11y.test.tsx` (5 casos: positivo, `image-alt`, `button-name`, `label`, chamadas sobrepostas).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (ui 1161) · build ✔. `pnpm test:a11y` não corrido (precisa de Storybook e Chromium; o helper não é usado lá).
+- **Notas para o testador:** repetir 30 execuções isoladas e 5 da suite. Como a causa não foi encontrada, o critério de a mitigação "deixar as execuções a verde" é fraco (já estavam verdes antes); avaliar se a serialização é aceite.
+- **Decisões para o João:** causa do incidente de 2026-11-06 não identificada; mitigação aplicada (serialização). Confirmar se o caso se mantém em observação.
+- **Sugestões para o planeador:** tarefa nova para o helper falhar (ou avisar) quando o `container` ou um ascendente estiver `aria-hidden`, `inert` ou `display: none` (falso verde medido em (b)), com revisão dos testes de componentes com overlays que possam passar a falhar.
+
