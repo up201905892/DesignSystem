@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-23
+
+- **Decisões para o João** (o ciclo está parado à espera de ti; `aprovacoes.md` não mudou desde 2026-11-20):
+  1. **Desbloquear DS-038** em `aprovacoes.md`: a DS-060 está `Concluído`; falta só repetir `pnpm build && pnpm size`. Depois dela seguem DS-039 e DS-041.
+  2. **DS-040 e DS-042 em `Em teste` há 10 dias.** O problema é o mesmo do relatório 2: a ferramenta Bash dos agentes não tem o parâmetro `run_in_background`, por isso o `testador` não consegue servir o `storybook-static`. A instrução nova em `testador.md` não resolve isto. Opções: configurar a capacidade em `.claude/`, ou autorizar um único script Playwright que sirva `apps/docs/storybook-static` no próprio processo. Não as retestei, porque nada mudou. Bloqueia DS-043, DS-046 a DS-049 e DS-061.
+  3. **Aprovar DS-062** (helper de axe falhar com alvo escondido). É a única tarefa que se pode começar já.
+  4. Pedidos para `.github/` (só teu), sem resposta: passo `pnpm size` no CI (DS-038), opcionalmente `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` (DS-040), e `source` do icons na DS-039.
+- **Concluídas, testadas, desenvolvidas:** nenhuma. Não há tarefa `Aprovado`, `Pronto para teste` ou `Planeado` com dependências satisfeitas.
+- **Decisões aplicadas:** nenhuma.
+- **Propostas novas:** nenhuma. O `planeador` confirmou que o âmbito do MVP já está todo coberto; as sugestões antigas (classes extra no Input/Checkbox, `role="alert"` no FieldError, ESLint 10 e TS 7, etc.) mexem em componentes e obrigariam a repetir a DS-038 e a DS-040, por isso ficam para depois da v1.0.
+- **Violações de regras encontradas:** DS-040 e DS-042 em `Em teste` há mais de 3 dias; DS-038 em `Em desenvolvimento` parada desde 2026-11-16. Mais nenhuma (1 tarefa em desenvolvimento, dentro do limite).
+- **Próximo passo:** decisões 1 a 3.
+
 ## 2026-11-20
 
 - **Decisões para o João:**
