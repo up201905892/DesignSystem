@@ -2,6 +2,19 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-25
+
+- **Decisões para o João** (iguais às de ontem; sem commits nem linhas novas em `aprovacoes.md`, o ciclo continua parado à espera de ti):
+  1. **Desbloquear DS-038** em `aprovacoes.md`: a DS-060 está `Concluído`; falta só repetir `pnpm build && pnpm size`. Depois seguem DS-039 e DS-041.
+  2. **DS-040 e DS-042 em `Em teste` há 12 dias.** O `testador` não tem `run_in_background` na ferramenta Bash e não consegue servir o `storybook-static`. Opções: dar essa capacidade em `.claude/`, ou autorizar um script Playwright que sirva `apps/docs/storybook-static` no próprio processo. Bloqueia DS-043, DS-046 a DS-049 e DS-061. Não as retestei, porque nada mudou.
+  3. **Aprovar DS-062** (helper de axe falhar com alvo escondido). É a única tarefa que se pode começar já.
+  4. Pedidos para `.github/` (só teu), sem resposta: passo `pnpm size` no CI (DS-038), opcionalmente `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` (DS-040), e `source` do icons na DS-039.
+- **Concluídas, testadas, desenvolvidas:** nenhuma. Não há tarefa `Aprovado`, `Pronto para teste` ou `Planeado` com dependências satisfeitas.
+- **Decisões aplicadas:** nenhuma.
+- **Propostas novas:** nenhuma (âmbito do MVP coberto; DS-062 aguarda aprovação).
+- **Violações de regras encontradas:** DS-040 e DS-042 em `Em teste` há mais de 3 dias; DS-038 em `Em desenvolvimento` parada desde 2026-11-16. Mais nenhuma (1 tarefa em desenvolvimento, dentro do limite).
+- **Próximo passo:** decisões 1 a 3.
+
 ## 2026-11-24
 
 - **Decisões para o João** (iguais às de ontem; sem commits nem linhas novas em `aprovacoes.md`, o ciclo continua parado à espera de ti):
