@@ -87,6 +87,40 @@ describe('expectNoA11yViolations', () => {
       }
     });
 
+    it.each([
+      ['inert', { inert: '' }],
+      ['hidden', { hidden: '' }],
+      ['display: none', { style: 'display: none' }],
+    ])('reports %s on the target itself', async (reason, attrs) => {
+      const { target, wrapper } = mountInWrapper({});
+      for (const [k, v] of Object.entries(attrs)) target.setAttribute(k, v);
+      try {
+        await expect(expectNoA11yViolations(target)).rejects.toThrow(
+          `(${reason} on the target <div>)`,
+        );
+      } finally {
+        wrapper.remove();
+      }
+    });
+
+    it('detects display: none that comes from a stylesheet, several levels up', async () => {
+      const style = document.createElement('style');
+      style.textContent = '.gone { display: none; }';
+      document.head.appendChild(style);
+      const { target, wrapper } = mountInWrapper({ class: 'gone' });
+      const inner = document.createElement('section');
+      inner.appendChild(target);
+      wrapper.appendChild(inner);
+      try {
+        await expect(expectNoA11yViolations(target)).rejects.toThrow(
+          /display: none on an ancestor <div>#wrapper\.gone/,
+        );
+      } finally {
+        wrapper.remove();
+        style.remove();
+      }
+    });
+
     it('regression: an img without alt under an aria-hidden ancestor no longer passes silently', async () => {
       const { target, wrapper } = mountInWrapper({ 'aria-hidden': 'true' }, '<img src="x.png">');
       try {
