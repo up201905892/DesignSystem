@@ -55,3 +55,15 @@ jobs:
       - name: Acessibilidade
         if: steps.existe.outputs.sim == 'true'
         run: pnpm run --if-present test:a11y
+
+      - name: Tamanho do bundle
+        if: steps.existe.outputs.sim == 'true'
+        run: pnpm run --if-present size
+
+      - name: Acessibilidade (reflow a 320 px)
+        if: steps.existe.outputs.sim == 'true'
+        run: pnpm run --if-present test:a11y:reflow
+
+      - name: Acessibilidade (alturas e áreas de toque)
+        if: steps.existe.outputs.sim == 'true'
+        run: pnpm run --if-present test:a11y:sizes
