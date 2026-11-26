@@ -46,7 +46,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
 | DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057, DS-060 | Concluído |
-| DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Pronto para teste |
+| DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Concluído |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Em teste |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
 | DS-042 | Página "Getting started" no Storybook | Documentação | Alta | DS-036 | Em teste |
@@ -1581,6 +1581,9 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-26 · planeador · Planeado (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-26, Responder): a condição `source` do `exports["."]` de `@up201905892/icons` (aponta para `src`, não publicado) não é pedido para `.github/`; avalia-se dentro desta tarefa, na verificação do tarball (`publint`, `attw`, conteúdo do `.tgz`). Não voltar a pôr na lista de pedidos para `.github/`
 - 2026-11-26 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-26 · programador · Em desenvolvimento → Pronto para teste · commit f223b83
+- 2026-11-26 · testador · Pronto para teste → Em teste · início dos testes sobre 2dbde8c (código de f223b83)
+- 2026-11-26 · testador · Em teste → Aprovado · relatório 1 aprovado: lint, typecheck, test, test:a11y, build e `pnpm verify:package` verdes (código 0; publint, attw e 9 testes do consumidor); prova negativa (sem `./styles.css` em `exports`) falha com código 1
+- 2026-11-26 · finalizador · Aprovado → Concluído · changeset patch (tokens, icons) já no commit f223b83; entrada em 04-concluded.md
 
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 

@@ -1999,3 +1999,41 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas encontradas:** nenhuma.
+
+### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor — Relatório 1 — 2026-11-26
+
+- **Commit testado:** 2dbde8c (HEAD de `develop`, confirmado com `git log`; código de produção = f223b83, o commit 2dbde8c só toca em documentação). `git status --short` no início sem alterações; não mudei de branch.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos) | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1161, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (233 testes, 33 suites, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Verificação do pacote | `pnpm verify:package` (build, pack, publint, attw, consumidor): terminou com "verify:package passed", código 0 | ✔ |
+| Prova negativa | remover `"./styles.css"` de `exports` em `packages/ui/package.json` e correr `node scripts/verify-package.mjs --skip-build` | ✔ (código 1: testes 4 (CJS) e 8 (ESM) falham com `ERR_PACKAGE_PATH_NOT_EXPORTED`; "verify:package failed (1): tests/consumer checks"). Ficheiro reposto à mão; `git status` sem diferenças em código |
+
+**Critérios de aceitação:**
+- [x] Script `pnpm verify:package` na raiz: `scripts/verify-package.mjs` faz o build, `pnpm pack` dos três pacotes para `os.tmpdir()` (fora do repositório, apagada no `finally`; o `git status` depois da execução só mostrava o meu ficheiro de workflow), publint e attw sobre cada `.tgz`, instala os tarballs no consumidor e corre-o; só sai com 0 se `failures` estiver vazio. Verificado com a execução completa (0) e a prova negativa (1).
+- [x] `publint` sem erros e `attw` sem problemas: "All good!" e "No problems found" nos três pacotes; tabelas com verde em node16 (CJS), node16 (ESM) e bundler (node10 ignorado pelo perfil, como a especificação não o exige). O publint corre com `--level warning --strict` (mais exigente do que o pedido). As entradas `*.css` são excluídas do `attw` (sem JS nem tipos); a sua resolução é verificada pelos testes (d).
+- [x] Conteúdo dos tarballs: a listagem do `pnpm pack` mostra só `dist/`, `package.json`, `README.md`, `LICENSE` (+ `LICENSE-LUCIDE` no icons) em tokens (9 ficheiros), icons (10) e ui (10); o script verifica com `tar -tzf` que nada fora disso nem `.test.`/`.stories.`/`src/` está no tarball e que nenhuma `package.json` tem `workspace:` ("ok ... no workspace:" nos três). Limitação: não consegui eu próprio correr `tar -tzf` sobre um tarball porque a sessão recusou comandos sobre `/tmp`; baseei-me na listagem do `pnpm pack` e na verificação do script (código lido, lógica correta). Condição `source` do icons (pedida pelo João): o script falha se um alvo de `main`/`module`/`types`/`exports` não estiver no tarball; passou, logo o `source` foi retirado do `package.json` publicado (`publishConfig.exports`).
+- [x] Consumidor em `tests/consumer/` fora do workspace (`pnpm-workspace.yaml` só inclui `packages/*` e `apps/*`; tem `package.json` próprio): (a) `import` e `require` de ui, icons e tokens (testes 1, 2, 5, 6); (b) `tsc --noEmit` strict (`strict: true`, `skipLibCheck: false`) sobre `usage.tsx` com `Button`, `DataTable<User>`, `CheckIcon` e `tokens`, com dois `@ts-expect-error` que provam que a tipagem rejeita linhas erradas e `getRowId` em falta (passou); (c) `renderToString(<Button>OK</Button>)` com `window` e `document` indefinidos e `class` com `ds-button` (testes 3 e 7, não triviais); (d) `styles.css` resolve e contém `--ds-color-bg-canvas` (testes 4 e 8, e a prova negativa mostra que falham quando a entrada falta). 9 de 9 testes verdes em Node 22.
+- [x] Nenhum `pnpm publish`: `grep publish` em `scripts/verify-package.mjs` e `package.json` só encontra um comentário a dizer que nunca publica; eu também não corri nenhum.
+- [x] G1 a G3: dependências novas só `publint` e `@arethetypeswrong/cli` (devDependencies da raiz, `package.json` e lockfile no commit); lint, build e testes executam com o lockfile; commit `feat(ui): DS-039 …` em inglês, com o ID. Changeset `patch` para tokens e icons (alteram `exports`).
+
+**Testes exigidos:**
+- [x] Verificações (a) a (d) como testes automatizados em `tests/consumer/`, corridos pelo `verify:package`: existem (`esm.test.mjs` 5, `cjs.test.cjs` 4, `usage.tsx`) e não são triviais.
+- [x] Verificação manual: `pnpm verify:package` com código 0; prova negativa do `styles.css` com falha e código 1 (não commitada, reposta). Listagem de conteúdo: ver nota acima sobre `tar -tf`.
+- Acessibilidade e Visual/Storybook: não aplicável (`pnpm test:a11y` corrido mesmo assim, verde).
+
+**Casos limite e notas:**
+- A prova negativa foi feita com `--skip-build`, como indicado pelo programador; sem essa opção o build do `apps/example` falharia primeiro (importa `styles.css`), o que também é falha.
+- O `npm install` do consumidor precisa de rede; correu bem. A dependência de `@up201905892/icons` do ui é resolvida por `overrides` para o tarball local, porque o pacote ainda não está no registo.
+- Resíduo fora do repositório: criei `/tmp/qa-ds039/` (um `pnpm pack` do ui) e a sessão recusou apagá-lo (`rm` fora dos diretórios de trabalho precisa de aprovação). É lixo inofensivo em `/tmp`; nenhum ficheiro temporário ficou no repositório e nenhum processo ficou a correr.
+- Não foi necessária verificação em browser.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas encontradas:** nenhuma.

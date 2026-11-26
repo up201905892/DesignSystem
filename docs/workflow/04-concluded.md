@@ -476,6 +476,15 @@ Modelo de entrada:
 - **Documentação:** secção "Bundle size" em `packages/ui/README.md` (método, limites e entradas); stories e props não aplicáveis (sem componente novo). Sem `TODO` na tarefa.
 - **Lições:** Stack e Badge continuam a incluir `@radix-ui/react-slot` por `asChild` (desvio da DS-060, aceite). O tree-shaking depende de o consumidor usar um bundler com tree-shaking; a DS-039 valida com um projeto consumidor. O passo `pnpm size` já está no `ci.yml` (pedido ao João fechado). DS-039 e DS-041 deixam de depender desta tarefa.
 
+### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor — concluída a 2026-11-26
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-26), commit 2dbde8c (código de produção em f223b83)
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `pnpm verify:package` constrói, empacota os três pacotes e prova, com publint, attw e um projeto consumidor fora do workspace (ESM, CJS, tipos strict, SSR e `styles.css`), que os tarballs instalam e funcionam; os tipos CJS de `tokens` e `icons` ficaram corrigidos.
+- **Changeset:** `.changeset/ds-039-cjs-types-tokens-icons.md` (patch para `@up201905892/tokens` e `@up201905892/icons`; o `ui` não muda)
+- **Documentação:** stories não aplicáveis (sem componente); o comando e o guia de publicação ficam documentados na DS-041 e nos README da DS-046. Sem `TODO` na tarefa.
+- **Lições:** a condição `source` do `icons` ficou só no monorepo (`publishConfig.exports` retira-a do tarball). `verify:package` precisa de rede e não está no CI (fora de âmbito). Resíduo inofensivo do testador em `/tmp/qa-ds039/`.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
