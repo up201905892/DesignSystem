@@ -31,10 +31,8 @@ Se falhar: devolves "BLOQUEADO: <motivo>" e terminas.
 Quando um critério exige ver páginas no browser (páginas MDX, revisão visual, teclado manual, capturas):
 
 1. Constrói o Storybook: `pnpm --filter ./apps/docs build-storybook`.
-2. Serve-o com a ferramenta Bash e o parâmetro `run_in_background: true`:
-   `pnpm --filter ./apps/docs exec http-server storybook-static -p 6010 -a 127.0.0.1 -s`
-3. Abre `http://127.0.0.1:6010` com Playwright (já instalado por `pnpm test:a11y:setup`) para correr axe, medir contraste nos dois temas, navegar só com teclado e tirar capturas.
-4. No fim, para o servidor em segundo plano.
+2. o testador escreve um único script Node numa pasta temporária. O script arranca o http-server, espera com wait-on, corre o Playwright e mata o servidor num finally. Corre-se com um só comando node <script>.
+
 
 Regras:
 - Nunca uses `&`, `nohup`, `;`, `&&` nem `|` para pôr processos em segundo plano ou encadear comandos: as permissões recusam comandos compostos. Um comando por chamada.
