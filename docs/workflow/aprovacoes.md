@@ -31,6 +31,9 @@ Como usar: acrescenta uma linha por decisão (pelo GitHub, no branch `develop`, 
 | 2026-11-26 | Desbloquear | DS-038 | DS-060 concluída. Repetir pnpm build e pnpm size e seguir. |
 | 2026-11-26 | Aprovar | DS-062 | |
 | 2026-11-26 | Desbloquear | DS-040, DS-042 | Verificação em browser com um script node que serve o Storybook no próprio processo. |
+| 2026-11-26 | Responder | DS-038 | Passo pnpm size acrescentado ao ci.yml. Pedido fechado. |
+| 2026-11-26 | Responder | DS-040 | Passos test:a11y:reflow e test:a11y:sizes acrescentados ao ci.yml. Pedido fechado. |
+| 2026-11-26 | Responder | DS-039 | A condição source do icons não é pedido para .github/; avalia-se dentro da DS-039 (tarball). Não voltar a pôr na lista de pedidos para .github/. |
 
 Decisões possíveis:
 
