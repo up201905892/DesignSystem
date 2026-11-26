@@ -963,6 +963,23 @@ Modelo de entrada:
 - **Notas para o testador:** não pegar na tarefa até haver decisão do João. Decisões para o João: (1) tornar o build tree-shakeable (p. ex. `displayName` sem efeito secundário e `/* @__PURE__ */` nas chamadas do React, ou entradas por componente/`preserveModules`), tarefa nova a planear; (2) passo `pnpm size` no CI (`.github/`, ficheiro do João).
 - **Sugestão para o planeador:** nova tarefa "build tree-shakeable de `@up201905892/ui`" (dependência de DS-038 e prévia à medição final); DS-039 e DS-041 dependem de DS-038.
 
+**Iteração 2 — 2026-11-26** (retoma após `Desbloquear` do João em aprovacoes.md, 2026-11-26; DS-060 `Concluído`; passo `pnpm size` já no `ci.yml`)
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** repetidos `pnpm build` e `pnpm size` sobre o build tree-shakeable da DS-060. Não foi preciso alterar código: o teste de tree-shaking de `packages/ui/src/size-limit.test.ts` já passou de `it.fails` a `it` (e o comentário "KNOWN FAILURE" já foi removido) no commit 616f722 da DS-060; os três casos (Button, Stack, Badge) e o de `displayName` correm com `it` e passam. Esta iteração só acrescenta o registo (sem commit de código).
+- **Ficheiros alterados:** `docs/workflow/{01-planeamento.md,02-desenvolvimento.md}` (nenhum ficheiro de código).
+- **Commit(s):** código medido e testado: HEAD 7fb6f17 (contém 616f722 `feat(ui): DS-060 make the ui build tree-shakeable`; `git log --oneline | grep DS-060` devolve 5 commits; contém DS-051 a DS-057, ex.: 1983c2a, d00a7dc, 9de2315, 05286f5, b0e40b7, dd8c6ce, 07b77fd). O commit desta iteração é de documentação: `docs(workflow): DS-038 record development iteration 2, ready for test`.
+- **Resultado da medição (commit medido 7fb6f17, `pnpm build && pnpm size`):** código de saída 0, todos os limites cumpridos. Substitui a medição de 317140f (histórico: 8,05 a 8,66 kB por export). Tabela em B (bytes) / kB gzip, mesmos externos da iteração 1:
+  - Maiores: `DataTable` 3,38 kB; `ToastProvider` 1,89; `Pagination` 1,86; `PopoverContent` 1,49; `Alert` 1,31; `DialogContent` 1,29; `Select` 1,08; `IconButton` 1,02; `Button` 979 B.
+  - Entre 500 B e 700 B: `Tooltip` 674, `useTableSort` 667, `DropdownMenuContent` 630, `Textarea` 619, `Switch` 617, `RadioGroup` 612, `GridItem` 592, `Spinner` 560, `TableHeaderCell` 522, `Field` 508, `Skeleton` 505.
+  - Restantes exports (sub-componentes e hooks): 244 a 484 B (p. ex. `Input` 791, `Checkbox` 733, `Stack` 381, `Badge` 358, `Dialog` 315, `VisuallyHidden` 310, `DialogClose` 245, `PopoverClose` 244 B mínimo).
+  - `styles.css` 8,66 kB (limite 15 kB, passa). Biblioteca inteira (informativa) 9,3 kB.
+  - Nenhum export chega perto de 5 kB; o maior é `DataTable` com 3,38 kB. Nenhum limite foi alterado.
+- **Critérios de aceitação cobertos:** todos: configuração e `pnpm size` (iteração 1); limite de 5 kB cumprido por todos os exports; lista de entradas validada por teste; CSS 15 kB e entrada informativa; tree-shaking (`import { Button }` sem `@radix-ui/react-dialog` nem `ds-dialog`, teste com `it`); medição depois de DS-051 a DS-057 e de DS-060; sem necessidade de "Decisões para o João" por tamanho; G1 a G3 na iteração 1. O pedido do passo `pnpm size` no CI foi fechado pelo João (ci.yml).
+- **Testes escritos pelo programador:** nenhum novo nesta iteração (os de `size-limit.test.ts` são da iteração 1 e da DS-060).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens 92, icons 10, ui 1161, docs 91, example 28; zero falhas esperadas) · build ✔ · `pnpm size` ✔ (código 0). A verificação manual de baixar um limite para `100 B` não foi repetida nesta iteração (a iteração 1 já a dispensou); fica ao testador, se quiser.
+- **Notas para o testador:** confirmar `pnpm build && pnpm size` com código 0, que `size-limit.test.ts` não tem `it.fails` e a prova negativa do limite de `100 B` (temporária, não commitada). Sem sugestões para o planeador.
+
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 
 **Iteração 1 — 2026-11-16**

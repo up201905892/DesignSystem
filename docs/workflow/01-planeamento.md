@@ -45,7 +45,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
-| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057, DS-060 | Em desenvolvimento |
+| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057, DS-060 | Pronto para teste |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Em teste |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
@@ -69,7 +69,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Concluído |
 | DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Concluído |
 | DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Planeado |
-| DS-062 | Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`) | Fundações | Média | DS-059 | Proposta |
+| DS-062 | Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`) | Fundações | Média | DS-059 | Planeado |
 
 ## Decisões aplicadas
 
@@ -98,6 +98,12 @@ Linhas de `aprovacoes.md` já tratadas pelo planeador (evita aplicar a mesma dec
 | 2026-11-20 | Aprovar | DS-059, DS-061 | 2026-11-20 |
 | 2026-11-20 | Responder | DS-039 | 2026-11-20 |
 | 2026-11-20 | Desbloquear | DS-040, DS-042 | 2026-11-20 |
+| 2026-11-26 | Desbloquear | DS-038 | 2026-11-26 |
+| 2026-11-26 | Aprovar | DS-062 | 2026-11-26 |
+| 2026-11-26 | Desbloquear | DS-040, DS-042 | 2026-11-26 |
+| 2026-11-26 | Responder | DS-038 | 2026-11-26 |
+| 2026-11-26 | Responder | DS-040 | 2026-11-26 |
+| 2026-11-26 | Responder | DS-039 | 2026-11-26 |
 
 ## Decisões técnicas
 
@@ -1535,6 +1541,9 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-16 · programador · Em desenvolvimento (sem mudança de estado) · commit 317140f; BLOQUEADA: todos os exports medem ≥ 8,05 kB gzip (tree-shaking não funciona), à espera de decisão do João; ver 02-desenvolvimento.md
 - 2026-11-16 · planeador · Em desenvolvimento (sem mudança de estado) · proposta a DS-060 (build tree-shakeable), que remove a causa do bloqueio; dependências desta tarefa não alteradas. Sugestão ao João: `Alterar` a DS-038 para depender também da DS-060 (a medição final e o critério de tree-shaking só podem passar depois dela; a DS-060 não depende da DS-038, logo não há ciclo) e, quando a DS-060 estiver `Concluído`, `Desbloquear` a DS-038 para o programador repetir `pnpm build && pnpm size` sobre o novo build. Enquanto bloqueada, a DS-038 ocupa uma das 2 vagas de `Em desenvolvimento`
 - 2026-11-20 · planeador · Em desenvolvimento (sem mudança de estado) · especificação revista a pedido do João (aprovacoes.md, 2026-11-20, Alterar): passa a depender também da DS-060; novo critério que exige a medição final sobre um commit com a DS-060 e o teste de tree-shaking com `it`. A tarefa já estava `Em desenvolvimento` (bloqueada), por isso não volta a `Proposta`; continua parada até a DS-060 estar `Concluído` e o João a `Desbloquear` em `aprovacoes.md`
+- 2026-11-26 · planeador · Em desenvolvimento (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-26, Desbloquear): a DS-060 está `Concluído`; o programador repete `pnpm build` e `pnpm size` sobre um commit que contém a DS-060, passa o teste de tree-shaking a `it` e segue com a tarefa (critérios de medição final). Continua a ocupar uma das 2 vagas de `Em desenvolvimento`
+- 2026-11-26 · planeador · Em desenvolvimento (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-26, Responder): o passo `pnpm size` foi acrescentado ao `ci.yml`; pedido fechado, não repetir
+- 2026-11-26 · programador · Em desenvolvimento → Pronto para teste · medição final sobre 7fb6f17 (contém DS-060): `pnpm build && pnpm size` com código 0, maior export 3,38 kB (DataTable); teste de tree-shaking com `it` e verde; sem alteração de código nesta iteração, ver 02-desenvolvimento.md
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 
@@ -1566,6 +1575,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-10-09 · planeador · especificação revista a pedido do João (conversa): placeholder do scope substituído por `@up201905892`
 - 2026-11-05 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-04)
 - 2026-11-20 · planeador · Planeado (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-20, Responder): o `ci.yml` já corre `pnpm build` antes de lint/typecheck/test; pedido fechado, não repetir
+- 2026-11-26 · planeador · Planeado (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-26, Responder): a condição `source` do `exports["."]` de `@up201905892/icons` (aponta para `src`, não publicado) não é pedido para `.github/`; avalia-se dentro desta tarefa, na verificação do tarball (`publint`, `attw`, conteúdo do `.tgz`). Não voltar a pôr na lista de pedidos para `.github/`
 
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 
@@ -1609,6 +1619,9 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-16 · testador · Em teste (sem mudança de estado) · relatório 1 em 03-testing.md, incompleto: verificações automáticas verdes, mas a revisão visual do DataTable e a verificação manual por teclado ficaram bloqueadas (servir `storybook-static` em segundo plano recusado pelas permissões)
 - 2026-11-20 · planeador · Em teste (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-20, Desbloquear): o testador serve o `storybook-static` com `run_in_background` (ver `.claude/agents/testador.md`) e repete só a verificação em browser que ficou por fazer no relatório 1 (revisão visual do DataTable e verificação manual só com teclado); as verificações automáticas já verdes não são repetidas
 - 2026-11-20 · testador · Em teste (sem mudança de estado) · relatório 2 em 03-testing.md, incompleto: build do Storybook ✔, mas a ferramenta Bash não tem o parâmetro `run_in_background` (`InputValidationError`), por isso a revisão visual do DataTable e a verificação manual por teclado continuam por fazer
+- 2026-11-26 · planeador · Em teste (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-26, Desbloquear): a verificação em browser (revisão visual do DataTable e verificação manual só com teclado) faz-se com um script node que serve o `storybook-static` no próprio processo (sem servidor em segundo plano); só se repete o que ficou por fazer nos relatórios 1 e 2
+- 2026-11-26 · planeador · Em teste (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-26, Responder): os passos `pnpm test:a11y:reflow` e `pnpm test:a11y:sizes` foram acrescentados ao `ci.yml`; pedido fechado, não repetir
+- 2026-11-26 · testador · Em teste (sem mudança de estado) · relatório 3 em 03-testing.md, incompleto: build e build do Storybook ✔, mas a sessão só permite escrever na raiz do repositório (Write e `mkdir` em `/tmp` recusados), por isso o script de browser não pôde ser criado fora do repositório e a revisão visual do DataTable e a verificação por teclado continuam por fazer
 
 ### DS-041 · Preparação da versão 1.0.0 e guia de publicação manual
 
@@ -1680,6 +1693,7 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-13 · testador · Pronto para teste → Em teste · início dos testes
 - 2026-11-16 · testador · Em teste (sem mudança de estado) · relatório 1 incompleto: G1 verde, falta a verificação em browser da página MDX (servidor em segundo plano bloqueado pelas permissões; ver 03-testing.md)
 - 2026-11-20 · planeador · Em teste (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-20, Desbloquear): o testador serve o `storybook-static` com `run_in_background` (ver `.claude/agents/testador.md`) e repete só a verificação em browser da página MDX que ficou por fazer no relatório 1; as verificações já verdes não são repetidas
+- 2026-11-26 · planeador · Em teste (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-26, Desbloquear): a verificação em browser da página MDX faz-se com um script node que serve o `storybook-static` no próprio processo (sem servidor em segundo plano); as verificações já verdes não são repetidas
 
 ### DS-043 · Guias de temas e de personalização de estilos
 
@@ -2421,3 +2435,4 @@ Modelo de tarefa (copiar para cada nova tarefa):
 
 **Histórico:**
 - 2026-11-20 · planeador · — → Proposta · sugestão do programador, do testador e do finalizador da DS-059 (falso verde medido na hipótese (b), 02-desenvolvimento.md)
+- 2026-11-26 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-26)
