@@ -485,11 +485,22 @@ Modelo de entrada:
 - **Documentação:** stories não aplicáveis (sem componente); o comando e o guia de publicação ficam documentados na DS-041 e nos README da DS-046. Sem `TODO` na tarefa.
 - **Lições:** a condição `source` do `icons` ficou só no monorepo (`publishConfig.exports` retira-a do tarball). `verify:package` precisa de rede e não está no CI (fora de âmbito). Resíduo inofensivo do testador em `/tmp/qa-ds039/`.
 
+### DS-062 · Helper de axe: falhar quando o alvo ou um ascendente está escondido — concluída a 2026-11-26
+
+- **Relatório de testes que aprovou:** Relatório 1 (2026-11-26), commit 2a70142 (código de produção em d015bf2); depois dele só há testes (fd97595) e documentação, sem alterações em `packages/*/src`
+- **Iterações de desenvolvimento:** 1
+- **Entregue:** `expectNoA11yViolations` verifica, dentro da fila de serialização e antes do axe, se o alvo ou um ascendente está escondido (`aria-hidden="true"`, `inert`, `hidden`, `display: none`) e rejeita com mensagem que indica motivo, elemento e se é alvo ou ascendente; fim do falso verde da DS-059. Assinatura inalterada.
+- **Changeset:** não aplicável (só o helper de teste em `packages/ui/test`, que não é publicado)
+- **Documentação:** JSDoc do helper reescrito (verificação, quatro motivos e o que fazer); stories e props não aplicáveis (sem componente). Sem `TODO` na tarefa.
+- **Lições:** o testador acrescentou 4 casos (`inert`, `hidden` e `display: none` no alvo; `display: none` por folha de estilo) e repetiu a prova negativa (12 falhas em 19 sem a verificação). Nenhuma violação real nova encontrada. Sem sugestões novas para o planeador.
+
 ## Marcos
 
 - Fundações concluídas — 2026-10-13 (DS-001 a DS-009)
 - Formulários concluídos — 2026-10-16 (DS-010 a DS-018)
 - Overlays e feedback concluídos — 2026-10-23 (DS-019 a DS-027)
 - Layout e dados concluídos — 2026-10-28 (DS-028 a DS-035; as tarefas de seguimento DS-053, DS-055 e DS-057 continuam como Proposta, tal como nas fases anteriores)
+
+- Fundações: com a DS-062 todas as tarefas da fase estão `Concluído`; o marco já tinha sido registado a 2026-10-13 (DS-001 a DS-009), por isso não há marco novo.
 
 <!-- O finalizador regista aqui quando uma fase do MVP fica toda Concluído (ex.: "Fundações concluídas — 2026-10-30"). -->
