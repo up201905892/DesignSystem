@@ -2037,3 +2037,42 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Testes adicionados pelo testador:** nenhum.
 
 **Falhas encontradas:** nenhuma.
+
+### DS-062 · Helper de axe: falhar quando o alvo ou um ascendente está escondido — Relatório 1 — 2026-11-26
+
+- **Commit testado:** 2a70142 (código = d015bf2), confirmado no histórico de `develop` com `git log`; `git status --short` limpo no início; não mudei de branch. Acrescentei o commit de testes fd97595.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (eslint, stylelint, prettier) | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos) | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1171, docs 91, example 28; antes dos meus testes novos) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (233 testes, 33 suites, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Prova negativa | comentar `assertExposed(container)` em `packages/ui/test/a11y.ts` e correr `a11y.test.tsx`: 12 falhas em 19 (ascendentes, alvo, regressão, Dialog, serialização e os meus 4 novos). Reposto à mão; `git status` sem diferenças em código | ✔ |
+
+**Critérios de aceitação:**
+- [x] Verificação antes do axe, do alvo até `document.documentElement`, com os quatro motivos e mensagem com o prefixo exigido, motivo, tag/id/class e "the target"/"an ancestor": lido `assertExposed`/`describeElement`/`hiddenReason` em `a11y.ts`; testes por `it.each` (ascendente, os quatro motivos), alvo com `aria-hidden` e, adicionados por mim, `inert`/`hidden`/`display: none` no próprio alvo e `display: none` vindo de folha de estilo a vários níveis.
+- [x] `aria-hidden="false"` e conteúdo escondido dentro do alvo não falham: testes existentes passam (ascendente `aria-hidden="false"`; botão com `<span aria-hidden>` com SVG).
+- [x] `document.body` com `Dialog` aberto resolve; o `container` rejeita com `aria-hidden="true"`: teste existente, verde e falha na prova negativa.
+- [x] Verificação dentro da fila e assinatura inalterada: `assertExposed` está dentro de `queue.then(...)`; assinatura `(container: Element): Promise<void>`; teste de serialização (alvo escondido rejeita, válido resolve, sem "Axe is already running"). JSDoc reescrito com verificação, quatro motivos e o que fazer (`document.body`, `getByRole('dialog')`).
+- [x] Revisão dos testes existentes: `pnpm test` verde em todos os pacotes; `02-desenvolvimento.md` regista lista vazia, o que é coerente com o resultado (nenhum teste falhou). Sem `skip`/`todo`, sem `try/catch` à volta do helper, sem opção para desligar (lido o código).
+- [x] Violação real nova: nenhuma encontrada, nada a registar.
+- [x] Só `packages/ui/test/a11y.ts` e `a11y.test.tsx` mudam em código (`git diff --stat 0908693 2a70142`): nenhum componente, story, `.css` ou API pública.
+- [x] Nada em `.github/` alterado (mesmo diff).
+- [x] G1 a G3: sem dependências novas, sem changeset; lint, typecheck, test e build verdes.
+
+**Testes exigidos:**
+- [x] Unitários em `a11y.test.tsx`: os 5 casos da DS-059 mantidos e os pedidos (falha por motivo com alvo/ascendente, não-falhas, regressão do falso verde, overlay real, serialização) existem e não são triviais (verificam a mensagem; a prova negativa mostra que falham sem a verificação).
+- [x] `pnpm test` verde nos três pacotes com o helper novo; `pnpm test:a11y` verde.
+- [x] Prova negativa repetida por mim (ver tabela).
+- Visual/Storybook: não aplicável.
+
+**Casos limite e notas:**
+- O teste do Dialog aceita "the target" ou "an ancestor", o que é deliberado (depende do elemento que o Radix esconde).
+- Não foi necessária verificação em browser nem teclado/contraste (código de teste, sem UI).
+
+**Testes adicionados pelo testador:** `packages/ui/test/a11y.test.tsx` (4 casos: `inert`, `hidden` e `display: none` no próprio alvo; `display: none` vindo de folha de estilo num ascendente a vários níveis), commit fd97595 `test(ui): DS-062 …`. Ficheiro a 19 testes verdes, eslint e prettier limpos.
+
+**Falhas encontradas:** nenhuma.

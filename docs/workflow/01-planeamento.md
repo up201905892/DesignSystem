@@ -69,7 +69,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-059 | Helper de axe: causa e estabilização do teste intermitente "fails for an img without alt" | Fundações | Média | DS-009 | Concluído |
 | DS-060 | Build tree-shakeable de `@up201905892/ui` | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057 | Concluído |
 | DS-061 | "Getting started": ligação para "Accessibility/Conformance" | Documentação | Média | DS-040, DS-042 | Planeado |
-| DS-062 | Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`) | Fundações | Média | DS-059 | Pronto para teste |
+| DS-062 | Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`) | Fundações | Média | DS-059 | Aprovado |
 
 ## Decisões aplicadas
 
@@ -2446,3 +2446,5 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-26 · planeador · Proposta → Planeado · aprovada pelo João (aprovacoes.md, 2026-11-26)
 - 2026-11-26 · programador · Planeado → Em desenvolvimento · início da implementação
 - 2026-11-26 · programador · Em desenvolvimento → Pronto para teste · commit d015bf2
+- 2026-11-26 · testador · Pronto para teste → Em teste · início do teste
+- 2026-11-26 · testador · Em teste → Aprovado · relatório 1 em 03-testing.md, zero falhas; 4 testes acrescentados (fd97595)
