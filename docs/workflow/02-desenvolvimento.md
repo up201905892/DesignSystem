@@ -1095,3 +1095,20 @@ Modelo de entrada:
 - **Decisões para o João:** nenhuma. A condição `source` do icons foi resolvida dentro desta tarefa. Acrescentar `verify:package` ao CI está fora de âmbito (precisa de rede e demora cerca de um minuto).
 - **Sugestões para o planeador:** nenhuma.
 
+
+### DS-062 · Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`)
+
+**Iteração 1 — 2026-11-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `expectNoA11yViolations` chama `assertExposed(container)` dentro da fila de serialização, antes do axe. Percorre o alvo e os ascendentes até `document.documentElement` e lança `expectNoA11yViolations: target is hidden from assistive technology (<motivo> on the target|an ancestor <tag>#id.classes). Pass the exposed element, ...` para `aria-hidden="true"`, `inert`, `hidden` ou `display: none` (computed). `aria-hidden="false"` e conteúdo escondido dentro do alvo não falham. JSDoc reescrito (verificação, quatro motivos, o que fazer). Assinatura inalterada.
+- **Ficheiros alterados:** `packages/ui/test/a11y.ts`, `packages/ui/test/a11y.test.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d015bf2 `feat(ui): DS-062 make the axe helper fail when the target or an ancestor is hidden`
+- **Revisão dos testes existentes:** `pnpm test` (raiz) com o helper novo: ui 1171, docs 91, example 28, tokens 92, icons 10, todos verdes. **Nenhum teste existente passou a falhar** pela verificação; lista de testes corrigidos: vazia (nenhum ficheiro de componente, story ou CSS alterado). Nenhuma violação real nova encontrada, logo nada em "Decisões para o João".
+- **Critérios de aceitação cobertos:** verificação e mensagem (alvo/ascendente, motivo, tag/id/class); não-falhas (`aria-hidden="false"`, ícone `aria-hidden` dentro de botão); `document.body` com `Dialog` aberto resolve e o `container` rejeita; verificação dentro da fila; JSDoc; só `test/a11y*` alterados em código; nada em `.github/`; sem dependências nem changeset.
+- **Testes escritos pelo programador:** `packages/ui/test/a11y.test.tsx`, os 5 casos da DS-059 mantidos mais 10 (4 ascendentes escondidos via `it.each`, alvo escondido, regressão do falso verde, `aria-hidden="false"`, conteúdo escondido dentro do alvo, Dialog aberto `container` vs `document.body`, serialização com alvo escondido e válido).
+- **Prova negativa (não commitada):** com `assertExposed(container)` comentado, `a11y.test.tsx` passa a 8 falhas / 7 passes (os 4 ascendentes, alvo escondido, regressão, Dialog, serialização). Revertido.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔. `pnpm test:a11y` não corrido (não usa o helper; sem Storybook/Chromium aqui).
+- **Notas para o testador:** repetir a prova negativa. No caso do Dialog, o Radix põe `aria-hidden` no `container` (irmão do portal), e a mensagem pode dizer "the target" ou "an ancestor" conforme o elemento; o teste aceita ambos.
+- **Decisões para o João:** nenhuma.
+- **Sugestões para o planeador:** nenhuma.
