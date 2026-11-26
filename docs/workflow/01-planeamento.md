@@ -45,7 +45,7 @@ Estados: `Proposta` → `Planeado` → `Em desenvolvimento` → `Pronto para tes
 | DS-035 | DataTable: Table com ordenação e paginação integradas | Layout e dados | Média | DS-033, DS-034 | Concluído |
 | DS-036 | Metadados dos pacotes: `exports`, `sideEffects`, `files` e licença | Publicação | Alta | DS-008, DS-010 | Concluído |
 | DS-037 | Changesets: versionamento e changelog | Publicação | Alta | DS-036 | Concluído |
-| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057, DS-060 | Pronto para teste |
+| DS-038 | Limite de tamanho de bundle (< 5 kB gzip por componente) | Publicação | Alta | DS-036, DS-010 a DS-035, DS-051 a DS-057, DS-060 | Concluído |
 | DS-039 | Verificação do pacote: `pnpm pack`, publint e projeto consumidor | Publicação | Alta | DS-037, DS-038 | Planeado |
 | DS-040 | Auditoria final de acessibilidade (WCAG 2.1 AA) | Publicação | Alta | DS-010 a DS-035, DS-051 a DS-057 | Em teste |
 | DS-041 | Preparação da versão 1.0.0 e guia de publicação manual | Publicação | Alta | DS-039, DS-040 | Planeado |
@@ -1544,6 +1544,9 @@ Modelo de tarefa (copiar para cada nova tarefa):
 - 2026-11-26 · planeador · Em desenvolvimento (sem mudança de estado) · desbloqueada pelo João (aprovacoes.md, 2026-11-26, Desbloquear): a DS-060 está `Concluído`; o programador repete `pnpm build` e `pnpm size` sobre um commit que contém a DS-060, passa o teste de tree-shaking a `it` e segue com a tarefa (critérios de medição final). Continua a ocupar uma das 2 vagas de `Em desenvolvimento`
 - 2026-11-26 · planeador · Em desenvolvimento (sem mudança de estado) · resposta do João (aprovacoes.md, 2026-11-26, Responder): o passo `pnpm size` foi acrescentado ao `ci.yml`; pedido fechado, não repetir
 - 2026-11-26 · programador · Em desenvolvimento → Pronto para teste · medição final sobre 7fb6f17 (contém DS-060): `pnpm build && pnpm size` com código 0, maior export 3,38 kB (DataTable); teste de tree-shaking com `it` e verde; sem alteração de código nesta iteração, ver 02-desenvolvimento.md
+- 2026-11-26 · testador · Pronto para teste → Em teste · início dos testes sobre 70719b2 (código de 7fb6f17)
+- 2026-11-26 · testador · Em teste → Aprovado · relatório 1 aprovado: lint, typecheck, test, test:a11y, build e `pnpm size` verdes (maior export DataTable 3,38 kB); prova negativa de 100 B falha com código 1; tree-shaking com `it`
+- 2026-11-26 · finalizador · Aprovado → Concluído · relatório 1 aprovado, todos os critérios marcados e sem falhas; sem commits de código de produção depois do testado; changeset não aplicável (infraestrutura, o código publicado não muda); README com secção "Bundle size"; sem `TODO`
 
 ### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
 

@@ -1926,3 +1926,76 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas para o João / planeador:**
 1. A causa do incidente de 2026-11-06 continua desconhecida; a aprovação assenta na cláusula de mitigação da especificação, não numa causa provada. Convém manter o caso em observação: se o falso verde voltar, o primeiro passo é registar o resultado completo do axe (`violations`, `incomplete`, `inapplicable`) no momento da falha.
 2. A sugestão do programador (helper a avisar quando o `container` ou um ascendente é `aria-hidden`/`inert`/`display: none`, falso verde medido) é válida e merece tarefa própria, a propor pelo planeador.
+
+### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA) — Relatório 3 — 2026-11-26
+
+- **Commit testado:** 674e068 (presente no histórico de `develop`, confirmado com `git log --grep=DS-040`; `git status --short` só com ` M docs/workflow/01-planeamento.md`, edição de workflow do planeador, nenhum ficheiro de código por guardar)
+- **Resultado:** Incompleto (sem veredicto). Retoma desbloqueada pelo João (aprovacoes.md, 2026-11-26, Desbloquear): só se repetia a verificação em browser, com um script node que serve o `storybook-static` no próprio processo. O script não pôde ser criado fora do repositório (ver bloqueio); a tarefa fica em `Em teste`.
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Build dos pacotes | `pnpm -C <raiz> build` | ✔ |
+| Build do Storybook | `pnpm -C <raiz> --filter docs build-storybook` | ✔ (`--filter ./apps/docs` não corresponde a nenhum projeto quando o cwd é `docs/workflow`; usado `--filter docs`) |
+| Script Node (servidor in-process + Playwright) | escrito para `/tmp/ds040-qa/run.mjs` | NÃO EXECUTADO (ver bloqueio) |
+| Revisão visual do DataTable (320px e 1280px, dois temas, pontos a a d) | Chromium com Playwright | NÃO EXECUTADO |
+| Verificação manual só com teclado (Select, Dialog, DropdownMenu, Popover, Tooltip, DataTable, dois temas) | idem | NÃO EXECUTADO |
+| Página "Accessibility/Conformance" aberta sem erros no browser | idem | NÃO EXECUTADO |
+| Verificações automáticas (lint, typecheck, test, test:a11y, reflow, sizes) | Não repetidas, por indicação do João (verdes no relatório 1) | n/a |
+
+**Comandos bloqueados (não contornados):**
+- Ferramenta Write em `/tmp/ds040-qa/run.mjs`. Mensagem: `Claude requested permissions to write to /tmp/ds040-qa/run.mjs, but you haven't granted it yet.`
+- Ferramenta Bash `mkdir -p /tmp/ds040-qa/shots`. Mensagem: `mkdir in '/tmp/ds040-qa/shots' needs approval. The path is outside the working directories for this session ('/home/runner/work/DesignSystem/DesignSystem'). Allowing runs the command as written.`
+- Ferramenta Bash `ls -d /home/runner/work/_temp`. Mensagem: `ls in '/home/runner/work/_temp' was blocked. For security, Claude Code may only list files in the allowed working directories for this session: '/home/runner/work/DesignSystem/DesignSystem'.`
+- Nota: `$RUNNER_TEMP` não pôde ser lido (`A variable in this command can't be checked before it runs`); alguns comandos git simples (`git -C <raiz> status`, `merge-base`) também pediram aprovação, mas as formas sem `-C` passaram.
+- Causa: nesta sessão o único diretório de trabalho permitido é a raiz do repositório; não há pasta temporária fora dela onde escrever o script ou as capturas. As regras do testador proíbem deixar ficheiros temporários no repositório, por isso não escrevi o script lá dentro (seria contornar a restrição). Não tentei outros caminhos fora do repositório.
+- Para desbloquear (decisão do João): ou a sessão passa a permitir escrita numa pasta temporária fora do repositório (por exemplo `/tmp/ds040-qa`, ou o `$RUNNER_TEMP` do CI) em `.claude/settings.json`, ou o João autoriza expressamente que o script e as capturas fiquem numa pasta do repositório ignorada pelo git (por exemplo `apps/docs/.qa-tmp/`, que o testador apaga no fim), ou corre ele a verificação.
+- O script estava desenhado e pronto: servidor `node:http` com guarda contra path traversal, Chromium com Playwright (carregado por `createRequire` de `apps/docs/package.json`), 6 stories do DataTable (`default`, `empty`, `no-pagination`, `keyboard-interaction`, `live-summary`, `dark-theme`) × dois temas (`globals=theme:dark`) × 320px e 1280px, com sobreposição/limites do rodapé (a), `aria-live` antes e depois de Next page por Tab+Enter e Space (b), `:focus-visible` e outline nos cabeçalhos e botões da paginação (c), contraste calculado com fundo efetivo (d), teclado manual de Select, Dialog, DropdownMenu, Popover, Tooltip e DataTable, axe com `axe-playwright` e leitura da página de conformidade nos dois temas; servidor fechado num `finally`.
+
+**Critérios de aceitação:** sem alterações face aos relatórios 1 e 2. Continuam por verificar, só por falta de local para o script: revisão visual do DataTable (a) a (d), verificação manual só com teclado e abertura da página de conformidade.
+
+**Notas:** `apps/docs/storybook-static` foi regenerado (está no `.gitignore`); nenhum ficheiro temporário foi criado no repositório e nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma encontrada.
+
+### DS-038 · Limite de tamanho de bundle (< 5 kB gzip por componente) — Relatório 1 — 2026-11-26
+
+- **Commit testado:** 70719b2 (HEAD de `develop`, confirmado com `git log`; código de produção medido e testado = 7fb6f17, o commit de 70719b2 só toca em documentação). `git status --short` no início só mostrava um relatório por guardar em `docs/workflow/03-testing.md` (DS-040, relatório 3, do testador); nenhum ficheiro de código por guardar. Não mudei de branch.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (eslint + stylelint + prettier) | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos) | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1161 em 71 ficheiros, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (233 testes, 33 suites, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Tamanhos | `pnpm size` depois do build | ✔ (código 0) |
+| Prova negativa | `COMPONENT_LIMIT` temporariamente `'100 B'` em `packages/ui/scripts/size-entries.mjs` | ✔ (`pnpm size` saiu com código 1, "Package size limit has exceeded by …" em todos os 70 exports; `styles.css` continuou a passar). Reposto a `'5 kB'`; `git status` sem diferenças em ficheiros de código |
+
+**Critérios de aceitação:**
+- [x] `size-limit` com `@size-limit/preset-small-lib` em `packages/ui` e `pnpm size` na raiz, com código ≠ 0 se um limite for ultrapassado: `packages/ui/package.json` (`size-limit` e preset ^14.3.0, script `size`), `package.json` raiz (`pnpm --filter @up201905892/ui size`); código 0 com os limites reais e código 1 com `100 B` (prova negativa acima).
+- [x] Uma entrada por export com 5 kB gzip e externos (`react`, `react-dom`, `react/jsx-runtime`, `@radix-ui/*`, `@up201905892/icons`): `pnpm size` lista 70 entradas, todas "Size limit: 5 kB"; o maior é `DataTable` 3,38 kB, seguem-se `ToastProvider` 1,89, `Pagination` 1,86, `PopoverContent` 1,49, `Alert` 1,31, `DialogContent` 1,29; método explicado na secção "Bundle size" de `packages/ui/README.md`.
+- [x] Lista gerada de `src/index.ts` e validada por teste: `scripts/size-entries.mjs` + `.size-limit.mjs`; `size-limit.test.ts` compara as entradas com `Object.keys` do módulo real e testa o parser com `export type` e listas multilinha (não trivial: falha se faltar um export).
+- [x] `dist/styles.css` com 15 kB gzip (mede 8,66 kB, passa) e entrada informativa sem limite para a biblioteca inteira (9,3 kB): saída do `pnpm size` e teste "measures styles.css (15 kB) and the whole library (no limit)".
+- [x] Tree-shaking: `import { Button }` sem `@radix-ui/react-dialog` nem `ds-dialog`: teste `size-limit.test.ts` com esbuild em memória (verde); `Stack` e `Badge` também verdes. Sobre o desvio assinalado na DS-060 (Slot de `@radix-ui/react-slot` permanece em `Stack`/`Badge`, porque usam `asChild`): aceite, pois o critério desta tarefa só exige `Button`, sem `react-dialog` nem `ds-dialog`, e o teste exige que nenhum outro pacote Radix apareça.
+- [x] Medição depois de DS-051 a DS-057: `git log --oneline -E --grep=DS-05[1-7]` devolve commits de código das sete tarefas (1983c2a, d00a7dc, 9de2315, 05286f5, b0e40b7, dd8c6ce, 07b77fd); a tabela com o commit medido (7fb6f17) está em `02-desenvolvimento.md`, iteração 2, e coincide com a minha execução (mesmos valores, p. ex. Button 979 B, DataTable 3,38 kB).
+- [x] Medição final depois da DS-060: `git log --grep=DS-060` devolve 616f722 `feat(ui): DS-060 make the ui build tree-shakeable` (DS-060 `Concluído`, aca606e); `grep -c "it.fails" size-limit.test.ts` = 0 e os três casos de tree-shaking correm com `it` e passam.
+- [x] Limite não aumentado / "Decisões para o João": nenhum export passa 5 kB, o limite é `'5 kB'` (constante verificada por teste e reposta após a prova negativa); sem necessidade de decisão por tamanho.
+- [x] G1 a G3: dependências novas só `size-limit`, `@size-limit/preset-small-lib` e `esbuild` (devDependencies, registadas na iteração 1); lockfile consistente (`pnpm lint`, build e testes executam); commit `feat(ui): DS-038 …` em inglês com o ID. Não verifiquei por diff os ficheiros do João, mas o registo (`02-desenvolvimento.md`) lista só ficheiros de `packages/ui`, raiz e `docs/workflow`.
+
+**Testes exigidos:**
+- [x] Unitário que compara os exports com as entradas do `size-limit`: existe, compara com `Object.keys(library)` e não é trivial.
+- [x] Teste de tree-shaking (esbuild em memória, verificação por texto): existe para Button, Stack e Badge, mais o teste de ausência de `displayName` de topo em `dist/index.js` e o de nomes/`displayName` exportados.
+- [x] Verificação manual `pnpm build && pnpm size` com código 0 e prova de `100 B` falhar sem commitar: feitas acima.
+- Acessibilidade e Visual/Storybook: não aplicável (sem componente nem story nova); `pnpm test:a11y` corrido mesmo assim, verde.
+
+**Casos limite e notas:**
+- Os testes de tree-shaking marcam como `sideEffects: false` os externos `@radix-ui/*` e `@up201905892/icons` para simular um bundler de consumidor; é coerente com o que esses pacotes declaram, mas depende de o consumidor usar um bundler com tree-shaking (a DS-039 valida com um projeto consumidor).
+- O passo `pnpm size` já está em `.github/workflows/ci.yml` (linha 61, `pnpm run --if-present size`).
+- Não foi necessária verificação em browser (sem componente nem página nova). Nenhum ficheiro temporário foi deixado e nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas encontradas:** nenhuma.
