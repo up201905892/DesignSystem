@@ -2,6 +2,28 @@
 
 Resumo de cada execução de `/diario`, a mais recente primeiro.
 
+## 2026-11-27
+
+- **Decisões para o João** (iguais às de ontem; sem linhas novas em `aprovacoes.md` nem alterações a `.claude/` depois da última tentativa, por isso não retestei):
+  1. **DS-040 e DS-042 em `Em teste` há 14 dias, bloqueadas.** O `testador` não consegue escrever o script node que serve o `storybook-static` (Write e `mkdir` fora do repo recusados; dentro do repo as regras proíbem ficheiros temporários). Opções: permitir escrita numa pasta temporária fora do repo (ex.: `/tmp/ds040-qa`) em `.claude/settings.json`; autorizar uma pasta do repo ignorada pelo git que o testador apaga no fim; ou fazeres tu a verificação em browser e registares o resultado. Bloqueia DS-041, DS-043, DS-046 a DS-049 e DS-061.
+  2. Resíduo inofensivo: `/tmp/qa-ds039/` fora do repo.
+- **Concluídas, testadas, desenvolvidas:** nenhuma. Não há tarefa `Aprovado`, `Pronto para teste` ou `Planeado` com dependências satisfeitas.
+- **Decisões aplicadas:** nenhuma (todas as linhas de `aprovacoes.md` já estavam aplicadas).
+- **Propostas novas:** nenhuma (âmbito do MVP coberto; todo o trabalho restante está atrás das DS-040/042).
+- **Violações de regras:** DS-040 e DS-042 em `Em teste` há mais de 3 dias (ver decisão 1). Mais nenhuma; 0 tarefas em desenvolvimento.
+- **Próximo passo:** decisão 1.
+
+## 2026-11-26
+
+- **Decisões para o João:**
+  1. **DS-040 e DS-042 continuam em `Em teste` (13 dias), bloqueadas.** O `testador` não consegue escrever o script node que serve o `storybook-static`: o Write e o `mkdir` em `/tmp` e em `$RUNNER_TEMP` são recusados, e só a raiz do repositório é gravável (as regras do testador proíbem ficheiros temporários lá). Opções: permitir escrita numa pasta temporária fora do repo (ex.: `/tmp/ds040-qa`) em `.claude/settings.json`; autorizar uma pasta do repo ignorada pelo git que o testador apaga no fim; ou fazeres tu a verificação em browser. Retestei só a DS-040 (relatório 3, sem veredicto); a DS-042 tem o mesmo bloqueio e não a repeti. Bloqueia DS-041, DS-043, DS-046 a DS-049 e DS-061.
+  2. Resíduo inofensivo: `/tmp/qa-ds039/` fora do repo (o `rm` foi recusado).
+- **Concluídas:** DS-038 (limite de bundle, maior export 3,38 kB), DS-039 (`pnpm verify:package`: publint, attw e projeto consumidor; também corrigiu os tipos CJS de tokens e icons, com changeset patch), DS-062 (helper de axe falha com alvo escondido). Todas desenvolvidas, testadas (Aprovado) e fechadas hoje.
+- **Decisões aplicadas:** as seis linhas de 2026-11-26 de `aprovacoes.md` (DS-062 `Planeado`; desbloqueios, e respostas sobre `ci.yml` e `source` do icons).
+- **Propostas novas:** nenhuma (âmbito do MVP coberto; só há trabalho a restar atrás das DS-040/042).
+- **Violações de regras:** DS-040 e DS-042 em `Em teste` há mais de 3 dias (ver decisão 1). Mais nenhuma; 0 tarefas em desenvolvimento.
+- **Próximo passo:** decisão 1. Resolvida, a DS-040 e a DS-042 fecham e seguem DS-041, DS-043, DS-046 a DS-049 e DS-061.
+
 ## 2026-11-25
 
 - **Decisões para o João** (iguais às de ontem; sem commits nem linhas novas em `aprovacoes.md`, o ciclo continua parado à espera de ti):

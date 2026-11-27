@@ -19,6 +19,17 @@ export default tseslint.config(
   js.configs.recommended,
   tseslint.configs.recommended,
   {
+    // Node scripts and the consumer checks that run in Node (DS-039).
+    files: ['scripts/**/*.mjs', 'tests/consumer/**/*.{mjs,cjs}'],
+    languageOptions: { globals: { console: 'readonly' } },
+  },
+  {
+    // CommonJS check of the consumer project: `require` is the point of the test.
+    files: ['tests/consumer/**/*.cjs'],
+    languageOptions: { sourceType: 'commonjs', globals: { require: 'readonly' } },
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     ...react.configs.flat.recommended,
     settings: { react: { version: '19.0' } },

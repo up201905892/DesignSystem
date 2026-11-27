@@ -963,6 +963,23 @@ Modelo de entrada:
 - **Notas para o testador:** não pegar na tarefa até haver decisão do João. Decisões para o João: (1) tornar o build tree-shakeable (p. ex. `displayName` sem efeito secundário e `/* @__PURE__ */` nas chamadas do React, ou entradas por componente/`preserveModules`), tarefa nova a planear; (2) passo `pnpm size` no CI (`.github/`, ficheiro do João).
 - **Sugestão para o planeador:** nova tarefa "build tree-shakeable de `@up201905892/ui`" (dependência de DS-038 e prévia à medição final); DS-039 e DS-041 dependem de DS-038.
 
+**Iteração 2 — 2026-11-26** (retoma após `Desbloquear` do João em aprovacoes.md, 2026-11-26; DS-060 `Concluído`; passo `pnpm size` já no `ci.yml`)
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** repetidos `pnpm build` e `pnpm size` sobre o build tree-shakeable da DS-060. Não foi preciso alterar código: o teste de tree-shaking de `packages/ui/src/size-limit.test.ts` já passou de `it.fails` a `it` (e o comentário "KNOWN FAILURE" já foi removido) no commit 616f722 da DS-060; os três casos (Button, Stack, Badge) e o de `displayName` correm com `it` e passam. Esta iteração só acrescenta o registo (sem commit de código).
+- **Ficheiros alterados:** `docs/workflow/{01-planeamento.md,02-desenvolvimento.md}` (nenhum ficheiro de código).
+- **Commit(s):** código medido e testado: HEAD 7fb6f17 (contém 616f722 `feat(ui): DS-060 make the ui build tree-shakeable`; `git log --oneline | grep DS-060` devolve 5 commits; contém DS-051 a DS-057, ex.: 1983c2a, d00a7dc, 9de2315, 05286f5, b0e40b7, dd8c6ce, 07b77fd). O commit desta iteração é de documentação: `docs(workflow): DS-038 record development iteration 2, ready for test`.
+- **Resultado da medição (commit medido 7fb6f17, `pnpm build && pnpm size`):** código de saída 0, todos os limites cumpridos. Substitui a medição de 317140f (histórico: 8,05 a 8,66 kB por export). Tabela em B (bytes) / kB gzip, mesmos externos da iteração 1:
+  - Maiores: `DataTable` 3,38 kB; `ToastProvider` 1,89; `Pagination` 1,86; `PopoverContent` 1,49; `Alert` 1,31; `DialogContent` 1,29; `Select` 1,08; `IconButton` 1,02; `Button` 979 B.
+  - Entre 500 B e 700 B: `Tooltip` 674, `useTableSort` 667, `DropdownMenuContent` 630, `Textarea` 619, `Switch` 617, `RadioGroup` 612, `GridItem` 592, `Spinner` 560, `TableHeaderCell` 522, `Field` 508, `Skeleton` 505.
+  - Restantes exports (sub-componentes e hooks): 244 a 484 B (p. ex. `Input` 791, `Checkbox` 733, `Stack` 381, `Badge` 358, `Dialog` 315, `VisuallyHidden` 310, `DialogClose` 245, `PopoverClose` 244 B mínimo).
+  - `styles.css` 8,66 kB (limite 15 kB, passa). Biblioteca inteira (informativa) 9,3 kB.
+  - Nenhum export chega perto de 5 kB; o maior é `DataTable` com 3,38 kB. Nenhum limite foi alterado.
+- **Critérios de aceitação cobertos:** todos: configuração e `pnpm size` (iteração 1); limite de 5 kB cumprido por todos os exports; lista de entradas validada por teste; CSS 15 kB e entrada informativa; tree-shaking (`import { Button }` sem `@radix-ui/react-dialog` nem `ds-dialog`, teste com `it`); medição depois de DS-051 a DS-057 e de DS-060; sem necessidade de "Decisões para o João" por tamanho; G1 a G3 na iteração 1. O pedido do passo `pnpm size` no CI foi fechado pelo João (ci.yml).
+- **Testes escritos pelo programador:** nenhum novo nesta iteração (os de `size-limit.test.ts` são da iteração 1 e da DS-060).
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens 92, icons 10, ui 1161, docs 91, example 28; zero falhas esperadas) · build ✔ · `pnpm size` ✔ (código 0). A verificação manual de baixar um limite para `100 B` não foi repetida nesta iteração (a iteração 1 já a dispensou); fica ao testador, se quiser.
+- **Notas para o testador:** confirmar `pnpm build && pnpm size` com código 0, que `size-limit.test.ts` não tem `it.fails` e a prova negativa do limite de `100 B` (temporária, não commitada). Sem sugestões para o planeador.
+
 ### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA)
 
 **Iteração 1 — 2026-11-16**
@@ -1061,3 +1078,37 @@ Modelo de entrada:
 - **Decisões para o João:** causa do incidente de 2026-11-06 não identificada; mitigação aplicada (serialização). Confirmar se o caso se mantém em observação.
 - **Sugestões para o planeador:** tarefa nova para o helper falhar (ou avisar) quando o `container` ou um ascendente estiver `aria-hidden`, `inert` ou `display: none` (falso verde medido em (b)), com revisão dos testes de componentes com overlays que possam passar a falhar.
 
+### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor
+
+**Iteração 1 — 2026-11-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** script `pnpm verify:package` (`scripts/verify-package.mjs`): build, `pnpm pack` dos três pacotes para uma pasta em `os.tmpdir()` (fora do repositório, apagada no fim), `publint` (`--level warning --strict`) e `attw` (`--profile node16`, que só ignora a resolução node10; `bundler` fica verificado) sobre cada `.tgz`, verificação do conteúdo, e instalação dos tarballs num projeto consumidor (`tests/consumer/`, copiado para a pasta temporária; `npm install` com `overrides` para o `@up201905892/icons`, que ainda não está no registo). O consumidor corre 9 testes `node:test` (ESM e CJS em Node 22, SSR com `renderToString`, `styles.css`) e `tsc --noEmit` strict.
+- **Problemas encontrados pelas ferramentas e corrigidos (necessário ao critério "attw sem problemas"):** (1) `tokens` e `icons` tinham `types` a `.d.ts` na condição `require` (`FalseESM`, erro do publint): `exports["."]` passa a ter `import.types`/`require.types` (`.d.ts`/`.d.cts`) como o `ui`; o build do tokens passa a gerar `index.d.cts`. (2) Condição `source` do `icons` (avaliada aqui, como pedido pelo João): aponta para `src/index.ts`, que não vai no tarball (o script falha se algum alvo de `main`/`module`/`types`/`exports` não estiver no `.tgz`). Mantida em `exports` (serve o monorepo: Storybook, vitest, `customConditions` do tsconfig) e retirada do `package.json` publicado com `publishConfig.exports` (o pnpm aplica-o no `pack`). Confirmado: o tarball do icons não tem `source`. (3) O `attw` não resolve `styles.css`, `tokens.css`, `themes.css` (sem JS nem tipos): o script exclui as entradas `*.css` do `attw` (`--exclude-entrypoints`); o `styles.css` do ui e os CSS do tokens são verificados pelos testes do consumidor (d) e pela verificação de que o alvo existe no tarball.
+- **Ficheiros alterados:** `scripts/verify-package.mjs`, `tests/consumer/{package.json,tsconfig.json,src/usage.tsx,test/esm.test.mjs,test/cjs.test.cjs}`, `package.json` (script + `publint` e `@arethetypeswrong/cli` em devDependencies), `pnpm-lock.yaml`, `packages/tokens/package.json`, `packages/tokens/scripts/build.mjs`, `packages/icons/package.json`, `eslint.config.js` (blocos para os scripts Node e o teste CJS: globais `console`/`require`; não é ficheiro reservado), `.changeset/ds-039-cjs-types-tokens-icons.md` (patch tokens e icons).
+- **Commit(s):** f223b83 `feat(ui): DS-039 add verify:package with publint, attw and a consumer project`
+- **Critérios de aceitação cobertos:** script na raiz com saída 0; publint e attw verdes nos três tarballs (`All good!` / `No problems found`); conteúdo dos tarballs só `dist/`, `package.json`, `README.md`, `LICENSE` (+ `LICENSE-LUCIDE` no icons), sem `src/`, testes, stories nem configuração, sem `workspace:`; consumidor (a) a (d) em `tests/consumer/`; nenhum `pnpm publish`; só as duas dependências nomeadas (G2).
+- **Testes escritos pelo programador:** `tests/consumer/test/esm.test.mjs` (5), `tests/consumer/test/cjs.test.cjs` (4), `tests/consumer/src/usage.tsx` (tsc strict: `Button`, `DataTable<User>`, `CheckIcon`, `tokens`, e dois `@ts-expect-error` que provam que a tipagem rejeita linhas erradas e `getRowId` em falta).
+- **Prova negativa (não commitada):** retirar `"./styles.css"` dos `exports` do ui: com `pnpm verify:package` completo o build do `apps/example` falha primeiro (importa o `styles.css`); com `pnpm verify:package --skip-build` (opção só para tentativas locais) falha o teste (d) com `ERR_PACKAGE_PATH_NOT_EXPORTED` e o script sai com 1. Revertido.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ (tokens 92, icons 10, ui 1161, docs 91, example 28) · build ✔ · `pnpm size` ✔ · `pnpm verify:package` ✔ (código 0). `pnpm test:a11y` não corrido (nenhum componente nem story alterado).
+- **Notas para o testador:** correr `pnpm verify:package` (precisa de rede para o `npm install` do consumidor); para `tar -tzf` de um tarball, `pnpm pack --pack-destination <pasta>` à mão em `packages/ui` (o script apaga a sua pasta no fim); prova negativa com `--skip-build`. O `publint` usa `--strict` (avisos são erros); o `tsconfig` do consumidor tem `skipLibCheck: false`.
+- **Decisões para o João:** nenhuma. A condição `source` do icons foi resolvida dentro desta tarefa. Acrescentar `verify:package` ao CI está fora de âmbito (precisa de rede e demora cerca de um minuto).
+- **Sugestões para o planeador:** nenhuma.
+
+
+### DS-062 · Helper de axe: falhar quando o alvo ou um ascendente está escondido (`aria-hidden`, `inert`, `hidden`, `display: none`)
+
+**Iteração 1 — 2026-11-26**
+
+- **Estado no fim:** Pronto para teste
+- **O que foi feito:** `expectNoA11yViolations` chama `assertExposed(container)` dentro da fila de serialização, antes do axe. Percorre o alvo e os ascendentes até `document.documentElement` e lança `expectNoA11yViolations: target is hidden from assistive technology (<motivo> on the target|an ancestor <tag>#id.classes). Pass the exposed element, ...` para `aria-hidden="true"`, `inert`, `hidden` ou `display: none` (computed). `aria-hidden="false"` e conteúdo escondido dentro do alvo não falham. JSDoc reescrito (verificação, quatro motivos, o que fazer). Assinatura inalterada.
+- **Ficheiros alterados:** `packages/ui/test/a11y.ts`, `packages/ui/test/a11y.test.tsx`, `docs/workflow/01-planeamento.md`, `docs/workflow/02-desenvolvimento.md`.
+- **Commit(s):** d015bf2 `feat(ui): DS-062 make the axe helper fail when the target or an ancestor is hidden`
+- **Revisão dos testes existentes:** `pnpm test` (raiz) com o helper novo: ui 1171, docs 91, example 28, tokens 92, icons 10, todos verdes. **Nenhum teste existente passou a falhar** pela verificação; lista de testes corrigidos: vazia (nenhum ficheiro de componente, story ou CSS alterado). Nenhuma violação real nova encontrada, logo nada em "Decisões para o João".
+- **Critérios de aceitação cobertos:** verificação e mensagem (alvo/ascendente, motivo, tag/id/class); não-falhas (`aria-hidden="false"`, ícone `aria-hidden` dentro de botão); `document.body` com `Dialog` aberto resolve e o `container` rejeita; verificação dentro da fila; JSDoc; só `test/a11y*` alterados em código; nada em `.github/`; sem dependências nem changeset.
+- **Testes escritos pelo programador:** `packages/ui/test/a11y.test.tsx`, os 5 casos da DS-059 mantidos mais 10 (4 ascendentes escondidos via `it.each`, alvo escondido, regressão do falso verde, `aria-hidden="false"`, conteúdo escondido dentro do alvo, Dialog aberto `container` vs `document.body`, serialização com alvo escondido e válido).
+- **Prova negativa (não commitada):** com `assertExposed(container)` comentado, `a11y.test.tsx` passa a 8 falhas / 7 passes (os 4 ascendentes, alvo escondido, regressão, Dialog, serialização). Revertido.
+- **Verificações locais:** lint ✔ · typecheck ✔ · test ✔ · build ✔. `pnpm test:a11y` não corrido (não usa o helper; sem Storybook/Chromium aqui).
+- **Notas para o testador:** repetir a prova negativa. No caso do Dialog, o Radix põe `aria-hidden` no `container` (irmão do portal), e a mensagem pode dizer "the target" ou "an ancestor" conforme o elemento; o teste aceita ambos.
+- **Decisões para o João:** nenhuma.
+- **Sugestões para o planeador:** nenhuma.

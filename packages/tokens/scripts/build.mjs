@@ -138,6 +138,7 @@ const sd = new StyleDictionary({
         { destination: 'index.js', format: 'ds/js-esm' },
         { destination: 'index.cjs', format: 'ds/js-cjs' },
         { destination: 'index.d.ts', format: 'ds/dts' },
+        { destination: 'index.d.cts', format: 'ds/dts' },
       ],
     },
   },

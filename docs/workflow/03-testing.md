@@ -1926,3 +1926,153 @@ Nota de método: o ambiente não permitiu criar um clone novo fora do repositór
 **Notas para o João / planeador:**
 1. A causa do incidente de 2026-11-06 continua desconhecida; a aprovação assenta na cláusula de mitigação da especificação, não numa causa provada. Convém manter o caso em observação: se o falso verde voltar, o primeiro passo é registar o resultado completo do axe (`violations`, `incomplete`, `inapplicable`) no momento da falha.
 2. A sugestão do programador (helper a avisar quando o `container` ou um ascendente é `aria-hidden`/`inert`/`display: none`, falso verde medido) é válida e merece tarefa própria, a propor pelo planeador.
+
+### DS-040 · Auditoria final de acessibilidade (WCAG 2.1 AA) — Relatório 3 — 2026-11-26
+
+- **Commit testado:** 674e068 (presente no histórico de `develop`, confirmado com `git log --grep=DS-040`; `git status --short` só com ` M docs/workflow/01-planeamento.md`, edição de workflow do planeador, nenhum ficheiro de código por guardar)
+- **Resultado:** Incompleto (sem veredicto). Retoma desbloqueada pelo João (aprovacoes.md, 2026-11-26, Desbloquear): só se repetia a verificação em browser, com um script node que serve o `storybook-static` no próprio processo. O script não pôde ser criado fora do repositório (ver bloqueio); a tarefa fica em `Em teste`.
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Build dos pacotes | `pnpm -C <raiz> build` | ✔ |
+| Build do Storybook | `pnpm -C <raiz> --filter docs build-storybook` | ✔ (`--filter ./apps/docs` não corresponde a nenhum projeto quando o cwd é `docs/workflow`; usado `--filter docs`) |
+| Script Node (servidor in-process + Playwright) | escrito para `/tmp/ds040-qa/run.mjs` | NÃO EXECUTADO (ver bloqueio) |
+| Revisão visual do DataTable (320px e 1280px, dois temas, pontos a a d) | Chromium com Playwright | NÃO EXECUTADO |
+| Verificação manual só com teclado (Select, Dialog, DropdownMenu, Popover, Tooltip, DataTable, dois temas) | idem | NÃO EXECUTADO |
+| Página "Accessibility/Conformance" aberta sem erros no browser | idem | NÃO EXECUTADO |
+| Verificações automáticas (lint, typecheck, test, test:a11y, reflow, sizes) | Não repetidas, por indicação do João (verdes no relatório 1) | n/a |
+
+**Comandos bloqueados (não contornados):**
+- Ferramenta Write em `/tmp/ds040-qa/run.mjs`. Mensagem: `Claude requested permissions to write to /tmp/ds040-qa/run.mjs, but you haven't granted it yet.`
+- Ferramenta Bash `mkdir -p /tmp/ds040-qa/shots`. Mensagem: `mkdir in '/tmp/ds040-qa/shots' needs approval. The path is outside the working directories for this session ('/home/runner/work/DesignSystem/DesignSystem'). Allowing runs the command as written.`
+- Ferramenta Bash `ls -d /home/runner/work/_temp`. Mensagem: `ls in '/home/runner/work/_temp' was blocked. For security, Claude Code may only list files in the allowed working directories for this session: '/home/runner/work/DesignSystem/DesignSystem'.`
+- Nota: `$RUNNER_TEMP` não pôde ser lido (`A variable in this command can't be checked before it runs`); alguns comandos git simples (`git -C <raiz> status`, `merge-base`) também pediram aprovação, mas as formas sem `-C` passaram.
+- Causa: nesta sessão o único diretório de trabalho permitido é a raiz do repositório; não há pasta temporária fora dela onde escrever o script ou as capturas. As regras do testador proíbem deixar ficheiros temporários no repositório, por isso não escrevi o script lá dentro (seria contornar a restrição). Não tentei outros caminhos fora do repositório.
+- Para desbloquear (decisão do João): ou a sessão passa a permitir escrita numa pasta temporária fora do repositório (por exemplo `/tmp/ds040-qa`, ou o `$RUNNER_TEMP` do CI) em `.claude/settings.json`, ou o João autoriza expressamente que o script e as capturas fiquem numa pasta do repositório ignorada pelo git (por exemplo `apps/docs/.qa-tmp/`, que o testador apaga no fim), ou corre ele a verificação.
+- O script estava desenhado e pronto: servidor `node:http` com guarda contra path traversal, Chromium com Playwright (carregado por `createRequire` de `apps/docs/package.json`), 6 stories do DataTable (`default`, `empty`, `no-pagination`, `keyboard-interaction`, `live-summary`, `dark-theme`) × dois temas (`globals=theme:dark`) × 320px e 1280px, com sobreposição/limites do rodapé (a), `aria-live` antes e depois de Next page por Tab+Enter e Space (b), `:focus-visible` e outline nos cabeçalhos e botões da paginação (c), contraste calculado com fundo efetivo (d), teclado manual de Select, Dialog, DropdownMenu, Popover, Tooltip e DataTable, axe com `axe-playwright` e leitura da página de conformidade nos dois temas; servidor fechado num `finally`.
+
+**Critérios de aceitação:** sem alterações face aos relatórios 1 e 2. Continuam por verificar, só por falta de local para o script: revisão visual do DataTable (a) a (d), verificação manual só com teclado e abertura da página de conformidade.
+
+**Notas:** `apps/docs/storybook-static` foi regenerado (está no `.gitignore`); nenhum ficheiro temporário foi criado no repositório e nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas:** nenhuma encontrada.
+
+### DS-038 · Limite de tamanho de bundle (< 5 kB gzip por componente) — Relatório 1 — 2026-11-26
+
+- **Commit testado:** 70719b2 (HEAD de `develop`, confirmado com `git log`; código de produção medido e testado = 7fb6f17, o commit de 70719b2 só toca em documentação). `git status --short` no início só mostrava um relatório por guardar em `docs/workflow/03-testing.md` (DS-040, relatório 3, do testador); nenhum ficheiro de código por guardar. Não mudei de branch.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (eslint + stylelint + prettier) | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos) | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1161 em 71 ficheiros, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (233 testes, 33 suites, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Tamanhos | `pnpm size` depois do build | ✔ (código 0) |
+| Prova negativa | `COMPONENT_LIMIT` temporariamente `'100 B'` em `packages/ui/scripts/size-entries.mjs` | ✔ (`pnpm size` saiu com código 1, "Package size limit has exceeded by …" em todos os 70 exports; `styles.css` continuou a passar). Reposto a `'5 kB'`; `git status` sem diferenças em ficheiros de código |
+
+**Critérios de aceitação:**
+- [x] `size-limit` com `@size-limit/preset-small-lib` em `packages/ui` e `pnpm size` na raiz, com código ≠ 0 se um limite for ultrapassado: `packages/ui/package.json` (`size-limit` e preset ^14.3.0, script `size`), `package.json` raiz (`pnpm --filter @up201905892/ui size`); código 0 com os limites reais e código 1 com `100 B` (prova negativa acima).
+- [x] Uma entrada por export com 5 kB gzip e externos (`react`, `react-dom`, `react/jsx-runtime`, `@radix-ui/*`, `@up201905892/icons`): `pnpm size` lista 70 entradas, todas "Size limit: 5 kB"; o maior é `DataTable` 3,38 kB, seguem-se `ToastProvider` 1,89, `Pagination` 1,86, `PopoverContent` 1,49, `Alert` 1,31, `DialogContent` 1,29; método explicado na secção "Bundle size" de `packages/ui/README.md`.
+- [x] Lista gerada de `src/index.ts` e validada por teste: `scripts/size-entries.mjs` + `.size-limit.mjs`; `size-limit.test.ts` compara as entradas com `Object.keys` do módulo real e testa o parser com `export type` e listas multilinha (não trivial: falha se faltar um export).
+- [x] `dist/styles.css` com 15 kB gzip (mede 8,66 kB, passa) e entrada informativa sem limite para a biblioteca inteira (9,3 kB): saída do `pnpm size` e teste "measures styles.css (15 kB) and the whole library (no limit)".
+- [x] Tree-shaking: `import { Button }` sem `@radix-ui/react-dialog` nem `ds-dialog`: teste `size-limit.test.ts` com esbuild em memória (verde); `Stack` e `Badge` também verdes. Sobre o desvio assinalado na DS-060 (Slot de `@radix-ui/react-slot` permanece em `Stack`/`Badge`, porque usam `asChild`): aceite, pois o critério desta tarefa só exige `Button`, sem `react-dialog` nem `ds-dialog`, e o teste exige que nenhum outro pacote Radix apareça.
+- [x] Medição depois de DS-051 a DS-057: `git log --oneline -E --grep=DS-05[1-7]` devolve commits de código das sete tarefas (1983c2a, d00a7dc, 9de2315, 05286f5, b0e40b7, dd8c6ce, 07b77fd); a tabela com o commit medido (7fb6f17) está em `02-desenvolvimento.md`, iteração 2, e coincide com a minha execução (mesmos valores, p. ex. Button 979 B, DataTable 3,38 kB).
+- [x] Medição final depois da DS-060: `git log --grep=DS-060` devolve 616f722 `feat(ui): DS-060 make the ui build tree-shakeable` (DS-060 `Concluído`, aca606e); `grep -c "it.fails" size-limit.test.ts` = 0 e os três casos de tree-shaking correm com `it` e passam.
+- [x] Limite não aumentado / "Decisões para o João": nenhum export passa 5 kB, o limite é `'5 kB'` (constante verificada por teste e reposta após a prova negativa); sem necessidade de decisão por tamanho.
+- [x] G1 a G3: dependências novas só `size-limit`, `@size-limit/preset-small-lib` e `esbuild` (devDependencies, registadas na iteração 1); lockfile consistente (`pnpm lint`, build e testes executam); commit `feat(ui): DS-038 …` em inglês com o ID. Não verifiquei por diff os ficheiros do João, mas o registo (`02-desenvolvimento.md`) lista só ficheiros de `packages/ui`, raiz e `docs/workflow`.
+
+**Testes exigidos:**
+- [x] Unitário que compara os exports com as entradas do `size-limit`: existe, compara com `Object.keys(library)` e não é trivial.
+- [x] Teste de tree-shaking (esbuild em memória, verificação por texto): existe para Button, Stack e Badge, mais o teste de ausência de `displayName` de topo em `dist/index.js` e o de nomes/`displayName` exportados.
+- [x] Verificação manual `pnpm build && pnpm size` com código 0 e prova de `100 B` falhar sem commitar: feitas acima.
+- Acessibilidade e Visual/Storybook: não aplicável (sem componente nem story nova); `pnpm test:a11y` corrido mesmo assim, verde.
+
+**Casos limite e notas:**
+- Os testes de tree-shaking marcam como `sideEffects: false` os externos `@radix-ui/*` e `@up201905892/icons` para simular um bundler de consumidor; é coerente com o que esses pacotes declaram, mas depende de o consumidor usar um bundler com tree-shaking (a DS-039 valida com um projeto consumidor).
+- O passo `pnpm size` já está em `.github/workflows/ci.yml` (linha 61, `pnpm run --if-present size`).
+- Não foi necessária verificação em browser (sem componente nem página nova). Nenhum ficheiro temporário foi deixado e nenhum processo ficou a correr.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas encontradas:** nenhuma.
+
+### DS-039 · Verificação do pacote: `pnpm pack`, publint e projeto consumidor — Relatório 1 — 2026-11-26
+
+- **Commit testado:** 2dbde8c (HEAD de `develop`, confirmado com `git log`; código de produção = f223b83, o commit 2dbde8c só toca em documentação). `git status --short` no início sem alterações; não mudei de branch.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos) | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1161, docs 91, example 28) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (233 testes, 33 suites, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Verificação do pacote | `pnpm verify:package` (build, pack, publint, attw, consumidor): terminou com "verify:package passed", código 0 | ✔ |
+| Prova negativa | remover `"./styles.css"` de `exports` em `packages/ui/package.json` e correr `node scripts/verify-package.mjs --skip-build` | ✔ (código 1: testes 4 (CJS) e 8 (ESM) falham com `ERR_PACKAGE_PATH_NOT_EXPORTED`; "verify:package failed (1): tests/consumer checks"). Ficheiro reposto à mão; `git status` sem diferenças em código |
+
+**Critérios de aceitação:**
+- [x] Script `pnpm verify:package` na raiz: `scripts/verify-package.mjs` faz o build, `pnpm pack` dos três pacotes para `os.tmpdir()` (fora do repositório, apagada no `finally`; o `git status` depois da execução só mostrava o meu ficheiro de workflow), publint e attw sobre cada `.tgz`, instala os tarballs no consumidor e corre-o; só sai com 0 se `failures` estiver vazio. Verificado com a execução completa (0) e a prova negativa (1).
+- [x] `publint` sem erros e `attw` sem problemas: "All good!" e "No problems found" nos três pacotes; tabelas com verde em node16 (CJS), node16 (ESM) e bundler (node10 ignorado pelo perfil, como a especificação não o exige). O publint corre com `--level warning --strict` (mais exigente do que o pedido). As entradas `*.css` são excluídas do `attw` (sem JS nem tipos); a sua resolução é verificada pelos testes (d).
+- [x] Conteúdo dos tarballs: a listagem do `pnpm pack` mostra só `dist/`, `package.json`, `README.md`, `LICENSE` (+ `LICENSE-LUCIDE` no icons) em tokens (9 ficheiros), icons (10) e ui (10); o script verifica com `tar -tzf` que nada fora disso nem `.test.`/`.stories.`/`src/` está no tarball e que nenhuma `package.json` tem `workspace:` ("ok ... no workspace:" nos três). Limitação: não consegui eu próprio correr `tar -tzf` sobre um tarball porque a sessão recusou comandos sobre `/tmp`; baseei-me na listagem do `pnpm pack` e na verificação do script (código lido, lógica correta). Condição `source` do icons (pedida pelo João): o script falha se um alvo de `main`/`module`/`types`/`exports` não estiver no tarball; passou, logo o `source` foi retirado do `package.json` publicado (`publishConfig.exports`).
+- [x] Consumidor em `tests/consumer/` fora do workspace (`pnpm-workspace.yaml` só inclui `packages/*` e `apps/*`; tem `package.json` próprio): (a) `import` e `require` de ui, icons e tokens (testes 1, 2, 5, 6); (b) `tsc --noEmit` strict (`strict: true`, `skipLibCheck: false`) sobre `usage.tsx` com `Button`, `DataTable<User>`, `CheckIcon` e `tokens`, com dois `@ts-expect-error` que provam que a tipagem rejeita linhas erradas e `getRowId` em falta (passou); (c) `renderToString(<Button>OK</Button>)` com `window` e `document` indefinidos e `class` com `ds-button` (testes 3 e 7, não triviais); (d) `styles.css` resolve e contém `--ds-color-bg-canvas` (testes 4 e 8, e a prova negativa mostra que falham quando a entrada falta). 9 de 9 testes verdes em Node 22.
+- [x] Nenhum `pnpm publish`: `grep publish` em `scripts/verify-package.mjs` e `package.json` só encontra um comentário a dizer que nunca publica; eu também não corri nenhum.
+- [x] G1 a G3: dependências novas só `publint` e `@arethetypeswrong/cli` (devDependencies da raiz, `package.json` e lockfile no commit); lint, build e testes executam com o lockfile; commit `feat(ui): DS-039 …` em inglês, com o ID. Changeset `patch` para tokens e icons (alteram `exports`).
+
+**Testes exigidos:**
+- [x] Verificações (a) a (d) como testes automatizados em `tests/consumer/`, corridos pelo `verify:package`: existem (`esm.test.mjs` 5, `cjs.test.cjs` 4, `usage.tsx`) e não são triviais.
+- [x] Verificação manual: `pnpm verify:package` com código 0; prova negativa do `styles.css` com falha e código 1 (não commitada, reposta). Listagem de conteúdo: ver nota acima sobre `tar -tf`.
+- Acessibilidade e Visual/Storybook: não aplicável (`pnpm test:a11y` corrido mesmo assim, verde).
+
+**Casos limite e notas:**
+- A prova negativa foi feita com `--skip-build`, como indicado pelo programador; sem essa opção o build do `apps/example` falharia primeiro (importa `styles.css`), o que também é falha.
+- O `npm install` do consumidor precisa de rede; correu bem. A dependência de `@up201905892/icons` do ui é resolvida por `overrides` para o tarball local, porque o pacote ainda não está no registo.
+- Resíduo fora do repositório: criei `/tmp/qa-ds039/` (um `pnpm pack` do ui) e a sessão recusou apagá-lo (`rm` fora dos diretórios de trabalho precisa de aprovação). É lixo inofensivo em `/tmp`; nenhum ficheiro temporário ficou no repositório e nenhum processo ficou a correr.
+- Não foi necessária verificação em browser.
+
+**Testes adicionados pelo testador:** nenhum.
+
+**Falhas encontradas:** nenhuma.
+
+### DS-062 · Helper de axe: falhar quando o alvo ou um ascendente está escondido — Relatório 1 — 2026-11-26
+
+- **Commit testado:** 2a70142 (código = d015bf2), confirmado no histórico de `develop` com `git log`; `git status --short` limpo no início; não mudei de branch. Acrescentei o commit de testes fd97595.
+- **Resultado:** Aprovado
+
+| Verificação | Comando ou método | Resultado |
+| --- | --- | --- |
+| Lint | `pnpm lint` (eslint, stylelint, prettier) | ✔ |
+| Tipos | `pnpm typecheck` (5 projetos) | ✔ |
+| Unitários | `pnpm test` (tokens 92, icons 10, ui 1171, docs 91, example 28; antes dos meus testes novos) | ✔ |
+| Acessibilidade | `pnpm test:a11y` (233 testes, 33 suites, sem violações) | ✔ |
+| Build | `pnpm build` | ✔ |
+| Prova negativa | comentar `assertExposed(container)` em `packages/ui/test/a11y.ts` e correr `a11y.test.tsx`: 12 falhas em 19 (ascendentes, alvo, regressão, Dialog, serialização e os meus 4 novos). Reposto à mão; `git status` sem diferenças em código | ✔ |
+
+**Critérios de aceitação:**
+- [x] Verificação antes do axe, do alvo até `document.documentElement`, com os quatro motivos e mensagem com o prefixo exigido, motivo, tag/id/class e "the target"/"an ancestor": lido `assertExposed`/`describeElement`/`hiddenReason` em `a11y.ts`; testes por `it.each` (ascendente, os quatro motivos), alvo com `aria-hidden` e, adicionados por mim, `inert`/`hidden`/`display: none` no próprio alvo e `display: none` vindo de folha de estilo a vários níveis.
+- [x] `aria-hidden="false"` e conteúdo escondido dentro do alvo não falham: testes existentes passam (ascendente `aria-hidden="false"`; botão com `<span aria-hidden>` com SVG).
+- [x] `document.body` com `Dialog` aberto resolve; o `container` rejeita com `aria-hidden="true"`: teste existente, verde e falha na prova negativa.
+- [x] Verificação dentro da fila e assinatura inalterada: `assertExposed` está dentro de `queue.then(...)`; assinatura `(container: Element): Promise<void>`; teste de serialização (alvo escondido rejeita, válido resolve, sem "Axe is already running"). JSDoc reescrito com verificação, quatro motivos e o que fazer (`document.body`, `getByRole('dialog')`).
+- [x] Revisão dos testes existentes: `pnpm test` verde em todos os pacotes; `02-desenvolvimento.md` regista lista vazia, o que é coerente com o resultado (nenhum teste falhou). Sem `skip`/`todo`, sem `try/catch` à volta do helper, sem opção para desligar (lido o código).
+- [x] Violação real nova: nenhuma encontrada, nada a registar.
+- [x] Só `packages/ui/test/a11y.ts` e `a11y.test.tsx` mudam em código (`git diff --stat 0908693 2a70142`): nenhum componente, story, `.css` ou API pública.
+- [x] Nada em `.github/` alterado (mesmo diff).
+- [x] G1 a G3: sem dependências novas, sem changeset; lint, typecheck, test e build verdes.
+
+**Testes exigidos:**
+- [x] Unitários em `a11y.test.tsx`: os 5 casos da DS-059 mantidos e os pedidos (falha por motivo com alvo/ascendente, não-falhas, regressão do falso verde, overlay real, serialização) existem e não são triviais (verificam a mensagem; a prova negativa mostra que falham sem a verificação).
+- [x] `pnpm test` verde nos três pacotes com o helper novo; `pnpm test:a11y` verde.
+- [x] Prova negativa repetida por mim (ver tabela).
+- Visual/Storybook: não aplicável.
+
+**Casos limite e notas:**
+- O teste do Dialog aceita "the target" ou "an ancestor", o que é deliberado (depende do elemento que o Radix esconde).
+- Não foi necessária verificação em browser nem teclado/contraste (código de teste, sem UI).
+
+**Testes adicionados pelo testador:** `packages/ui/test/a11y.test.tsx` (4 casos: `inert`, `hidden` e `display: none` no próprio alvo; `display: none` vindo de folha de estilo num ascendente a vários níveis), commit fd97595 `test(ui): DS-062 …`. Ficheiro a 19 testes verdes, eslint e prettier limpos.
+
+**Falhas encontradas:** nenhuma.
